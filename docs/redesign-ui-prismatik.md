@@ -84,16 +84,17 @@ Sem stats strips, sem API, sem groupboxes na primeira vista.
 - Presets de AR + margens
 - Toggle “Blackbar detection” / política clamp
 - **Todas as caixas**: largura, altura e espessura (para dentro da tela) aplicadas de uma vez
-- **Grupos de LEDs**: criar grupos nomeados (`top`, `bottom`, `sides`…) e ajustar peculiaridades do grupo (tamanho, inset, enable) sem LED-a-LED
+- **Grupos de LEDs**: criar grupos nomeados (`top`, `bottom`, `sides`…) e ajustar peculiaridades do grupo — **mesmos eixos que o global**: largura, altura, espessura, mais inset e enable — sem LED-a-LED
 - Modo avançado: editar zona individual (só quando necessário)
 
 #### Modelo de grupos (protótipo)
 
 ```text
-LED → lado (top|bottom|left|right) → grupo nomeado → overrides de tamanho/inset/enable
+LED → lado (top|bottom|left|right) → grupo nomeado
+     → overrides: width, height, thickness, inset, enable
 ```
 
-Caso de uso: pedestal ocupa parte do bottom → grupo `bottom` com altura maior e inset; topo fino no grupo `top`. “Aplicar a todas” redefine a baseline; o grupo mantém overrides depois.
+Caso de uso: pedestal no bottom → grupo `bottom` com altura + espessura maiores e inset; topo fino no `top`. “Aplicar a todas” redefine a baseline (w/h/thick) em todos os grupos; depois cada grupo pode divergir.
 
 Persistência sugerida no app real (além de `LED_N/Position|Size`):
 
@@ -101,9 +102,10 @@ Persistência sugerida no app real (além de `LED_N/Position|Size`):
 Grab/BoxWidthDefault
 Grab/BoxHeightDefault
 Grab/BoxThicknessPercent
-LEDGroup/<nome>/Members   = side:top | led:3,led:4 …
+LEDGroup/<nome>/Members     = side:top | led:3,led:4 …
 LEDGroup/<nome>/Width
 LEDGroup/<nome>/Height
+LEDGroup/<nome>/Thickness
 LEDGroup/<nome>/Inset
 LEDGroup/<nome>/IsEnabled
 ```

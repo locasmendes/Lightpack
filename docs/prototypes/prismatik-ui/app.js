@@ -16,9 +16,9 @@
     brightness: 72,
     box: { w: 120, h: 80, thick: 6 },
     groups: {
-      top: { members: ["side:top"], w: 120, h: 70, inset: 0, enabled: true },
-      bottom: { members: ["side:bottom"], w: 140, h: 90, inset: 1, enabled: true },
-      sides: { members: ["side:left", "side:right"], w: 90, h: 110, inset: 0, enabled: true },
+      top: { members: ["side:top"], w: 120, h: 70, thick: 5, inset: 0, enabled: true },
+      bottom: { members: ["side:bottom"], w: 140, h: 90, thick: 8, inset: 1, enabled: true },
+      sides: { members: ["side:left", "side:right"], w: 90, h: 110, thick: 6, inset: 0, enabled: true },
     },
     activeGroup: "top",
   };
@@ -31,6 +31,7 @@
       name: "ungrouped",
       w: state.box.w,
       h: state.box.h,
+      thick: state.box.thick,
       inset: 0,
       enabled: true,
       members: [],
@@ -129,8 +130,7 @@
     const leftG = sideGroup("left");
     const rightG = sideGroup("right");
 
-    // thick % drives how far boxes bite into the content; group inset nudges away from bezel
-    const thick = state.box.thick;
+    // Per-group thick % = how far boxes bite into the content; inset nudges from bezel
     const zones = [
       {
         group: topG.name,
@@ -139,7 +139,7 @@
           top: `${box.top + topG.inset}%`,
           left: `${box.left}%`,
           width: `${100 - box.left - box.right}%`,
-          height: `${Math.max(2, (topG.h / 80) * thick)}%`,
+          height: `${Math.max(2, (topG.h / 80) * topG.thick)}%`,
         },
       },
       {
@@ -148,7 +148,7 @@
         style: {
           top: `${box.top}%`,
           right: `${box.right + rightG.inset}%`,
-          width: `${Math.max(1.5, (rightG.w / 120) * (thick * 0.55))}%`,
+          width: `${Math.max(1.5, (rightG.w / 120) * (rightG.thick * 0.55))}%`,
           height: `${100 - box.top - box.bottom}%`,
         },
       },
@@ -159,7 +159,7 @@
           bottom: `${box.bottom + bottomG.inset}%`,
           left: `${box.left}%`,
           width: `${100 - box.left - box.right}%`,
-          height: `${Math.max(2, (bottomG.h / 80) * thick)}%`,
+          height: `${Math.max(2, (bottomG.h / 80) * bottomG.thick)}%`,
         },
       },
       {
@@ -168,7 +168,7 @@
         style: {
           top: `${box.top}%`,
           left: `${box.left + leftG.inset}%`,
-          width: `${Math.max(1.5, (leftG.w / 120) * (thick * 0.55))}%`,
+          width: `${Math.max(1.5, (leftG.w / 120) * (leftG.thick * 0.55))}%`,
           height: `${100 - box.top - box.bottom}%`,
         },
       },
@@ -332,6 +332,7 @@
     Object.values(state.groups).forEach((g) => {
       g.w = w;
       g.h = h;
+      g.thick = thick;
     });
     loadGroupEditor();
     layoutMiniZones(aspectInsets(state.aspect));
@@ -348,6 +349,7 @@
     Object.values(state.groups).forEach((g) => {
       g.w = 120;
       g.h = 80;
+      g.thick = 6;
       g.inset = 0;
     });
     loadGroupEditor();
@@ -383,15 +385,18 @@
     });
     document.getElementById("grp-w").value = g.w;
     document.getElementById("grp-h").value = g.h;
+    document.getElementById("grp-thick").value = g.thick;
     document.getElementById("grp-inset").value = g.inset;
     document.getElementById("grp-enabled").checked = g.enabled;
     document.getElementById("grp-w-val").textContent = `${g.w} px`;
     document.getElementById("grp-h-val").textContent = `${g.h} px`;
+    document.getElementById("grp-thick-val").textContent = `${g.thick}%`;
     document.getElementById("grp-inset-val").textContent = `${g.inset}%`;
   }
 
   bind("grp-w", "grp-w-val", (v) => `${v} px`);
   bind("grp-h", "grp-h-val", (v) => `${v} px`);
+  bind("grp-thick", "grp-thick-val", (v) => `${v}%`);
   bind("grp-inset", "grp-inset-val", (v) => `${v}%`);
 
   document.getElementById("btn-create-group").addEventListener("click", () => {
@@ -408,6 +413,7 @@
         members: [],
         w: state.box.w,
         h: state.box.h,
+        thick: state.box.thick,
         inset: 0,
         enabled: true,
       };
@@ -424,6 +430,7 @@
     g.members = [...groupMembers.selectedOptions].map((o) => o.value);
     g.w = Number(document.getElementById("grp-w").value);
     g.h = Number(document.getElementById("grp-h").value);
+    g.thick = Number(document.getElementById("grp-thick").value);
     g.inset = Number(document.getElementById("grp-inset").value);
     g.enabled = document.getElementById("grp-enabled").checked;
     layoutMiniZones(aspectInsets(state.aspect));
@@ -440,12 +447,13 @@
   });
 
   // Live preview while dragging group sliders
-  ["grp-w", "grp-h", "grp-inset"].forEach((id) => {
+  ["grp-w", "grp-h", "grp-thick", "grp-inset"].forEach((id) => {
     document.getElementById(id).addEventListener("input", () => {
       const g = state.groups[state.activeGroup];
       if (!g) return;
       g.w = Number(document.getElementById("grp-w").value);
       g.h = Number(document.getElementById("grp-h").value);
+      g.thick = Number(document.getElementById("grp-thick").value);
       g.inset = Number(document.getElementById("grp-inset").value);
       layoutMiniZones(aspectInsets(state.aspect));
     });
