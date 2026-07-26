@@ -14,7 +14,28 @@
     mode: "ambilight",
     aspect: "auto",
     brightness: 72,
+    box: { w: 120, h: 80, thick: 6 },
+    groups: {
+      top: { members: ["side:top"], w: 120, h: 70, inset: 0, enabled: true },
+      bottom: { members: ["side:bottom"], w: 140, h: 90, inset: 1, enabled: true },
+      sides: { members: ["side:left", "side:right"], w: 90, h: 110, inset: 0, enabled: true },
+    },
+    activeGroup: "top",
   };
+
+  function sideGroup(side) {
+    for (const [name, g] of Object.entries(state.groups)) {
+      if (g.members.includes(`side:${side}`)) return { name, ...g };
+    }
+    return {
+      name: "ungrouped",
+      w: state.box.w,
+      h: state.box.h,
+      inset: 0,
+      enabled: true,
+      members: [],
+    };
+  }
 
   // Place LEDs around monitor perimeter (top, right, bottom, left)
   function buildLeds() {
@@ -102,16 +123,63 @@
   function layoutMiniZones(box) {
     const host = document.getElementById("mini-zones");
     host.innerHTML = "";
+
+    const topG = sideGroup("top");
+    const bottomG = sideGroup("bottom");
+    const leftG = sideGroup("left");
+    const rightG = sideGroup("right");
+
+    // thick % drives how far boxes bite into the content; group inset nudges away from bezel
+    const thick = state.box.thick;
     const zones = [
-      { top: `${box.top}%`, left: `${box.left}%`, width: `${100 - box.left - box.right}%`, height: "6%" },
-      { top: `${box.top}%`, right: `${box.right}%`, width: "3%", height: `${100 - box.top - box.bottom}%` },
-      { bottom: `${box.bottom}%`, left: `${box.left}%`, width: `${100 - box.left - box.right}%`, height: "6%" },
-      { top: `${box.top}%`, left: `${box.left}%`, width: "3%", height: `${100 - box.top - box.bottom}%` },
+      {
+        group: topG.name,
+        enabled: topG.enabled,
+        style: {
+          top: `${box.top + topG.inset}%`,
+          left: `${box.left}%`,
+          width: `${100 - box.left - box.right}%`,
+          height: `${Math.max(2, (topG.h / 80) * thick)}%`,
+        },
+      },
+      {
+        group: rightG.name,
+        enabled: rightG.enabled,
+        style: {
+          top: `${box.top}%`,
+          right: `${box.right + rightG.inset}%`,
+          width: `${Math.max(1.5, (rightG.w / 120) * (thick * 0.55))}%`,
+          height: `${100 - box.top - box.bottom}%`,
+        },
+      },
+      {
+        group: bottomG.name,
+        enabled: bottomG.enabled,
+        style: {
+          bottom: `${box.bottom + bottomG.inset}%`,
+          left: `${box.left}%`,
+          width: `${100 - box.left - box.right}%`,
+          height: `${Math.max(2, (bottomG.h / 80) * thick)}%`,
+        },
+      },
+      {
+        group: leftG.name,
+        enabled: leftG.enabled,
+        style: {
+          top: `${box.top}%`,
+          left: `${box.left + leftG.inset}%`,
+          width: `${Math.max(1.5, (leftG.w / 120) * (thick * 0.55))}%`,
+          height: `${100 - box.top - box.bottom}%`,
+        },
+      },
     ];
+
     zones.forEach((z) => {
       const el = document.createElement("div");
-      el.className = "zone";
-      Object.assign(el.style, z);
+      el.className = "zone" + (z.enabled ? "" : " is-disabled");
+      el.dataset.group = z.group;
+      el.title = `Grupo: ${z.group}`;
+      Object.assign(el.style, z.style);
       host.appendChild(el);
     });
   }
@@ -248,6 +316,147 @@
   bind("temp", "temp-val", (v) => `${v} K`);
   bind("ob", "ob-val", (v) => `${v}`);
 
+  // —— Global box size ——
+  bind("all-w", "all-w-val", (v) => `${v} px`);
+  bind("all-h", "all-h-val", (v) => `${v} px`);
+  bind("all-thick", "all-thick-val", (v) => `${v}%`, (v) => {
+    state.box.thick = v;
+    layoutMiniZones(aspectInsets(state.aspect));
+  });
+
+  document.getElementById("btn-apply-all-size").addEventListener("click", () => {
+    const w = Number(document.getElementById("all-w").value);
+    const h = Number(document.getElementById("all-h").value);
+    const thick = Number(document.getElementById("all-thick").value);
+    state.box = { w, h, thick };
+    Object.values(state.groups).forEach((g) => {
+      g.w = w;
+      g.h = h;
+    });
+    loadGroupEditor();
+    layoutMiniZones(aspectInsets(state.aspect));
+  });
+
+  document.getElementById("btn-reset-all-size").addEventListener("click", () => {
+    state.box = { w: 120, h: 80, thick: 6 };
+    document.getElementById("all-w").value = 120;
+    document.getElementById("all-h").value = 80;
+    document.getElementById("all-thick").value = 6;
+    document.getElementById("all-w-val").textContent = "120 px";
+    document.getElementById("all-h-val").textContent = "80 px";
+    document.getElementById("all-thick-val").textContent = "6%";
+    Object.values(state.groups).forEach((g) => {
+      g.w = 120;
+      g.h = 80;
+      g.inset = 0;
+    });
+    loadGroupEditor();
+    layoutMiniZones(aspectInsets(state.aspect));
+  });
+
+  // —— Groups ——
+  const groupTabs = document.getElementById("group-tabs");
+  const groupMembers = document.getElementById("group-members");
+
+  function renderGroupTabs() {
+    groupTabs.innerHTML = "";
+    Object.keys(state.groups).forEach((name) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = name;
+      btn.dataset.group = name;
+      if (name === state.activeGroup) btn.classList.add("active");
+      btn.addEventListener("click", () => {
+        state.activeGroup = name;
+        renderGroupTabs();
+        loadGroupEditor();
+      });
+      groupTabs.appendChild(btn);
+    });
+  }
+
+  function loadGroupEditor() {
+    const g = state.groups[state.activeGroup];
+    if (!g) return;
+    [...groupMembers.options].forEach((opt) => {
+      opt.selected = g.members.includes(opt.value);
+    });
+    document.getElementById("grp-w").value = g.w;
+    document.getElementById("grp-h").value = g.h;
+    document.getElementById("grp-inset").value = g.inset;
+    document.getElementById("grp-enabled").checked = g.enabled;
+    document.getElementById("grp-w-val").textContent = `${g.w} px`;
+    document.getElementById("grp-h-val").textContent = `${g.h} px`;
+    document.getElementById("grp-inset-val").textContent = `${g.inset}%`;
+  }
+
+  bind("grp-w", "grp-w-val", (v) => `${v} px`);
+  bind("grp-h", "grp-h-val", (v) => `${v} px`);
+  bind("grp-inset", "grp-inset-val", (v) => `${v}%`);
+
+  document.getElementById("btn-create-group").addEventListener("click", () => {
+    const raw = document.getElementById("group-name").value.trim().toLowerCase();
+    const name = raw.replace(/[^a-z0-9_-]+/g, "-").replace(/^-|-$/g, "");
+    if (!name) {
+      document.getElementById("group-name").focus();
+      return;
+    }
+    if (state.groups[name]) {
+      state.activeGroup = name;
+    } else {
+      state.groups[name] = {
+        members: [],
+        w: state.box.w,
+        h: state.box.h,
+        inset: 0,
+        enabled: true,
+      };
+      state.activeGroup = name;
+    }
+    document.getElementById("group-name").value = "";
+    renderGroupTabs();
+    loadGroupEditor();
+  });
+
+  document.getElementById("btn-apply-group").addEventListener("click", () => {
+    const g = state.groups[state.activeGroup];
+    if (!g) return;
+    g.members = [...groupMembers.selectedOptions].map((o) => o.value);
+    g.w = Number(document.getElementById("grp-w").value);
+    g.h = Number(document.getElementById("grp-h").value);
+    g.inset = Number(document.getElementById("grp-inset").value);
+    g.enabled = document.getElementById("grp-enabled").checked;
+    layoutMiniZones(aspectInsets(state.aspect));
+  });
+
+  document.getElementById("btn-delete-group").addEventListener("click", () => {
+    const names = Object.keys(state.groups);
+    if (names.length <= 1) return;
+    delete state.groups[state.activeGroup];
+    state.activeGroup = Object.keys(state.groups)[0];
+    renderGroupTabs();
+    loadGroupEditor();
+    layoutMiniZones(aspectInsets(state.aspect));
+  });
+
+  // Live preview while dragging group sliders
+  ["grp-w", "grp-h", "grp-inset"].forEach((id) => {
+    document.getElementById(id).addEventListener("input", () => {
+      const g = state.groups[state.activeGroup];
+      if (!g) return;
+      g.w = Number(document.getElementById("grp-w").value);
+      g.h = Number(document.getElementById("grp-h").value);
+      g.inset = Number(document.getElementById("grp-inset").value);
+      layoutMiniZones(aspectInsets(state.aspect));
+    });
+  });
+  document.getElementById("grp-enabled").addEventListener("change", (e) => {
+    const g = state.groups[state.activeGroup];
+    if (!g) return;
+    g.enabled = e.target.checked;
+    layoutMiniZones(aspectInsets(state.aspect));
+  });
+
   // Animate scene hues gently
   let hue = 0;
   function tick() {
@@ -260,6 +469,8 @@
   }
 
   buildLeds();
+  renderGroupTabs();
+  loadGroupEditor();
   applyAspect();
   requestAnimationFrame(tick);
 })();

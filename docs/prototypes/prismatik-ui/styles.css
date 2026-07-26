@@ -554,6 +554,75 @@ input[type="range"] {
   background: color-mix(in srgb, var(--lime) 55%, transparent);
   border: 1px solid rgba(247, 250, 251, 0.5);
   border-radius: 3px;
+  transition: inset 280ms ease, width 280ms ease, height 280ms ease, opacity 200ms ease;
+}
+
+.zone.is-disabled {
+  opacity: 0.25;
+  background: color-mix(in srgb, var(--coral) 40%, transparent);
+}
+
+.zone[data-group="top"] {
+  background: color-mix(in srgb, var(--teal) 55%, transparent);
+}
+
+.zone[data-group="bottom"] {
+  background: color-mix(in srgb, #e0a21a 55%, transparent);
+}
+
+.zone[data-group="left"],
+.zone[data-group="right"] {
+  background: color-mix(in srgb, var(--lime) 55%, transparent);
+}
+
+.group-create {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.group-create input {
+  flex: 1;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font: inherit;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.group-tabs {
+  margin-bottom: 12px;
+}
+
+.group-editor {
+  display: grid;
+  gap: 4px;
+  padding-top: 4px;
+  border-top: 1px solid var(--line);
+}
+
+.group-editor select[multiple] {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 8px;
+  font: inherit;
+  background: var(--paper);
+  color: var(--ink);
+  width: 100%;
+}
+
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.check input {
+  accent-color: var(--teal);
 }
 
 @media (max-width: 900px) {

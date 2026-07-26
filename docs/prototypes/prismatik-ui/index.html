@@ -100,9 +100,10 @@
           <header class="topbar">
             <div>
               <h1>Geometry</h1>
-              <p>Layout físico uma vez. Área ativa o tempo todo.</p>
+              <p>Ajuste todas as caixas de uma vez, ou por grupo (top, bottom…).</p>
             </div>
           </header>
+
           <div class="geo-preview">
             <div class="mini-stage" id="mini-stage">
               <div class="mini-content" id="mini-content"></div>
@@ -128,7 +129,76 @@
                     <option>Bleed — suavizar para dentro</option>
                   </select>
                 </div>
-                <button type="button" class="btn ghost">Editar zonas avançado…</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="controls">
+            <div class="block">
+              <h2>Todas as caixas</h2>
+              <p class="note">Aplica o mesmo tamanho a todas as zonas de amostragem.</p>
+              <div class="slider-row">
+                <label><span>Largura</span><span id="all-w-val">120 px</span></label>
+                <input id="all-w" type="range" min="40" max="280" value="120" />
+              </div>
+              <div class="slider-row">
+                <label><span>Altura</span><span id="all-h-val">80 px</span></label>
+                <input id="all-h" type="range" min="30" max="220" value="80" />
+              </div>
+              <div class="slider-row">
+                <label><span>Espessura (para dentro da tela)</span><span id="all-thick-val">6%</span></label>
+                <input id="all-thick" type="range" min="2" max="18" value="6" />
+              </div>
+              <div class="power-row" style="margin-top: 14px">
+                <button type="button" class="btn" id="btn-apply-all-size">Aplicar a todas</button>
+                <button type="button" class="btn ghost" id="btn-reset-all-size">Reset tamanho</button>
+              </div>
+            </div>
+
+            <div class="block">
+              <h2>Grupos de LEDs</h2>
+              <p class="note">
+                Ex.: grupo <strong>top</strong> e <strong>bottom</strong> — ajuste inset,
+                tamanho e enable de um lado inteiro sem abrir LED por LED.
+              </p>
+
+              <div class="group-create">
+                <input id="group-name" type="text" placeholder="Nome do grupo (ex.: top)" maxlength="24" />
+                <button type="button" class="btn primary" id="btn-create-group">Criar</button>
+              </div>
+
+              <div class="seg group-tabs" id="group-tabs" role="tablist" aria-label="Grupos"></div>
+
+              <div id="group-editor" class="group-editor">
+                <div class="field">
+                  <label for="group-members">Membros (lados / LEDs)</label>
+                  <select id="group-members" multiple size="4">
+                    <option value="side:top" selected>Lado: top</option>
+                    <option value="side:bottom">Lado: bottom</option>
+                    <option value="side:left">Lado: left</option>
+                    <option value="side:right">Lado: right</option>
+                  </select>
+                </div>
+                <div class="slider-row">
+                  <label><span>Largura do grupo</span><span id="grp-w-val">120 px</span></label>
+                  <input id="grp-w" type="range" min="40" max="280" value="120" />
+                </div>
+                <div class="slider-row">
+                  <label><span>Altura do grupo</span><span id="grp-h-val">80 px</span></label>
+                  <input id="grp-h" type="range" min="30" max="220" value="80" />
+                </div>
+                <div class="slider-row">
+                  <label><span>Inset do grupo</span><span id="grp-inset-val">0%</span></label>
+                  <input id="grp-inset" type="range" min="0" max="12" value="0" />
+                </div>
+                <div class="power-row" style="margin-top: 12px">
+                  <label class="check">
+                    <input type="checkbox" id="grp-enabled" checked />
+                    Grupo habilitado
+                  </label>
+                  <button type="button" class="btn" id="btn-apply-group">Aplicar ao grupo</button>
+                  <button type="button" class="btn ghost" id="btn-delete-group">Apagar grupo</button>
+                </div>
               </div>
             </div>
           </div>
