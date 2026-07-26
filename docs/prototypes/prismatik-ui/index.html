@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Prismatik — protótipo UI</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <aside class="nav">
+        <div class="brand">
+          <strong>Prismatik</strong>
+          <span>controle de luz ambiente</span>
+        </div>
+        <nav class="nav-list" aria-label="Seções">
+          <button type="button" data-panel="home" class="active">Home</button>
+          <button type="button" data-panel="geometry">Geometry</button>
+          <button type="button" data-panel="look">Look</button>
+          <button type="button" data-panel="device">Device</button>
+          <button type="button" data-panel="more">More</button>
+        </nav>
+        <div class="nav-foot">
+          Protótipo de redesign · não conectado ao runtime Qt.
+          Troque o aspect ratio e veja o content frame + LEDs reagirem.
+        </div>
+      </aside>
+
+      <main class="main">
+        <!-- HOME -->
+        <section id="home" class="panel active">
+          <header class="topbar">
+            <div>
+              <h1>Ambilight ao vivo</h1>
+              <p id="home-sub">
+                Uma composição: marca, estado, palco e os controles que importam.
+              </p>
+            </div>
+            <div class="status-pills">
+              <span class="chip"><i class="dot"></i> <span id="chip-device">WLED · online</span></span>
+              <span class="chip"><span id="chip-fps">48 FPS</span></span>
+              <span class="chip" id="chip-black" hidden><i class="dot"></i> laterais em preto</span>
+            </div>
+          </header>
+
+          <div class="stage-wrap">
+            <div class="stage" aria-label="Palco do monitor com LEDs">
+              <div class="monitor">
+                <div class="led-ring" id="led-ring"></div>
+                <div class="screen">
+                  <div class="screen-scene" id="screen-scene"></div>
+                  <div class="content-frame" id="content-frame">
+                    <label id="content-label">Auto</label>
+                  </div>
+                </div>
+                <div class="stand"></div>
+              </div>
+            </div>
+            <div class="stage-meta">
+              <span id="stage-caption">Content: Fill · monitor 21:9</span>
+              <span>Hover num LED para “identify”</span>
+            </div>
+          </div>
+
+          <div class="controls">
+            <div class="block">
+              <h2>Luz</h2>
+              <div class="power-row">
+                <button type="button" class="btn primary" id="btn-power">Lights ON</button>
+                <div class="seg" id="mode-seg" role="group" aria-label="Modo">
+                  <button type="button" data-mode="ambilight" class="active">Ambilight</button>
+                  <button type="button" data-mode="mood">Mood</button>
+                  <button type="button" data-mode="sound">Sound</button>
+                </div>
+              </div>
+              <div class="slider-row">
+                <label><span>Intensidade</span><span id="brightness-val">72%</span></label>
+                <input id="brightness" type="range" min="0" max="100" value="72" />
+              </div>
+            </div>
+
+            <div class="block">
+              <h2>Área de conteúdo</h2>
+              <div class="seg" id="aspect-seg" role="group" aria-label="Aspect ratio">
+                <button type="button" data-aspect="auto" class="active">Auto</button>
+                <button type="button" data-aspect="fill">Fill</button>
+                <button type="button" data-aspect="16:9">16:9</button>
+                <button type="button" data-aspect="4:3">4:3</button>
+              </div>
+              <p class="note" style="margin-top: 12px">
+                Substitui os 3 perfis manuais do ultrawide: o layout físico dos LEDs
+                fica fixo; só o content frame muda.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- GEOMETRY -->
+        <section id="geometry" class="panel">
+          <header class="topbar">
+            <div>
+              <h1>Geometry</h1>
+              <p>Ajuste todas as caixas de uma vez, ou por grupo (top, bottom…).</p>
+            </div>
+          </header>
+
+          <div class="geo-preview">
+            <div class="mini-stage" id="mini-stage">
+              <div class="mini-content" id="mini-content"></div>
+              <div id="mini-zones"></div>
+            </div>
+            <div class="block">
+              <h2>Política</h2>
+              <div class="field-grid">
+                <div class="field">
+                  <label for="blackbar">Blackbar detection</label>
+                  <select id="blackbar">
+                    <option>Auto (recomendado)</option>
+                    <option>Letterbox only</option>
+                    <option>OSD-safe</option>
+                    <option>Off</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="policy">LEDs sobre a barra</label>
+                  <select id="policy">
+                    <option selected>Clamp — amostrar borda ativa</option>
+                    <option>Off — apagar</option>
+                    <option>Bleed — suavizar para dentro</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="controls">
+            <div class="block">
+              <h2>Todas as caixas</h2>
+              <p class="note">Aplica o mesmo tamanho a todas as zonas de amostragem.</p>
+              <div class="slider-row">
+                <label><span>Largura</span><span id="all-w-val">120 px</span></label>
+                <input id="all-w" type="range" min="40" max="280" value="120" />
+              </div>
+              <div class="slider-row">
+                <label><span>Altura</span><span id="all-h-val">80 px</span></label>
+                <input id="all-h" type="range" min="30" max="220" value="80" />
+              </div>
+              <div class="slider-row">
+                <label><span>Espessura (para dentro da tela)</span><span id="all-thick-val">6%</span></label>
+                <input id="all-thick" type="range" min="2" max="18" value="6" />
+              </div>
+              <div class="power-row" style="margin-top: 14px">
+                <button type="button" class="btn" id="btn-apply-all-size">Aplicar a todas</button>
+                <button type="button" class="btn ghost" id="btn-reset-all-size">Reset tamanho</button>
+              </div>
+            </div>
+
+            <div class="block">
+              <h2>Grupos de LEDs</h2>
+              <p class="note">
+                Ex.: grupo <strong>top</strong> e <strong>bottom</strong> — ajuste largura,
+                altura, espessura, inset e enable de um lado inteiro sem abrir LED por LED.
+              </p>
+
+              <div class="group-create">
+                <input id="group-name" type="text" placeholder="Nome do grupo (ex.: top)" maxlength="24" />
+                <button type="button" class="btn primary" id="btn-create-group">Criar</button>
+              </div>
+
+              <div class="seg group-tabs" id="group-tabs" role="tablist" aria-label="Grupos"></div>
+
+              <div id="group-editor" class="group-editor">
+                <div class="field">
+                  <label for="group-members">Membros (lados / LEDs)</label>
+                  <select id="group-members" multiple size="4">
+                    <option value="side:top" selected>Lado: top</option>
+                    <option value="side:bottom">Lado: bottom</option>
+                    <option value="side:left">Lado: left</option>
+                    <option value="side:right">Lado: right</option>
+                  </select>
+                </div>
+                <div class="slider-row">
+                  <label><span>Largura do grupo</span><span id="grp-w-val">120 px</span></label>
+                  <input id="grp-w" type="range" min="40" max="280" value="120" />
+                </div>
+                <div class="slider-row">
+                  <label><span>Altura do grupo</span><span id="grp-h-val">80 px</span></label>
+                  <input id="grp-h" type="range" min="30" max="220" value="80" />
+                </div>
+                <div class="slider-row">
+                  <label><span>Espessura do grupo</span><span id="grp-thick-val">6%</span></label>
+                  <input id="grp-thick" type="range" min="2" max="18" value="6" />
+                </div>
+                <div class="slider-row">
+                  <label><span>Inset do grupo</span><span id="grp-inset-val">0%</span></label>
+                  <input id="grp-inset" type="range" min="0" max="12" value="0" />
+                </div>
+                <div class="power-row" style="margin-top: 12px">
+                  <label class="check">
+                    <input type="checkbox" id="grp-enabled" checked />
+                    Grupo habilitado
+                  </label>
+                  <button type="button" class="btn" id="btn-apply-group">Aplicar ao grupo</button>
+                  <button type="button" class="btn ghost" id="btn-delete-group">Apagar grupo</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- LOOK -->
+        <section id="look" class="panel">
+          <header class="topbar">
+            <div>
+              <h1>Look</h1>
+              <p>Como a cor chega nos olhos — não onde as caixas ficam.</p>
+            </div>
+          </header>
+          <div class="controls">
+            <div class="block">
+              <h2>Correção</h2>
+              <div class="slider-row">
+                <label><span>Gamma</span><span id="gamma-val">2.20</span></label>
+                <input id="gamma" type="range" min="10" max="30" value="22" />
+              </div>
+              <div class="slider-row">
+                <label><span>Smooth (host)</span><span id="smooth-val">120 ms</span></label>
+                <input id="smooth" type="range" min="0" max="400" value="120" />
+              </div>
+              <p class="note" style="margin-top: 12px">
+                Preferir smooth no host. Smooth alto no firmware Lightpack adiciona
+                centenas de ms de lag.
+              </p>
+            </div>
+            <div class="block">
+              <h2>Atmosfera</h2>
+              <div class="slider-row">
+                <label><span>Temperatura</span><span id="temp-val">6500 K</span></label>
+                <input id="temp" type="range" min="2000" max="9000" value="6500" step="50" />
+              </div>
+              <div class="slider-row">
+                <label><span>Overbrighten</span><span id="ob-val">2</span></label>
+                <input id="ob" type="range" min="0" max="10" value="2" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- DEVICE -->
+        <section id="device" class="panel">
+          <header class="topbar">
+            <div>
+              <h1>Device</h1>
+              <p>Transporte e saúde do hardware — fora do caminho crítico.</p>
+            </div>
+          </header>
+          <div class="list-cards">
+            <article>
+              <div>
+                <strong>WLED · sala</strong>
+                <span>UDP DRGB · 120 LEDs · 192.168.0.42</span>
+              </div>
+              <button type="button" class="btn primary">Conectado</button>
+            </article>
+            <article>
+              <div>
+                <strong>Setup wizard</strong>
+                <span>Descobrir dispositivo, contar LEDs, calibrar laterais</span>
+              </div>
+              <button type="button" class="btn">Abrir</button>
+            </article>
+            <article>
+              <div>
+                <strong>Refresh / baud</strong>
+                <span>Avisos de teto serial aparecem aqui, não na Home</span>
+              </div>
+              <button type="button" class="btn ghost">Avançado</button>
+            </article>
+          </div>
+        </section>
+
+        <!-- MORE -->
+        <section id="more" class="panel">
+          <header class="topbar">
+            <div>
+              <h1>More</h1>
+              <p>Profiles, API e o resto — sem competir com o palco.</p>
+            </div>
+          </header>
+          <div class="list-cards">
+            <article>
+              <div>
+                <strong>Profiles em camadas</strong>
+                <span>Look “Cinema” + Geometry “Auto” — não 3 cópias monolíticas</span>
+              </div>
+              <button type="button" class="btn">Gerenciar</button>
+            </article>
+            <article>
+              <div>
+                <strong>Controle remoto (API)</strong>
+                <span>Socket local · porta 3636</span>
+              </div>
+              <button type="button" class="btn">Configurar</button>
+            </article>
+            <article>
+              <div>
+                <strong>Plugins / About</strong>
+                <span>Extensões, créditos, logs</span>
+              </div>
+              <button type="button" class="btn ghost">Abrir</button>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>

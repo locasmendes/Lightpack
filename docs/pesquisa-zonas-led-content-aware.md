@@ -4,6 +4,8 @@ Documento de pesquisa e design sobre o problema de **caixas/zonas de captura por
 
 Inclui: estado atual no código, práticas de sistemas modernos (open-source e comerciais), soluções incrementais, inovadoras e disruptivas, e um roadmap sugerido.
 
+Ver também: [índice](./README.md) · [pipeline](./pipeline-captura-processamento-leds.md) · [gargalos 2026](./gargalos-sistema-moderno-2026.md) · [captação de cor](./captacao-cor-ainda-moderna.md)
+
 ---
 
 ## 1. O problema (caso ultrawide)

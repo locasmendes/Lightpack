@@ -2,6 +2,8 @@
 
 Documento técnico do fluxo **Prismatik (host) → dispositivo → firmware → LED**, baseado no código deste repositório.
 
+Ver também: [índice](./README.md) · [gargalos 2026](./gargalos-sistema-moderno-2026.md) · [captação de cor](./captacao-cor-ainda-moderna.md) · [zonas content-aware](./pesquisa-zonas-led-content-aware.md)
+
 ---
 
 ## 1. Visão geral
