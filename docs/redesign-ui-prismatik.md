@@ -154,7 +154,7 @@ LEDGroup/<nome>/IsEnabled
 4. **Identify LED** — hover numa zona do palco pisca o LED físico (como HyperHDR).  
 5. **Tray compacto** — power + aspect + brightness sem abrir a janela.  
 6. **Resize global** — um gesto define o tamanho de todas as caixinhas.  
-7. **Grupos** — `top` / `bottom` / custom; editar peculiaridades do conjunto de uma vez.
+7. **Grupos** — `top` / `bottom` / custom; mesmos controles de largura/altura/espessura (e inset/enable) aplicados ao conjunto de uma vez.
 
 ---
 
