@@ -82,8 +82,31 @@ Sem stats strips, sem API, sem groupboxes na primeira vista.
 
 - Preview grande do monitor
 - Presets de AR + margens
-- Modo avançado: editar zonas (substitui o mar de `GrabWidget`s como default)
 - Toggle “Blackbar detection” / política clamp
+- **Todas as caixas**: largura, altura e espessura (para dentro da tela) aplicadas de uma vez
+- **Grupos de LEDs**: criar grupos nomeados (`top`, `bottom`, `sides`…) e ajustar peculiaridades do grupo (tamanho, inset, enable) sem LED-a-LED
+- Modo avançado: editar zona individual (só quando necessário)
+
+#### Modelo de grupos (protótipo)
+
+```text
+LED → lado (top|bottom|left|right) → grupo nomeado → overrides de tamanho/inset/enable
+```
+
+Caso de uso: pedestal ocupa parte do bottom → grupo `bottom` com altura maior e inset; topo fino no grupo `top`. “Aplicar a todas” redefine a baseline; o grupo mantém overrides depois.
+
+Persistência sugerida no app real (além de `LED_N/Position|Size`):
+
+```text
+Grab/BoxWidthDefault
+Grab/BoxHeightDefault
+Grab/BoxThicknessPercent
+LEDGroup/<nome>/Members   = side:top | led:3,led:4 …
+LEDGroup/<nome>/Width
+LEDGroup/<nome>/Height
+LEDGroup/<nome>/Inset
+LEDGroup/<nome>/IsEnabled
+```
 
 ### 4.3 Look
 
@@ -127,7 +150,9 @@ Sem stats strips, sem API, sem groupboxes na primeira vista.
 2. **Content frame vivo** — anima quando o detector muda (histerese visual).  
 3. **Diagnóstico “pretos nas laterais”** — chip coral se zonas laterais ~pretas por N frames.  
 4. **Identify LED** — hover numa zona do palco pisca o LED físico (como HyperHDR).  
-5. **Tray compacto** — power + aspect + brightness sem abrir a janela.
+5. **Tray compacto** — power + aspect + brightness sem abrir a janela.  
+6. **Resize global** — um gesto define o tamanho de todas as caixinhas.  
+7. **Grupos** — `top` / `bottom` / custom; editar peculiaridades do conjunto de uma vez.
 
 ---
 
