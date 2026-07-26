@@ -18,11 +18,13 @@ Documento complementar a:
 |--------|----------------|
 | Ideia geral: amostrar bordas → cor por LED → hardware | **Sim** — padrão da indústria |
 | DXGI Desktop Duplication + downscale (este fork) | **Sim, com ressalvas** — válido; WGC/HDR são o passo seguinte |
-| Média aritmética RGB 8-bit em espaço gamma | **Não** — legado competente, não cutting-edge |
-| Pipeline sem HDR / float / linear | **Não** — gap claro em desktops/jogos HDR 2026 |
+| Média espacial (pixels → cor de zona) em RGB 8-bit inteiro | **Não** — legado competente, não cutting-edge |
+| Pipeline sem HDR / wide-gamut / tone-mapping | **Não** — gap claro em desktops/jogos HDR 2026 |
 
 Para Ambilight “bom o suficiente”, ainda serve.  
 Para parecer atual frente a HyperHDR / Hue / Govee em HDR, ultrawide e cenas escuras, precisa evoluir.
+
+> **Correção (2026-07-26):** a linha original desta tabela dizia "Pipeline sem HDR / float / linear". Isso é impreciso: `Software/math/PrismatikMath.cpp` faz conversão real gamma→linear (EOTF sRGB) e opera em CIE Lab usando `double` — usado pelo "Lab threshold" e pela correção de gamma em `AbstractLedDevice::applyColorModifications`. Ou seja, **há** ponto flutuante e espaço linear real no pipeline de cor do host. O gap real é mais estreito do que a formulação original sugeria: (a) não há HDR/wide-gamut/tone-mapping em nenhum ponto, e (b) especificamente a **média espacial** (`calculateAvgColor`, que reduz pixels de uma zona a uma cor) é inteira e em espaço gamma 8-bit — é aí, e não no pipeline de cor como um todo, que a "precisão perdida cedo" citada na seção 4.2 realmente acontece. Ver detalhamento na seção 4.1 abaixo.
 
 ---
 
@@ -120,13 +122,15 @@ Fontes:
 
 Mesmo com device 12-bit e dither, a informação já foi perdida na média 8-bit. HyperHDR enfatiza exatamente o oposto: a média teórica já tinha precisão; truncar a 24-bit cedo era o erro.
 
-### 4.3 Sem HDR
+### 4.3 Sem HDR (mas com mais ponto flutuante do que este documento afirmava)
 
 Desktop/jogos HDR em 2026 são comuns. O Prismatik:
 
-- só aceita formatos 8-bit no DDupl (`mapDXGIFormatToBufferFormat`)
-- FP16 / 10-bit → `BufferFormatUnknown` → frame dropado ou caminho inválido
-- sem tone-map (BT.2390, ICtCp, etc.)
+- só aceita formatos 8-bit no DDupl (`mapDXGIFormatToBufferFormat`, `DDuplGrabber.cpp:509-523`)
+- FP16 / 10-bit caem em `BufferFormatUnknown`. **Correção:** o comportamento real (`DDuplGrabber.cpp:653-659`) não é "caminho inválido" — é um `qWarning()` seguido de `ReleaseFrame()` e `continue`: aquela tela específica simplesmente não é atualizada naquele ciclo (mantém o frame anterior). Não há crash nem estado inválido, só um frame perdido silenciosamente (com log).
+- sem tone-map (BT.2390, ICtCp, etc.) em nenhum ponto do pipeline — isso está correto e é o gap real
+
+**Ressalva importante:** isso não significa que o pipeline de cor inteiro seja "8-bit puro". `Software/math/PrismatikMath.cpp` já faz EOTF sRGB (gamma→linear) e conversão para CIE Lab em `double`, usada por `AbstractLedDevice::applyColorModifications` para o "Lab threshold" e a correção de gamma. O gap real de HDR está estritamente na **captura** (formatos aceitos) e na **ausência de tone-mapping**, não na falta total de aritmética em ponto flutuante — ver correção na seção 1.
 
 Práticas modernas de captura Windows:
 
@@ -137,7 +141,12 @@ Práticas modernas de captura Windows:
 | Âncora no SDR reference white do monitor | UI não “lava” |
 | Fallback 8-bit | Se HDR path falhar |
 
-Exemplos de ecossistema: forks/tools HDR-aware (ShareX-HDR, capscr), docs Microsoft de Advanced Color / WGC.
+Fontes (verificadas 2026-07-26):
+- https://learn.microsoft.com/en-us/windows/win32/direct3darticles/high-dynamic-range — Microsoft, "Use DirectX with Advanced Color on high/standard dynamic range displays"
+- https://learn.microsoft.com/en-us/windows/apps/develop/media-authoring-processing/screen-capture — Microsoft, recomenda `R16G16B16A16_FLOAT` no Windows.Graphics.Capture para conteúdo HDR
+- https://github.com/GotoFinal/ShareX-HDR — fork **não-oficial** de terceiro do ShareX com suporte básico a HDR (não é o ShareX oficial)
+
+> **Correção:** a versão original citava também uma ferramenta "capscr" como exemplo de captura HDR-aware. Não localizei nenhum projeto com esse nome — foi removida por falta de evidência. Um exemplo real e verificável equivalente é `MagestiUA/HDR_Screenshot_tool_for_windows` (captura via DXGI em FP16 scRGB + tone-map), mas não confirmei relação com o "capscr" original citado, então trate como substituição, não como confirmação da referência antiga.
 
 ### 4.4 API de captura: DDupl vs Windows Graphics Capture
 
@@ -148,6 +157,8 @@ OBS e apps modernos migraram/oferecem **Windows Graphics Capture (WGC)** porque:
 - ergonomia WinRT mais atual
 
 DDupl continua válido para “monitor inteiro”, mas não é mais o único (nem sempre o melhor) caminho em 2026.
+
+Fonte: https://obsproject.com/forum/threads/windows-graphics-capture-vs-dxgi-desktop-duplication.149320/ (discussão da comunidade OBS confirmando os trade-offs acima: WGC funciona cross-GPU sem exigir que o processo rode na mesma GPU do display, mas precisa de requisitos extras — HDR e HAGS — para latência baixa).
 
 ### 4.5 Sem content-aware na amostragem
 
@@ -236,15 +247,17 @@ Detalhes de FPS/latência: doc de gargalos.
 ## 9. Referências
 
 ### Código local
-- `Software/grab/calculations.cpp` — `calculateAvgColor`
+- `Software/grab/calculations.cpp` — `calculateAvgColor` (média 8-bit inteira, sem gamma-aware)
 - `Software/grab/DDuplGrabber.cpp` — captura + mip /8 + formatos 8-bit
 - `Software/grab/GrabberBase.cpp` — orquestração por zona
-- `Software/src/AbstractLedDevice.cpp` — 8→12 bit, gamma, dither
+- `Software/src/AbstractLedDevice.cpp` — 8→12 bit, gamma, Lab threshold, dither
+- `Software/math/PrismatikMath.cpp` — EOTF sRGB (gamma→linear) e conversões CIE Lab/XYZ em `double`, usadas pelo item acima (ponto flutuante e espaço linear real já existem aqui — ver correção na seção 1)
 
-### Externas
+### Externas (links verificados em 2026-07-26)
 - HyperHDR Infinite Color Engine: https://github.com/awawa-dev/HyperHDR/wiki/Infinite-color-engine
 - HyperHDR: https://github.com/awawa-dev/HyperHDR
-- Microsoft: Using DirectX with HDR and Advanced Color
-- Microsoft: Screen capture (Windows.Graphics.Capture) — recomenda FP16 em HD Color
-- OBS community: DXGI Desktop Duplication vs Windows Graphics Capture
-- Exemplos HDR-aware capture: ShareX-HDR, capscr (FP16 + tone-map)
+- Microsoft — Use DirectX with Advanced Color on high/standard dynamic range displays: https://learn.microsoft.com/en-us/windows/win32/direct3darticles/high-dynamic-range
+- Microsoft — Screen capture (Windows.Graphics.Capture), recomenda `R16G16B16A16_FLOAT` para HDR: https://learn.microsoft.com/en-us/windows/apps/develop/media-authoring-processing/screen-capture
+- OBS Forums — Windows Graphics Capture vs DXGI Desktop Duplication: https://obsproject.com/forum/threads/windows-graphics-capture-vs-dxgi-desktop-duplication.149320/
+- ShareX-HDR (fork não-oficial, não é o ShareX oficial): https://github.com/GotoFinal/ShareX-HDR
+- ~~capscr~~ — referência removida: nenhum projeto com esse nome foi localizado; ver ressalva na seção 4.3

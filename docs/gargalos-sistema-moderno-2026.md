@@ -85,6 +85,10 @@ Ordem de grandeza (HW ≥ 6, Timer1 típico): taxa efetiva ~F_CPU/65536 ≈ **24
 
 `CMD_SET_SMOOTH_SLOWDOWN`: **0 = smooth off** (`Firmware/LightpackUSB.c`).
 
+> **Nuance verificada (2026-07-26):** `Firmware/LightpackUSB.c:199-202` seta `isSmoothEnabled` **e** `smoothSlowdown` a partir do **mesmo byte** recebido (comentário no próprio código-fonte: `/* not a bug */`). Não é um "if especial para 0"; é um acoplamento onde qualquer valor não-zero liga o smooth usando aquele mesmo valor como slowdown — o efeito prático ("0 desliga") está correto, mas o mecanismo é menos direto do que "0 = off" sugere isoladamente.
+
+> **Escopo (2026-07-26):** todo este smooth (host `Device::SmoothDefault` + firmware `smoothSlowdown`) é exclusivo do **device Lightpack nativo** (USB HID, `Firmware/`). Devices Adalight, Ardulight e os UDP (WARLS/DRGB/DNRGB) **não têm nenhuma suavização** — nem host, nem firmware/sketch: `LedDeviceAdalight::setSmoothSlowdown`/`LedDeviceArdulight::setSmoothSlowdown` são stubs vazios, e `GrabManager.cpp` não tem nenhuma lógica de interpolação temporal. Para quem usa Arduino+Adalight ou WLED, cada frame que passa no diff de cor vira um corte duro, sem cross-fade nenhum. Detalhamento e opções de correção em [`firmware-hardware-datados.md`](./firmware-hardware-datados.md) §3.1.
+
 **Conclusão:** em setup Lightpack “de fábrica”, o firmware smooth pode atrasar a percepção mais que baixar o grab para 10–16 ms. Host a 60–100 FPS + smooth=100 ainda “amolece” cortes rápidos de cena.
 
 ---

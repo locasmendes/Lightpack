@@ -75,7 +75,7 @@ LED_N/CoefRed|Green|Blue
 | Múltiplos perfis + hotkey/API | ✅ | Workaround atual; base para “presets de AR” |
 | `setleds` em runtime | ✅ | Remap sem reiniciar |
 | Wizard com margens % | ✅ parcial | Margens **não** viram setting persistente de “content rect” |
-| `CustomDistributor` | ✅ | Pode redistribuir zonas em um `QRect` arbitrário |
+| `CustomDistributor` | ✅ (com ressalva) | Aceita um `QRect` arbitrário no construtor, mas hoje só é chamado com `screenRect()` (geometria do monitor inteiro) — usá-lo com um content rect seria uso novo, não testado |
 | `AreaDistributor::aspect()` | ⚠️ morto | Existe, mas não é usado no layout |
 | Detecção de letterbox/pillarbox | ❌ | Gap principal |
 | Zonas relativas (0.0–1.0) | ❌ | Tudo é pixel absoluto |
@@ -93,7 +93,9 @@ LED_N/CoefRed|Green|Blue
 
 ## 3. Práticas adotadas por sistemas modernos
 
-Pesquisa cobrindo open-source (Hyperion.ng, HyperHDR, Adrilight3, AmbiTuya) e produtos comerciais (Philips Hue Sync Box, Govee AI Sync Box), além de literatura de TV digital.
+Pesquisa cobrindo open-source (Hyperion.ng, HyperHDR, adrilight, AmbiTuya) e produtos comerciais (Philips Hue Sync Box, Govee AI Sync Box), além de literatura de TV digital.
+
+> **Nota de verificação (2026-07-26):** a versão original desta seção citava um projeto "Adrilight3" de um autor "AbsenteeAtom" — essa referência não foi localizada (nem o repositório, nem o usuário existem no GitHub) e foi tratada como citação inválida/possível alucinação. Foi substituída abaixo pelo projeto real e verificável `fabsenet/adrilight`, com a afirmação comportamental específica marcada como não confirmada no código.
 
 ### 3.1 Hyperion.ng / HyperHDR — referência open-source dominante
 
@@ -122,45 +124,56 @@ Fontes:
 - https://github.com/hyperion-project/hyperion.ng
 - https://github.com/awawa-dev/HyperHDR
 
-### 3.2 Adrilight3 — remap inteligente (não desligar LED)
+### 3.2 adrilight — captura DXGI para Arduino (comportamento de blackbar não confirmado)
 
-Diferencial importante:
+adrilight (Windows, C#) captura o desktop via DXGI Desktop Duplication e envia cores para um Arduino/WS2812b via USB CDC — mesma família conceitual do Prismatik/Lightpack.
 
-> Letterbox/pillarbox detectados por **sparse edge scan**; LEDs sobre a barra preta são **remapeados para a borda mais próxima do conteúdo**, em vez de apagar.
+> ⚠️ **Não confirmado.** A ideia original deste documento — "LEDs sobre a barra preta são remapeados para a borda mais próxima do conteúdo, em vez de apagar" — **não pôde ser verificada** no repositório real. O que existe publicamente é uma *issue* aberta pedindo detecção de barra preta ("Black Bar detection", `fabsenet/adrilight#34`), o que sugere que, na melhor das hipóteses, isso era um pedido de feature e não um comportamento já implementado. Trate a estratégia de "clamp" (política S2 na seção 5.2) como uma proposta de design inspirada por Hyperion/HyperHDR, **não** como algo já validado em produção por este projeto específico.
 
-Resultado: **todas as LEDs continuam ativas** e refletem cor real — melhor em UW, onde “apagar laterais” deixa o ambiente morto.
-
-Também: captura DXGI, downscale 1/8, span de dois monitores como uma superfície.
-
-Fonte: https://github.com/AbsenteeAtom/Adrilight3
+Fontes:
+- https://github.com/fabsenet/adrilight — repositório principal
+- https://github.com/fabsenet/adrilight/issues/34 — pedido de detecção de barra preta (aberto, não confirmado como implementado)
 
 ### 3.3 AmbiTuya / AmbiScreen
 
 - **Letterbox threshold** configurável
-- Segment editor visual (grid/segments)
 - Crop estático (left/right/top/bottom) + detecção dinâmica
 - Signal thresholds por canal RGB para “sem sinal”
+
+> **Correção (2026-07-26):** a versão original citava um "segment editor visual (grid/segments)" para AmbiScreen. A página-fonte consultada (`wiki.ambiscreen.tv/leds-settings/`) documenta apenas parâmetros de configuração via webapp (`cropLeft/Right/Top/Bottom`, `threshold`), **não** um editor visual de segmentos. Esse item foi removido por falta de evidência.
+
+Fontes:
+- https://github.com/CmdrAvegan/AmbiTuya
+- https://wiki.ambiscreen.tv/leds-settings/
 
 ### 3.4 Philips Hue Play HDMI Sync Box
 
 - Processa o **sinal HDMI** (não o desktop)
-- Melhorias explícitas de firmware em **detecção de black bars** para scripts de luz
+- Firmware tem histórico de melhorias em **detecção de black bars** para scripts de luz
 - Modos Video / Game / Music (intenção de conteúdo)
 - Limitação: depende de HDMI in-line; apps do smart TV fora do caminho
 
-Fonte: release notes Hue Sync Box (melhorias de letterboxing detection).
+Fonte: https://www.philips-hue.com/en-us/support/release-notes/philips-hue-play-hdmi-sync-box (release notes oficiais). **Ressalva:** não localizei uma entrada de changelog específica citando "detecção de black bars" com número de versão/data fixos — a melhoria é mencionada de forma agregada em cobertura de terceiros sobre o produto, não confirmada linha a linha nas release notes.
 
 ### 3.5 Govee AI Sync Box / Cogniglow
 
 - Sync via HDMI + “AI” para eventos de jogo
-- Setting **Black Bar Elimination**
-- Reviews apontam **falha notável em ultrawide 21:9**: barras pretas ainda degradam o resultado
+- Setting **Black Bar Elimination** (confirmado em reviews)
+- Reviews de monitores **ultrawide curvos** relatam perda de brilho/qualidade em movimento (não necessariamente causada pelo Black Bar Elimination em si — pode ser efeito da curvatura do painel na leitura de cor)
 - Lição: “ter o toggle” não basta — a qualidade do detector + estratégia de remap (crop vs rematerializar laterais) importa
+
+Fontes:
+- https://gamerant.com/govee-ai-sync-box-2-review/
+- https://www.mmorpg.com/hardware-reviews/govee-ai-gaming-sync-box-kit-review-2000127861
+- https://www.pcgamer.com/hardware/lighting/govee-ai-sync-box-kit-2-review/
 
 ### 3.6 Literatura / broadcast
 
-Paper *Automatic Letter/Pillarbox Detection for Optimized Display of Digital TV* (SciTePress, 2014):
+Paper *Automatic Letter/Pillarbox Detection for Optimized Display of Digital TV* (Carreira & Queluz, SIGMAP/SciTePress, 2014):
 
+- https://www.scitepress.org/PublishedPapers/2014/50642/ (página oficial)
+- https://www.scitepress.org/papers/2014/50642/50642.pdf (PDF)
+- https://ieeexplore.ieee.org/document/7514520 (versão IEEE Xplore)
 - Detectar largura de barras H/V quando AFD metadata não existe
 - Caso 1: barras limpas
 - Caso 2: legendas/logos **sobre** as barras → não cropar cegamente
@@ -305,7 +318,7 @@ Três políticas (configurável):
 | Política | Comportamento | Quando usar |
 |----------|---------------|-------------|
 | `off` | LED apaga | Economia / cinema “puro” |
-| `clamp` | Amostra a borda do conteúdo (Adrilight3) | **Melhor default UW** |
+| `clamp` | Amostra a borda do conteúdo (padrão Hyperion/HyperHDR; não confirmado no adrilight, ver §3.2) | **Melhor default UW** |
 | `bleed` | Amostra um pouco para dentro + blur | Transições mais suaves |
 
 #### S3. Redistribuição automática das caixas
@@ -622,16 +635,17 @@ flowchart TB
 - Hyperion.ng: https://github.com/hyperion-project/hyperion.ng
 - HyperHDR: https://github.com/awawa-dev/HyperHDR
 - HyperHDR issue legendas/blackbar: https://github.com/awawa-dev/HyperHDR/issues/821
-- Adrilight3 (black bar remap): https://github.com/AbsenteeAtom/Adrilight3
-- AmbiTuya (letterbox threshold / segments): https://github.com/CmdrAvegan/AmbiTuya
-- AmbiScreen LED/crop settings: https://wiki.ambiscreen.tv/leds-settings/
+- adrilight (não "Adrilight3" — ver correção em §3.2): https://github.com/fabsenet/adrilight
+- adrilight issue de black bar (feature request, comportamento não confirmado como implementado): https://github.com/fabsenet/adrilight/issues/34
+- AmbiTuya (letterbox threshold): https://github.com/CmdrAvegan/AmbiTuya
+- AmbiScreen LED/crop settings (sem segment editor visual — ver correção em §3.3): https://wiki.ambiscreen.tv/leds-settings/
 
 ### Comercial
-- Philips Hue Sync Box release notes (black bar detection improvements)
-- Govee AI Sync Box / Cogniglow (Black Bar Elimination; limitações em UW reportadas em reviews)
+- Philips Hue Sync Box release notes: https://www.philips-hue.com/en-us/support/release-notes/philips-hue-play-hdmi-sync-box (melhoria específica de black-bar detection não pinada a uma versão exata — ver ressalva em §3.4)
+- Govee AI Sync Box — Black Bar Elimination + relatos de limitação em ultrawide curvo: https://gamerant.com/govee-ai-sync-box-2-review/ , https://www.mmorpg.com/hardware-reviews/govee-ai-gaming-sync-box-kit-review-2000127861
 
 ### Academia
-- *Automatic Letter/Pillarbox Detection for Optimized Display of Digital TV* (SciTePress, 2014)
+- Carreira, L.; Queluz, M.P. — *Automatic Letter/Pillarbox Detection for Optimized Display of Digital TV*, SIGMAP/SciTePress, 2014: https://www.scitepress.org/PublishedPapers/2014/50642/ (PDF: https://www.scitepress.org/papers/2014/50642/50642.pdf ; IEEE Xplore: https://ieeexplore.ieee.org/document/7514520)
 
 ### Código local (Prismatik)
 - `Software/src/GrabWidget.*`

@@ -12,10 +12,10 @@ Com base em `Software/src/SettingsWindow.ui` e screenshots em `screenshots/`:
 
 | Aspecto | Hoje | Problema |
 |---------|------|----------|
-| Shell | `QMainWindow` ~485×668, lista de ícones 64×64 | Visual de ~2010; ocupa espaço sem hierarquia |
-| Navegação | Mode / Device / Profiles / Plugins / Experimental / About | Tudo no mesmo nível; o que importa (luz ligada, AR, preview) some |
+| Shell | `QMainWindow` 485×668 (exato, `SettingsWindow.ui:6-11`), lista de ícones 64×64 | Visual de ~2010; ocupa espaço sem hierarquia |
+| Navegação | Mode / Device / Profiles / Plugins / Expert / About | Tudo no mesmo nível; o que importa (luz ligada, AR, preview) some |
 | Mode | Form longo: FPS, checkboxes, sliders, groupboxes | Densidade alta, zero feedback visual da captura |
-| Zonas | Overlay `GrabWidget` separado, “Colored/White/Hide” | Configuração tediosa; sem content rect / presets AR |
+| Zonas | Overlay `GrabWidget` separado, “Colored/All white/Hidden” | Configuração tediosa; sem content rect / presets AR |
 | Preview | Quase inexistente (FPS na status bar) | Usuário não vê o que os LEDs “entendem” |
 | Brand | Ícone + título da janela | Brand fraco; poderia ser qualquer settings app |
 | Idioma visual | Controles nativos Windows/Qt, ícones skeuomorphic | Não comunica “luz / cinema / desktop moderno” |
@@ -139,7 +139,7 @@ LEDGroup/<nome>/IsEnabled
 | Appearance of grab widgets | Geometry → Overlay |
 | Device tabs | Device |
 | Profiles + UI locale | More → Profiles |
-| Experimental → API | More → API (rótulo humano: “Controle remoto”) |
+| Expert → API | More → API (rótulo humano: “Controle remoto”) |
 | About | More → About |
 | Wizard Qt | Device → Setup / Geometry → Auto layout |
 | Status bar FPS/device | Chrome persistente no Home |
