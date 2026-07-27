@@ -26,6 +26,7 @@
 
 #include "CustomDistributor.hpp"
 #include "PrismatikMath.hpp"
+#include <QtGlobal>
 
 int roundDown(int n) {
 	const int rounded = (n % 2 == 0) ? n : (n - 1);
@@ -55,7 +56,9 @@ void CustomDistributor::startBottomMiddleToRight() {
 			// use left side led count as they'll have 1 more with an odd total number
 			// this will give the smaller width that'll fit on both sides
 			const int halfWidth = _screen.width() * (1.0 - _standWidth) / 2;
-			_width = halfWidth / (bLeds - hLeds);
+			// bLeds - hLeds can be 0 (e.g. bottomLeds == 1, no skipCorners) - clamp
+			// to avoid a division by zero for that otherwise-valid configuration.
+			_width = halfWidth / qMax(1, bLeds - hLeds);
 		}
 		_height = _screen.height() * _thickness;
 		_x = _screen.left() + _screen.width() - (hLeds * _width) - _sizeBudget;
@@ -130,7 +133,9 @@ void CustomDistributor::startBottomRightToMiddle() {
 		}
 		else {
 			const int halfWidth = _screen.width() * (1.0 - _standWidth) / 2;
-			_width = halfWidth / hLeds;
+			// hLeds can be 0 (e.g. bottomLeds == 1, no skipCorners) - clamp to
+			// avoid a division by zero for that otherwise-valid configuration.
+			_width = halfWidth / qMax(1, hLeds);
 		}
 		_height = _screen.height() * _thickness;
 		_x = _screen.left() + _skipCorners * _width;

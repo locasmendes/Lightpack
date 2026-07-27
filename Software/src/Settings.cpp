@@ -35,7 +35,9 @@
 #include <QDir>
 #include <QUuid>
 #include <QScreen>
+#include <QJsonDocument>
 #include "debug.h"
+#include "wizard/ContentAspectPreset.hpp"
 
 #define MAIN_CONFIG_FILE_VERSION	"4.0"
 
@@ -202,6 +204,8 @@ static const QString IsAvgColorsEnabled = QStringLiteral("Grab/IsAvgColorsEnable
 static const QString IsSendDataOnlyIfColorsChanges = QStringLiteral("Grab/IsSendDataOnlyIfColorsChanges");
 static const QString Slowdown = QStringLiteral("Grab/Slowdown");
 static const QString HostSmoothingDuration = QStringLiteral("Grab/HostSmoothingDuration");
+static const QString ContentAspectPreset = QStringLiteral("Grab/ContentAspectPreset");
+static const QString LayoutRecipe = QStringLiteral("Grab/LayoutRecipe");
 static const QString LuminosityThreshold = QStringLiteral("Grab/LuminosityThreshold");
 static const QString OverBrighten = QStringLiteral("Grab/OverBrighten");
 static const QString IsMinimumLuminosityEnabled = QStringLiteral("Grab/IsMinimumLuminosityEnabled");
@@ -1381,6 +1385,44 @@ void Settings::setGrabHostSmoothingDuration(int value)
 	emit m_this->grabHostSmoothingDurationChanged(validValue);
 }
 
+QString Settings::getContentAspectPreset()
+{
+	return ContentAspectPreset::normalize(value(Profile::Key::Grab::ContentAspectPreset).toString());
+}
+
+void Settings::setContentAspectPreset(const QString& preset)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << preset;
+	const QString validPreset = ContentAspectPreset::normalize(preset);
+	setValue(Profile::Key::Grab::ContentAspectPreset, validPreset);
+	emit m_this->contentAspectPresetChanged(validPreset);
+}
+
+bool Settings::hasLayoutRecipe()
+{
+	return !getLayoutRecipe().isEmpty();
+}
+
+QJsonArray Settings::getLayoutRecipe()
+{
+	const QString raw = value(Profile::Key::Grab::LayoutRecipe).toString();
+	if (raw.isEmpty())
+		return QJsonArray();
+
+	const QJsonDocument doc = QJsonDocument::fromJson(raw.toUtf8());
+	return doc.isArray() ? doc.array() : QJsonArray();
+}
+
+void Settings::setLayoutRecipe(const QJsonArray& recipe)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
+	const QString raw = recipe.isEmpty()
+		? QString()
+		: QString::fromUtf8(QJsonDocument(recipe).toJson(QJsonDocument::Compact));
+	setValue(Profile::Key::Grab::LayoutRecipe, raw);
+	emit m_this->layoutRecipeChanged();
+}
+
 bool Settings::isBacklightEnabled()
 {
 	return value(Profile::Key::IsBacklightEnabled).toBool();
@@ -2195,6 +2237,8 @@ void Settings::initCurrentProfile(bool isResetDefault)
 	setNewOption(Profile::Key::Grab::IsSendDataOnlyIfColorsChanges, Profile::Grab::IsSendDataOnlyIfColorsChangesDefault, isResetDefault);
 	setNewOption(Profile::Key::Grab::Slowdown,						Profile::Grab::SlowdownDefault, isResetDefault);
 	setNewOption(Profile::Key::Grab::HostSmoothingDuration,			Profile::Grab::HostSmoothingDurationDefault, isResetDefault);
+	setNewOption(Profile::Key::Grab::ContentAspectPreset,			Profile::Grab::ContentAspectPresetDefault, isResetDefault);
+	setNewOption(Profile::Key::Grab::LayoutRecipe,					Profile::Grab::LayoutRecipeDefault, isResetDefault);
 	setNewOption(Profile::Key::Grab::LuminosityThreshold,			Profile::Grab::LuminosityThresholdDefault, isResetDefault);
 	setNewOption(Profile::Key::Grab::IsMinimumLuminosityEnabled,	Profile::Grab::IsMinimumLuminosityEnabledDefault, isResetDefault);
 	setNewOption(Profile::Key::Grab::IsDx1011GrabberEnabled,		Profile::Grab::IsDx1011GrabberEnabledDefault, isResetDefault);

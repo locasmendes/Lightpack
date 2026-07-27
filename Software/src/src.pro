@@ -330,6 +330,9 @@ SOURCES += \
     wizard/SelectDevicePage.cpp \
     wizard/GlobalColorCoefPage.cpp \
     wizard/CustomDistributor.cpp \
+    wizard/ContentAspectPreset.cpp \
+    wizard/LayoutRecipeGenerator.cpp \
+    ZoneLayoutRuntime.cpp \
     systrayicon/SysTrayIcon.cpp \
     UpdatesProcessor.cpp \
     LightpackCommandLineParser.cpp
@@ -390,6 +393,9 @@ HEADERS += \
     types.h \
     wizard/AreaDistributor.hpp \
     wizard/CustomDistributor.hpp \
+    wizard/ContentAspectPreset.hpp \
+    wizard/LayoutRecipeGenerator.hpp \
+    ZoneLayoutRuntime.hpp \
     systrayicon/SysTrayIcon.hpp \
     UpdatesProcessor.hpp \
     LightpackCommandLineParser.hpp

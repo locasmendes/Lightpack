@@ -242,6 +242,10 @@ private slots:
 
 	void onRunConfigurationWizard_clicked();
 
+	void onContentAspectFill_toggled(bool checked);
+	void onContentAspect169_toggled(bool checked);
+	void onContentAspect43_toggled(bool checked);
+
 	void onCheckBox_checkForUpdates_Toggled(bool isEnabled);
 	void onCheckBox_installUpdates_Toggled(bool isEnabled);
 
@@ -270,6 +274,9 @@ private:
 
 	void setFirmwareVersion(const QString &firmwareVersion);
 	void versionsUpdate();
+
+	void applyContentAspectPreset(const QString &preset);
+	void updateContentAspectUi();
 
 	void savePriorityPlugin();
 	void showHelpOf(QObject *object);

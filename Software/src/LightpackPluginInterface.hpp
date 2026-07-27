@@ -31,6 +31,7 @@ public:
 	bool SetSmooth(const QString& sessionKey, int smooth);
 	bool SetHostSmooth(const QString& sessionKey, int hostSmooth);
 	bool SetProfile(const QString& sessionKey, const QString& profile);
+	bool SetContentAspect(const QString& sessionKey, const QString& preset);
 	bool SetDevice(const QString& sessionKey, const QString& device);
 #ifdef SOUNDVIZ_SUPPORT
 	bool SetSoundVizColors(const QString& sessionKey, QColor min, QColor max);

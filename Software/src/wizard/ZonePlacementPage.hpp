@@ -76,6 +76,7 @@ private:
 	void resetNewAreaRect();
 	bool checkZoneIssues();
 	QRect screenRect() const;
+	static QRect marginAdjustedRect(const QRect& screen, double topMarginPct, double sideMarginPct, double bottomMarginPct);
 
 	Ui::ZonePlacementPage *_ui;
 	QRect _newAreaRect;

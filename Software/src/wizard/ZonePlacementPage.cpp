@@ -29,9 +29,11 @@
 #include "AbstractLedDevice.hpp"
 #include "Settings.hpp"
 #include "CustomDistributor.hpp"
+#include "LayoutRecipeGenerator.hpp"
 #include "GrabWidget.hpp"
 #include "LedDeviceLightpack.hpp"
 #include "MonitorIdForm.hpp"
+#include <QJsonArray>
 
 
 ZonePlacementPage::ZonePlacementPage(bool isInitFromSettings, TransientSettings *ts, QWidget *parent):
@@ -230,6 +232,32 @@ bool ZonePlacementPage::validatePage()
 		}
 	}
 
+	// Persist a layout recipe (see docs/plans/presets-aspect-ratio.md) for every
+	// monitor that has zones, so content-aspect presets can regenerate them
+	// later without re-running the wizard. Make sure the currently selected
+	// monitor's settings reflect the live UI controls first.
+	saveMonitorSettings(_screens[_ui->cbMonitorSelect->currentIndex()]);
+	QJsonArray recipe;
+	for (const MonitorSettings& settings : _screens) {
+		if (settings.grabAreas.isEmpty())
+			continue;
+
+		LayoutRecipeGenerator::MonitorRecipe monitorRecipe;
+		monitorRecipe.startingLed = settings.startingLed;
+		monitorRecipe.topLeds = settings.topLeds;
+		monitorRecipe.sideLeds = settings.sideLeds;
+		monitorRecipe.bottomLeds = std::max(0, (int)settings.grabAreas.count() - settings.topLeds - 2 * settings.sideLeds);
+		monitorRecipe.thicknessPercent = settings.thickness;
+		monitorRecipe.standWidthPercent = settings.standWidth;
+		monitorRecipe.skipCorners = settings.skipCorners;
+		monitorRecipe.invertOrder = settings.invertOrder;
+		monitorRecipe.numberingOffset = settings.offset;
+		monitorRecipe.baseRect = marginAdjustedRect(settings.screen->geometry(), settings.topMargin, settings.sideMargin, settings.bottomMargin);
+
+		recipe.append(LayoutRecipeGenerator::toJson(monitorRecipe));
+	}
+	_transSettings->layoutRecipe = recipe;
+
 	cleanupPage();
 	return true;
 }
@@ -253,20 +281,10 @@ void ZonePlacementPage::distributeAreas(AreaDistributor *distributor, bool inver
 	_zonePool.append(grabAreas);
 
 	grabAreas.clear();
-	grabAreas.reserve(distributor->areaCount());
-	for(int i = 0; i < distributor->areaCount(); i++) {
-		const ScreenArea * const sf = distributor->next();
-		qDebug() << sf->hScanStart() << sf->vScanStart();
-
-		const QRect r(sf->hScanStart(),
-				sf->vScanStart(),
-				(sf->hScanEnd() - sf->hScanStart()),
-				(sf->vScanEnd() - sf->vScanStart()));
-		int id = ((invertIds ? distributor->areaCount() - (i + 1) : i) + idOffset) % distributor->areaCount();
-		id = (id + distributor->areaCount()) % distributor->areaCount();
-		addGrabArea(grabAreas, id + startId, r);
-		delete sf;
-	}
+	const QMap<int, QRect> rects = LayoutRecipeGenerator::generate(*distributor, invertIds, idOffset, startId);
+	grabAreas.reserve(rects.size());
+	for (auto it = rects.constBegin(); it != rects.constEnd(); ++it)
+		addGrabArea(grabAreas, it.key(), it.value());
 	resetNewAreaRect();
 
 	_transSettings->ledCount = 0;
@@ -305,13 +323,22 @@ void ZonePlacementPage::removeLastGrabArea()
 
 QRect ZonePlacementPage::screenRect() const
 {
-	QRect screen = QGuiApplication::screens().value(_ui->cbMonitorSelect->currentIndex(), QGuiApplication::primaryScreen())->geometry();
-	const int topMargin = std::floor(screen.height() * _ui->doubleSpinBox_topMargin->value() / 100.0);
-	const int sideMargin = std::floor(screen.width() * _ui->doubleSpinBox_sideMargin->value() / 100.0);
-	const int bottomMargin = std::floor(screen.height() * _ui->doubleSpinBox_bottomMargin->value() / 100.0);
-	screen.setTopLeft(QPoint(screen.left() + sideMargin, screen.top() + topMargin));
-	screen.setBottomRight(QPoint(screen.right() - sideMargin, screen.bottom() - bottomMargin));
-	return screen;
+	const QRect screen = QGuiApplication::screens().value(_ui->cbMonitorSelect->currentIndex(), QGuiApplication::primaryScreen())->geometry();
+	return marginAdjustedRect(screen,
+		_ui->doubleSpinBox_topMargin->value(),
+		_ui->doubleSpinBox_sideMargin->value(),
+		_ui->doubleSpinBox_bottomMargin->value());
+}
+
+QRect ZonePlacementPage::marginAdjustedRect(const QRect& screen, double topMarginPct, double sideMarginPct, double bottomMarginPct)
+{
+	QRect result = screen;
+	const int topMargin = std::floor(screen.height() * topMarginPct / 100.0);
+	const int sideMargin = std::floor(screen.width() * sideMarginPct / 100.0);
+	const int bottomMargin = std::floor(screen.height() * bottomMarginPct / 100.0);
+	result.setTopLeft(QPoint(screen.left() + sideMargin, screen.top() + topMargin));
+	result.setBottomRight(QPoint(screen.right() - sideMargin, screen.bottom() - bottomMargin));
+	return result;
 }
 
 void ZonePlacementPage::onAndromeda_clicked()

@@ -29,6 +29,7 @@
 
 #include <QSharedPointer>
 #include <QMap>
+#include <QJsonArray>
 
 namespace SettingsScope {
 class Settings;
@@ -42,6 +43,10 @@ struct TransientSettings {
 	QMap<int, QSize> zoneSizes;
 	QMap<int, bool> zoneEnabled;
 	int ledCount = 0;
+	// Layout recipe captured by ZonePlacementPage, persisted by whichever page
+	// commits to real Settings at the end of the wizard (see
+	// docs/plans/presets-aspect-ratio.md Fase 2/3).
+	QJsonArray layoutRecipe;
 };
 
 class SettingsAwareTrait {

@@ -154,6 +154,7 @@ const char * const ApiServer::CmdSetBrightness = "setbrightness:";
 const char * const ApiServer::CmdSetSmooth = "setsmooth:";
 const char * const ApiServer::CmdSetHostSmooth = "sethostsmooth:";
 const char * const ApiServer::CmdSetProfile = "setprofile:";
+const char * const ApiServer::CmdSetContentAspect = "setcontentaspect:";
 
 #ifdef SOUNDVIZ_SUPPORT
 const char * const ApiServer::CmdSetSoundVizColors = "setsoundvizcolors:";
@@ -1089,6 +1090,42 @@ void ApiServer::clientProcessCommands()
 				result = CmdSetResult_Busy;
 			}
 		}
+		else if (cmdBuffer.startsWith(CmdSetContentAspect))
+		{
+			API_DEBUG_OUT << CmdSetContentAspect;
+
+			if (m_lockedClient == 1)
+			{
+				cmdBuffer.remove(0, cmdBuffer.indexOf(':') + 1);
+				API_DEBUG_OUT << QString(cmdBuffer);
+				QString contentAspectPreset = QString(cmdBuffer);
+
+				if (contentAspectPreset == QStringLiteral("fill")
+						|| contentAspectPreset == QStringLiteral("16:9")
+						|| contentAspectPreset == QStringLiteral("4:3"))
+				{
+					if (lightpack->SetContentAspect(sessionKey, contentAspectPreset))
+					{
+						API_DEBUG_OUT << CmdSetContentAspect << "OK:" << contentAspectPreset;
+						result = CmdSetResult_Ok;
+					} else {
+						API_DEBUG_OUT << CmdSetContentAspect << "Error (no layout recipe for current profile):" << contentAspectPreset;
+						result = CmdSetResult_Error;
+					}
+				} else {
+					API_DEBUG_OUT << CmdSetContentAspect << "Error (invalid preset):" << contentAspectPreset;
+					result = CmdSetResult_Error;
+				}
+			}
+			else if (m_lockedClient == 0)
+			{
+				result = CmdSetResult_NotLocked;
+			}
+			else // m_lockedClient != client
+			{
+				result = CmdSetResult_Busy;
+			}
+		}
 		else if (cmdBuffer.startsWith(CmdSetDevice))
 		{
 			API_DEBUG_OUT << CmdSetDevice;
@@ -1606,6 +1643,14 @@ void ApiServer::initHelpMessage()
 				helpCmdSetResults);
 
 	m_helpMessage += formatHelp(
+				CmdSetContentAspect,
+				QStringLiteral("Set the content aspect preset (fill, 16:9 or 4:3) for the current profile, regenerating its LED zones from the stored layout recipe. Fails if the profile has no recipe. Works only on locking time (see lock)."),
+				formatHelp(CmdSetContentAspect + QStringLiteral("fill")) +
+				formatHelp(CmdSetContentAspect + QStringLiteral("16:9")) +
+				formatHelp(CmdSetContentAspect + QStringLiteral("4:3")),
+				helpCmdSetResults);
+
+	m_helpMessage += formatHelp(
 				CmdNewProfile,
 				QStringLiteral("Create new profile. Works only on locking time (see lock)."),
 				formatHelp(CmdNewProfile + QStringLiteral("16x9")) +
@@ -1679,7 +1724,7 @@ void ApiServer::initShortHelpMessage()
 			<< CmdGetPersistOnUnlock
 			<< CmdSetColor << CmdSetLeds
 			<< CmdSetGamma << CmdSetBrightness << CmdSetSmooth << CmdSetHostSmooth
-			<< CmdSetProfile << CmdNewProfile << CmdDeleteProfile
+			<< CmdSetProfile << CmdSetContentAspect << CmdNewProfile << CmdDeleteProfile
 			<< CmdSetStatus << CmdSetBacklight
 #ifdef SOUNDVIZ_SUPPORT
 			<< CmdSetSoundVizColors << CmdSetSoundVizLiquid

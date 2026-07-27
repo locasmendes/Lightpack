@@ -33,6 +33,7 @@
 #include "ui_SettingsWindow.h"
 
 #include "Settings.hpp"
+#include "ZoneLayoutRuntime.hpp"
 #include "ColorButton.hpp"
 #include "LedDeviceManager.hpp"
 #include "enums.hpp"
@@ -275,6 +276,11 @@ void SettingsWindow::connectSignalsSlots()
 
 	connect(ui->pbRunConfigurationWizard, &QPushButton::clicked, this, &SettingsWindow::onRunConfigurationWizard_clicked);
 
+	// Content aspect presets (redistribute zones within the same profile)
+	connect(ui->radioButton_ContentAspectFill, &QRadioButton::toggled, this, &SettingsWindow::onContentAspectFill_toggled);
+	connect(ui->radioButton_ContentAspect169, &QRadioButton::toggled, this, &SettingsWindow::onContentAspect169_toggled);
+	connect(ui->radioButton_ContentAspect43, &QRadioButton::toggled, this, &SettingsWindow::onContentAspect43_toggled);
+
 	// Open Settings file
 	connect(ui->commandLinkButton_OpenSettings, &QCommandLinkButton::clicked, this, &SettingsWindow::openCurrentProfile);
 
@@ -286,6 +292,7 @@ void SettingsWindow::connectSignalsSlots()
 
 	// connect(Settings::settingsSingleton(), SIGNAL(hotkeyChanged(QString,QKeySequence,QKeySequence)), this, &SettingsWindow::onHotkeyChanged);
 	connect(Settings::settingsSingleton(), &Settings::lightpackModeChanged, this, &SettingsWindow::onLightpackModeChanged);
+	connect(Settings::settingsSingleton(), &Settings::contentAspectPresetChanged, this, &SettingsWindow::updateContentAspectUi);
 
 	connect(ui->pushButton_ProfileNew, &QPushButton::clicked, this, &SettingsWindow::profileNew);
 	connect(ui->pushButton_ProfileResetToDefault, &QPushButton::clicked, this, &SettingsWindow::profileResetToDefaultCurrent);
@@ -2033,6 +2040,7 @@ void SettingsWindow::updateUiFromSettings()
 	updateDeviceTabWidgetsVisibility();
 	onGrabberChanged();
 	settingsProfileChanged_UpdateUI(Settings::getCurrentProfileName());
+	updateContentAspectUi();
 	updatingFromSettings = false;
 }
 
@@ -2342,6 +2350,60 @@ void SettingsWindow::onRunConfigurationWizard_clicked()
 	QProcess::startDetached(cmdLine, args);
 
 	quit();
+}
+
+void SettingsWindow::onContentAspectFill_toggled(bool checked)
+{
+	if (checked && !updatingFromSettings) {
+		applyContentAspectPreset(QStringLiteral("fill"));
+	}
+}
+
+void SettingsWindow::onContentAspect169_toggled(bool checked)
+{
+	if (checked && !updatingFromSettings) {
+		applyContentAspectPreset(QStringLiteral("16:9"));
+	}
+}
+
+void SettingsWindow::onContentAspect43_toggled(bool checked)
+{
+	if (checked && !updatingFromSettings) {
+		applyContentAspectPreset(QStringLiteral("4:3"));
+	}
+}
+
+void SettingsWindow::applyContentAspectPreset(const QString &preset)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << preset;
+
+	if (!ZoneLayoutRuntime::applyContentAspectPreset(preset)) {
+		DEBUG_LOW_LEVEL << Q_FUNC_INFO << "no-op, no layout recipe for current profile";
+	}
+
+	// Resync the UI to whatever actually ended up persisted (a no-op must not
+	// leave a stale checked radio button behind).
+	updateContentAspectUi();
+}
+
+void SettingsWindow::updateContentAspectUi()
+{
+	const bool hasRecipe = Settings::hasLayoutRecipe();
+
+	ui->radioButton_ContentAspectFill->setEnabled(hasRecipe);
+	ui->radioButton_ContentAspect169->setEnabled(hasRecipe);
+	ui->radioButton_ContentAspect43->setEnabled(hasRecipe);
+
+	const QString preset = Settings::getContentAspectPreset();
+
+	const bool wasUpdatingFromSettings = updatingFromSettings;
+	updatingFromSettings = true;
+	ui->radioButton_ContentAspectFill->setChecked(preset == QLatin1String("fill"));
+	ui->radioButton_ContentAspect169->setChecked(preset == QLatin1String("16:9"));
+	ui->radioButton_ContentAspect43->setChecked(preset == QLatin1String("4:3"));
+	updatingFromSettings = wasUpdatingFromSettings;
+
+	ui->label_ContentAspectPreview->setText(ZoneLayoutRuntime::previewText(preset));
 }
 
 void SettingsWindow::onKeepLightsAfterExit_Toggled(bool isEnabled)

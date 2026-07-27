@@ -9,6 +9,8 @@
 #include "LightpackCommandLineParserTest.hpp"
 #include "LedDeviceDdpTest.hpp"
 #include "HostColorSmoothingTest.hpp"
+#include "ContentAspectPresetTest.hpp"
+#include "LayoutRecipeGeneratorTest.hpp"
 #include "debug.h"
 
 #include <iostream>
@@ -33,6 +35,8 @@ int main(int argc, char *argv[])
 	tests.append(new LightpackCommandLineParserTest());
 	tests.append(new LedDeviceDdpTest());
 	tests.append(new HostColorSmoothingTest());
+	tests.append(new ContentAspectPresetTest());
+	tests.append(new LayoutRecipeGeneratorTest());
 
 	// HooksTest does low-level function hooking that is sensitive to the exact
 	// compiler/toolset used to build it; keep it last so a crash there does not

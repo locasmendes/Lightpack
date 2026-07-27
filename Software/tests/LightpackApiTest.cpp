@@ -26,6 +26,8 @@
 #include <QString>
 #include <QApplication>
 #include <QTest>
+#include <QJsonArray>
+#include <QJsonObject>
 
 #include "debug.h"
 #include "ApiServer.hpp"
@@ -698,6 +700,99 @@ void LightpackApiTest::testCase_SetHostSmoothWithoutLock()
 	setHostSmoothCmd += "150";
 
 	QVERIFY(writeCommandWithCheck(m_socket, setHostSmoothCmd, ApiServer::CmdSetResult_NotLocked));
+}
+
+namespace
+{
+	QJsonArray sampleLayoutRecipe()
+	{
+		QJsonObject rect;
+		rect["x"] = 0;
+		rect["y"] = 0;
+		rect["width"] = 1920;
+		rect["height"] = 1080;
+
+		QJsonObject monitor;
+		monitor["startingLed"] = 0;
+		monitor["topLeds"] = 4;
+		monitor["sideLeds"] = 2;
+		monitor["bottomLeds"] = 4;
+		monitor["thicknessPercent"] = 15;
+		monitor["standWidthPercent"] = 0;
+		monitor["skipCorners"] = false;
+		monitor["invertOrder"] = false;
+		monitor["numberingOffset"] = 0;
+		monitor["baseRect"] = rect;
+
+		QJsonArray recipe;
+		recipe.append(monitor);
+		return recipe;
+	}
+}
+
+void LightpackApiTest::testCase_ContentAspectSettingsDefaultAndRecipeRoundTrip()
+{
+	// A profile with no recipe defaults to "fill" and reports no recipe.
+	Settings::setLayoutRecipe(QJsonArray());
+	QVERIFY(!Settings::hasLayoutRecipe());
+	QCOMPARE(Settings::getContentAspectPreset(), QStringLiteral("fill"));
+
+	const QJsonArray recipe = sampleLayoutRecipe();
+	Settings::setLayoutRecipe(recipe);
+	QVERIFY(Settings::hasLayoutRecipe());
+	QCOMPARE(Settings::getLayoutRecipe(), recipe);
+
+	Settings::setContentAspectPreset(QStringLiteral("16:9"));
+	QCOMPARE(Settings::getContentAspectPreset(), QStringLiteral("16:9"));
+
+	// Invalid/unknown values are normalized to "fill" rather than stored as-is.
+	Settings::setContentAspectPreset(QStringLiteral("bogus"));
+	QCOMPARE(Settings::getContentAspectPreset(), QStringLiteral("fill"));
+
+	// Cleanup so later test cases don't inherit this recipe.
+	Settings::setLayoutRecipe(QJsonArray());
+}
+
+void LightpackApiTest::testCase_SetContentAspectRequiresRecipeAndLock()
+{
+	Settings::setLayoutRecipe(QJsonArray());
+
+	QVERIFY(lock(m_socket));
+
+	// No recipe yet: even a valid token and a valid lock must fail.
+	QByteArray setContentAspectCmd = ApiServer::CmdSetContentAspect;
+	setContentAspectCmd += "fill";
+	QVERIFY(writeCommandWithCheck(m_socket, setContentAspectCmd, ApiServer::CmdSetResult_Error));
+
+	// Invalid token, still no recipe.
+	QByteArray badTokenCmd = ApiServer::CmdSetContentAspect;
+	badTokenCmd += "bogus";
+	QVERIFY(writeCommandWithCheck(m_socket, badTokenCmd, ApiServer::CmdSetResult_Error));
+
+	QVERIFY(unlock(m_socket));
+
+	// Now with a recipe present, valid tokens succeed under lock.
+	Settings::setLayoutRecipe(sampleLayoutRecipe());
+	QVERIFY(lock(m_socket));
+
+	QByteArray setFillCmd = ApiServer::CmdSetContentAspect;
+	setFillCmd += "fill";
+	QVERIFY(writeCommandWithCheck(m_socket, setFillCmd, ApiServer::CmdSetResult_Ok));
+	QCOMPARE(Settings::getContentAspectPreset(), QStringLiteral("fill"));
+
+	QByteArray set16x9Cmd = ApiServer::CmdSetContentAspect;
+	set16x9Cmd += "16:9";
+	QVERIFY(writeCommandWithCheck(m_socket, set16x9Cmd, ApiServer::CmdSetResult_Ok));
+	QCOMPARE(Settings::getContentAspectPreset(), QStringLiteral("16:9"));
+
+	QVERIFY(unlock(m_socket));
+
+	// Without lock, even a valid token/recipe is rejected.
+	QByteArray set43Cmd = ApiServer::CmdSetContentAspect;
+	set43Cmd += "4:3";
+	QVERIFY(writeCommandWithCheck(m_socket, set43Cmd, ApiServer::CmdSetResult_NotLocked));
+
+	Settings::setLayoutRecipe(QJsonArray());
 }
 
 void LightpackApiTest::testCase_SetProfile()

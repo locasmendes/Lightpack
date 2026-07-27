@@ -5,6 +5,7 @@
 #include "Settings.hpp"
 #include "version.h"
 #include "debug.h"
+#include "ZoneLayoutRuntime.hpp"
 
 using namespace SettingsScope;
 
@@ -425,6 +426,22 @@ bool LightpackPluginInterface::SetProfile(const QString& sessionKey, const QStri
 		{
 			emit updateProfile(profile);
 			return true;
+		} else
+			return false;
+}
+
+bool LightpackPluginInterface::SetContentAspect(const QString& sessionKey, const QString& preset)
+{
+	if (lockSessionKeys.isEmpty()) return false;
+	if (lockSessionKeys[0]!=sessionKey) return false;
+		if (preset == QStringLiteral("fill") || preset == QStringLiteral("16:9") || preset == QStringLiteral("4:3"))
+		{
+			// ZoneLayoutRuntime is the single source of truth for both the
+			// valid-token set and whether the current profile has a stored
+			// layout recipe; it persists Grab/ContentAspectPreset and
+			// regenerates LED Position/Size in place, so there is nothing
+			// further to do here on success.
+			return ZoneLayoutRuntime::applyContentAspectPreset(preset);
 		} else
 			return false;
 }

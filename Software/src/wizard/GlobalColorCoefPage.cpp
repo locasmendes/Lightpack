@@ -33,6 +33,7 @@
 #include "debug.h"
 #include "PrismatikMath.hpp"
 #include "GrabWidget.hpp"
+#include "ContentAspectPreset.hpp"
 
 GlobalColorCoefPage::GlobalColorCoefPage(bool isInitFromSettings, TransientSettings *ts, QWidget *parent) :
 	WizardPageUsingDevice(isInitFromSettings, ts, parent),
@@ -172,6 +173,13 @@ bool GlobalColorCoefPage::validatePage()
 		Settings::setLedCoefGreen(id, widget->getCoefGreen());
 		Settings::setLedCoefBlue(id, widget->getCoefBlue());
 	}
+
+	// The wizard's own output is the "fill" baseline for the layout recipe it
+	// just captured (see docs/plans/presets-aspect-ratio.md) - reset the
+	// preset choice so it doesn't keep pointing at geometry from a now-stale
+	// recipe.
+	Settings::setLayoutRecipe(_transSettings->layoutRecipe);
+	Settings::setContentAspectPreset(ContentAspectPreset::Fill);
 
 	cleanupPage();
 	return true;

@@ -1675,6 +1675,49 @@ Internally emulates the effects of f.lux, redshift, Night Light, Night Shift...<
           </property>
          </widget>
         </item>
+        <item row="24" column="0" colspan="6">
+         <widget class="QGroupBox" name="groupBox_ContentAspect">
+          <property name="whatsThis">
+           <string>These buttons redistribute the LED zones within the same profile to match the chosen content aspect ratio. They do not switch profiles and do not change brightness, gamma, smoothing, device settings, or per-LED color coefficients - only the Position and Size of each zone are recalculated. Warning: any manual position/size adjustments you made to individual zones will be replaced by the canonical layout recomputed from the recipe. Profiles without a recorded layout recipe are unaffected - run the setup wizard first.</string>
+          </property>
+          <property name="title">
+           <string>Content aspect</string>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_ContentAspect">
+           <item>
+            <widget class="QRadioButton" name="radioButton_ContentAspectFill">
+             <property name="text">
+              <string>Fill</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radioButton_ContentAspect169">
+             <property name="text">
+              <string>16:9</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radioButton_ContentAspect43">
+             <property name="text">
+              <string>4:3</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_ContentAspectPreview">
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
         <item row="6" column="4">
          <widget class="QPushButton" name="pushButton_GammaCorrectionHelp">
           <property name="sizePolicy">

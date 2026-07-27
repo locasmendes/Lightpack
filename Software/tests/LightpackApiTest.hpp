@@ -74,6 +74,9 @@ private Q_SLOTS:
 	void testCase_SetHostSmoothInvalid_data();
 	void testCase_SetHostSmoothWithoutLock();
 
+	void testCase_ContentAspectSettingsDefaultAndRecipeRoundTrip();
+	void testCase_SetContentAspectRequiresRecipeAndLock();
+
 	void testCase_SetProfile();
 	void testCase_SetStatus();
 

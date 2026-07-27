@@ -30,6 +30,7 @@
 #include <QVariant>
 #include <QMutex>
 #include <QColor>
+#include <QJsonArray>
 
 #include "SettingsDefaults.hpp"
 #include "enums.hpp"
@@ -172,6 +173,13 @@ public:
 	static void setGrabSlowdown(int value);
 	static int getGrabHostSmoothingDuration();
 	static void setGrabHostSmoothingDuration(int value);
+	static QString getContentAspectPreset();
+	static void setContentAspectPreset(const QString& preset);
+	// Whether the current profile has a persisted layout recipe (see
+	// setLayoutRecipe()) that presets can regenerate zones from.
+	static bool hasLayoutRecipe();
+	static QJsonArray getLayoutRecipe();
+	static void setLayoutRecipe(const QJsonArray& recipe);
 	static bool isBacklightEnabled();
 	static void setIsBacklightEnabled(bool isEnabled);
 	static bool isGrabAvgColorsEnabled();
@@ -364,6 +372,8 @@ signals:
 	void virtualPowerSupplyAmpsChanged(const double amps);
 	void grabSlowdownChanged(int value);
 	void grabHostSmoothingDurationChanged(int value);
+	void contentAspectPresetChanged(const QString& preset);
+	void layoutRecipeChanged();
 	void backlightEnabledChanged(bool isEnabled);
 	void grabAvgColorsEnabledChanged(bool isEnabled);
 	void grabOverBrightenChanged(int value);

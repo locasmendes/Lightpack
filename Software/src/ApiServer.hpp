@@ -173,6 +173,7 @@ public:
 	static const char * const CmdSetSmooth;
 	static const char * const CmdSetHostSmooth;
 	static const char * const CmdSetProfile;
+	static const char * const CmdSetContentAspect;
 
 #ifdef SOUNDVIZ_SUPPORT
 	static const char * const CmdSetSoundVizColors;
