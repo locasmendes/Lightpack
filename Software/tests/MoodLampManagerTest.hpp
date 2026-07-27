@@ -29,4 +29,9 @@ private Q_SLOTS:
 	void testGroupColorOverrideOverlapLastWins();
 	void testGroupColorOverrideIgnoredWhenGroupDisabledOrNoColor();
 	void testGroupColorOverrideOnlyAppliedInConstantMode();
+
+	void testBreathingModeForcesBreathingLampAndPulses();
+	void testBreathingModeIgnoresRequestedLamp();
+	void testNewLampEffectsPreserveSizeAndRespectDisabledLeds();
+	void testTheaterChaseExactPattern();
 };

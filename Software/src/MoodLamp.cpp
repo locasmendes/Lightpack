@@ -119,6 +119,20 @@ int MoodLampBase::defaultLampId()
 	return recommended;
 }
 
+int MoodLampBase::idByName(const QString& name)
+{
+	for (auto it = g_moodLampMap.constBegin(); it != g_moodLampMap.constEnd(); ++it) {
+		if (it.value().name == name)
+			return it.key();
+	}
+	return -1;
+}
+
+int MoodLampBase::breathingLampId()
+{
+	return idByName(QStringLiteral("Breathing"));
+}
+
 DECLARE_LAMP(Static, "Static (default)",
 public:
 	std::chrono::milliseconds interval() const { return 50ms; };
@@ -232,4 +246,160 @@ public:
 	};
 private:
 	const double Speed = 1.5;
+);
+
+// Sinusoidal brightness pulse over a single fixed color. The only animated lamp allowed
+// to run outside Liquid mode (forced by MoodLampManager while Breathing mode is active) -
+// see MoodLampBase::breathingLampId().
+DECLARE_LAMP(Breathing, "Breathing",
+public:
+	bool shine(const QColor& newColor, QList<QRgb>& colors)
+	{
+		const double phase = (m_frames % CyclePeriodFrames) / (double)CyclePeriodFrames;
+		const double brightnessScale = 0.5 - 0.5 * std::cos(2 * M_PI * phase); // 0..1, starts/ends at 0
+		m_frames++;
+
+		QColor pulsed(newColor);
+		pulsed.setHsl(pulsed.hue(), pulsed.saturation(), static_cast<int>(pulsed.lightness() * brightnessScale));
+
+		bool changed = false;
+		for (int i = 0; i < colors.size(); i++)
+		{
+			QRgb rgb = Settings::isLedEnabled(i) ? pulsed.rgb() : 0;
+			changed = changed || (colors[i] != rgb);
+			colors[i] = rgb;
+		}
+		return changed;
+	};
+private:
+	const size_t CyclePeriodFrames = 120; // ~4s at the default 33ms tick
+);
+
+// Full hue spectrum across the strip, cycling over time - ignores newColor entirely
+// (unlike RGBLife, which rotates newColor's own hue by a fixed offset per LED).
+DECLARE_LAMP(Rainbow, "Rainbow",
+public:
+	bool shine(const QColor&, QList<QRgb>& colors)
+	{
+		if (colors.isEmpty())
+			return false;
+
+		const int degrees = colors.size() > 1 ? 360 / colors.size() : 0;
+		const int step = Speed * m_frames++;
+		bool changed = false;
+		for (int i = 0; i < colors.size(); i++)
+		{
+			const QColor color = QColor::fromHsv((degrees * i + step) % 360, 255, 255);
+			const QRgb rgb = Settings::isLedEnabled(i) ? color.rgb() : 0;
+			changed = changed || (colors[i] != rgb);
+			colors[i] = rgb;
+		}
+		return changed;
+	};
+private:
+	const double Speed = 1.5;
+);
+
+// A bright head with an exponentially-decaying trail, moving along the strip.
+DECLARE_LAMP(Comet, "Comet",
+public:
+	bool shine(const QColor& newColor, QList<QRgb>& colors)
+	{
+		if (colors.isEmpty())
+			return false;
+
+		if (colors.size() > m_lightness.size()) {
+			const int oldSize = m_lightness.size();
+			m_lightness.reserve(colors.size());
+			for (int i = oldSize; i < colors.size(); ++i)
+				m_lightness << 0;
+		}
+
+		for (int i = 0; i < colors.size(); i++)
+			m_lightness[i] = static_cast<quint8>(m_lightness[i] * FadeFactor);
+
+		const int headPos = m_position % colors.size();
+		m_lightness[headPos] = 255;
+		m_position += Speed;
+
+		bool changed = false;
+		for (int i = 0; i < colors.size(); i++)
+		{
+			QColor color(newColor);
+			color.setHsl(color.hue(), color.saturation(), m_lightness[i]);
+			const QRgb rgb = Settings::isLedEnabled(i) ? color.rgb() : 0;
+			changed = changed || (colors[i] != rgb);
+			colors[i] = rgb;
+		}
+		return changed;
+	};
+private:
+	QList<quint8> m_lightness;
+	int m_position{ 0 };
+	const int Speed = 1;
+	const double FadeFactor = 0.75;
+);
+
+// Evenly-spaced dots marquee, offset advancing by one LED per tick.
+DECLARE_LAMP(TheaterChase, "Theater Chase",
+public:
+	bool shine(const QColor& newColor, QList<QRgb>& colors)
+	{
+		bool changed = false;
+		const int offset = m_frames++ % SpacingLeds;
+		for (int i = 0; i < colors.size(); i++)
+		{
+			const QRgb rgb = (Settings::isLedEnabled(i) && (i + offset) % SpacingLeds == 0) ? newColor.rgb() : 0;
+			changed = changed || (colors[i] != rgb);
+			colors[i] = rgb;
+		}
+		return changed;
+	};
+private:
+	const int SpacingLeds = 3;
+);
+
+// Random pixels briefly flash to full brightness then decay, like Fire but sparse/still.
+DECLARE_LAMP(Twinkle, "Twinkle",
+public:
+	void init() {
+		m_rnd.seed(QTime(0, 0, 0).secsTo(QTime::currentTime()));
+	};
+
+	bool shine(const QColor& newColor, QList<QRgb>& colors)
+	{
+		if (colors.isEmpty())
+			return false;
+
+		if (colors.size() > m_lightness.size()) {
+			const int oldSize = m_lightness.size();
+			m_lightness.reserve(colors.size());
+			for (int i = oldSize; i < colors.size(); ++i)
+				m_lightness << 0;
+		}
+
+		for (int i = 0; i < colors.size(); i++)
+			m_lightness[i] = static_cast<quint8>(m_lightness[i] * FadeFactor);
+
+		if (m_rnd.bounded(100) < SpawnChancePercent) {
+			const int i = m_rnd.bounded(colors.size());
+			m_lightness[i] = 255;
+		}
+
+		bool changed = false;
+		for (int i = 0; i < colors.size(); i++)
+		{
+			QColor color(newColor);
+			color.setHsl(color.hue(), color.saturation(), m_lightness[i]);
+			const QRgb rgb = Settings::isLedEnabled(i) ? color.rgb() : 0;
+			changed = changed || (colors[i] != rgb);
+			colors[i] = rgb;
+		}
+		return changed;
+	};
+private:
+	QRandomGeneratorShim m_rnd;
+	QList<quint8> m_lightness;
+	const double FadeFactor = 0.9;
+	const int SpawnChancePercent = 30;
 );

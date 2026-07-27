@@ -221,6 +221,7 @@ static const QString Gamma = QStringLiteral("Grab/Gamma");
 namespace MoodLamp
 {
 static const QString IsLiquidMode = QStringLiteral("MoodLamp/LiquidMode");
+static const QString ColorMode = QStringLiteral("MoodLamp/ColorMode");
 static const QString Color = QStringLiteral("MoodLamp/Color");
 static const QString Speed = QStringLiteral("MoodLamp/Speed");
 static const QString Lamp = QStringLiteral("MoodLamp/Lamp");
@@ -306,6 +307,7 @@ Settings::Settings() : QObject(NULL) {
 	qRegisterMetaType<QColor>("QColor");
 	qRegisterMetaType<SupportedDevices::DeviceType>("SupportedDevices::DeviceType");
 	qRegisterMetaType<Lightpack::Mode>("Lightpack::Mode");
+	qRegisterMetaType<MoodLampColorMode>("SettingsScope::MoodLampColorMode");
 }
 
 // Desktop should be initialized before call Settings::Initialize()
@@ -1921,6 +1923,55 @@ void Settings::setMoodLampLiquidMode(bool value)
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
 	setValue(Profile::Key::MoodLamp::IsLiquidMode, value );
 	emit m_this->moodLampLiquidModeChanged(value);
+}
+
+namespace {
+	QString moodLampColorModeToString(MoodLampColorMode mode)
+	{
+		switch (mode) {
+		case MoodLampColorMode::Constant: return QStringLiteral("Constant");
+		case MoodLampColorMode::Breathing: return QStringLiteral("Breathing");
+		case MoodLampColorMode::Liquid: return QStringLiteral("Liquid");
+		}
+		return QStringLiteral("Constant");
+	}
+
+	MoodLampColorMode moodLampColorModeFromString(const QString& str, bool& found)
+	{
+		found = true;
+		if (str == QStringLiteral("Constant")) return MoodLampColorMode::Constant;
+		if (str == QStringLiteral("Breathing")) return MoodLampColorMode::Breathing;
+		if (str == QStringLiteral("Liquid")) return MoodLampColorMode::Liquid;
+		found = false;
+		return MoodLampColorMode::Constant;
+	}
+}
+
+MoodLampColorMode Settings::getMoodLampColorMode()
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
+
+	bool found = false;
+	const MoodLampColorMode mode = moodLampColorModeFromString(value(Profile::Key::MoodLamp::ColorMode).toString(), found);
+	if (found)
+		return mode;
+
+	// No "MoodLamp/ColorMode" key yet (profile written before this setting existed) -
+	// migrate the legacy boolean once and persist the migrated value, so subsequent
+	// reads take the fast path above instead of re-migrating every time.
+	const MoodLampColorMode migrated = isMoodLampLiquidMode() ? MoodLampColorMode::Liquid : MoodLampColorMode::Constant;
+	setValue(Profile::Key::MoodLamp::ColorMode, moodLampColorModeToString(migrated));
+	return migrated;
+}
+
+void Settings::setMoodLampColorMode(MoodLampColorMode mode)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << static_cast<int>(mode);
+	setValue(Profile::Key::MoodLamp::ColorMode, moodLampColorModeToString(mode));
+	// Keeps the legacy key (and anything still reading it, e.g. old profile exports)
+	// consistent with the new one - Liquid maps to true, Constant/Breathing to false.
+	setValue(Profile::Key::MoodLamp::IsLiquidMode, mode == MoodLampColorMode::Liquid);
+	emit m_this->moodLampColorModeChanged(mode);
 }
 
 QColor Settings::getMoodLampColor()

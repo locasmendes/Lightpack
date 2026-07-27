@@ -266,6 +266,8 @@ public:
 	static void setLightpackMode(Lightpack::Mode mode);
 	static bool isMoodLampLiquidMode();
 	static void setMoodLampLiquidMode(bool isLiquidMode);
+	static MoodLampColorMode getMoodLampColorMode();
+	static void setMoodLampColorMode(MoodLampColorMode mode);
 	static QColor getMoodLampColor();
 	static void setMoodLampColor(QColor color);
 	static int getMoodLampSpeed();
@@ -435,6 +437,7 @@ signals:
 #endif
 	void lightpackModeChanged(const Lightpack::Mode mode);
 	void moodLampLiquidModeChanged(bool isLiquidMode);
+	void moodLampColorModeChanged(SettingsScope::MoodLampColorMode mode);
 	void moodLampColorChanged(const QColor color);
 	void moodLampSpeedChanged(int value);
 	void moodLampLampChanged(int value);

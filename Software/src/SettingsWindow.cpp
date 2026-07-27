@@ -254,7 +254,9 @@ void SettingsWindow::connectSignalsSlots()
 	connect(ui->radioButton_Colored, &QRadioButton::toggled, this, &SettingsWindow::onSetColoredLedWidgets);
 	connect(ui->radioButton_White, &QRadioButton::toggled, this, &SettingsWindow::onSetWhiteLedWidgets);
 
-	connect(ui->radioButton_LiquidColorMoodLampMode, &QRadioButton::toggled, this, &SettingsWindow::onMoodLampLiquidMode_Toggled);
+	connect(ui->radioButton_ConstantColorMoodLampMode, &QRadioButton::toggled, this, &SettingsWindow::onMoodLampColorMode_toggled);
+	connect(ui->radioButton_BreathingColorMoodLampMode, &QRadioButton::toggled, this, &SettingsWindow::onMoodLampColorMode_toggled);
+	connect(ui->radioButton_LiquidColorMoodLampMode, &QRadioButton::toggled, this, &SettingsWindow::onMoodLampColorMode_toggled);
 	connect(ui->horizontalSlider_MoodLampSpeed, &QSlider::valueChanged, this, &SettingsWindow::onMoodLampSpeed_valueChanged);
 	connect(ui->comboBox_MoodLampLamp, qOverload<int>(&QComboBox::currentIndexChanged), this, &SettingsWindow::onMoodLampLamp_currentIndexChanged);
 
@@ -1518,29 +1520,37 @@ void SettingsWindow::onMoodLampLamp_currentIndexChanged(int index)
 	}
 }
 
-void SettingsWindow::onMoodLampLiquidMode_Toggled(bool checked)
+void SettingsWindow::onMoodLampColorMode_toggled(bool checked)
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << checked;
 
-	Settings::setMoodLampLiquidMode(checked);
-	if (Settings::isMoodLampLiquidMode())
-	{
-		ui->pushButton_SelectColorMoodLamp->setEnabled(false);
-		ui->horizontalSlider_MoodLampSpeed->setEnabled(true);
-		ui->comboBox_MoodLampLamp->setEnabled(true);
-	} else {
-		ui->pushButton_SelectColorMoodLamp->setEnabled(true);
-		ui->horizontalSlider_MoodLampSpeed->setEnabled(false);
+	// All 3 radio buttons share this slot (a 3-way group has no single button whose
+	// boolean state alone determines the mode, unlike the old Constant/Liquid toggle) -
+	// each button's toggled(bool) fires twice per click (once for the button losing the
+	// check, once for the button gaining it), so only act on the "gained" half.
+	if (!checked)
+		return;
 
-		// Lamp effects (Fire/RGB is Life) animate every tick regardless of
-		// which color they're fed - only Static keeps the output truly
-		// unchanging. Constant color mode forces Static at runtime
-		// (MoodLampManager::applyEffectiveLamp) without touching the
-		// persisted preference, so just disable the combo here rather than
-		// resetting its selection - it's ready again as soon as Liquid mode
-		// is re-enabled.
-		ui->comboBox_MoodLampLamp->setEnabled(false);
-	}
+	using SettingsScope::MoodLampColorMode;
+	MoodLampColorMode mode = MoodLampColorMode::Constant;
+	if (ui->radioButton_BreathingColorMoodLampMode->isChecked())
+		mode = MoodLampColorMode::Breathing;
+	else if (ui->radioButton_LiquidColorMoodLampMode->isChecked())
+		mode = MoodLampColorMode::Liquid;
+
+	Settings::setMoodLampColorMode(mode);
+
+	const bool isLiquid = (mode == MoodLampColorMode::Liquid);
+	ui->pushButton_SelectColorMoodLamp->setEnabled(!isLiquid);
+	ui->horizontalSlider_MoodLampSpeed->setEnabled(isLiquid);
+
+	// Lamp effects (Fire/RGB is Life/Rainbow/...) animate every tick regardless of
+	// which color they're fed - only Static (Constant mode) and Breathing (Breathing
+	// mode) hold a genuinely fixed shape. Both modes force their own lamp at runtime
+	// (MoodLampManager::applyEffectiveLamp) without touching the persisted preference,
+	// so just disable the combo here rather than resetting its selection - it's ready
+	// again as soon as Liquid mode is re-enabled.
+	ui->comboBox_MoodLampLamp->setEnabled(isLiquid);
 }
 
 #ifdef SOUNDVIZ_SUPPORT
@@ -1969,8 +1979,13 @@ void SettingsWindow::updateUiFromSettings()
 	ui->radioButton_LuminosityDeadZone->setChecked					(!Settings::isMinimumLuminosityEnabled());
 
 	// Check the selected moodlamp mode (setChecked(false) not working to select another)
-	ui->radioButton_ConstantColorMoodLampMode->setChecked			(!Settings::isMoodLampLiquidMode());
-	ui->radioButton_LiquidColorMoodLampMode->setChecked				(Settings::isMoodLampLiquidMode());
+	{
+		using SettingsScope::MoodLampColorMode;
+		const MoodLampColorMode mode = Settings::getMoodLampColorMode();
+		ui->radioButton_ConstantColorMoodLampMode->setChecked	(mode == MoodLampColorMode::Constant);
+		ui->radioButton_BreathingColorMoodLampMode->setChecked	(mode == MoodLampColorMode::Breathing);
+		ui->radioButton_LiquidColorMoodLampMode->setChecked		(mode == MoodLampColorMode::Liquid);
+	}
 	ui->pushButton_SelectColorMoodLamp->setColor						(Settings::getMoodLampColor());
 	ui->horizontalSlider_MoodLampSpeed->setValue						(Settings::getMoodLampSpeed());
 	for (int i = 0; i < ui->comboBox_MoodLampLamp->count(); i++) {
@@ -2061,7 +2076,7 @@ void SettingsWindow::updateUiFromSettings()
 	ui->checkBox_EnableDx9Capture->setChecked(Settings::isDx9GrabbingEnabled());
 #endif
 
-	onMoodLampLiquidMode_Toggled(ui->radioButton_LiquidColorMoodLampMode->isChecked());
+	onMoodLampColorMode_toggled(true);
 	updateDeviceTabWidgetsVisibility();
 	onGrabberChanged();
 	settingsProfileChanged_UpdateUI(Settings::getCurrentProfileName());

@@ -56,7 +56,7 @@ public:
 
 public slots:
 	void initFromSettings();
-	void setLiquidMode(bool isEnabled);
+	void setColorMode(SettingsScope::MoodLampColorMode mode);
 	void setLiquidModeSpeed(int value);
 	void settingsProfileChanged(const QString &profileName);
 	void setNumberOfLeds(int value);
@@ -81,12 +81,12 @@ private slots:
 
 private:
 	void initColors(int numberOfLeds);
-	// Recreates m_lamp from m_requestedLampId, except while !m_isLiquidMode:
-	// lamp effects (Fire/RGB is Life) animate every tick regardless of which
-	// color they're fed, so "Constant color" forces Static (the only effect
-	// with no per-tick animation) to actually hold still, without touching
-	// the persisted MoodLampLamp preference (restored as soon as Liquid mode
-	// is re-enabled).
+	// Recreates m_lamp from m_requestedLampId, except in Constant/Breathing mode: lamp
+	// effects (Fire/RGB is Life/Rainbow/...) animate every tick regardless of which color
+	// they're fed, so those two modes force a specific non-freely-selectable lamp (Static
+	// for Constant, Breathing for Breathing) to actually behave as advertised, without
+	// touching the persisted MoodLampLamp preference (restored as soon as Liquid mode is
+	// re-enabled).
 	void applyEffectiveLamp();
 	bool isHostSmoothingApplicable() const;
 
@@ -99,7 +99,7 @@ private:
 
 	bool	m_isMoodLampEnabled;
 	QColor  m_currentColor;
-	bool	m_isLiquidMode;
+	SettingsScope::MoodLampColorMode m_colorMode{ SettingsScope::MoodLampColorMode::Constant };
 	bool	m_isSendDataOnlyIfColorsChanged;
 
 	QTimer m_timer;

@@ -859,6 +859,19 @@ Internally emulates the effects of f.lux, redshift, Night Light, Night Shift...<
                </widget>
               </item>
               <item>
+               <widget class="QRadioButton" name="radioButton_BreathingColorMoodLampMode">
+                <property name="text">
+                 <string>Breathing:</string>
+                </property>
+                <property name="toolTip">
+                 <string>Same fixed color as Constant, with a smooth brightness pulse.</string>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
                <widget class="ColorButton" name="pushButton_SelectColorMoodLamp">
                 <property name="text">
                  <string/>
@@ -3583,6 +3596,7 @@ Internally emulates the effects of f.lux, redshift, Night Light, Night Shift...<
   <tabstop>pushButton_SoundVizDeviceHelp</tabstop>
   <tabstop>radioButton_SoundVizConstantMode</tabstop>
   <tabstop>radioButton_ConstantColorMoodLampMode</tabstop>
+  <tabstop>radioButton_BreathingColorMoodLampMode</tabstop>
   <tabstop>horizontalSlider_MoodLampSpeed</tabstop>
   <tabstop>comboBox_SoundVizDevice</tabstop>
   <tabstop>pushButton_SelectColorMoodLamp</tabstop>

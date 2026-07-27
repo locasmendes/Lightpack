@@ -71,7 +71,7 @@ void MoodLampManager::start(bool isEnabled)
 		updateColors(true);
 	}
 
-	if (m_isMoodLampEnabled && m_isLiquidMode)
+	if (m_isMoodLampEnabled && m_colorMode == SettingsScope::MoodLampColorMode::Liquid)
 		m_generator.start();
 	else
 		m_generator.stop();
@@ -92,13 +92,13 @@ void MoodLampManager::setCurrentColor(QColor color)
 		updateColors();
 }
 
-void MoodLampManager::setLiquidMode(bool state)
+void MoodLampManager::setColorMode(SettingsScope::MoodLampColorMode mode)
 {
-	DEBUG_LOW_LEVEL << Q_FUNC_INFO << state;
-	m_isLiquidMode = state;
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << static_cast<int>(mode);
+	m_colorMode = mode;
 	applyEffectiveLamp();
 	emit moodlampFrametime(1000); // reset FPS to 1
-	if (m_isLiquidMode && m_isMoodLampEnabled)
+	if (m_colorMode == SettingsScope::MoodLampColorMode::Liquid && m_isMoodLampEnabled)
 		m_generator.start();
 	else {
 		m_generator.stop();
@@ -143,7 +143,7 @@ void MoodLampManager::initFromSettings()
 {
 	m_generator.setSpeed(Settings::getMoodLampSpeed());
 	m_currentColor = Settings::getMoodLampColor();
-	setLiquidMode(Settings::isMoodLampLiquidMode());
+	setColorMode(Settings::getMoodLampColorMode());
 	m_isSendDataOnlyIfColorsChanged = Settings::isSendDataOnlyIfColorsChanges();
 	m_hostSmoothing.setDurationMs(Settings::getGrabHostSmoothingDuration());
 
@@ -166,7 +166,18 @@ void MoodLampManager::applyEffectiveLamp()
 		m_lamp = nullptr;
 	}
 
-	const int effectiveId = m_isLiquidMode ? m_requestedLampId : MoodLampBase::defaultLampId();
+	int effectiveId = m_requestedLampId;
+	switch (m_colorMode) {
+	case SettingsScope::MoodLampColorMode::Constant:
+		effectiveId = MoodLampBase::defaultLampId();
+		break;
+	case SettingsScope::MoodLampColorMode::Breathing:
+		effectiveId = MoodLampBase::breathingLampId();
+		break;
+	case SettingsScope::MoodLampColorMode::Liquid:
+		effectiveId = m_requestedLampId;
+		break;
+	}
 	m_lamp = MoodLampBase::createWithID(effectiveId);
 	emit moodlampFrametime(1000); // reset FPS to 1
 	if (m_isMoodLampEnabled && m_lamp)
@@ -175,27 +186,20 @@ void MoodLampManager::applyEffectiveLamp()
 
 void MoodLampManager::updateColors(const bool forceUpdate)
 {
-	DEBUG_HIGH_LEVEL << Q_FUNC_INFO << m_isLiquidMode;
+	DEBUG_HIGH_LEVEL << Q_FUNC_INFO << static_cast<int>(m_colorMode);
 
-	QColor newColor;
-
-	if (m_isLiquidMode)
-	{
-		newColor = m_generator.current();
-	}
-	else
-	{
-		newColor = m_currentColor;
-	}
+	const QColor newColor = (m_colorMode == SettingsScope::MoodLampColorMode::Liquid)
+		? m_generator.current()
+		: m_currentColor;
 
 	DEBUG_MID_LEVEL << Q_FUNC_INFO << newColor.rgb();
 
 	bool changed = (m_lamp ? m_lamp->shine(newColor, m_colors) : false);
 
 	// Per-group color overrides only make sense as fixed/static colors, so they only
-	// apply in Constant mode; in Liquid mode they're ignored (the configuration is kept,
-	// it simply takes effect again once Constant mode is re-selected).
-	if (!m_isLiquidMode) {
+	// apply in Constant mode (not Breathing, not Liquid); elsewhere they're ignored (the
+	// configuration is kept, it simply takes effect again once Constant mode is reselected).
+	if (m_colorMode == SettingsScope::MoodLampColorMode::Constant) {
 		if (applyGroupColorOverrides(m_colors, Settings::getLedGroups()))
 			changed = true;
 	}

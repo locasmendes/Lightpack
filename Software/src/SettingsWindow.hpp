@@ -138,7 +138,7 @@ private slots:
 	void onMoodLampColor_changed(QColor color);
 	void onMoodLampSpeed_valueChanged(int value);
 	void onMoodLampLamp_currentIndexChanged(int index);
-	void onMoodLampLiquidMode_Toggled(bool isLiquidMode);
+	void onMoodLampColorMode_toggled(bool checked);
 #ifdef SOUNDVIZ_SUPPORT
 	void onSoundVizDevice_currentIndexChanged(int index);
 	void onSoundVizVisualizer_currentIndexChanged(int index);

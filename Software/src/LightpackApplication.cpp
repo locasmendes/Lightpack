@@ -195,6 +195,7 @@ void LightpackApplication::initializeAll()
 	qRegisterMetaType< QList<QRgb> >("QList<QRgb>");
 	qRegisterMetaType< QList<QString> >("QList<QString>");
 	qRegisterMetaType<Lightpack::Mode>("Lightpack::Mode");
+	qRegisterMetaType<SettingsScope::MoodLampColorMode>("SettingsScope::MoodLampColorMode");
 	qRegisterMetaType<Backlight::Status>("Backlight::Status");
 	qRegisterMetaType<DeviceLocked::DeviceLockStatus>("DeviceLocked::DeviceLockStatus");
 	qRegisterMetaType< QList<Plugin*> >("QList<Plugin*>");
@@ -786,7 +787,7 @@ void LightpackApplication::initGrabManager()
 
 	connect(settings(), &Settings::moodLampColorChanged,					m_moodlampManager, &MoodLampManager::setCurrentColor);
 	connect(settings(), &Settings::moodLampSpeedChanged,						m_moodlampManager, &MoodLampManager::setLiquidModeSpeed);
-	connect(settings(), &Settings::moodLampLiquidModeChanged,				m_moodlampManager, &MoodLampManager::setLiquidMode);
+	connect(settings(), &Settings::moodLampColorModeChanged,				m_moodlampManager, &MoodLampManager::setColorMode);
 	connect(settings(), &Settings::moodLampLampChanged,						m_moodlampManager, &MoodLampManager::setCurrentLamp);
 	connect(settings(), &Settings::sendDataOnlyIfColorsChangesChanged,		m_moodlampManager, &MoodLampManager::setSendDataOnlyIfColorsChanged);
 	connect(settings(), &Settings::grabHostSmoothingDurationChanged,		m_moodlampManager, &MoodLampManager::onHostSmoothingDurationChanged,		Qt::QueuedConnection);
@@ -896,7 +897,7 @@ void LightpackApplication::settingsChanged()
 
 	m_moodlampManager->setCurrentColor(Settings::getMoodLampColor());
 	m_moodlampManager->setLiquidModeSpeed(Settings::getMoodLampSpeed());
-	m_moodlampManager->setLiquidMode(Settings::isMoodLampLiquidMode());
+	m_moodlampManager->setColorMode(Settings::getMoodLampColorMode());
 	m_moodlampManager->setCurrentLamp(Settings::getMoodLampLamp());
 
 	bool isBacklightEnabled = Settings::isBacklightEnabled();

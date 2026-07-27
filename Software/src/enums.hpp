@@ -59,6 +59,15 @@ enum Mode {
 };
 }
 
+namespace SettingsScope
+{
+// Constant: a single fixed color, held genuinely still (forces the Static lamp effect
+// regardless of the persisted MoodLampLamp preference). Breathing: a single fixed color
+// with a sinusoidal brightness pulse (forces the Breathing lamp effect). Liquid: colors
+// cycle automatically (LiquidColorGenerator), any lamp effect may run freely.
+enum class MoodLampColorMode { Constant, Breathing, Liquid };
+}
+
 namespace Grab
 {
 

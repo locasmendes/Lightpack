@@ -32,6 +32,11 @@ namespace {
 
 	int staticLampId() { return MoodLampBase::defaultLampId(); }
 	int fireLampId() { return lampIdByName(QStringLiteral("Fire")); }
+	int breathingLampId() { return MoodLampBase::breathingLampId(); }
+	int rainbowLampId() { return lampIdByName(QStringLiteral("Rainbow")); }
+	int cometLampId() { return lampIdByName(QStringLiteral("Comet")); }
+	int theaterChaseLampId() { return lampIdByName(QStringLiteral("Theater Chase")); }
+	int twinkleLampId() { return lampIdByName(QStringLiteral("Twinkle")); }
 
 	// Collects the QList<QRgb> argument of every updateLedsColors emission captured by spy.
 	QList<QList<QRgb>> capturedColorLists(const QSignalSpy& spy)
@@ -54,6 +59,11 @@ void MoodLampManagerTest::initTestCase()
 	QVERIFY(staticLampId() >= 0);
 	QVERIFY(fireLampId() >= 0);
 	QVERIFY(staticLampId() != fireLampId());
+	QVERIFY(breathingLampId() >= 0);
+	QVERIFY(rainbowLampId() >= 0);
+	QVERIFY(cometLampId() >= 0);
+	QVERIFY(theaterChaseLampId() >= 0);
+	QVERIFY(twinkleLampId() >= 0);
 }
 
 void MoodLampManagerTest::cleanup()
@@ -68,7 +78,7 @@ void MoodLampManagerTest::testConstantModeWithStaticStaysConstant()
 	MoodLampManager manager;
 	manager.setSendDataOnlyIfColorsChanged(false); // force a signal on every tick, changed or not
 	manager.setNumberOfLeds(NumberOfLeds);
-	manager.setLiquidMode(false);
+	manager.setColorMode(MoodLampColorMode::Constant);
 	manager.setCurrentLamp(staticLampId());
 	manager.setCurrentColor(QColor(200, 50, 10));
 
@@ -89,7 +99,7 @@ void MoodLampManagerTest::testConstantModeForcesStaticEvenWhenFireRequested()
 	MoodLampManager manager;
 	manager.setSendDataOnlyIfColorsChanged(false);
 	manager.setNumberOfLeds(NumberOfLeds);
-	manager.setLiquidMode(false);
+	manager.setColorMode(MoodLampColorMode::Constant);
 	manager.setCurrentLamp(fireLampId());
 	manager.setCurrentColor(QColor(10, 220, 30));
 
@@ -111,7 +121,7 @@ void MoodLampManagerTest::testLiquidModeWithFireAnimates()
 	manager.setSendDataOnlyIfColorsChanged(false);
 	manager.setNumberOfLeds(NumberOfLeds);
 	manager.setCurrentColor(QColor(10, 220, 30));
-	manager.setLiquidMode(true);
+	manager.setColorMode(MoodLampColorMode::Liquid);
 	manager.setCurrentLamp(fireLampId());
 
 	QSignalSpy spy(&manager, &MoodLampManager::updateLedsColors);
@@ -139,7 +149,7 @@ void MoodLampManagerTest::testHostSmoothingProducesGradualTransition()
 	MoodLampManager manager; // reads the 300ms duration from Settings in initFromSettings()
 	manager.setSendDataOnlyIfColorsChanged(false);
 	manager.setNumberOfLeds(NumberOfLeds);
-	manager.setLiquidMode(false);
+	manager.setColorMode(MoodLampColorMode::Constant);
 	manager.setCurrentLamp(staticLampId());
 	manager.setCurrentColor(QColor(0, 0, 0));
 	manager.start(true);
@@ -172,7 +182,7 @@ void MoodLampManagerTest::testHostSmoothingDisabledJumpsImmediately()
 	MoodLampManager manager;
 	manager.setSendDataOnlyIfColorsChanged(false);
 	manager.setNumberOfLeds(NumberOfLeds);
-	manager.setLiquidMode(false);
+	manager.setColorMode(MoodLampColorMode::Constant);
 	manager.setCurrentLamp(staticLampId());
 	manager.setCurrentColor(QColor(0, 0, 0));
 	manager.start(true);
@@ -197,7 +207,7 @@ void MoodLampManagerTest::testHostSmoothingSkippedForLightpackDevice()
 	MoodLampManager manager;
 	manager.setSendDataOnlyIfColorsChanged(false);
 	manager.setNumberOfLeds(NumberOfLeds);
-	manager.setLiquidMode(false);
+	manager.setColorMode(MoodLampColorMode::Constant);
 	manager.setCurrentLamp(staticLampId());
 	manager.setCurrentColor(QColor(0, 0, 0));
 	manager.start(true);
@@ -315,7 +325,7 @@ void MoodLampManagerTest::testGroupColorOverrideOnlyAppliedInConstantMode()
 	MoodLampManager manager;
 	manager.setSendDataOnlyIfColorsChanged(false);
 	manager.setNumberOfLeds(NumberOfLeds);
-	manager.setLiquidMode(false);
+	manager.setColorMode(MoodLampColorMode::Constant);
 	manager.setCurrentLamp(staticLampId());
 	manager.setCurrentColor(QColor(200, 0, 0));
 
@@ -325,11 +335,114 @@ void MoodLampManagerTest::testGroupColorOverrideOnlyAppliedInConstantMode()
 	QVERIFY(!constantSpy.isEmpty());
 	QCOMPARE(capturedColorLists(constantSpy).last().first(), group.color.rgb());
 
-	manager.setLiquidMode(true);
+	manager.setColorMode(MoodLampColorMode::Liquid);
 	QSignalSpy liquidSpy(&manager, &MoodLampManager::updateLedsColors);
 	QTest::qWait(120);
 	QVERIFY(!liquidSpy.isEmpty());
 	QVERIFY(capturedColorLists(liquidSpy).last().first() != group.color.rgb());
 
 	Settings::setLedGroups({});
+}
+
+void MoodLampManagerTest::testBreathingModeForcesBreathingLampAndPulses()
+{
+	MoodLampManager manager;
+	manager.setSendDataOnlyIfColorsChanged(false);
+	manager.setNumberOfLeds(NumberOfLeds);
+	manager.setColorMode(MoodLampColorMode::Breathing);
+	manager.setCurrentLamp(staticLampId());
+	manager.setCurrentColor(QColor(200, 50, 10));
+
+	QSignalSpy spy(&manager, &MoodLampManager::updateLedsColors);
+	manager.start(true);
+	QTest::qWait(200); // several 33ms Breathing ticks, well under one ~4s cycle
+
+	const QList<QList<QRgb>> emissions = capturedColorLists(spy);
+	QVERIFY(emissions.size() >= 2);
+
+	bool sawDifferentFrame = false;
+	for (const QList<QRgb>& colors : emissions) {
+		if (colors != emissions.first()) {
+			sawDifferentFrame = true;
+			break;
+		}
+	}
+	QVERIFY2(sawDifferentFrame, "Breathing should pulse brightness over time, unlike Static");
+}
+
+void MoodLampManagerTest::testBreathingModeIgnoresRequestedLamp()
+{
+	// Regression test mirroring testConstantModeForcesStaticEvenWhenFireRequested:
+	// Breathing must force its own lamp even if Fire is still the persisted preference.
+	MoodLampManager manager;
+	manager.setSendDataOnlyIfColorsChanged(false);
+	manager.setNumberOfLeds(NumberOfLeds);
+	manager.setColorMode(MoodLampColorMode::Breathing);
+	manager.setCurrentLamp(fireLampId());
+	manager.setCurrentColor(QColor(10, 220, 30));
+
+	QSignalSpy spy(&manager, &MoodLampManager::updateLedsColors);
+	manager.start(true);
+	QTest::qWait(200);
+
+	// Breathing pulses every LED identically (uniform brightness); Fire would instead
+	// diverge per-pixel. This is a structural proxy for "Fire isn't the active lamp".
+	const QList<QList<QRgb>> emissions = capturedColorLists(spy);
+	QVERIFY(!emissions.isEmpty());
+	for (const QList<QRgb>& colors : emissions) {
+		for (int i = 1; i < colors.size(); ++i)
+			QCOMPARE(colors[i], colors.first());
+	}
+}
+
+void MoodLampManagerTest::testNewLampEffectsPreserveSizeAndRespectDisabledLeds()
+{
+	Settings::setLedEnabled(0, true);
+	Settings::setLedEnabled(1, false);
+
+	const QList<int> lampIds = { rainbowLampId(), cometLampId(), theaterChaseLampId(), twinkleLampId() };
+	for (int lampId : lampIds) {
+		QVERIFY(lampId >= 0);
+		MoodLampBase* const lamp = MoodLampBase::createWithID(lampId);
+		QVERIFY(lamp != nullptr);
+
+		QList<QRgb> colors = { 0, 0, 0, 0 };
+		for (int tick = 0; tick < 5; ++tick)
+			lamp->shine(QColor(200, 100, 50), colors);
+
+		QCOMPARE(colors.size(), 4);
+		QCOMPARE(colors[1], static_cast<QRgb>(0)); // disabled LED always stays off
+
+		delete lamp;
+	}
+
+	Settings::setLedEnabled(1, true);
+}
+
+void MoodLampManagerTest::testTheaterChaseExactPattern()
+{
+	for (int i = 0; i < 6; ++i)
+		Settings::setLedEnabled(i, true);
+
+	MoodLampBase* const lamp = MoodLampBase::createWithID(theaterChaseLampId());
+	QVERIFY(lamp != nullptr);
+
+	QList<QRgb> colors(6, 0);
+	lamp->shine(QColor(255, 255, 255), colors); // frame 0: offset 0 -> LEDs 0,3 lit
+	QVERIFY(colors[0] != 0);
+	QCOMPARE(colors[1], static_cast<QRgb>(0));
+	QCOMPARE(colors[2], static_cast<QRgb>(0));
+	QVERIFY(colors[3] != 0);
+	QCOMPARE(colors[4], static_cast<QRgb>(0));
+	QCOMPARE(colors[5], static_cast<QRgb>(0));
+
+	lamp->shine(QColor(255, 255, 255), colors); // frame 1: offset 1 -> LEDs 2,5 lit
+	QCOMPARE(colors[0], static_cast<QRgb>(0));
+	QCOMPARE(colors[1], static_cast<QRgb>(0));
+	QVERIFY(colors[2] != 0);
+	QCOMPARE(colors[3], static_cast<QRgb>(0));
+	QCOMPARE(colors[4], static_cast<QRgb>(0));
+	QVERIFY(colors[5] != 0);
+
+	delete lamp;
 }
