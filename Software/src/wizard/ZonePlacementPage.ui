@@ -390,6 +390,209 @@ Mode tab &gt; Screen grabbing mode &gt; Grab widget adjustment&lt;/p&gt;&lt;/td&
     </spacer>
    </item>
    <item row="6" column="2">
+    <widget class="QGroupBox" name="groupBox_ResizeAll">
+     <property name="title">
+      <string>Resize all boxes</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_ResizeAll">
+      <item>
+       <widget class="QLabel" name="label_ResizeAllWidth">
+        <property name="text">
+         <string>Width</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spinBox_ResizeAllWidth">
+        <property name="specialValueText">
+         <string>—</string>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>9999</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_ResizeAllHeight">
+        <property name="text">
+         <string>Height</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spinBox_ResizeAllHeight">
+        <property name="specialValueText">
+         <string>—</string>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>9999</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_ResizeAllApply">
+        <property name="text">
+         <string>Apply to all boxes on this display</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_ResizeAll">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="7" column="2">
+    <widget class="QGroupBox" name="groupBox_LedGroups">
+     <property name="title">
+      <string>LED groups</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_LedGroups">
+      <item>
+       <widget class="QLabel" name="label_GroupHint">
+        <property name="text">
+         <string>Right-click boxes to mark them as members of the group being edited.</string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_GroupFields">
+        <item>
+         <widget class="QLabel" name="label_GroupName">
+          <property name="text">
+           <string>Name</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="lineEdit_GroupName"/>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_GroupEdge">
+          <property name="text">
+           <string>Edge</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="comboBox_GroupEdge">
+          <item>
+           <property name="text">
+            <string>Top</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Bottom</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Left</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Right</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Custom</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_GroupSize">
+        <item>
+         <widget class="QLabel" name="label_GroupWidth">
+          <property name="text">
+           <string>Width</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="spinBox_GroupWidth">
+          <property name="minimum">
+           <number>50</number>
+          </property>
+          <property name="maximum">
+           <number>9999</number>
+          </property>
+          <property name="value">
+           <number>50</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_GroupHeight">
+          <property name="text">
+           <string>Height</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="spinBox_GroupHeight">
+          <property name="minimum">
+           <number>50</number>
+          </property>
+          <property name="maximum">
+           <number>9999</number>
+          </property>
+          <property name="value">
+           <number>50</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_GroupApply">
+          <property name="text">
+           <string>Create / apply group</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_GroupList">
+        <item>
+         <widget class="QListWidget" name="listWidget_LedGroups"/>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_GroupRemove">
+          <property name="text">
+           <string>Remove selected</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="8" column="2">
     <spacer name="verticalSpacer_2">
      <property name="orientation">
       <enum>Qt::Vertical</enum>

@@ -33,7 +33,13 @@
 #include "GrabWidget.hpp"
 #include "LedDeviceLightpack.hpp"
 #include "MonitorIdForm.hpp"
+#include "BulkResize.hpp"
+#include "LedGroupRuntime.hpp"
 #include <QJsonArray>
+#include <QListWidgetItem>
+#include <QSet>
+
+using SettingsScope::LedGroup;
 
 
 ZonePlacementPage::ZonePlacementPage(bool isInitFromSettings, TransientSettings *ts, QWidget *parent):
@@ -83,6 +89,14 @@ void ZonePlacementPage::initializePage()
 	connect(_ui->sbNumberOfLeds, qOverload<int>(&QSpinBox::valueChanged), this, &ZonePlacementPage::onNumberOfLeds_valueChanged);
 	connect(_ui->sbTopLeds, qOverload<int>(&QSpinBox::valueChanged), this, &ZonePlacementPage::onTopLeds_valueChanged);
 	connect(_ui->sbSideLeds, qOverload<int>(&QSpinBox::valueChanged), this, &ZonePlacementPage::onSideLeds_valueChanged);
+
+	connect(_ui->pushButton_ResizeAllApply, &QPushButton::clicked, this, &ZonePlacementPage::onResizeAllApply_clicked);
+	connect(_ui->comboBox_GroupEdge, qOverload<int>(&QComboBox::currentIndexChanged), this, &ZonePlacementPage::onGroupEdge_currentIndexChanged);
+	connect(_ui->pushButton_GroupApply, &QPushButton::clicked, this, &ZonePlacementPage::onGroupApply_clicked);
+	connect(_ui->pushButton_GroupRemove, &QPushButton::clicked, this, &ZonePlacementPage::onGroupRemove_clicked);
+	connect(_ui->listWidget_LedGroups, &QListWidget::itemClicked, this, &ZonePlacementPage::onGroupListItem_clicked);
+	updateGroupEdgeControlsVisibility();
+	refreshGroupList();
 
 	_ui->sbNumberOfLeds->setMaximum(device()->maxLedsCount());
 	_ui->sbStartingLed->setMaximum(device()->maxLedsCount() - 1);
@@ -309,6 +323,7 @@ void ZonePlacementPage::addGrabArea(QList<GrabWidget*>& list, int id, const QRec
 	} else {
 		connect(zone, &GrabWidget::resizeOrMoveStarted, this, &ZonePlacementPage::turnLightOn);
 		connect(zone, &GrabWidget::resizeOrMoveCompleted, this, qOverload<>(&ZonePlacementPage::turnLightsOff));
+		connect(zone, &GrabWidget::mouseRightButtonClicked, this, &ZonePlacementPage::onGrabWidgetRightClicked);
 	}
 	zone->show();
 	list.append(zone);
@@ -531,4 +546,206 @@ void ZonePlacementPage::saveMonitorSettings(MonitorSettings& settings)
 	settings.bottomMargin = _ui->doubleSpinBox_bottomMargin->value();
 	settings.invertOrder = _ui->cbInvertOrder->isChecked();
 	settings.skipCorners = _ui->checkBox_skipCorners->isChecked();
+}
+
+QList<GrabWidget*> ZonePlacementPage::selectedForGroupEdit() const
+{
+	QList<GrabWidget*> result;
+	for (const MonitorSettings& settings : _screens) {
+		for (GrabWidget* const widget : settings.grabAreas) {
+			if (widget->isSelectedForGroupEdit())
+				result.append(widget);
+		}
+	}
+	return result;
+}
+
+void ZonePlacementPage::clearGroupEditSelection()
+{
+	for (GrabWidget* const widget : selectedForGroupEdit())
+		widget->setSelectedForGroupEdit(false);
+}
+
+void ZonePlacementPage::onGrabWidgetRightClicked(int)
+{
+	const int count = selectedForGroupEdit().count();
+	_ui->label_GroupHint->setText(count > 0
+		? tr("%1 box(es) selected for the group. Right-click to toggle.").arg(count)
+		: tr("Right-click boxes to mark them as members of the group being edited."));
+}
+
+void ZonePlacementPage::updateGroupEdgeControlsVisibility()
+{
+	const LedGroup::Edge edge = static_cast<LedGroup::Edge>(_ui->comboBox_GroupEdge->currentIndex());
+	const bool showWidth = edge == LedGroup::Edge::Left || edge == LedGroup::Edge::Right || edge == LedGroup::Edge::Custom;
+	const bool showHeight = edge == LedGroup::Edge::Top || edge == LedGroup::Edge::Bottom || edge == LedGroup::Edge::Custom;
+
+	_ui->label_GroupWidth->setVisible(showWidth);
+	_ui->spinBox_GroupWidth->setVisible(showWidth);
+	_ui->label_GroupHeight->setVisible(showHeight);
+	_ui->spinBox_GroupHeight->setVisible(showHeight);
+}
+
+void ZonePlacementPage::onGroupEdge_currentIndexChanged(int)
+{
+	updateGroupEdgeControlsVisibility();
+}
+
+void ZonePlacementPage::applyResizeToWidgets(const QList<GrabWidget*>& widgets, int newWidth, int newHeight, Qt::Corner anchor)
+{
+	// BulkResize::resizedKeepingAnchor is pure math (unit-tested in
+	// BulkResizeTest, which links without GrabWidget/QApplication) - the
+	// widget-touching loop stays here since GrabWidget requires a real
+	// QApplication and is not part of the test binary.
+	for (GrabWidget* const widget : widgets) {
+		const QRect current(widget->pos(), widget->size());
+		const QRect updated = BulkResize::resizedKeepingAnchor(current, newWidth, newHeight, anchor);
+
+		if (updated.size() != current.size())
+			widget->resize(updated.size());
+		if (updated.topLeft() != current.topLeft())
+			widget->move(updated.topLeft());
+
+		widget->saveSizeAndPosition();
+	}
+}
+
+void ZonePlacementPage::onResizeAllApply_clicked()
+{
+	const QList<GrabWidget*>& grabAreas = _screens[_ui->cbMonitorSelect->currentIndex()].grabAreas;
+	applyResizeToWidgets(grabAreas, _ui->spinBox_ResizeAllWidth->value(), _ui->spinBox_ResizeAllHeight->value(), Qt::TopLeftCorner);
+	checkZoneIssues();
+}
+
+static QString groupEdgeName(LedGroup::Edge edge)
+{
+	switch (edge) {
+	case LedGroup::Edge::Top: return QStringLiteral("Top");
+	case LedGroup::Edge::Bottom: return QStringLiteral("Bottom");
+	case LedGroup::Edge::Left: return QStringLiteral("Left");
+	case LedGroup::Edge::Right: return QStringLiteral("Right");
+	case LedGroup::Edge::Custom: return QStringLiteral("Custom");
+	}
+	return QStringLiteral("Custom");
+}
+
+void ZonePlacementPage::refreshGroupList()
+{
+	_ui->listWidget_LedGroups->clear();
+	for (const LedGroup& group : SettingsScope::Settings::getLedGroups()) {
+		QListWidgetItem* const item = new QListWidgetItem(
+			tr("%1 (%2, %3 members)").arg(group.name, groupEdgeName(group.edge)).arg(group.memberIds.count()));
+		item->setData(Qt::UserRole, group.name);
+		_ui->listWidget_LedGroups->addItem(item);
+	}
+}
+
+void ZonePlacementPage::onGroupApply_clicked()
+{
+	const QString name = _ui->lineEdit_GroupName->text().trimmed();
+	if (name.isEmpty()) {
+		_ui->label_GroupHint->setText(tr("Enter a name for the group before applying it."));
+		return;
+	}
+
+	const QList<GrabWidget*> selected = selectedForGroupEdit();
+	if (selected.isEmpty()) {
+		_ui->label_GroupHint->setText(tr("Right-click at least one box before applying the group."));
+		return;
+	}
+
+	LedGroup group;
+	group.name = name;
+	group.edge = static_cast<LedGroup::Edge>(_ui->comboBox_GroupEdge->currentIndex());
+	group.width = _ui->spinBox_GroupWidth->isVisible() ? _ui->spinBox_GroupWidth->value() : -1;
+	group.height = _ui->spinBox_GroupHeight->isVisible() ? _ui->spinBox_GroupHeight->value() : -1;
+	group.enabled = true;
+	for (GrabWidget* const widget : selected)
+		group.memberIds.append(widget->getId());
+
+	LedGroupRuntime::applyGroup(group);
+
+	// LedGroupRuntime writes through Settings only (so it also works outside
+	// the wizard, without live GrabWidgets) - reflect the result onto the
+	// live wizard widgets here so validatePage() picks up the new geometry
+	// instead of the stale pre-apply positions.
+	for (GrabWidget* const widget : selected) {
+		widget->move(SettingsScope::Settings::getLedPosition(widget->getId()));
+		widget->resize(SettingsScope::Settings::getLedSize(widget->getId()));
+	}
+
+	QList<LedGroup> groups = SettingsScope::Settings::getLedGroups();
+	bool replaced = false;
+	for (LedGroup& existing : groups) {
+		if (existing.name == group.name) {
+			existing = group;
+			replaced = true;
+			break;
+		}
+	}
+	if (!replaced)
+		groups.append(group);
+	SettingsScope::Settings::setLedGroups(groups);
+
+	clearGroupEditSelection();
+	_ui->lineEdit_GroupName->clear();
+	_ui->label_GroupHint->setText(tr("Right-click boxes to mark them as members of the group being edited."));
+	refreshGroupList();
+	checkZoneIssues();
+}
+
+void ZonePlacementPage::onGroupRemove_clicked()
+{
+	QListWidgetItem* const item = _ui->listWidget_LedGroups->currentItem();
+	if (!item)
+		return;
+
+	const QString name = item->data(Qt::UserRole).toString();
+	QList<LedGroup> groups = SettingsScope::Settings::getLedGroups();
+	for (int i = 0; i < groups.count(); ++i) {
+		if (groups.at(i).name == name) {
+			groups.removeAt(i);
+			break;
+		}
+	}
+	// Removing a group definition does not undo the resize already applied
+	// to its member LEDs - only stops it from being reapplied later.
+	SettingsScope::Settings::setLedGroups(groups);
+	refreshGroupList();
+}
+
+void ZonePlacementPage::onGroupListItem_clicked(QListWidgetItem *item)
+{
+	if (!item)
+		return;
+
+	const QString name = item->data(Qt::UserRole).toString();
+	LedGroup found;
+	bool foundGroup = false;
+	for (const LedGroup& group : SettingsScope::Settings::getLedGroups()) {
+		if (group.name == name) {
+			found = group;
+			foundGroup = true;
+			break;
+		}
+	}
+	if (!foundGroup)
+		return;
+
+	clearGroupEditSelection();
+	_ui->lineEdit_GroupName->setText(found.name);
+	_ui->comboBox_GroupEdge->setCurrentIndex(static_cast<int>(found.edge));
+	if (found.width > 0)
+		_ui->spinBox_GroupWidth->setValue(found.width);
+	if (found.height > 0)
+		_ui->spinBox_GroupHeight->setValue(found.height);
+
+	const QSet<int> memberIds(found.memberIds.constBegin(), found.memberIds.constEnd());
+	for (const MonitorSettings& settings : _screens) {
+		for (GrabWidget* const widget : settings.grabAreas) {
+			if (memberIds.contains(widget->getId()))
+				widget->setSelectedForGroupEdit(true);
+		}
+	}
+	onGrabWidgetRightClicked(0);
 }

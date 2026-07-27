@@ -62,6 +62,8 @@ HEADERS += \
     ../src/wizard/ContentAspectPreset.hpp \
     ../src/wizard/LayoutRecipeGenerator.hpp \
     ../src/wizard/DeviceDiscoveryDefault.hpp \
+    ../src/wizard/BulkResize.hpp \
+    ../src/LedGroupRuntime.hpp \
     ../src/ZoneLayoutRuntime.hpp \
     ../src/MoodLamp.hpp \
     ../src/LiquidColorGenerator.hpp \
@@ -80,7 +82,9 @@ HEADERS += \
     ContentAspectPresetTest.hpp \
     LayoutRecipeGeneratorTest.hpp \
     DeviceDiscoveryDefaultTest.hpp \
-    MoodLampManagerTest.hpp
+    MoodLampManagerTest.hpp \
+    BulkResizeTest.hpp \
+    LedGroupRuntimeTest.hpp
 
 SOURCES += \
     ../src/ApiServerSetColorTask.cpp \
@@ -97,7 +101,9 @@ SOURCES += \
     ../src/wizard/ContentAspectPreset.cpp \
     ../src/wizard/LayoutRecipeGenerator.cpp \
     ../src/wizard/DeviceDiscoveryDefault.cpp \
+    ../src/wizard/BulkResize.cpp \
     ../src/ZoneLayoutRuntime.cpp \
+    ../src/LedGroupRuntime.cpp \
     ../src/MoodLamp.cpp \
     ../src/LiquidColorGenerator.cpp \
     ../src/MoodLampManager.cpp \
@@ -114,7 +120,9 @@ SOURCES += \
     ContentAspectPresetTest.cpp \
     LayoutRecipeGeneratorTest.cpp \
     DeviceDiscoveryDefaultTest.cpp \
-    MoodLampManagerTest.cpp
+    MoodLampManagerTest.cpp \
+    BulkResizeTest.cpp \
+    LedGroupRuntimeTest.cpp
 
 win32{
     HEADERS += \

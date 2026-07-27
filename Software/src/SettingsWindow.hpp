@@ -242,6 +242,7 @@ private slots:
 	void onKeepLightsAfterScreenOff_Toggled(bool isEnabled);
 
 	void onRunConfigurationWizard_clicked();
+	void onReapplyLedGroups_clicked();
 
 	void onContentAspectFill_toggled(bool checked);
 	void onContentAspect169_toggled(bool checked);

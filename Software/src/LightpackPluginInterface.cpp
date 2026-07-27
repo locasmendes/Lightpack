@@ -6,6 +6,7 @@
 #include "version.h"
 #include "debug.h"
 #include "ZoneLayoutRuntime.hpp"
+#include "LedGroupRuntime.hpp"
 
 using namespace SettingsScope;
 
@@ -444,6 +445,57 @@ bool LightpackPluginInterface::SetContentAspect(const QString& sessionKey, const
 			return ZoneLayoutRuntime::applyContentAspectPreset(preset);
 		} else
 			return false;
+}
+
+bool LightpackPluginInterface::SetLedGroup(const QString& sessionKey, const SettingsScope::LedGroup& group)
+{
+	if (lockSessionKeys.isEmpty()) return false;
+	if (lockSessionKeys[0]!=sessionKey) return false;
+
+	LedGroupRuntime::applyGroup(group);
+
+	QList<SettingsScope::LedGroup> groups = Settings::getLedGroups();
+	bool replaced = false;
+	for (SettingsScope::LedGroup& existing : groups) {
+		if (existing.name == group.name) {
+			existing = group;
+			replaced = true;
+			break;
+		}
+	}
+	if (!replaced)
+		groups.append(group);
+	Settings::setLedGroups(groups);
+	return true;
+}
+
+bool LightpackPluginInterface::RemoveLedGroup(const QString& sessionKey, const QString& name)
+{
+	if (lockSessionKeys.isEmpty()) return false;
+	if (lockSessionKeys[0]!=sessionKey) return false;
+
+	QList<SettingsScope::LedGroup> groups = Settings::getLedGroups();
+	bool found = false;
+	for (int i = 0; i < groups.count(); ++i) {
+		if (groups.at(i).name == name) {
+			groups.removeAt(i);
+			found = true;
+			break;
+		}
+	}
+	// Removing a group definition does not undo the resize already applied
+	// to its member LEDs - only stops it from being reapplied later.
+	if (found)
+		Settings::setLedGroups(groups);
+	return found;
+}
+
+bool LightpackPluginInterface::ApplyLedGroups(const QString& sessionKey)
+{
+	if (lockSessionKeys.isEmpty()) return false;
+	if (lockSessionKeys[0]!=sessionKey) return false;
+
+	return LedGroupRuntime::applyAll();
 }
 
 bool LightpackPluginInterface::SetDevice(const QString& sessionKey, const QString& device)

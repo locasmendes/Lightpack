@@ -37,6 +37,84 @@
 
 using namespace SettingsScope;
 
+namespace {
+
+// Wire format decided in docs/plans/grupos-e-resize-global-leds.md §5.1.
+QString ledGroupEdgeToString(LedGroup::Edge edge)
+{
+	switch (edge) {
+	case LedGroup::Edge::Top: return QStringLiteral("top");
+	case LedGroup::Edge::Bottom: return QStringLiteral("bottom");
+	case LedGroup::Edge::Left: return QStringLiteral("left");
+	case LedGroup::Edge::Right: return QStringLiteral("right");
+	case LedGroup::Edge::Custom: return QStringLiteral("custom");
+	}
+	return QStringLiteral("custom");
+}
+
+bool ledGroupEdgeFromString(const QString& str, LedGroup::Edge& out)
+{
+	if (str == QLatin1String("top")) { out = LedGroup::Edge::Top; return true; }
+	if (str == QLatin1String("bottom")) { out = LedGroup::Edge::Bottom; return true; }
+	if (str == QLatin1String("left")) { out = LedGroup::Edge::Left; return true; }
+	if (str == QLatin1String("right")) { out = LedGroup::Edge::Right; return true; }
+	if (str == QLatin1String("custom")) { out = LedGroup::Edge::Custom; return true; }
+	return false;
+}
+
+// name must not contain the delimiters used by setledgroup:/getledgroups (',', ';', '|').
+bool isValidLedGroupName(const QString& name)
+{
+	return !name.isEmpty() && !name.contains(QLatin1Char(',')) && !name.contains(QLatin1Char(';')) && !name.contains(QLatin1Char('|'));
+}
+
+// Parses "<name>,<edge>,<width>,<height>,<enabled>,<id1>|<id2>|..." (payload after "setledgroup:").
+bool parseLedGroupPayload(const QString& payload, LedGroup& out)
+{
+	const QStringList fields = payload.split(QLatin1Char(','));
+	if (fields.count() != 6)
+		return false;
+
+	const QString& name = fields.at(0);
+	if (!isValidLedGroupName(name))
+		return false;
+
+	LedGroup::Edge edge;
+	if (!ledGroupEdgeFromString(fields.at(1), edge))
+		return false;
+
+	bool widthOk = false, heightOk = false;
+	const int width = fields.at(2).toInt(&widthOk);
+	const int height = fields.at(3).toInt(&heightOk);
+	if (!widthOk || !heightOk)
+		return false;
+
+	const QString& enabledStr = fields.at(4);
+	if (enabledStr != QLatin1String("0") && enabledStr != QLatin1String("1"))
+		return false;
+
+	QList<int> memberIds;
+	if (!fields.at(5).isEmpty()) {
+		for (const QString& idStr : fields.at(5).split(QLatin1Char('|'))) {
+			bool idOk = false;
+			const int id = idStr.toInt(&idOk);
+			if (!idOk)
+				return false;
+			memberIds.append(id);
+		}
+	}
+
+	out.name = name;
+	out.edge = edge;
+	out.width = width;
+	out.height = height;
+	out.enabled = (enabledStr == QLatin1String("1"));
+	out.memberIds = memberIds;
+	return true;
+}
+
+} // namespace
+
 // Immediatly after successful connection server sends to client -- ApiVersion
 const char * const ApiServer::ApiVersion = "Lightpack API v1.4 - Prismatik API v" API_VERSION " (type \"help\" for more info)\r\n";
 const char * const ApiServer::CmdUnknown = "unknown command\r\n";
@@ -82,6 +160,9 @@ const char * const ApiServer::CmdResultCountLeds = "countleds:";
 
 const char * const ApiServer::CmdGetLeds = "getleds";
 const char * const ApiServer::CmdResultLeds = "leds:";
+
+const char * const ApiServer::CmdGetLedGroups = "getledgroups";
+const char * const ApiServer::CmdResultLedGroups = "ledgroups:";
 
 const char * const ApiServer::CmdGetColors = "getcolors";
 const char * const ApiServer::CmdResultGetColors = "colors:";
@@ -155,6 +236,9 @@ const char * const ApiServer::CmdSetSmooth = "setsmooth:";
 const char * const ApiServer::CmdSetHostSmooth = "sethostsmooth:";
 const char * const ApiServer::CmdSetProfile = "setprofile:";
 const char * const ApiServer::CmdSetContentAspect = "setcontentaspect:";
+const char * const ApiServer::CmdSetLedGroup = "setledgroup:";
+const char * const ApiServer::CmdRemoveLedGroup = "removeledgroup:";
+const char * const ApiServer::CmdApplyLedGroups = "applyledgroups";
 
 #ifdef SOUNDVIZ_SUPPORT
 const char * const ApiServer::CmdSetSoundVizColors = "setsoundvizcolors:";
@@ -496,6 +580,24 @@ void ApiServer::clientProcessCommands()
 			}
 			result += QStringLiteral("\r\n");
 
+		}
+		else if (cmdBuffer == CmdGetLedGroups)
+		{
+			API_DEBUG_OUT << CmdGetLedGroups;
+
+			result = ApiServer::CmdResultLedGroups;
+			for (const LedGroup& group : Settings::getLedGroups())
+			{
+				QStringList memberIds;
+				for (int id : group.memberIds)
+					memberIds << QString::number(id);
+
+				result += QStringLiteral("%1,%2,%3,%4,%5,%6;")
+					.arg(group.name, ledGroupEdgeToString(group.edge))
+					.arg(group.width).arg(group.height).arg(group.enabled ? 1 : 0)
+					.arg(memberIds.join(QLatin1Char('|')));
+			}
+			result += QStringLiteral("\r\n");
 		}
 		else if (cmdBuffer == CmdGetColors)
 		{
@@ -1126,6 +1228,86 @@ void ApiServer::clientProcessCommands()
 				result = CmdSetResult_Busy;
 			}
 		}
+		else if (cmdBuffer.startsWith(CmdSetLedGroup))
+		{
+			API_DEBUG_OUT << CmdSetLedGroup;
+
+			if (m_lockedClient == 1)
+			{
+				cmdBuffer.remove(0, cmdBuffer.indexOf(':') + 1);
+				API_DEBUG_OUT << QString(cmdBuffer);
+
+				LedGroup group;
+				if (parseLedGroupPayload(QString(cmdBuffer), group) && lightpack->SetLedGroup(sessionKey, group))
+				{
+					API_DEBUG_OUT << CmdSetLedGroup << "OK:" << group.name;
+					result = CmdSetResult_Ok;
+				} else {
+					API_DEBUG_OUT << CmdSetLedGroup << "Error (invalid group):" << QString(cmdBuffer);
+					result = CmdSetResult_Error;
+				}
+			}
+			else if (m_lockedClient == 0)
+			{
+				result = CmdSetResult_NotLocked;
+			}
+			else // m_lockedClient != client
+			{
+				result = CmdSetResult_Busy;
+			}
+		}
+		else if (cmdBuffer.startsWith(CmdRemoveLedGroup))
+		{
+			API_DEBUG_OUT << CmdRemoveLedGroup;
+
+			if (m_lockedClient == 1)
+			{
+				cmdBuffer.remove(0, cmdBuffer.indexOf(':') + 1);
+				API_DEBUG_OUT << QString(cmdBuffer);
+				const QString groupName = QString(cmdBuffer);
+
+				if (lightpack->RemoveLedGroup(sessionKey, groupName))
+				{
+					API_DEBUG_OUT << CmdRemoveLedGroup << "OK:" << groupName;
+					result = CmdSetResult_Ok;
+				} else {
+					API_DEBUG_OUT << CmdRemoveLedGroup << "Error (group not found):" << groupName;
+					result = CmdSetResult_Error;
+				}
+			}
+			else if (m_lockedClient == 0)
+			{
+				result = CmdSetResult_NotLocked;
+			}
+			else // m_lockedClient != client
+			{
+				result = CmdSetResult_Busy;
+			}
+		}
+		else if (cmdBuffer == CmdApplyLedGroups)
+		{
+			API_DEBUG_OUT << CmdApplyLedGroups;
+
+			if (m_lockedClient == 1)
+			{
+				if (lightpack->ApplyLedGroups(sessionKey))
+				{
+					API_DEBUG_OUT << CmdApplyLedGroups << "OK";
+					result = CmdSetResult_Ok;
+				} else {
+					API_DEBUG_OUT << CmdApplyLedGroups << "Error";
+					result = CmdSetResult_Error;
+				}
+			}
+			else if (m_lockedClient == 0)
+			{
+				result = CmdSetResult_NotLocked;
+			}
+			else // m_lockedClient != client
+			{
+				result = CmdSetResult_Busy;
+			}
+		}
 		else if (cmdBuffer.startsWith(CmdSetDevice))
 		{
 			API_DEBUG_OUT << CmdSetDevice;
@@ -1521,6 +1703,11 @@ void ApiServer::initHelpMessage()
 				formatHelp(CmdResultLeds + QStringLiteral("1-0,0,100,100;2-0,200,100,100;"))
 				);
 	m_helpMessage += formatHelp(
+				CmdGetLedGroups,
+				QStringLiteral("Get the LED groups defined for the current profile. Format: \"name,edge,width,height,enabled,id1|id2|...;\" per group, edge is one of top/bottom/left/right/custom, width/height are -1 when there is no override for that axis."),
+				formatHelp(CmdResultLedGroups + QStringLiteral("bottom,bottom,-1,140,1,4|5|6|7;"))
+				);
+	m_helpMessage += formatHelp(
 				CmdGetColors,
 				QStringLiteral("Get curent color leds. Format: \"N-R,G,B;\", where N - number of led, R, G, B - red, green and blue color components."),
 				formatHelp(CmdResultGetColors + QStringLiteral("1-0,120,200;2-0,234,23;"))
@@ -1651,6 +1838,23 @@ void ApiServer::initHelpMessage()
 				helpCmdSetResults);
 
 	m_helpMessage += formatHelp(
+				CmdSetLedGroup,
+				QStringLiteral("Create or replace (by name) a LED group: \"name,edge,width,height,enabled,id1|id2|...\". edge is one of top/bottom/left/right/custom; width/height use -1 for no override; name must not contain ',', ';' or '|'. Works only on locking time (see lock)."),
+				formatHelp(CmdSetLedGroup + QStringLiteral("bottom,bottom,-1,140,1,4|5|6|7")),
+				helpCmdSetResults);
+
+	m_helpMessage += formatHelp(
+				CmdRemoveLedGroup,
+				QStringLiteral("Remove a LED group by name. Does not undo the resize already applied to its member LEDs. Works only on locking time (see lock)."),
+				formatHelp(CmdRemoveLedGroup + QStringLiteral("bottom")),
+				helpCmdSetResults);
+
+	m_helpMessage += formatHelp(
+				CmdApplyLedGroups,
+				QStringLiteral("Reapply every enabled LED group's override to its member LEDs. Takes no arguments. Works only on locking time (see lock)."),
+				helpCmdSetResults);
+
+	m_helpMessage += formatHelp(
 				CmdNewProfile,
 				QStringLiteral("Create new profile. Works only on locking time (see lock)."),
 				formatHelp(CmdNewProfile + QStringLiteral("16x9")) +
@@ -1715,7 +1919,7 @@ void ApiServer::initShortHelpMessage()
 	cmds << CmdApiKey << CmdLock << CmdUnlock
 			<< CmdGetStatus << CmdGetStatusAPI
 			<< CmdGetProfile << CmdGetProfiles
-			<< CmdGetCountLeds << CmdGetLeds << CmdGetColors
+			<< CmdGetCountLeds << CmdGetLeds << CmdGetColors << CmdGetLedGroups
 			<< CmdGetFPS << CmdGetScreenSize << CmdGetBacklight
 			<< CmdGetGamma << CmdGetBrightness << CmdGetSmooth << CmdGetHostSmooth
 #ifdef SOUNDVIZ_SUPPORT
@@ -1724,7 +1928,7 @@ void ApiServer::initShortHelpMessage()
 			<< CmdGetPersistOnUnlock
 			<< CmdSetColor << CmdSetLeds
 			<< CmdSetGamma << CmdSetBrightness << CmdSetSmooth << CmdSetHostSmooth
-			<< CmdSetProfile << CmdSetContentAspect << CmdNewProfile << CmdDeleteProfile
+			<< CmdSetProfile << CmdSetContentAspect << CmdSetLedGroup << CmdRemoveLedGroup << CmdApplyLedGroups << CmdNewProfile << CmdDeleteProfile
 			<< CmdSetStatus << CmdSetBacklight
 #ifdef SOUNDVIZ_SUPPORT
 			<< CmdSetSoundVizColors << CmdSetSoundVizLiquid

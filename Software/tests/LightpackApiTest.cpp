@@ -793,6 +793,132 @@ void LightpackApiTest::testCase_SetContentAspectRequiresRecipeAndLock()
 	QVERIFY(writeCommandWithCheck(m_socket, set43Cmd, ApiServer::CmdSetResult_NotLocked));
 
 	Settings::setLayoutRecipe(QJsonArray());
+	// Settings::Initialize() persists to disk (not a temp dir, see initTestCase()),
+	// so leaving this at "16:9" makes the very first assertion of
+	// testCase_ContentAspectSettingsDefaultAndRecipeRoundTrip() order/rerun-dependent
+	// on the next invocation of this binary.
+	Settings::setContentAspectPreset(QStringLiteral("fill"));
+}
+
+void LightpackApiTest::testCase_SetLedGroupAndGetLedGroups()
+{
+	Settings::setLedGroups(QList<LedGroup>());
+
+	QVERIFY(lock(m_socket));
+
+	QByteArray setLedGroupCmd = ApiServer::CmdSetLedGroup;
+	setLedGroupCmd += "bottom,bottom,-1,140,1,4|5|6|7";
+	QVERIFY(writeCommandWithCheck(m_socket, setLedGroupCmd, ApiServer::CmdSetResult_Ok));
+
+	writeCommand(m_socket, ApiServer::CmdGetLedGroups);
+	const QByteArray getResult = readResult(m_socket).trimmed();
+	QVERIFY(m_sockReadLineOk);
+	QCOMPARE(QString(getResult), QStringLiteral("ledgroups:bottom,bottom,-1,140,1,4|5|6|7;"));
+
+	// setledgroup: with an existing name replaces it in place (upsert), it
+	// does not append a second entry.
+	QByteArray replaceLedGroupCmd = ApiServer::CmdSetLedGroup;
+	replaceLedGroupCmd += "bottom,bottom,-1,90,1,4|5";
+	QVERIFY(writeCommandWithCheck(m_socket, replaceLedGroupCmd, ApiServer::CmdSetResult_Ok));
+
+	writeCommand(m_socket, ApiServer::CmdGetLedGroups);
+	const QByteArray getResultAfterReplace = readResult(m_socket).trimmed();
+	QVERIFY(m_sockReadLineOk);
+	QCOMPARE(QString(getResultAfterReplace), QStringLiteral("ledgroups:bottom,bottom,-1,90,1,4|5;"));
+
+	QVERIFY(unlock(m_socket));
+	Settings::setLedGroups(QList<LedGroup>());
+}
+
+void LightpackApiTest::testCase_SetLedGroupInvalidPayload()
+{
+	Settings::setLedGroups(QList<LedGroup>());
+
+	QVERIFY(lock(m_socket));
+
+	// Name contains a reserved delimiter.
+	QByteArray badNameCmd = ApiServer::CmdSetLedGroup;
+	badNameCmd += "bad,name,top,-1,100,1,0";
+	QVERIFY(writeCommandWithCheck(m_socket, badNameCmd, ApiServer::CmdSetResult_Error));
+
+	// Unknown edge token.
+	QByteArray badEdgeCmd = ApiServer::CmdSetLedGroup;
+	badEdgeCmd += "group1,diagonal,-1,100,1,0";
+	QVERIFY(writeCommandWithCheck(m_socket, badEdgeCmd, ApiServer::CmdSetResult_Error));
+
+	// Non-numeric width.
+	QByteArray badWidthCmd = ApiServer::CmdSetLedGroup;
+	badWidthCmd += "group1,top,abc,100,1,0";
+	QVERIFY(writeCommandWithCheck(m_socket, badWidthCmd, ApiServer::CmdSetResult_Error));
+
+	// Missing fields.
+	QByteArray badFieldCountCmd = ApiServer::CmdSetLedGroup;
+	badFieldCountCmd += "group1,top,-1,100";
+	QVERIFY(writeCommandWithCheck(m_socket, badFieldCountCmd, ApiServer::CmdSetResult_Error));
+
+	QVERIFY(unlock(m_socket));
+	QVERIFY(Settings::getLedGroups().isEmpty());
+}
+
+void LightpackApiTest::testCase_SetLedGroupWithoutLock()
+{
+	QByteArray setLedGroupCmd = ApiServer::CmdSetLedGroup;
+	setLedGroupCmd += "bottom,bottom,-1,140,1,4|5|6|7";
+	QVERIFY(writeCommandWithCheck(m_socket, setLedGroupCmd, ApiServer::CmdSetResult_NotLocked));
+
+	QVERIFY(writeCommandWithCheck(m_socket, ApiServer::CmdApplyLedGroups, ApiServer::CmdSetResult_NotLocked));
+
+	QByteArray removeLedGroupCmd = ApiServer::CmdRemoveLedGroup;
+	removeLedGroupCmd += "bottom";
+	QVERIFY(writeCommandWithCheck(m_socket, removeLedGroupCmd, ApiServer::CmdSetResult_NotLocked));
+}
+
+void LightpackApiTest::testCase_RemoveLedGroup()
+{
+	Settings::setLedGroups(QList<LedGroup>());
+
+	QVERIFY(lock(m_socket));
+
+	QByteArray setLedGroupCmd = ApiServer::CmdSetLedGroup;
+	setLedGroupCmd += "bottom,bottom,-1,140,1,4|5|6|7";
+	QVERIFY(writeCommandWithCheck(m_socket, setLedGroupCmd, ApiServer::CmdSetResult_Ok));
+
+	QByteArray removeUnknownCmd = ApiServer::CmdRemoveLedGroup;
+	removeUnknownCmd += "not-a-group";
+	QVERIFY(writeCommandWithCheck(m_socket, removeUnknownCmd, ApiServer::CmdSetResult_Error));
+
+	QByteArray removeLedGroupCmd = ApiServer::CmdRemoveLedGroup;
+	removeLedGroupCmd += "bottom";
+	QVERIFY(writeCommandWithCheck(m_socket, removeLedGroupCmd, ApiServer::CmdSetResult_Ok));
+
+	QVERIFY(Settings::getLedGroups().isEmpty());
+
+	QVERIFY(unlock(m_socket));
+}
+
+void LightpackApiTest::testCase_ApplyLedGroups()
+{
+	Settings::setLedGroups(QList<LedGroup>());
+	Settings::setLedPosition(0, QPoint(10, 10));
+	Settings::setLedSize(0, QSize(50, 50));
+
+	QVERIFY(lock(m_socket));
+
+	QByteArray setLedGroupCmd = ApiServer::CmdSetLedGroup;
+	setLedGroupCmd += "custom,custom,80,90,1,0";
+	QVERIFY(writeCommandWithCheck(m_socket, setLedGroupCmd, ApiServer::CmdSetResult_Ok));
+
+	// setledgroup: already applies the group once - reset LED 0 to confirm
+	// applyledgroups reapplies it independently of that first application.
+	Settings::setLedPosition(0, QPoint(10, 10));
+	Settings::setLedSize(0, QSize(50, 50));
+
+	QVERIFY(writeCommandWithCheck(m_socket, ApiServer::CmdApplyLedGroups, ApiServer::CmdSetResult_Ok));
+	QCOMPARE(Settings::getLedSize(0), QSize(80, 90));
+	QCOMPARE(Settings::getLedPosition(0), QPoint(10, 10));
+
+	QVERIFY(unlock(m_socket));
+	Settings::setLedGroups(QList<LedGroup>());
 }
 
 void LightpackApiTest::testCase_SetProfile()

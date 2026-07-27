@@ -191,7 +191,9 @@ void GrabWidget::mousePressEvent(QMouseEvent *pe)
 
 	if (pe->buttons() == Qt::RightButton)
 	{
-		// Send signal RightButtonClicked to main window for grouping widgets
+		// Toggle membership in the LED group currently being edited (see
+		// docs/plans/grupos-e-resize-global-leds.md, Fase 4)
+		setSelectedForGroupEdit(!m_selectedForGroupEdit);
 		emit mouseRightButtonClicked(m_selfId);
 	}
 	else if (pe->buttons() == Qt::LeftButton)
@@ -571,7 +573,13 @@ void GrabWidget::paintEvent(QPaintEvent *)
 	DEBUG_HIGH_LEVEL << Q_FUNC_INFO;
 
 	QPainter painter(this);
-	painter.setPen(QColor(0x77, 0x77, 0x77));
+	if (m_selectedForGroupEdit) {
+		QPen groupEditPen(QColor(0xff, 0xa5, 0x00));
+		groupEditPen.setWidth(3);
+		painter.setPen(groupEditPen);
+	} else {
+		painter.setPen(QColor(0x77, 0x77, 0x77));
+	}
 	if ((m_features & DimUntilInteractedWith) && isAreaEnabled()) {
 		painter.setBrush(QBrush(cmd == NOP ? m_backgroundColor.darker(150) : m_backgroundColor));
 	}
@@ -683,6 +691,10 @@ void GrabWidget::setId(const int id)
 
 	m_selfId = id;
 	m_selfIdString = QString::number(m_selfId + 1);
+	// This widget instance may be pooled and reused for a different LED id
+	// (see ZonePlacementPage::addGrabArea) - stale group-edit selection must
+	// not carry over to whatever LED now occupies this widget.
+	m_selectedForGroupEdit = false;
 }
 
 void GrabWidget::setFellows(QList<GrabWidget*>* const fellows)
@@ -722,6 +734,20 @@ void GrabWidget::fillBackgroundColored()
 	DEBUG_MID_LEVEL << Q_FUNC_INFO << m_selfId;
 
 	fillBackground(m_selfId);
+}
+
+bool GrabWidget::isSelectedForGroupEdit() const
+{
+	return m_selectedForGroupEdit;
+}
+
+void GrabWidget::setSelectedForGroupEdit(const bool selected)
+{
+	if (m_selectedForGroupEdit == selected)
+		return;
+
+	m_selectedForGroupEdit = selected;
+	repaint();
 }
 
 void GrabWidget::fillBackground(int index)

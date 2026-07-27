@@ -31,6 +31,8 @@
 #include <QMutex>
 #include <QColor>
 #include <QJsonArray>
+#include <QJsonObject>
+#include <QList>
 
 #include "SettingsDefaults.hpp"
 #include "enums.hpp"
@@ -40,6 +42,32 @@
 
 namespace SettingsScope
 {
+
+struct LedGroup {
+	enum class Edge { Top, Bottom, Left, Right, Custom };
+
+	QString name;
+	QList<int> memberIds;
+	Edge edge = Edge::Custom;
+	int width = -1;  // -1 = no override
+	int height = -1; // -1 = no override
+	bool enabled = true;
+
+	QJsonObject toJson() const;
+	static LedGroup fromJson(const QJsonObject& json);
+
+	bool operator==(const LedGroup& other) const {
+		return name == other.name &&
+		       memberIds == other.memberIds &&
+		       edge == other.edge &&
+		       width == other.width &&
+		       height == other.height &&
+		       enabled == other.enabled;
+	}
+	bool operator!=(const LedGroup& other) const {
+		return !(*this == other);
+	}
+};
 
 struct LedInfo {
 	bool isEnabled;
@@ -180,6 +208,8 @@ public:
 	static bool hasLayoutRecipe();
 	static QJsonArray getLayoutRecipe();
 	static void setLayoutRecipe(const QJsonArray& recipe);
+	static QList<LedGroup> getLedGroups();
+	static void setLedGroups(const QList<LedGroup>& groups);
 	static bool isBacklightEnabled();
 	static void setIsBacklightEnabled(bool isEnabled);
 	static bool isGrabAvgColorsEnabled();
@@ -374,6 +404,7 @@ signals:
 	void grabHostSmoothingDurationChanged(int value);
 	void contentAspectPresetChanged(const QString& preset);
 	void layoutRecipeChanged();
+	void ledGroupsChanged();
 	void backlightEnabledChanged(bool isEnabled);
 	void grabAvgColorsEnabledChanged(bool isEnabled);
 	void grabOverBrightenChanged(int value);

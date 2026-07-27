@@ -70,6 +70,8 @@ public:
 	void setAreaEnabled(const bool);
 	void fillBackgroundWhite();
 	void fillBackgroundColored();
+	bool isSelectedForGroupEdit() const;
+	void setSelectedForGroupEdit(const bool selected);
 
 private:
 	void fillBackground(int index);
@@ -151,6 +153,8 @@ private:
 
 	int m_features;
 	QList<GrabWidget*> *m_fellows;
+
+	bool m_selectedForGroupEdit = false; // toggled by right-click, see docs/plans/grupos-e-resize-global-leds.md
 
 protected:
 	virtual void mousePressEvent(QMouseEvent *pe);

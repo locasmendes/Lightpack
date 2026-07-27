@@ -206,6 +206,7 @@ static const QString Slowdown = QStringLiteral("Grab/Slowdown");
 static const QString HostSmoothingDuration = QStringLiteral("Grab/HostSmoothingDuration");
 static const QString ContentAspectPreset = QStringLiteral("Grab/ContentAspectPreset");
 static const QString LayoutRecipe = QStringLiteral("Grab/LayoutRecipe");
+static const QString LedGroups = QStringLiteral("Grab/LedGroups");
 static const QString LuminosityThreshold = QStringLiteral("Grab/LuminosityThreshold");
 static const QString OverBrighten = QStringLiteral("Grab/OverBrighten");
 static const QString IsMinimumLuminosityEnabled = QStringLiteral("Grab/IsMinimumLuminosityEnabled");
@@ -1421,6 +1422,89 @@ void Settings::setLayoutRecipe(const QJsonArray& recipe)
 		: QString::fromUtf8(QJsonDocument(recipe).toJson(QJsonDocument::Compact));
 	setValue(Profile::Key::Grab::LayoutRecipe, raw);
 	emit m_this->layoutRecipeChanged();
+}
+
+QJsonObject LedGroup::toJson() const
+{
+	QJsonObject json;
+	json[QStringLiteral("name")] = name;
+	QJsonArray membersArray;
+	for (int id : memberIds) {
+		membersArray.append(id);
+	}
+	json[QStringLiteral("memberIds")] = membersArray;
+
+	QString edgeStr = QStringLiteral("Custom");
+	switch (edge) {
+	case Edge::Top: edgeStr = QStringLiteral("Top"); break;
+	case Edge::Bottom: edgeStr = QStringLiteral("Bottom"); break;
+	case Edge::Left: edgeStr = QStringLiteral("Left"); break;
+	case Edge::Right: edgeStr = QStringLiteral("Right"); break;
+	case Edge::Custom: edgeStr = QStringLiteral("Custom"); break;
+	}
+	json[QStringLiteral("edge")] = edgeStr;
+	json[QStringLiteral("width")] = width;
+	json[QStringLiteral("height")] = height;
+	json[QStringLiteral("enabled")] = enabled;
+	return json;
+}
+
+LedGroup LedGroup::fromJson(const QJsonObject& json)
+{
+	LedGroup group;
+	group.name = json.value(QStringLiteral("name")).toString();
+	const QJsonArray membersArray = json.value(QStringLiteral("memberIds")).toArray();
+	for (const QJsonValue& val : membersArray) {
+		group.memberIds.append(val.toInt());
+	}
+
+	const QString edgeStr = json.value(QStringLiteral("edge")).toString();
+	if (edgeStr == QStringLiteral("Top")) group.edge = Edge::Top;
+	else if (edgeStr == QStringLiteral("Bottom")) group.edge = Edge::Bottom;
+	else if (edgeStr == QStringLiteral("Left")) group.edge = Edge::Left;
+	else if (edgeStr == QStringLiteral("Right")) group.edge = Edge::Right;
+	else group.edge = Edge::Custom;
+
+	group.width = json.value(QStringLiteral("width")).toInt(-1);
+	group.height = json.value(QStringLiteral("height")).toInt(-1);
+	group.enabled = json.value(QStringLiteral("enabled")).toBool(true);
+	return group;
+}
+
+QList<LedGroup> Settings::getLedGroups()
+{
+	const QString raw = value(Profile::Key::Grab::LedGroups).toString();
+	if (raw.isEmpty())
+		return QList<LedGroup>();
+
+	const QJsonDocument doc = QJsonDocument::fromJson(raw.toUtf8());
+	if (!doc.isArray())
+		return QList<LedGroup>();
+
+	QList<LedGroup> result;
+	const QJsonArray array = doc.array();
+	for (const QJsonValue& val : array) {
+		if (val.isObject()) {
+			result.append(LedGroup::fromJson(val.toObject()));
+		}
+	}
+	return result;
+}
+
+void Settings::setLedGroups(const QList<LedGroup>& groups)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
+	if (groups.isEmpty()) {
+		setValue(Profile::Key::Grab::LedGroups, QString());
+	} else {
+		QJsonArray array;
+		for (const LedGroup& g : groups) {
+			array.append(g.toJson());
+		}
+		const QString raw = QString::fromUtf8(QJsonDocument(array).toJson(QJsonDocument::Compact));
+		setValue(Profile::Key::Grab::LedGroups, raw);
+	}
+	emit m_this->ledGroupsChanged();
 }
 
 bool Settings::isBacklightEnabled()

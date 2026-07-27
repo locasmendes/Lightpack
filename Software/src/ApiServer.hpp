@@ -104,6 +104,9 @@ public:
 	static const char * const CmdGetLeds;
 	static const char * const CmdResultLeds;
 
+	static const char * const CmdGetLedGroups;
+	static const char * const CmdResultLedGroups;
+
 	static const char * const CmdGetColors;
 	static const char * const CmdResultGetColors;
 
@@ -174,6 +177,9 @@ public:
 	static const char * const CmdSetHostSmooth;
 	static const char * const CmdSetProfile;
 	static const char * const CmdSetContentAspect;
+	static const char * const CmdSetLedGroup;
+	static const char * const CmdRemoveLedGroup;
+	static const char * const CmdApplyLedGroups;
 
 #ifdef SOUNDVIZ_SUPPORT
 	static const char * const CmdSetSoundVizColors;
