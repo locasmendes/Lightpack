@@ -191,6 +191,15 @@ void MoodLampManager::updateColors(const bool forceUpdate)
 	DEBUG_MID_LEVEL << Q_FUNC_INFO << newColor.rgb();
 
 	bool changed = (m_lamp ? m_lamp->shine(newColor, m_colors) : false);
+
+	// Per-group color overrides only make sense as fixed/static colors, so they only
+	// apply in Constant mode; in Liquid mode they're ignored (the configuration is kept,
+	// it simply takes effect again once Constant mode is re-selected).
+	if (!m_isLiquidMode) {
+		if (applyGroupColorOverrides(m_colors, Settings::getLedGroups()))
+			changed = true;
+	}
+
 	if (changed || !m_isSendDataOnlyIfColorsChanged || forceUpdate) {
 		if (isHostSmoothingApplicable()) {
 			m_hostSmoothing.retarget(m_colors, m_hostSmoothingClock.elapsed());
@@ -268,6 +277,28 @@ void MoodLampManager::initColors(int numberOfLeds)
 
 	m_timerHostSmoothing->stop();
 	m_hostSmoothing.reset(numberOfLeds);
+}
+
+bool MoodLampManager::applyGroupColorOverrides(QList<QRgb>& colors, const QList<SettingsScope::LedGroup>& groups)
+{
+	bool changed = false;
+	for (const SettingsScope::LedGroup& group : groups) {
+		if (!group.enabled || !group.hasColor)
+			continue;
+
+		const QRgb rgb = group.color.rgb();
+		for (int id : group.memberIds) {
+			if (id < 0 || id >= colors.size())
+				continue;
+			if (!Settings::isLedEnabled(id))
+				continue;
+			if (colors[id] != rgb) {
+				colors[id] = rgb;
+				changed = true;
+			}
+		}
+	}
+	return changed;
 }
 
 void MoodLampManager::requestLampList()

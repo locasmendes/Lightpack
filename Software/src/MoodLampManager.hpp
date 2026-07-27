@@ -34,6 +34,8 @@
 #include "HostColorSmoothing.hpp"
 #include "enums.hpp"
 
+namespace SettingsScope { struct LedGroup; }
+
 class MoodLampManager : public QObject
 {
 	Q_OBJECT
@@ -64,6 +66,13 @@ public slots:
 	void setSendDataOnlyIfColorsChanged(bool state);
 	void onHostSmoothingDurationChanged(int ms);
 	void onConnectedDeviceChanged(const SupportedDevices::DeviceType device);
+
+public:
+	// Overwrites colors[id] for every enabled LedGroup with hasColor=true, for each id in
+	// memberIds (bounds/enabled-checked, last group wins on overlap). Pure/static so it's
+	// unit-testable without a live MoodLampManager/QTimer. Only meaningful in Constant
+	// color mode - callers must gate on that themselves (see updateColors()).
+	static bool applyGroupColorOverrides(QList<QRgb>& colors, const QList<SettingsScope::LedGroup>& groups);
 
 private slots:
 	void updateColors(const bool forceUpdate);

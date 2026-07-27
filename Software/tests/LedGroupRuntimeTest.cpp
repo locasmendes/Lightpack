@@ -34,6 +34,7 @@ void LedGroupRuntimeTest::testLedGroupJsonRoundTrip()
 	group.width = -1;
 	group.height = 120;
 	group.enabled = true;
+	group.hasColor = false;
 
 	const QJsonObject json = group.toJson();
 	const SettingsScope::LedGroup deserialized = SettingsScope::LedGroup::fromJson(json);
@@ -44,6 +45,24 @@ void LedGroupRuntimeTest::testLedGroupJsonRoundTrip()
 	QCOMPARE(deserialized.width, group.width);
 	QCOMPARE(deserialized.height, group.height);
 	QCOMPARE(deserialized.enabled, group.enabled);
+	QCOMPARE(deserialized.hasColor, group.hasColor);
+	QCOMPARE(deserialized, group);
+}
+
+void LedGroupRuntimeTest::testLedGroupJsonRoundTripWithColor()
+{
+	SettingsScope::LedGroup group;
+	group.name = QStringLiteral("Bottom");
+	group.memberIds = { 4, 5, 6 };
+	group.edge = SettingsScope::LedGroup::Edge::Bottom;
+	group.hasColor = true;
+	group.color = QColor(200, 100, 50);
+
+	const QJsonObject json = group.toJson();
+	const SettingsScope::LedGroup deserialized = SettingsScope::LedGroup::fromJson(json);
+
+	QCOMPARE(deserialized.hasColor, true);
+	QCOMPARE(deserialized.color, group.color);
 	QCOMPARE(deserialized, group);
 }
 

@@ -23,4 +23,10 @@ private Q_SLOTS:
 	void testHostSmoothingProducesGradualTransition();
 	void testHostSmoothingDisabledJumpsImmediately();
 	void testHostSmoothingSkippedForLightpackDevice();
+
+	void testGroupColorOverrideAppliesToMembers();
+	void testGroupColorOverrideSkipsDisabledLeds();
+	void testGroupColorOverrideOverlapLastWins();
+	void testGroupColorOverrideIgnoredWhenGroupDisabledOrNoColor();
+	void testGroupColorOverrideOnlyAppliedInConstantMode();
 };

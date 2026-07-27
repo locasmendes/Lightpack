@@ -73,6 +73,7 @@ private slots:
 	void onGroupApply_clicked();
 	void onGroupRemove_clicked();
 	void onGroupListItem_clicked(QListWidgetItem *item);
+	void onGroupHasColor_toggled(bool checked);
 
 private:
 	void addGrabArea(QList<GrabWidget*>& list, int id, const QRect &rect, const bool enabled = true);

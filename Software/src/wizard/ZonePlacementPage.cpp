@@ -35,9 +35,12 @@
 #include "MonitorIdForm.hpp"
 #include "BulkResize.hpp"
 #include "LedGroupRuntime.hpp"
+#include "ColorButton.hpp"
 #include <QJsonArray>
 #include <QListWidgetItem>
 #include <QSet>
+#include <QPixmap>
+#include <QIcon>
 
 using SettingsScope::LedGroup;
 
@@ -95,6 +98,7 @@ void ZonePlacementPage::initializePage()
 	connect(_ui->pushButton_GroupApply, &QPushButton::clicked, this, &ZonePlacementPage::onGroupApply_clicked);
 	connect(_ui->pushButton_GroupRemove, &QPushButton::clicked, this, &ZonePlacementPage::onGroupRemove_clicked);
 	connect(_ui->listWidget_LedGroups, &QListWidget::itemClicked, this, &ZonePlacementPage::onGroupListItem_clicked);
+	connect(_ui->checkBox_GroupHasColor, &QCheckBox::toggled, this, &ZonePlacementPage::onGroupHasColor_toggled);
 	updateGroupEdgeControlsVisibility();
 	refreshGroupList();
 
@@ -636,8 +640,18 @@ void ZonePlacementPage::refreshGroupList()
 		QListWidgetItem* const item = new QListWidgetItem(
 			tr("%1 (%2, %3 members)").arg(group.name, groupEdgeName(group.edge)).arg(group.memberIds.count()));
 		item->setData(Qt::UserRole, group.name);
+		if (group.hasColor) {
+			QPixmap swatch(12, 12);
+			swatch.fill(group.color);
+			item->setIcon(QIcon(swatch));
+		}
 		_ui->listWidget_LedGroups->addItem(item);
 	}
+}
+
+void ZonePlacementPage::onGroupHasColor_toggled(bool checked)
+{
+	_ui->pushButton_GroupColor->setEnabled(checked);
 }
 
 void ZonePlacementPage::onGroupApply_clicked()
@@ -660,6 +674,8 @@ void ZonePlacementPage::onGroupApply_clicked()
 	group.width = _ui->spinBox_GroupWidth->isVisible() ? _ui->spinBox_GroupWidth->value() : -1;
 	group.height = _ui->spinBox_GroupHeight->isVisible() ? _ui->spinBox_GroupHeight->value() : -1;
 	group.enabled = true;
+	group.hasColor = _ui->checkBox_GroupHasColor->isChecked();
+	group.color = _ui->pushButton_GroupColor->getColor();
 	for (GrabWidget* const widget : selected)
 		group.memberIds.append(widget->getId());
 
@@ -689,6 +705,7 @@ void ZonePlacementPage::onGroupApply_clicked()
 
 	clearGroupEditSelection();
 	_ui->lineEdit_GroupName->clear();
+	_ui->checkBox_GroupHasColor->setChecked(false);
 	_ui->label_GroupHint->setText(tr("Right-click boxes to mark them as members of the group being edited."));
 	refreshGroupList();
 	checkZoneIssues();
@@ -739,6 +756,9 @@ void ZonePlacementPage::onGroupListItem_clicked(QListWidgetItem *item)
 		_ui->spinBox_GroupWidth->setValue(found.width);
 	if (found.height > 0)
 		_ui->spinBox_GroupHeight->setValue(found.height);
+	_ui->checkBox_GroupHasColor->setChecked(found.hasColor);
+	if (found.hasColor)
+		_ui->pushButton_GroupColor->setColor(found.color);
 
 	const QSet<int> memberIds(found.memberIds.constBegin(), found.memberIds.constEnd());
 	for (const MonitorSettings& settings : _screens) {

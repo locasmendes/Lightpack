@@ -1446,6 +1446,8 @@ QJsonObject LedGroup::toJson() const
 	json[QStringLiteral("width")] = width;
 	json[QStringLiteral("height")] = height;
 	json[QStringLiteral("enabled")] = enabled;
+	json[QStringLiteral("hasColor")] = hasColor;
+	json[QStringLiteral("color")] = hasColor ? color.name() : QString();
 	return json;
 }
 
@@ -1468,6 +1470,8 @@ LedGroup LedGroup::fromJson(const QJsonObject& json)
 	group.width = json.value(QStringLiteral("width")).toInt(-1);
 	group.height = json.value(QStringLiteral("height")).toInt(-1);
 	group.enabled = json.value(QStringLiteral("enabled")).toBool(true);
+	group.hasColor = json.value(QStringLiteral("hasColor")).toBool(false);
+	group.color = QColor(json.value(QStringLiteral("color")).toString());
 	return group;
 }
 

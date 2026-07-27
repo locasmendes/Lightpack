@@ -10,6 +10,14 @@
     </message>
 </context>
 <context>
+    <name>ColorWheelDialog</name>
+    <message>
+        <location filename="../../src/ColorWheelDialog.cpp" line="20"/>
+        <source>Select Color</source>
+        <translation>Selecionar cor</translation>
+    </message>
+</context>
+<context>
     <name>ConfigureDevicePage</name>
     <message>
         <location filename="../../src/wizard/ConfigureDevicePage.ui" line="14"/>
@@ -1569,8 +1577,8 @@ Aba Modo &gt; Modo de captura de tela &gt; Ajuste das zonas de captura&lt;/p&gt;
     </message>
     <message>
         <location filename="../../src/wizard/ZonePlacementPage.ui" line="470"/>
-        <location filename="../../src/wizard/ZonePlacementPage.cpp" line="574"/>
-        <location filename="../../src/wizard/ZonePlacementPage.cpp" line="692"/>
+        <location filename="../../src/wizard/ZonePlacementPage.cpp" line="578"/>
+        <location filename="../../src/wizard/ZonePlacementPage.cpp" line="709"/>
         <source>Right-click boxes to mark them as members of the group being edited.</source>
         <translation>Clique com o botão direito nas caixas para marcá-las como membros do grupo em edição.</translation>
     </message>
@@ -1601,31 +1609,41 @@ Aba Modo &gt; Modo de captura de tela &gt; Ajuste das zonas de captura&lt;/p&gt;
     </message>
     <message>
         <location filename="../../src/wizard/ZonePlacementPage.ui" line="572"/>
+        <source>Color</source>
+        <translation>Cor</translation>
+    </message>
+    <message>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="575"/>
+        <source>Applies a fixed color to this group&apos;s members in Constant color mode only (ignored in Liquid mode).</source>
+        <translation>Aplica uma cor fixa aos membros deste grupo, só no modo Cor constante (ignorado no modo Líquido).</translation>
+    </message>
+    <message>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="589"/>
         <source>Create / apply group</source>
         <translation>Criar / aplicar grupo</translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="586"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="603"/>
         <source>Remove selected</source>
         <translation>Remover selecionado</translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.cpp" line="573"/>
+        <location filename="../../src/wizard/ZonePlacementPage.cpp" line="577"/>
         <source>%1 box(es) selected for the group. Right-click to toggle.</source>
         <translation>%1 caixa(s) selecionada(s) para o grupo. Clique com o botão direito para alternar.</translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.cpp" line="637"/>
+        <location filename="../../src/wizard/ZonePlacementPage.cpp" line="641"/>
         <source>%1 (%2, %3 members)</source>
         <translation>%1 (%2, %3 membros)</translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.cpp" line="647"/>
+        <location filename="../../src/wizard/ZonePlacementPage.cpp" line="661"/>
         <source>Enter a name for the group before applying it.</source>
         <translation>Informe um nome para o grupo antes de aplicá-lo.</translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.cpp" line="653"/>
+        <location filename="../../src/wizard/ZonePlacementPage.cpp" line="667"/>
         <source>Right-click at least one box before applying the group.</source>
         <translation>Clique com o botão direito em pelo menos uma caixa antes de aplicar o grupo.</translation>
     </message>

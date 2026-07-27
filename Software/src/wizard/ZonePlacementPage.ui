@@ -567,6 +567,23 @@ Mode tab &gt; Screen grabbing mode &gt; Grab widget adjustment&lt;/p&gt;&lt;/td&
          </widget>
         </item>
         <item>
+         <widget class="QCheckBox" name="checkBox_GroupHasColor">
+          <property name="text">
+           <string>Color</string>
+          </property>
+          <property name="toolTip">
+           <string>Applies a fixed color to this group's members in Constant color mode only (ignored in Liquid mode).</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="ColorButton" name="pushButton_GroupColor">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QPushButton" name="pushButton_GroupApply">
           <property name="text">
            <string>Create / apply group</string>
@@ -646,4 +663,11 @@ Mode tab &gt; Screen grabbing mode &gt; Grab widget adjustment&lt;/p&gt;&lt;/td&
  </tabstops>
  <resources/>
  <connections/>
+ <customwidgets>
+  <customwidget>
+   <class>ColorButton</class>
+   <extends>QPushButton</extends>
+   <header>ColorButton.hpp</header>
+  </customwidget>
+ </customwidgets>
 </ui>

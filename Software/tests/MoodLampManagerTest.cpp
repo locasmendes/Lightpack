@@ -212,3 +212,124 @@ void MoodLampManagerTest::testHostSmoothingSkippedForLightpackDevice()
 	for (const QList<QRgb>& colors : emissions)
 		QCOMPARE(qRed(colors.first()), 255);
 }
+
+void MoodLampManagerTest::testGroupColorOverrideAppliesToMembers()
+{
+	QList<QRgb> colors = { qRgb(1, 1, 1), qRgb(2, 2, 2), qRgb(3, 3, 3), qRgb(4, 4, 4) };
+	Settings::setLedEnabled(0, true);
+	Settings::setLedEnabled(2, true);
+
+	LedGroup group;
+	group.name = QStringLiteral("bottom");
+	group.memberIds = { 0, 2 };
+	group.hasColor = true;
+	group.color = QColor(200, 100, 50);
+
+	const bool changed = MoodLampManager::applyGroupColorOverrides(colors, { group });
+
+	QVERIFY(changed);
+	QCOMPARE(colors[0], group.color.rgb());
+	QCOMPARE(colors[2], group.color.rgb());
+	QCOMPARE(colors[1], qRgb(2, 2, 2)); // untouched, not a member
+	QCOMPARE(colors[3], qRgb(4, 4, 4)); // untouched, not a member
+}
+
+void MoodLampManagerTest::testGroupColorOverrideSkipsDisabledLeds()
+{
+	QList<QRgb> colors = { qRgb(1, 1, 1), qRgb(2, 2, 2) };
+	Settings::setLedEnabled(0, true);
+	Settings::setLedEnabled(1, false);
+
+	LedGroup group;
+	group.name = QStringLiteral("all");
+	group.memberIds = { 0, 1 };
+	group.hasColor = true;
+	group.color = QColor(200, 100, 50);
+
+	MoodLampManager::applyGroupColorOverrides(colors, { group });
+
+	QCOMPARE(colors[0], group.color.rgb());
+	QCOMPARE(colors[1], qRgb(2, 2, 2)); // disabled LED left untouched
+	Settings::setLedEnabled(1, true);
+}
+
+void MoodLampManagerTest::testGroupColorOverrideOverlapLastWins()
+{
+	QList<QRgb> colors = { qRgb(0, 0, 0) };
+	Settings::setLedEnabled(0, true);
+
+	LedGroup first;
+	first.name = QStringLiteral("first");
+	first.memberIds = { 0 };
+	first.hasColor = true;
+	first.color = QColor(100, 0, 0);
+
+	LedGroup second;
+	second.name = QStringLiteral("second");
+	second.memberIds = { 0 };
+	second.hasColor = true;
+	second.color = QColor(0, 100, 0);
+
+	MoodLampManager::applyGroupColorOverrides(colors, { first, second });
+
+	QCOMPARE(colors[0], second.color.rgb());
+}
+
+void MoodLampManagerTest::testGroupColorOverrideIgnoredWhenGroupDisabledOrNoColor()
+{
+	const QList<QRgb> original = { qRgb(9, 9, 9) };
+	Settings::setLedEnabled(0, true);
+
+	LedGroup disabledGroup;
+	disabledGroup.name = QStringLiteral("disabled");
+	disabledGroup.memberIds = { 0 };
+	disabledGroup.enabled = false;
+	disabledGroup.hasColor = true;
+	disabledGroup.color = QColor(200, 100, 50);
+
+	QList<QRgb> colors1 = original;
+	QVERIFY(!MoodLampManager::applyGroupColorOverrides(colors1, { disabledGroup }));
+	QCOMPARE(colors1, original);
+
+	LedGroup noColorGroup;
+	noColorGroup.name = QStringLiteral("nocolor");
+	noColorGroup.memberIds = { 0 };
+	noColorGroup.enabled = true;
+	noColorGroup.hasColor = false;
+
+	QList<QRgb> colors2 = original;
+	QVERIFY(!MoodLampManager::applyGroupColorOverrides(colors2, { noColorGroup }));
+	QCOMPARE(colors2, original);
+}
+
+void MoodLampManagerTest::testGroupColorOverrideOnlyAppliedInConstantMode()
+{
+	LedGroup group;
+	group.name = QStringLiteral("bottom");
+	group.memberIds = { 0 };
+	group.hasColor = true;
+	group.color = QColor(9, 200, 9);
+	Settings::setLedEnabled(0, true);
+	Settings::setLedGroups({ group });
+
+	MoodLampManager manager;
+	manager.setSendDataOnlyIfColorsChanged(false);
+	manager.setNumberOfLeds(NumberOfLeds);
+	manager.setLiquidMode(false);
+	manager.setCurrentLamp(staticLampId());
+	manager.setCurrentColor(QColor(200, 0, 0));
+
+	QSignalSpy constantSpy(&manager, &MoodLampManager::updateLedsColors);
+	manager.start(true);
+	QTest::qWait(120);
+	QVERIFY(!constantSpy.isEmpty());
+	QCOMPARE(capturedColorLists(constantSpy).last().first(), group.color.rgb());
+
+	manager.setLiquidMode(true);
+	QSignalSpy liquidSpy(&manager, &MoodLampManager::updateLedsColors);
+	QTest::qWait(120);
+	QVERIFY(!liquidSpy.isEmpty());
+	QVERIFY(capturedColorLists(liquidSpy).last().first() != group.color.rgb());
+
+	Settings::setLedGroups({});
+}

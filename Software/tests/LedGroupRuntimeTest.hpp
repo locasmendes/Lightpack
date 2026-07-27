@@ -19,6 +19,7 @@ public:
 private slots:
 	void initTestCase();
 	void testLedGroupJsonRoundTrip();
+	void testLedGroupJsonRoundTripWithColor();
 	void testApplyGroupDirectSettings();
 	void testInvalidMemberIdsIgnored();
 	void testOverlappingGroupsLastWins();

@@ -52,6 +52,8 @@ struct LedGroup {
 	int width = -1;  // -1 = no override
 	int height = -1; // -1 = no override
 	bool enabled = true;
+	bool hasColor = false; // if true, applies `color` uniformly to memberIds in Constant mode
+	QColor color;
 
 	QJsonObject toJson() const;
 	static LedGroup fromJson(const QJsonObject& json);
@@ -62,7 +64,9 @@ struct LedGroup {
 		       edge == other.edge &&
 		       width == other.width &&
 		       height == other.height &&
-		       enabled == other.enabled;
+		       enabled == other.enabled &&
+		       hasColor == other.hasColor &&
+		       color == other.color;
 	}
 	bool operator!=(const LedGroup& other) const {
 		return !(*this == other);

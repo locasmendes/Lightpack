@@ -10,6 +10,14 @@
     </message>
 </context>
 <context>
+    <name>ColorWheelDialog</name>
+    <message>
+        <location filename="../../src/ColorWheelDialog.cpp" line="20"/>
+        <source>Select Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ConfigureDevicePage</name>
     <message>
         <location filename="../../src/wizard/ConfigureDevicePage.ui" line="14"/>
@@ -1722,8 +1730,8 @@ Mode tab &gt; Screen grabbing mode &gt; Grab widget adjustment&lt;/p&gt;&lt;/td&
     </message>
     <message>
         <location filename="../../src/wizard/ZonePlacementPage.ui" line="470"/>
-        <location filename="../../src/wizard/ZonePlacementPage.cpp" line="574"/>
-        <location filename="../../src/wizard/ZonePlacementPage.cpp" line="692"/>
+        <location filename="../../src/wizard/ZonePlacementPage.cpp" line="578"/>
+        <location filename="../../src/wizard/ZonePlacementPage.cpp" line="709"/>
         <source>Right-click boxes to mark them as members of the group being edited.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1754,11 +1762,21 @@ Mode tab &gt; Screen grabbing mode &gt; Grab widget adjustment&lt;/p&gt;&lt;/td&
     </message>
     <message>
         <location filename="../../src/wizard/ZonePlacementPage.ui" line="572"/>
+        <source>Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="575"/>
+        <source>Applies a fixed color to this group&apos;s members in Constant color mode only (ignored in Liquid mode).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="589"/>
         <source>Create / apply group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="586"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="603"/>
         <source>Remove selected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1803,22 +1821,22 @@ Mode tab &gt; Screen grabbing mode &gt; Grab widget adjustment&lt;/p&gt;&lt;/td&
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.cpp" line="573"/>
+        <location filename="../../src/wizard/ZonePlacementPage.cpp" line="577"/>
         <source>%1 box(es) selected for the group. Right-click to toggle.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.cpp" line="637"/>
+        <location filename="../../src/wizard/ZonePlacementPage.cpp" line="641"/>
         <source>%1 (%2, %3 members)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.cpp" line="647"/>
+        <location filename="../../src/wizard/ZonePlacementPage.cpp" line="661"/>
         <source>Enter a name for the group before applying it.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.cpp" line="653"/>
+        <location filename="../../src/wizard/ZonePlacementPage.cpp" line="667"/>
         <source>Right-click at least one box before applying the group.</source>
         <translation type="unfinished"></translation>
     </message>
