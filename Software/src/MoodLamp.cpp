@@ -284,12 +284,22 @@ public:
 		if (colors.isEmpty())
 			return false;
 
+		// Lazy load: init() runs during the base class constructor, before virtual dispatch
+		// reaches this override, so per-lamp Speed/Direction are read on first shine() instead.
+		if (!m_paramsLoaded) {
+			const int lampId = MoodLampBase::idByName(name());
+			m_speedMultiplier = Settings::getMoodLampEffectSpeed(lampId);
+			m_direction = Settings::getMoodLampEffectDirection(lampId);
+			m_paramsLoaded = true;
+		}
+
 		const int degrees = colors.size() > 1 ? 360 / colors.size() : 0;
-		const int step = Speed * m_frames++;
+		const int step = static_cast<int>(m_direction * BaseSpeed * m_speedMultiplier * m_frames++);
 		bool changed = false;
 		for (int i = 0; i < colors.size(); i++)
 		{
-			const QColor color = QColor::fromHsv((degrees * i + step) % 360, 255, 255);
+			const int hue = ((degrees * i + step) % 360 + 360) % 360;
+			const QColor color = QColor::fromHsv(hue, 255, 255);
 			const QRgb rgb = Settings::isLedEnabled(i) ? color.rgb() : 0;
 			changed = changed || (colors[i] != rgb);
 			colors[i] = rgb;
@@ -297,7 +307,10 @@ public:
 		return changed;
 	};
 private:
-	const double Speed = 1.5;
+	bool m_paramsLoaded{ false };
+	double m_speedMultiplier{ 1.0 };
+	int m_direction{ 1 };
+	const double BaseSpeed = 1.5;
 );
 
 // A bright head with an exponentially-decaying trail, moving along the strip.
@@ -307,6 +320,14 @@ public:
 	{
 		if (colors.isEmpty())
 			return false;
+
+		// Lazy load: see Rainbow's shine() for why this can't live in init().
+		if (!m_paramsLoaded) {
+			const int lampId = MoodLampBase::idByName(name());
+			m_speedMultiplier = Settings::getMoodLampEffectSpeed(lampId);
+			m_direction = Settings::getMoodLampEffectDirection(lampId);
+			m_paramsLoaded = true;
+		}
 
 		if (colors.size() > m_lightness.size()) {
 			const int oldSize = m_lightness.size();
@@ -318,9 +339,10 @@ public:
 		for (int i = 0; i < colors.size(); i++)
 			m_lightness[i] = static_cast<quint8>(m_lightness[i] * FadeFactor);
 
-		const int headPos = m_position % colors.size();
+		const int size = colors.size();
+		const int headPos = ((static_cast<int>(m_position) % size) + size) % size;
 		m_lightness[headPos] = 255;
-		m_position += Speed;
+		m_position += m_direction * BaseSpeed * m_speedMultiplier;
 
 		bool changed = false;
 		for (int i = 0; i < colors.size(); i++)
@@ -335,8 +357,11 @@ public:
 	};
 private:
 	QList<quint8> m_lightness;
-	int m_position{ 0 };
-	const int Speed = 1;
+	double m_position{ 0 };
+	bool m_paramsLoaded{ false };
+	double m_speedMultiplier{ 1.0 };
+	int m_direction{ 1 };
+	const double BaseSpeed = 1;
 	const double FadeFactor = 0.75;
 );
 
@@ -345,8 +370,18 @@ DECLARE_LAMP(TheaterChase, "Theater Chase",
 public:
 	bool shine(const QColor& newColor, QList<QRgb>& colors)
 	{
+		// Lazy load: see Rainbow's shine() for why this can't live in init().
+		if (!m_paramsLoaded) {
+			const int lampId = MoodLampBase::idByName(name());
+			m_speedMultiplier = Settings::getMoodLampEffectSpeed(lampId);
+			m_direction = Settings::getMoodLampEffectDirection(lampId);
+			m_paramsLoaded = true;
+		}
+
+		const int offset = ((static_cast<int>(m_offsetAccumulator) % SpacingLeds) + SpacingLeds) % SpacingLeds;
+		m_offsetAccumulator += m_direction * BaseSpeed * m_speedMultiplier;
+
 		bool changed = false;
-		const int offset = m_frames++ % SpacingLeds;
 		for (int i = 0; i < colors.size(); i++)
 		{
 			const QRgb rgb = (Settings::isLedEnabled(i) && (i + offset) % SpacingLeds == 0) ? newColor.rgb() : 0;
@@ -356,7 +391,12 @@ public:
 		return changed;
 	};
 private:
+	bool m_paramsLoaded{ false };
+	double m_speedMultiplier{ 1.0 };
+	int m_direction{ 1 };
+	double m_offsetAccumulator{ 0 };
 	const int SpacingLeds = 3;
+	const double BaseSpeed = 1;
 );
 
 // Random pixels briefly flash to full brightness then decay, like Fire but sparse/still.
@@ -371,6 +411,14 @@ public:
 		if (colors.isEmpty())
 			return false;
 
+		// Lazy load: see Rainbow's shine() for why this can't live in init().
+		if (!m_paramsLoaded) {
+			const int lampId = MoodLampBase::idByName(name());
+			m_speedMultiplier = Settings::getMoodLampEffectSpeed(lampId);
+			m_densityMultiplier = Settings::getMoodLampEffectDensity(lampId);
+			m_paramsLoaded = true;
+		}
+
 		if (colors.size() > m_lightness.size()) {
 			const int oldSize = m_lightness.size();
 			m_lightness.reserve(colors.size());
@@ -378,10 +426,12 @@ public:
 				m_lightness << 0;
 		}
 
+		const double fadeFactor = std::max(0.0, std::min(1.0, 1.0 - (1.0 - BaseFadeFactor) * m_speedMultiplier));
 		for (int i = 0; i < colors.size(); i++)
-			m_lightness[i] = static_cast<quint8>(m_lightness[i] * FadeFactor);
+			m_lightness[i] = static_cast<quint8>(m_lightness[i] * fadeFactor);
 
-		if (m_rnd.bounded(100) < SpawnChancePercent) {
+		const int spawnChancePercent = std::max(0, std::min(100, static_cast<int>(BaseSpawnChancePercent * m_densityMultiplier)));
+		if (m_rnd.bounded(100) < spawnChancePercent) {
 			const int i = m_rnd.bounded(colors.size());
 			m_lightness[i] = 255;
 		}
@@ -400,6 +450,9 @@ public:
 private:
 	QRandomGeneratorShim m_rnd;
 	QList<quint8> m_lightness;
-	const double FadeFactor = 0.9;
-	const int SpawnChancePercent = 30;
+	bool m_paramsLoaded{ false };
+	double m_speedMultiplier{ 1.0 };
+	double m_densityMultiplier{ 1.0 };
+	const double BaseFadeFactor = 0.9;
+	const int BaseSpawnChancePercent = 30;
 );

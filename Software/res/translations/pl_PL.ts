@@ -383,104 +383,116 @@ You can do it either via the gear icon of the each zone OR via the global color 
 <context>
     <name>SettingsWindow</name>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="108"/>
-        <location filename="../../src/SettingsWindow.ui" line="244"/>
+        <location filename="../../src/SettingsWindow.ui" line="120"/>
+        <location filename="../../src/SettingsWindow.ui" line="256"/>
         <source>Mode</source>
         <translation>Tryb</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="132"/>
-        <location filename="../../src/SettingsWindow.ui" line="1607"/>
+        <location filename="../../src/SettingsWindow.ui" line="144"/>
+        <location filename="../../src/SettingsWindow.ui" line="1879"/>
         <source>Device</source>
         <translation>Urządzenie</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="147"/>
-        <location filename="../../src/SettingsWindow.ui" line="2420"/>
+        <location filename="../../src/SettingsWindow.ui" line="159"/>
+        <location filename="../../src/SettingsWindow.ui" line="2692"/>
         <source>Profiles</source>
         <translation>Profile</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="162"/>
-        <location filename="../../src/SettingsWindow.ui" line="2630"/>
+        <location filename="../../src/SettingsWindow.ui" line="174"/>
+        <location filename="../../src/SettingsWindow.ui" line="2902"/>
         <source>Plugins</source>
         <translation>Wtyczki</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="177"/>
-        <location filename="../../src/SettingsWindow.ui" line="2934"/>
+        <location filename="../../src/SettingsWindow.ui" line="189"/>
+        <location filename="../../src/SettingsWindow.ui" line="3206"/>
         <source>Expert</source>
         <translation>Ekspert</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="207"/>
-        <location filename="../../src/SettingsWindow.ui" line="3409"/>
+        <location filename="../../src/SettingsWindow.ui" line="219"/>
+        <location filename="../../src/SettingsWindow.ui" line="3681"/>
         <source>About</source>
         <translation>O programie</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="192"/>
-        <location filename="../../src/SettingsWindow.ui" line="3305"/>
+        <location filename="../../src/SettingsWindow.ui" line="204"/>
+        <location filename="../../src/SettingsWindow.ui" line="3577"/>
         <source>Help</source>
         <translation>Pomoc</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="272"/>
+        <location filename="../../src/SettingsWindow.ui" line="41"/>
+        <source>&lt;h4&gt;Advanced mode&lt;/h4&gt;
+
+Reveals extra fine-grained controls across the color/effect sections: bloom threshold, contrast pivot, vibrance protection, and per-effect speed/density/direction for the Rainbow/Comet/Theater Chase/Twinkle mood lamp effects.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindow.ui" line="46"/>
+        <source>Advanced mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindow.ui" line="284"/>
         <source>Screen grabbing</source>
         <translation>Śledzenie obrazu</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="277"/>
+        <location filename="../../src/SettingsWindow.ui" line="289"/>
         <source>Mood lamp</source>
         <translation>Kolorowe efekty</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="282"/>
+        <location filename="../../src/SettingsWindow.ui" line="294"/>
         <source>Sound visualization</source>
         <translation>Wizualizacja dzwięku</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="305"/>
+        <location filename="../../src/SettingsWindow.ui" line="317"/>
         <source>Apply screen color modifications (F.lux, redshift)</source>
         <translation>Zastosuj modyfikacje koloru ekrany (Flux, redshift)</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="315"/>
+        <location filename="../../src/SettingsWindow.ui" line="327"/>
         <source>FPS</source>
         <translation>FPS</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="368"/>
+        <location filename="../../src/SettingsWindow.ui" line="380"/>
         <source>Grab frequency:</source>
         <translation>Częstotliwość próbkowania:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="407"/>
+        <location filename="../../src/SettingsWindow.ui" line="419"/>
         <source>&lt;h4&gt;Over-brightening&lt;/h4&gt; To achieve a higher overall brightness, Prismatik will set the LEDs to maximum even if the grabbed color is not at full brightness.</source>
         <translation>&lt;h4&gt;Ekstra jasność&lt;/h4&gt; Dla uzyskania większej jasności ogólnej, Prismatik włączy maksymalnąć jasność wszystkich LEDów nawet gdy odczytany kolor ekranu nie jest najjaśniejszy.</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="432"/>
+        <location filename="../../src/SettingsWindow.ui" line="444"/>
         <source>Grab interval:</source>
         <translation>Okres próbkowania:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="461"/>
+        <location filename="../../src/SettingsWindow.ui" line="473"/>
         <source>ms</source>
         <translation>ms</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="477"/>
+        <location filename="../../src/SettingsWindow.ui" line="489"/>
         <source>Average color on all LEDs</source>
         <translation>Ten sam kolor dla wszystkich LED</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="546"/>
+        <location filename="../../src/SettingsWindow.ui" line="558"/>
         <source>Over-brightening:</source>
         <translation>Ekstra jasność:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="584"/>
+        <location filename="../../src/SettingsWindow.ui" line="596"/>
         <source>&lt;h4&gt;Color encoding gamma&lt;/h4&gt;
 
 This is the gamma used for encoding the color with the desired &lt;b&gt;color temperature&lt;/b&gt;. Setting to &lt;b&gt;1.0&lt;/b&gt; cancels the effect.
@@ -488,548 +500,578 @@ This is the reciprocal of the &lt;b&gt;device gamma&lt;/b&gt; which is the decod
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="634"/>
+        <location filename="../../src/SettingsWindow.ui" line="646"/>
         <source>&lt;h4&gt;Color temperature &amp;amp; gamma&lt;/h4&gt;
 
 Internally emulates the effects of f.lux, redshift, Night Light, Night Shift...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="639"/>
+        <location filename="../../src/SettingsWindow.ui" line="651"/>
         <source>Apply color temperature and gamma</source>
         <translation>Ustaw temperaturę kolory i gamma</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="692"/>
+        <location filename="../../src/SettingsWindow.ui" line="704"/>
         <source>Host smoothing:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="705"/>
+        <location filename="../../src/SettingsWindow.ui" line="717"/>
         <source>&lt;h4&gt;Host smoothing&lt;/h4&gt; Linear transition, on the host, from the last displayed color to the most recently captured one. &lt;b&gt;Off&lt;/b&gt; (0) keeps the current instant cut. For devices without their own smoothing (Adalight, Ardulight, WARLS/DRGB/DNRGB/DDP). Not used by the native Lightpack device, which has its own firmware smoothing (see Device Smooth on its tab).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="742"/>
+        <location filename="../../src/SettingsWindow.ui" line="754"/>
         <source>Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="784"/>
+        <location filename="../../src/SettingsWindow.ui" line="796"/>
         <source>The Lightpack device uses its own firmware Device Smooth instead.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="796"/>
+        <location filename="../../src/SettingsWindow.ui" line="808"/>
         <source>Grab widget adjustment</source>
         <translation>Regulacja obszarów pobierania koloru</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="802"/>
+        <location filename="../../src/SettingsWindow.ui" line="814"/>
         <source>Hidden</source>
         <translation>Ukryte</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="812"/>
+        <location filename="../../src/SettingsWindow.ui" line="824"/>
         <source>Colored</source>
         <translation>Kolorowe</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="822"/>
+        <location filename="../../src/SettingsWindow.ui" line="834"/>
         <source>All white</source>
         <translation>Białe</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="832"/>
+        <location filename="../../src/SettingsWindow.ui" line="844"/>
         <source>Color Adjustments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="838"/>
+        <location filename="../../src/SettingsWindow.ui" line="850"/>
         <source>&lt;h4&gt;Bloom&lt;/h4&gt;
 
 Boosts near-white, low-saturation pixels (lens flares, bright highlights) to make them stand out more.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="843"/>
+        <location filename="../../src/SettingsWindow.ui" line="855"/>
         <source>Bloom (boost near-white highlights)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="891"/>
+        <location filename="../../src/SettingsWindow.ui" line="903"/>
         <source>Saturation:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="930"/>
+        <location filename="../../src/SettingsWindow.ui" line="942"/>
         <source>Contrast:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="969"/>
+        <location filename="../../src/SettingsWindow.ui" line="981"/>
         <source>Vibrance:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1021"/>
+        <location filename="../../src/SettingsWindow.ui" line="1023"/>
+        <source>Bloom threshold:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindow.ui" line="1071"/>
+        <source>Contrast pivot:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindow.ui" line="1119"/>
+        <source>Vibrance protection:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindow.ui" line="1177"/>
         <source>Lamp effects only apply in Liquid color mode - Constant color always uses Static so the output truly stops changing.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1030"/>
+        <location filename="../../src/SettingsWindow.ui" line="1186"/>
         <source>Constant color:</source>
         <translation>Stały kolor:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1043"/>
+        <location filename="../../src/SettingsWindow.ui" line="1199"/>
         <source>Breathing:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1046"/>
+        <location filename="../../src/SettingsWindow.ui" line="1202"/>
         <source>Same fixed color as Constant, with a smooth brightness pulse.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1086"/>
-        <location filename="../../src/SettingsWindow.ui" line="1284"/>
+        <location filename="../../src/SettingsWindow.ui" line="1242"/>
+        <location filename="../../src/SettingsWindow.ui" line="1556"/>
         <source>Change color with rate:</source>
         <translation>Prędkość zmiany kolorów:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1101"/>
-        <location filename="../../src/SettingsWindow.ui" line="1299"/>
+        <location filename="../../src/SettingsWindow.ui" line="1257"/>
+        <location filename="../../src/SettingsWindow.ui" line="1571"/>
         <source>Slow</source>
         <translation>Wolno</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1135"/>
-        <location filename="../../src/SettingsWindow.ui" line="1333"/>
+        <location filename="../../src/SettingsWindow.ui" line="1291"/>
+        <location filename="../../src/SettingsWindow.ui" line="1605"/>
         <source>Fast</source>
         <translation>Szybko</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1170"/>
+        <location filename="../../src/SettingsWindow.ui" line="1308"/>
+        <source>Effect speed:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindow.ui" line="1359"/>
+        <source>Effect density:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindow.ui" line="1410"/>
+        <source>Reverse effect direction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindow.ui" line="1442"/>
         <source>Sound device:</source>
         <translation>Urządzenie dzwiękowe:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1188"/>
+        <location filename="../../src/SettingsWindow.ui" line="1460"/>
         <source>By default, on macOS this feature is limited to input devices (mic, line-in...), a third party software (such as Soundflower etc) is needed to redirect desktop sound into a virtual input that can be used here. The device has to support Linear PCM, 44100Hz (or 32000, 48000) sample rate and 16 (or 24, 32) bits per channel.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1215"/>
+        <location filename="../../src/SettingsWindow.ui" line="1487"/>
         <source>Animate colors from</source>
         <translation>Animuj kolory od</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1241"/>
+        <location filename="../../src/SettingsWindow.ui" line="1513"/>
         <source>to</source>
         <translation>do</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1345"/>
+        <location filename="../../src/SettingsWindow.ui" line="1617"/>
         <source>Please note: The sound visualizer works best with low smoothness settings (20 and below, 10 recommended)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1458"/>
+        <location filename="../../src/SettingsWindow.ui" line="1730"/>
         <source>Mode:</source>
         <translation>Tryb:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1465"/>
+        <location filename="../../src/SettingsWindow.ui" line="1737"/>
         <source>Eye care settings</source>
         <translation>Ustawienia zmęczenia oczu</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1471"/>
+        <location filename="../../src/SettingsWindow.ui" line="1743"/>
         <source>Dead-zone</source>
         <translation>Martwa strefa</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1481"/>
+        <location filename="../../src/SettingsWindow.ui" line="1753"/>
         <source>Scene luminosity threshold:</source>
         <translation>Limit jasności:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1491"/>
+        <location filename="../../src/SettingsWindow.ui" line="1763"/>
         <source>Luminosity threshold is used for:</source>
         <translation>Limit jasności używany do:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1501"/>
+        <location filename="../../src/SettingsWindow.ui" line="1773"/>
         <source>Minimum luminosity level</source>
         <translation>Minimalny poziom jasności</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1568"/>
+        <location filename="../../src/SettingsWindow.ui" line="1840"/>
         <source>&lt;h4&gt;Scene luminosity threshold&lt;/h4&gt; It works in two ways: You can either use &lt;b&gt;minimum luminosity level&lt;/b&gt; for soft and gentle light in dark scenes or you can use &lt;b&gt;dead-zone&lt;/b&gt; luminosity grabbing which ignores small non-black objects on black backgrounds and turns lights OFF in dark scenes. This is eye-saving vs. eye-killing options which works mutually. We &lt;b&gt;recommend&lt;/b&gt; to use threshold for minimum luminosity level.</source>
         <translation>&lt;h4&gt;Limit jasności&lt;/h4&gt; Opcja działa na 2 sposoby: Możesz ustawić albo&lt;b&gt;minimalny poziom jasności&lt;/b&gt; delikatne podświetlenie nawet przy ciemnym ekranie, lub&lt;b&gt;martwa strefa&lt;/b&gt; ignorowanie małych jasnych obszarów i wyłączenie podświetlenie w ciemnych scenach. Dla większego komforu oczy zalecamy ustawienie minimalnego poziomu jasności.</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1648"/>
+        <location filename="../../src/SettingsWindow.ui" line="1920"/>
         <source>Brightness cap:</source>
         <translation>Limit jasności:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1661"/>
+        <location filename="../../src/SettingsWindow.ui" line="1933"/>
         <source>&lt;h4&gt;Gamma correction&lt;/h4&gt; It controls the level of saturation. The effect is clearly detectable in a video in screen grabbing mode&lt;br/&gt;Recommended value: 2.00</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1692"/>
+        <location filename="../../src/SettingsWindow.ui" line="1964"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Brightness Cap&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Lowers the brightness limit of LEDs (as opposed to overall brightness). Can be used to limit the power draw and the heat output. Defaults to 100% (no limit).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1770"/>
-        <location filename="../../src/SettingsWindow.ui" line="2041"/>
+        <location filename="../../src/SettingsWindow.ui" line="2042"/>
+        <location filename="../../src/SettingsWindow.ui" line="2313"/>
         <source>%</source>
         <translation>%</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1786"/>
+        <location filename="../../src/SettingsWindow.ui" line="2058"/>
         <source>Keep lights ON after display sleep</source>
         <translation>Zostaw włączone gdy ekran w stanie uśpienia</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1793"/>
+        <location filename="../../src/SettingsWindow.ui" line="2065"/>
         <source>Keep lights ON after lock computer</source>
         <translation>Zostaw włączone po zablokowaniu komputera</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1806"/>
+        <location filename="../../src/SettingsWindow.ui" line="2078"/>
         <source>Gamma correction:</source>
         <translation>Korekcja gamma:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1818"/>
+        <location filename="../../src/SettingsWindow.ui" line="2090"/>
         <source>Run configuration wizard</source>
         <translation>Uruchom kreator konfiguracji</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1825"/>
+        <location filename="../../src/SettingsWindow.ui" line="2097"/>
         <source>Reapplies every enabled LED group&apos;s width/height override, without reopening the wizard.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1828"/>
+        <location filename="../../src/SettingsWindow.ui" line="2100"/>
         <source>Reapply LED groups</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1888"/>
+        <location filename="../../src/SettingsWindow.ui" line="2160"/>
         <source>Keep lights ON after exit</source>
         <translation>Zostaw włączone po wyjściu z programu</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1895"/>
+        <location filename="../../src/SettingsWindow.ui" line="2167"/>
         <source>Keep lights ON after system suspend</source>
         <translation>Zostaw włączone po uśpieniu systemu</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1902"/>
+        <location filename="../../src/SettingsWindow.ui" line="2174"/>
         <source>These buttons redistribute the LED zones within the same profile to match the chosen content aspect ratio. They do not switch profiles and do not change brightness, gamma, smoothing, device settings, or per-LED color coefficients - only the Position and Size of each zone are recalculated. Warning: any manual position/size adjustments you made to individual zones will be replaced by the canonical layout recomputed from the recipe. Profiles without a recorded layout recipe are unaffected - run the setup wizard first.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1905"/>
+        <location filename="../../src/SettingsWindow.ui" line="2177"/>
         <source>Content aspect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1911"/>
+        <location filename="../../src/SettingsWindow.ui" line="2183"/>
         <source>Fill</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1918"/>
+        <location filename="../../src/SettingsWindow.ui" line="2190"/>
         <source>16:9</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1925"/>
+        <location filename="../../src/SettingsWindow.ui" line="2197"/>
         <source>4:3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2000"/>
+        <location filename="../../src/SettingsWindow.ui" line="2272"/>
         <source>Overall brightness:</source>
         <translation>Jasność ogólna:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2007"/>
+        <location filename="../../src/SettingsWindow.ui" line="2279"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;h4 style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:medium; font-weight:600;&quot;&gt;Dithering&lt;/span&gt;&lt;/h4&gt;&lt;p&gt;Increases color accuracy with some devices, but may introduce flickering.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2010"/>
+        <location filename="../../src/SettingsWindow.ui" line="2282"/>
         <source>Enable Dithering</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2088"/>
+        <location filename="../../src/SettingsWindow.ui" line="2360"/>
         <source>Lightpack</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2106"/>
+        <location filename="../../src/SettingsWindow.ui" line="2378"/>
         <source>Smoothness:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2113"/>
+        <location filename="../../src/SettingsWindow.ui" line="2385"/>
         <source>&lt;h4&gt;Color depth&lt;/h4&gt; Number of colors per channel, one RGB LED uses 3 channels (value in power of 3).</source>
         <translation>&lt;h4&gt;Głębokość kolorów&lt;/h4&gt; Ilość kolorów na kanał, jeden LED RGB używa 3 kanałów (wartość do 3. potęgi).</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2141"/>
+        <location filename="../../src/SettingsWindow.ui" line="2413"/>
         <source>Color depth (Lightpack 5 and below):</source>
         <translation>Głębia kolorów (Lightpack 5 i poniżej):</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2148"/>
+        <location filename="../../src/SettingsWindow.ui" line="2420"/>
         <source>&lt;h4&gt;Smoothness&lt;/h4&gt; It defines how many steps will be color changed in</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2224"/>
+        <location filename="../../src/SettingsWindow.ui" line="2496"/>
         <source>Disable USB Power LED</source>
         <translation>Wyłącz LED zasilania USB</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2231"/>
+        <location filename="../../src/SettingsWindow.ui" line="2503"/>
         <source>&lt;h4&gt;Refresh delay&lt;/h4&gt; This setting’s values are inversely proportional to the PWM’s frequency. It&apos;s affects to performance.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2367"/>
+        <location filename="../../src/SettingsWindow.ui" line="2639"/>
         <source>Refresh delay (Lightpack 5 and below):</source>
         <translation>Opóźnienie odświerzania (Lightpack 5 i poniżej):</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2381"/>
+        <location filename="../../src/SettingsWindow.ui" line="2653"/>
         <source>Virtual</source>
         <translation>Wirtualne</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2429"/>
+        <location filename="../../src/SettingsWindow.ui" line="2701"/>
         <source>Profile</source>
         <translation>Profil</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2456"/>
+        <location filename="../../src/SettingsWindow.ui" line="2728"/>
         <source>Add new profile</source>
         <translation>Dodaj nowy profil</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2482"/>
+        <location filename="../../src/SettingsWindow.ui" line="2754"/>
         <source>Reset current profile to defaults</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2508"/>
+        <location filename="../../src/SettingsWindow.ui" line="2780"/>
         <source>Delete profile</source>
         <translation>Usuń profil</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2533"/>
+        <location filename="../../src/SettingsWindow.ui" line="2805"/>
         <source>Open in text editor</source>
         <translation>Otwórz w edytorze tekstu</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2558"/>
+        <location filename="../../src/SettingsWindow.ui" line="2830"/>
         <source>User interface</source>
         <translation>Interfejs użytkownika</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2575"/>
+        <location filename="../../src/SettingsWindow.ui" line="2847"/>
         <source>Language:</source>
         <translation>Język:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2662"/>
+        <location filename="../../src/SettingsWindow.ui" line="2934"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:medium; font-weight:600;&quot;&gt;Plugins&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Here you can manage your plugins which are stored in you profile folder. Check each plugin&apos;s documentation for requirements and settings. Plugins work in priority of order — first plugin in the list has the highest priority.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2668"/>
+        <location filename="../../src/SettingsWindow.ui" line="2940"/>
         <source>All plugins:</source>
         <translation>Wtyczki:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2745"/>
+        <location filename="../../src/SettingsWindow.ui" line="3017"/>
         <source>Increase priority</source>
         <translation>Podwyższ priorytet</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2759"/>
+        <location filename="../../src/SettingsWindow.ui" line="3031"/>
         <source>Decrease priority</source>
         <translation>Obniż priorytet</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2773"/>
+        <location filename="../../src/SettingsWindow.ui" line="3045"/>
         <source>Reload plugins</source>
         <translation>Przeładuj wtyczki</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2795"/>
+        <location filename="../../src/SettingsWindow.ui" line="3067"/>
         <source>Info</source>
         <translation>Info</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2819"/>
+        <location filename="../../src/SettingsWindow.ui" line="3091"/>
         <source>Author:</source>
         <translation>Autor:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2861"/>
+        <location filename="../../src/SettingsWindow.ui" line="3133"/>
         <source>Name:</source>
         <translation>Nazwa:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2903"/>
+        <location filename="../../src/SettingsWindow.ui" line="3175"/>
         <source>Version:</source>
         <translation>Wersja:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2943"/>
+        <location filename="../../src/SettingsWindow.ui" line="3215"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This tab is used for experimental and unstable features. Any tuning with these controls may cause inevitable plane crash, miscarriage or nuclear disaster. Use it at your own risk.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2965"/>
+        <location filename="../../src/SettingsWindow.ui" line="3237"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enables TCP socket server.&lt;/p&gt;&lt;p&gt;You can connect via &amp;quot;telnet &amp;lt;ip&amp;gt; &amp;lt;port&amp;gt;&amp;quot; for example and manually execute available commands.&lt;/p&gt;&lt;p&gt;Default: %1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2971"/>
+        <location filename="../../src/SettingsWindow.ui" line="3243"/>
         <source>Enable server (API via sockets)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2983"/>
+        <location filename="../../src/SettingsWindow.ui" line="3255"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When enabled, you can connect ONLY from the same computer through 127.0.0.1/localhost address.&lt;/p&gt;&lt;p&gt;Disable this if you want to connect from anywhere else.&lt;/p&gt;&lt;p&gt;Default: %1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2986"/>
+        <location filename="../../src/SettingsWindow.ui" line="3258"/>
         <source>Listen only on local interface (127.0.0.1)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2999"/>
-        <location filename="../../src/SettingsWindow.ui" line="3006"/>
+        <location filename="../../src/SettingsWindow.ui" line="3271"/>
+        <location filename="../../src/SettingsWindow.ui" line="3278"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;TCP port to listen.&lt;/p&gt;&lt;p&gt;Default: %1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3012"/>
+        <location filename="../../src/SettingsWindow.ui" line="3284"/>
         <source>Port:</source>
         <translation>Port:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3022"/>
+        <location filename="../../src/SettingsWindow.ui" line="3294"/>
         <source>Generate a random one</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3025"/>
+        <location filename="../../src/SettingsWindow.ui" line="3297"/>
         <source>Generate</source>
         <translation>Generuj</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3044"/>
-        <location filename="../../src/SettingsWindow.ui" line="3060"/>
+        <location filename="../../src/SettingsWindow.ui" line="3316"/>
+        <location filename="../../src/SettingsWindow.ui" line="3332"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The API Key all the clients should provide to authenticate. Could be any custom string (%1 character limit). &lt;/p&gt;&lt;p&gt;Default: %2&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3066"/>
+        <location filename="../../src/SettingsWindow.ui" line="3338"/>
         <source>Key (authorization disabled if empty):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3085"/>
+        <location filename="../../src/SettingsWindow.ui" line="3357"/>
         <source>Capture source</source>
         <translation>Żródło pobierania ekranu</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3095"/>
+        <location filename="../../src/SettingsWindow.ui" line="3367"/>
         <source>X11 (Full screen)</source>
         <translation>X11 (Pełen ekran)</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3102"/>
+        <location filename="../../src/SettingsWindow.ui" line="3374"/>
         <source>Mac CG (Full screen)</source>
         <translation>Mac CG (Pełen ekran)</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3109"/>
+        <location filename="../../src/SettingsWindow.ui" line="3381"/>
         <source>Mac AV (Full screen)</source>
         <translation>Mac AC (Pełen ekran)</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3133"/>
+        <location filename="../../src/SettingsWindow.ui" line="3405"/>
         <source>WinAPI (Full screen)</source>
         <translation>WinAPI (Pełen ekran)</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3140"/>
+        <location filename="../../src/SettingsWindow.ui" line="3412"/>
         <source>Win8 Desktop Duplication</source>
         <translation>Duplikacja Pulpitu Win8</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3164"/>
+        <location filename="../../src/SettingsWindow.ui" line="3436"/>
         <source>Enable DX hooking</source>
         <translation>Włącz podłączenie pod DirectX</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3196"/>
+        <location filename="../../src/SettingsWindow.ui" line="3468"/>
         <source>also hook D3D9 (high performance impact)</source>
         <translation>Również włącz Direct3D 9 (spory koszt wydajności)</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3210"/>
+        <location filename="../../src/SettingsWindow.ui" line="3482"/>
         <source>Logging level:</source>
         <translation>Poziom logowania:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3220"/>
+        <location filename="../../src/SettingsWindow.ui" line="3492"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Log verbosity: %1-%2 where %1 = no logs.&lt;/p&gt;&lt;p&gt;After enabling logs you need to restart the program.&lt;/p&gt;&lt;p&gt;When enabled you can use the &lt;img src=&quot;:/buttons/arrow_right_dark_24px.png&quot; width=&quot;12&quot;&gt; button to open the log directory.&lt;/p&gt;&lt;p&gt;Default: %3&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3230"/>
-        <location filename="../../src/SettingsWindow.ui" line="3233"/>
+        <location filename="../../src/SettingsWindow.ui" line="3502"/>
+        <location filename="../../src/SettingsWindow.ui" line="3505"/>
         <source>open Log folder</source>
         <translation>Otwórz katalog z logami</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3236"/>
+        <location filename="../../src/SettingsWindow.ui" line="3508"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3262"/>
+        <location filename="../../src/SettingsWindow.ui" line="3534"/>
         <source>Ping Lightpack device every second</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3269"/>
+        <location filename="../../src/SettingsWindow.ui" line="3541"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When disabled every frame will be sent to the device. This is recommended for devices with inactivity timers built into firmwares (some custom Adalight sketches for example) or configured via Prismatik (UDP devices with a &amp;lt; 255 timeout value).&lt;/p&gt;&lt;p&gt;When enabled every new frame will be compared with the previous one, and will be sent only if differences are detected (can be useful in low bandwidth situations).&lt;/p&gt;&lt;p&gt;Default: %1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3272"/>
+        <location filename="../../src/SettingsWindow.ui" line="3544"/>
         <source>Send data only if colors changed</source>
         <translation>Wysyłaj dane wyłącznie przy zmianie obrazu</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3326"/>
+        <location filename="../../src/SettingsWindow.ui" line="3598"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;
 &lt;head&gt;
@@ -1103,164 +1145,164 @@ Boosts near-white, low-saturation pixels (lens flares, bright highlights) to mak
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3477"/>
+        <location filename="../../src/SettingsWindow.ui" line="3749"/>
         <source>&lt;h2&gt;Prismatik (unofficial fork)&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;Prismatik (nieoficjalny fork)&lt;/h2</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3511"/>
+        <location filename="../../src/SettingsWindow.ui" line="3783"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The &lt;span style=&quot; font-weight:600;&quot;&gt;Woodenshark&lt;/span&gt; team created this software with &lt;span style=&quot; font-weight:600;&quot;&gt;Lightpack&lt;/span&gt; — content-appropriate ambient lighting system with USB interface&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This is an unofficial fork of the open source project that is not affiliated with Woodenshark or Lightpack&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3580"/>
+        <location filename="../../src/SettingsWindow.ui" line="3852"/>
         <source>Check for updates on startup</source>
         <translation>Automatycznie sprawdzaj aktualizacje przy starcie</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3590"/>
+        <location filename="../../src/SettingsWindow.ui" line="3862"/>
         <source>Install updates automatically</source>
         <translation>Automatycznie instaluj aktualizacje</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3633"/>
+        <location filename="../../src/SettingsWindow.ui" line="3905"/>
         <source>This program is distributed «as is». Its source code is under the &lt;a href=&quot;http://www.gnu.org/licenses/gpl.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;GPL license&lt;/span&gt;&lt;/a&gt;. No warranty of any kind is expressed or implied. The authors will not be liable for data loss, damages, loss of profits or any other kind of loss while using or misusing this software. All content, such as icons, plugins, bitmaps etc. is under &lt;a href=&quot;http://creativecommons.org/licenses/by-sa/3.0/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;CC-BY-SA&lt;/span&gt;&lt;/a&gt; if otherwise is not noticed. &lt;br/&gt;&lt;br/&gt;This software build with the &lt;a href=&quot;http://qt-project.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Qt&lt;/span&gt;&lt;/a&gt; cross-platform framework, the &lt;a href=&quot;http://www.openssl.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;OpenSSL Toolkit&lt;/span&gt;&lt;/a&gt; and &lt;a href=&quot;http://somerandomdude.com/work/iconic/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;«Iconic»&lt;/span&gt;&lt;/a&gt; icon set by P.J. Onori as third-party licensed products.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3665"/>
+        <location filename="../../src/SettingsWindow.ui" line="3937"/>
         <source>qrc:/text/cast.html</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="140"/>
+        <location filename="../../src/SettingsWindow.cpp" line="141"/>
         <source> The sound visualizer uses the &lt;a href=&quot;http://un4seen.com/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;BASS&lt;/span&gt;&lt;/a&gt; library.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="174"/>
-        <location filename="../../src/SettingsWindow.cpp" line="177"/>
-        <location filename="../../src/SettingsWindow.cpp" line="194"/>
+        <location filename="../../src/SettingsWindow.cpp" line="175"/>
+        <location filename="../../src/SettingsWindow.cpp" line="178"/>
+        <location filename="../../src/SettingsWindow.cpp" line="195"/>
         <source>ON</source>
         <translation>Włączone</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="174"/>
-        <location filename="../../src/SettingsWindow.cpp" line="177"/>
-        <location filename="../../src/SettingsWindow.cpp" line="194"/>
+        <location filename="../../src/SettingsWindow.cpp" line="175"/>
+        <location filename="../../src/SettingsWindow.cpp" line="178"/>
+        <location filename="../../src/SettingsWindow.cpp" line="195"/>
         <source>OFF</source>
         <translation>Wyłączone</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="184"/>
+        <location filename="../../src/SettingsWindow.cpp" line="185"/>
         <source>none</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="398"/>
-        <location filename="../../src/SettingsWindow.cpp" line="1846"/>
+        <location filename="../../src/SettingsWindow.cpp" line="407"/>
+        <location filename="../../src/SettingsWindow.cpp" line="1973"/>
         <source>Prismatik: %1</source>
         <translation>Prismatik: %1</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="406"/>
-        <location filename="../../src/SettingsWindow.cpp" line="1883"/>
+        <location filename="../../src/SettingsWindow.cpp" line="415"/>
+        <location filename="../../src/SettingsWindow.cpp" line="2010"/>
         <source>System default</source>
         <translation>Domyślny systemu</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="448"/>
-        <location filename="../../src/SettingsWindow.cpp" line="1758"/>
+        <location filename="../../src/SettingsWindow.cpp" line="457"/>
+        <location filename="../../src/SettingsWindow.cpp" line="1885"/>
         <source>Profile: %1</source>
         <translation>Profil: %1</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="449"/>
+        <location filename="../../src/SettingsWindow.cpp" line="458"/>
         <source>Device: %1</source>
         <translation>Urządzenie: %1</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="450"/>
+        <location filename="../../src/SettingsWindow.cpp" line="459"/>
         <source>FPS: %1</source>
         <translation>FPS: %1</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="560"/>
+        <location filename="../../src/SettingsWindow.cpp" line="569"/>
         <source>Prismatik was updated</source>
         <translation>Prismatik został uaktualniony</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="560"/>
+        <location filename="../../src/SettingsWindow.cpp" line="569"/>
         <source>Successfully updated to version %1.</source>
         <translation>Pomyśnie uaktualniono do wersji %1.</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="564"/>
+        <location filename="../../src/SettingsWindow.cpp" line="573"/>
         <source>Prismatik automatic update failed</source>
         <translation>Automatyczna aktualizacjia Prismatik nie powiodła się</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="565"/>
+        <location filename="../../src/SettingsWindow.cpp" line="574"/>
         <source>There was a problem when trying to automatically update Prismatik to the latest version.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="566"/>
+        <location filename="../../src/SettingsWindow.cpp" line="575"/>
         <source>You are still on version %1.
 </source>
         <translation>Wciąż masz wersję %1.
 </translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="567"/>
+        <location filename="../../src/SettingsWindow.cpp" line="576"/>
         <source>Installing updates automatically was disabled.</source>
         <translation>Automatyczna instalacja aktualizacji jest wyłączona.</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="655"/>
+        <location filename="../../src/SettingsWindow.cpp" line="664"/>
         <source> (restart the program first)</source>
         <translation> (najpierw zrestartuj program)</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="657"/>
-        <location filename="../../src/SettingsWindow.cpp" line="2084"/>
+        <location filename="../../src/SettingsWindow.cpp" line="666"/>
+        <location filename="../../src/SettingsWindow.cpp" line="2216"/>
         <source> (enable logs first and restart the program)</source>
         <translation> (najpierw włącz logowanie i zrestartuj program)</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="813"/>
-        <location filename="../../src/SettingsWindow.cpp" line="850"/>
+        <location filename="../../src/SettingsWindow.cpp" line="822"/>
+        <location filename="../../src/SettingsWindow.cpp" line="859"/>
         <source>Turn lights OFF</source>
         <translation>Wyłącz podświetlenie</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="842"/>
+        <location filename="../../src/SettingsWindow.cpp" line="851"/>
         <source>Turn lights ON</source>
         <translation>Włącz podświetlenie</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="1172"/>
+        <location filename="../../src/SettingsWindow.cpp" line="1183"/>
         <source>update firmware</source>
         <translation>uaktualnienij sterownik</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="1230"/>
+        <location filename="../../src/SettingsWindow.cpp" line="1241"/>
         <source>&lt;html&gt;&lt;body&gt;&lt;p&gt;Your frame rate reached &lt;b&gt;%1 FPS&lt;/b&gt;, your baud rate of &lt;b&gt;%2&lt;/b&gt; might be too low for the amount of LEDs (%3).&lt;/p&gt;&lt;p&gt;You might experience lag or visual artifacts with your LEDs.&lt;/p&gt;&lt;p&gt;Lower your target framerate to &lt;b&gt;under %4 FPS&lt;/b&gt; or increase your baud rate to &lt;b&gt;above %5&lt;/b&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="1247"/>
+        <location filename="../../src/SettingsWindow.cpp" line="1258"/>
         <source>FPS: </source>
         <translation>FPS: </translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="1779"/>
+        <location filename="../../src/SettingsWindow.cpp" line="1906"/>
         <source>New profile</source>
         <translation>Nowy profil</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="2206"/>
+        <location filename="../../src/SettingsWindow.cpp" line="2338"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt; &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt; p, li { white-space: pre-wrap; } &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt; &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;software &lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;%1&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; (rev &lt;/span&gt;&lt;a href=&quot;https://github.com/psieg/Lightpack/commit/%2&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;%2&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;, Qt %4), firmware &lt;b&gt;%3&lt;/b&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt; &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt; p, li { white-space: pre-wrap; } &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt; &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;oprogramowanie &lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;%1&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; (rev &lt;/span&gt;&lt;a href=&quot;https://github.com/psieg/Lightpack/commit/%2&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;%2&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;, Qt %4), sterownik &lt;b&gt;%3&lt;/b&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>

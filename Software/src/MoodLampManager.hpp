@@ -27,6 +27,7 @@
 
 #include <QObject>
 #include <QColor>
+#include <QStringList>
 #include <QTimer>
 #include <QElapsedTimer>
 #include "LiquidColorGenerator.hpp"
@@ -66,6 +67,9 @@ public slots:
 	void setSendDataOnlyIfColorsChanged(bool state);
 	void onHostSmoothingDurationChanged(int ms);
 	void onConnectedDeviceChanged(const SupportedDevices::DeviceType device);
+	// Recreates the active lamp so a just-edited Speed/Density/Direction value (advanced
+	// mode) takes effect immediately instead of only on the next explicit effect switch.
+	void onMoodLampEffectParamsChanged(int lampId);
 
 public:
 	// Overwrites colors[id] for every enabled LedGroup with hasColor=true, for each id in
@@ -73,6 +77,11 @@ public:
 	// unit-testable without a live MoodLampManager/QTimer. Only meaningful in Constant
 	// color mode - callers must gate on that themselves (see updateColors()).
 	static bool applyGroupColorOverrides(QList<QRgb>& colors, const QList<SettingsScope::LedGroup>& groups);
+	// Which of "Speed"/"Density"/"Direction" are meaningful for a given lamp id, in display
+	// order - only the 4 parametrized effects (Rainbow/Comet/Theater Chase/Twinkle) return
+	// anything. Pure/static so the advanced-mode UI's field visibility is unit-testable
+	// without constructing a settings window.
+	static QStringList visibleEffectParamsForLamp(int lampId);
 
 private slots:
 	void updateColors(const bool forceUpdate);

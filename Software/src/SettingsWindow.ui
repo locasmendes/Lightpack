@@ -35,6 +35,18 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_8">
+    <item row="0" column="1" colspan="2">
+     <widget class="QCheckBox" name="checkBox_AdvancedMode">
+      <property name="whatsThis">
+       <string>&lt;h4&gt;Advanced mode&lt;/h4&gt;
+
+Reveals extra fine-grained controls across the color/effect sections: bloom threshold, contrast pivot, vibrance protection, and per-effect speed/density/direction for the Rainbow/Comet/Theater Chase/Twinkle mood lamp effects.</string>
+      </property>
+      <property name="text">
+       <string>Advanced mode</string>
+      </property>
+     </widget>
+    </item>
     <item row="1" column="1">
      <widget class="QListWidget" name="listWidget">
       <property name="enabled">
@@ -1002,6 +1014,150 @@ Boosts near-white, low-saturation pixels (lens flares, bright highlights) to mak
                  </property>
                 </widget>
                </item>
+               <item row="8" column="0" colspan="3">
+                <widget class="QLabel" name="label_GrabBloomThreshold">
+                 <property name="visible">
+                  <bool>false</bool>
+                 </property>
+                 <property name="text">
+                  <string>Bloom threshold:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="9" column="0">
+                <widget class="QSlider" name="horizontalSlider_GrabBloomThreshold">
+                 <property name="visible">
+                  <bool>false</bool>
+                 </property>
+                 <property name="minimum">
+                  <number>0</number>
+                 </property>
+                 <property name="maximum">
+                  <number>100</number>
+                 </property>
+                 <property name="value">
+                  <number>70</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="9" column="1">
+                <widget class="QSpinBox" name="spinBox_GrabBloomThreshold">
+                 <property name="visible">
+                  <bool>false</bool>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                 <property name="minimum">
+                  <number>0</number>
+                 </property>
+                 <property name="maximum">
+                  <number>100</number>
+                 </property>
+                 <property name="value">
+                  <number>70</number>
+                 </property>
+                </widget>
+               </item>
+               <item row="10" column="0" colspan="3">
+                <widget class="QLabel" name="label_GrabContrastPivot">
+                 <property name="visible">
+                  <bool>false</bool>
+                 </property>
+                 <property name="text">
+                  <string>Contrast pivot:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="11" column="0">
+                <widget class="QSlider" name="horizontalSlider_GrabContrastPivot">
+                 <property name="visible">
+                  <bool>false</bool>
+                 </property>
+                 <property name="minimum">
+                  <number>0</number>
+                 </property>
+                 <property name="maximum">
+                  <number>255</number>
+                 </property>
+                 <property name="value">
+                  <number>128</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="11" column="1">
+                <widget class="QSpinBox" name="spinBox_GrabContrastPivot">
+                 <property name="visible">
+                  <bool>false</bool>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                 <property name="minimum">
+                  <number>0</number>
+                 </property>
+                 <property name="maximum">
+                  <number>255</number>
+                 </property>
+                 <property name="value">
+                  <number>128</number>
+                 </property>
+                </widget>
+               </item>
+               <item row="12" column="0" colspan="3">
+                <widget class="QLabel" name="label_GrabVibranceProtection">
+                 <property name="visible">
+                  <bool>false</bool>
+                 </property>
+                 <property name="text">
+                  <string>Vibrance protection:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="13" column="0">
+                <widget class="QSlider" name="horizontalSlider_GrabVibranceProtection">
+                 <property name="visible">
+                  <bool>false</bool>
+                 </property>
+                 <property name="minimum">
+                  <number>0</number>
+                 </property>
+                 <property name="maximum">
+                  <number>100</number>
+                 </property>
+                 <property name="value">
+                  <number>60</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="13" column="1">
+                <widget class="QSpinBox" name="spinBox_GrabVibranceProtection">
+                 <property name="visible">
+                  <bool>false</bool>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                 <property name="minimum">
+                  <number>0</number>
+                 </property>
+                 <property name="maximum">
+                  <number>100</number>
+                 </property>
+                 <property name="value">
+                  <number>60</number>
+                 </property>
+                </widget>
+               </item>
               </layout>
              </widget>
             </item>
@@ -1136,6 +1292,122 @@ Boosts near-white, low-saturation pixels (lens flares, bright highlights) to mak
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QGridLayout" name="gridLayout_MoodLampEffectParams">
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_MoodLampEffectSpeed">
+                <property name="visible">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Effect speed:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QSlider" name="horizontalSlider_MoodLampEffectSpeed">
+                <property name="visible">
+                 <bool>false</bool>
+                </property>
+                <property name="minimum">
+                 <number>10</number>
+                </property>
+                <property name="maximum">
+                 <number>300</number>
+                </property>
+                <property name="value">
+                 <number>100</number>
+                </property>
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <widget class="QSpinBox" name="spinBox_MoodLampEffectSpeed">
+                <property name="visible">
+                 <bool>false</bool>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+                <property name="suffix">
+                 <string notr="true">%</string>
+                </property>
+                <property name="minimum">
+                 <number>10</number>
+                </property>
+                <property name="maximum">
+                 <number>300</number>
+                </property>
+                <property name="value">
+                 <number>100</number>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_MoodLampEffectDensity">
+                <property name="visible">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Effect density:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QSlider" name="horizontalSlider_MoodLampEffectDensity">
+                <property name="visible">
+                 <bool>false</bool>
+                </property>
+                <property name="minimum">
+                 <number>10</number>
+                </property>
+                <property name="maximum">
+                 <number>300</number>
+                </property>
+                <property name="value">
+                 <number>100</number>
+                </property>
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2">
+               <widget class="QSpinBox" name="spinBox_MoodLampEffectDensity">
+                <property name="visible">
+                 <bool>false</bool>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+                <property name="suffix">
+                 <string notr="true">%</string>
+                </property>
+                <property name="minimum">
+                 <number>10</number>
+                </property>
+                <property name="maximum">
+                 <number>300</number>
+                </property>
+                <property name="value">
+                 <number>100</number>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0" colspan="2">
+               <widget class="QCheckBox" name="checkBox_MoodLampEffectDirectionReversed">
+                <property name="visible">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Reverse effect direction</string>
                 </property>
                </widget>
               </item>
@@ -3685,6 +3957,7 @@ Boosts near-white, low-saturation pixels (lens flares, bright highlights) to mak
   </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>checkBox_AdvancedMode</tabstop>
   <tabstop>listWidget</tabstop>
   <tabstop>tabWidget</tabstop>
   <tabstop>comboBox_LightpackModes</tabstop>
@@ -3716,6 +3989,12 @@ Boosts near-white, low-saturation pixels (lens flares, bright highlights) to mak
   <tabstop>spinBox_GrabContrast</tabstop>
   <tabstop>horizontalSlider_GrabVibrance</tabstop>
   <tabstop>spinBox_GrabVibrance</tabstop>
+  <tabstop>horizontalSlider_GrabBloomThreshold</tabstop>
+  <tabstop>spinBox_GrabBloomThreshold</tabstop>
+  <tabstop>horizontalSlider_GrabContrastPivot</tabstop>
+  <tabstop>spinBox_GrabContrastPivot</tabstop>
+  <tabstop>horizontalSlider_GrabVibranceProtection</tabstop>
+  <tabstop>spinBox_GrabVibranceProtection</tabstop>
   <tabstop>horizontalSlider_LuminosityThreshold</tabstop>
   <tabstop>spinBox_LuminosityThreshold</tabstop>
   <tabstop>pushButton_lumosityThresholdHelp</tabstop>
@@ -3793,6 +4072,11 @@ Boosts near-white, low-saturation pixels (lens flares, bright highlights) to mak
   <tabstop>pushButton_SelectColorSoundVizMax</tabstop>
   <tabstop>pushButton_SelectColorSoundVizMin</tabstop>
   <tabstop>comboBox_MoodLampLamp</tabstop>
+  <tabstop>horizontalSlider_MoodLampEffectSpeed</tabstop>
+  <tabstop>spinBox_MoodLampEffectSpeed</tabstop>
+  <tabstop>horizontalSlider_MoodLampEffectDensity</tabstop>
+  <tabstop>spinBox_MoodLampEffectDensity</tabstop>
+  <tabstop>checkBox_MoodLampEffectDirectionReversed</tabstop>
   <tabstop>radioButton_SoundVizLiquidMode</tabstop>
  </tabstops>
  <resources>
@@ -4276,6 +4560,166 @@ Boosts near-white, low-saturation pixels (lens flares, bright highlights) to mak
     <hint type="destinationlabel">
      <x>368</x>
      <y>360</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSlider_GrabBloomThreshold</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBox_GrabBloomThreshold</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>368</x>
+     <y>400</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>422</x>
+     <y>400</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBox_GrabBloomThreshold</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSlider_GrabBloomThreshold</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>422</x>
+     <y>400</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>368</x>
+     <y>400</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSlider_GrabContrastPivot</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBox_GrabContrastPivot</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>368</x>
+     <y>420</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>422</x>
+     <y>420</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBox_GrabContrastPivot</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSlider_GrabContrastPivot</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>422</x>
+     <y>420</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>368</x>
+     <y>420</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSlider_GrabVibranceProtection</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBox_GrabVibranceProtection</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>368</x>
+     <y>440</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>422</x>
+     <y>440</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBox_GrabVibranceProtection</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSlider_GrabVibranceProtection</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>422</x>
+     <y>440</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>368</x>
+     <y>440</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSlider_MoodLampEffectSpeed</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBox_MoodLampEffectSpeed</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>200</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>260</x>
+     <y>260</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBox_MoodLampEffectSpeed</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSlider_MoodLampEffectSpeed</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>260</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>200</x>
+     <y>260</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSlider_MoodLampEffectDensity</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBox_MoodLampEffectDensity</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>200</x>
+     <y>280</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>260</x>
+     <y>280</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBox_MoodLampEffectDensity</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSlider_MoodLampEffectDensity</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>260</x>
+     <y>280</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>200</x>
+     <y>280</y>
     </hint>
    </hints>
   </connection>

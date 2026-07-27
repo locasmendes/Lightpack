@@ -264,6 +264,32 @@ void MoodLampManager::onConnectedDeviceChanged(const SupportedDevices::DeviceTyp
 	}
 }
 
+void MoodLampManager::onMoodLampEffectParamsChanged(int lampId)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << lampId;
+
+	// Effect params only matter for the freely-selectable Liquid-mode lamp - Constant/Breathing
+	// force Static/Breathing, neither of which reads Speed/Density/Direction.
+	if (m_colorMode == SettingsScope::MoodLampColorMode::Liquid && lampId == m_requestedLampId)
+		applyEffectiveLamp();
+}
+
+QStringList MoodLampManager::visibleEffectParamsForLamp(int lampId)
+{
+	if (lampId < 0)
+		return QStringList();
+
+	if (lampId == MoodLampBase::idByName(QStringLiteral("Twinkle")))
+		return { QStringLiteral("Speed"), QStringLiteral("Density") };
+
+	if (lampId == MoodLampBase::idByName(QStringLiteral("Rainbow"))
+		|| lampId == MoodLampBase::idByName(QStringLiteral("Comet"))
+		|| lampId == MoodLampBase::idByName(QStringLiteral("Theater Chase")))
+		return { QStringLiteral("Speed"), QStringLiteral("Direction") };
+
+	return QStringList();
+}
+
 bool MoodLampManager::isHostSmoothingApplicable() const
 {
 	return m_hostSmoothing.durationMs() > 0

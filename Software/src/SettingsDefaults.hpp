@@ -86,6 +86,7 @@ static const QString ConnectedDeviceDefault = QStringLiteral("Lightpack");
 static const QString SupportedDevices = QStringLiteral(SUPPORTED_DEVICES); /* comma separated values! */
 static const bool CheckForUpdates = true;
 static const bool InstallUpdates = true;
+static const bool IsAdvancedModeEnabled = false;
 
 // [HotKeys]
 namespace HotKeys
@@ -234,6 +235,13 @@ static const int SpeedDefault = 50;
 static const int SpeedMax = 100;
 static const QString ColorDefault = QStringLiteral("#00FF00");
 static const bool IsLiquidModeDefault = true;
+static const double EffectSpeedMin = 0.1;
+static const double EffectSpeedDefault = 1.0;
+static const double EffectSpeedMax = 3.0;
+static const double EffectDensityMin = 0.1;
+static const double EffectDensityDefault = 1.0;
+static const double EffectDensityMax = 3.0;
+static const int EffectDirectionDefault = 1;
 }
 // [SoundVisualizer]
 namespace SoundVisualizer

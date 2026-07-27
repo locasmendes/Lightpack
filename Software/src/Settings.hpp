@@ -290,6 +290,12 @@ public:
 	static void setMoodLampSpeed(int value);
 	static int getMoodLampLamp();
 	static void setMoodLampLamp(int value);
+	static double getMoodLampEffectSpeed(int lampId);
+	static void setMoodLampEffectSpeed(int lampId, double value);
+	static double getMoodLampEffectDensity(int lampId);
+	static void setMoodLampEffectDensity(int lampId, double value);
+	static int getMoodLampEffectDirection(int lampId);
+	static void setMoodLampEffectDirection(int lampId, int value);
 
 #ifdef SOUNDVIZ_SUPPORT
 	static int getSoundVisualizerDevice();
@@ -325,6 +331,8 @@ public:
 
 	static bool isCheckForUpdatesEnabled();
 	static void setCheckForUpdatesEnabled(bool isEnabled);
+	static bool isAdvancedModeEnabled();
+	static void setAdvancedModeEnabled(bool isEnabled);
 	static bool isInstallUpdatesEnabled();
 	static void setInstallUpdatesEnabled(bool isEnabled);
 	static QString getAutoUpdatingVersion();
@@ -472,6 +480,8 @@ signals:
 	void moodLampColorChanged(const QColor color);
 	void moodLampSpeedChanged(int value);
 	void moodLampLampChanged(int value);
+	void moodLampEffectParamsChanged(int lampId);
+	void advancedModeEnabledChanged(bool isEnabled);
 #ifdef SOUNDVIZ_SUPPORT
 	void soundVisualizerDeviceChanged(int value);
 	void soundVisualizerVisualizerChanged(int value);

@@ -37,6 +37,7 @@
 #include "LedGroupRuntime.hpp"
 #include "ColorButton.hpp"
 #include "LedDeviceManager.hpp"
+#include "MoodLampManager.hpp"
 #include "enums.hpp"
 #include "debug.h"
 #include "LogWriter.hpp"
@@ -264,6 +265,14 @@ void SettingsWindow::connectSignalsSlots()
 	connect(ui->radioButton_LiquidColorMoodLampMode, &QRadioButton::toggled, this, &SettingsWindow::onMoodLampColorMode_toggled);
 	connect(ui->horizontalSlider_MoodLampSpeed, &QSlider::valueChanged, this, &SettingsWindow::onMoodLampSpeed_valueChanged);
 	connect(ui->comboBox_MoodLampLamp, qOverload<int>(&QComboBox::currentIndexChanged), this, &SettingsWindow::onMoodLampLamp_currentIndexChanged);
+
+	connect(ui->checkBox_AdvancedMode, &QCheckBox::toggled, this, &SettingsWindow::onAdvancedMode_toggled);
+	connect(ui->spinBox_GrabBloomThreshold, qOverload<int>(&QSpinBox::valueChanged), this, &SettingsWindow::onGrabBloomThreshold_valueChanged);
+	connect(ui->spinBox_GrabContrastPivot, qOverload<int>(&QSpinBox::valueChanged), this, &SettingsWindow::onGrabContrastPivot_valueChanged);
+	connect(ui->spinBox_GrabVibranceProtection, qOverload<int>(&QSpinBox::valueChanged), this, &SettingsWindow::onGrabVibranceProtection_valueChanged);
+	connect(ui->spinBox_MoodLampEffectSpeed, qOverload<int>(&QSpinBox::valueChanged), this, &SettingsWindow::onMoodLampEffectSpeed_valueChanged);
+	connect(ui->spinBox_MoodLampEffectDensity, qOverload<int>(&QSpinBox::valueChanged), this, &SettingsWindow::onMoodLampEffectDensity_valueChanged);
+	connect(ui->checkBox_MoodLampEffectDirectionReversed, &QCheckBox::toggled, this, &SettingsWindow::onMoodLampEffectDirection_toggled);
 
 	// Main options
 	connect(ui->comboBox_LightpackModes, qOverload<int>(&QComboBox::currentIndexChanged), this, &SettingsWindow::onLightpackModes_currentIndexChanged);
@@ -1051,6 +1060,8 @@ void SettingsWindow::updateAvailableMoodLampLamps(const QList<MoodLampLampInfo> 
 	}
 	ui->comboBox_MoodLampLamp->setCurrentIndex(selectIndex);
 	ui->comboBox_MoodLampLamp->blockSignals(false);
+
+	loadMoodLampEffectParamsIntoUi(ui->comboBox_MoodLampLamp->currentData().toInt());
 }
 
 // ----------------------------------------------------------------------------
@@ -1352,6 +1363,99 @@ void SettingsWindow::onGrabVibrance_valueChanged(int value)
 	Settings::setGrabVibrance(value);
 }
 
+void SettingsWindow::onAdvancedMode_toggled(bool checked)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << checked;
+
+	Settings::setAdvancedModeEnabled(checked);
+	updateAdvancedModeVisibility();
+	updateMoodLampEffectParamsUi();
+}
+
+void SettingsWindow::onGrabBloomThreshold_valueChanged(int value)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << value;
+
+	Settings::setGrabBloomThreshold(value);
+}
+
+void SettingsWindow::onGrabContrastPivot_valueChanged(int value)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << value;
+
+	Settings::setGrabContrastPivot(value);
+}
+
+void SettingsWindow::onGrabVibranceProtection_valueChanged(int value)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << value;
+
+	Settings::setGrabVibranceProtection(value);
+}
+
+void SettingsWindow::onMoodLampEffectSpeed_valueChanged(int value)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << value;
+
+	const int lampId = ui->comboBox_MoodLampLamp->currentData().toInt();
+	Settings::setMoodLampEffectSpeed(lampId, value / 100.0);
+}
+
+void SettingsWindow::onMoodLampEffectDensity_valueChanged(int value)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << value;
+
+	const int lampId = ui->comboBox_MoodLampLamp->currentData().toInt();
+	Settings::setMoodLampEffectDensity(lampId, value / 100.0);
+}
+
+void SettingsWindow::onMoodLampEffectDirection_toggled(bool checked)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << checked;
+
+	const int lampId = ui->comboBox_MoodLampLamp->currentData().toInt();
+	Settings::setMoodLampEffectDirection(lampId, checked ? -1 : 1);
+}
+
+void SettingsWindow::updateAdvancedModeVisibility()
+{
+	const bool advanced = Settings::isAdvancedModeEnabled();
+
+	ui->label_GrabBloomThreshold->setVisible(advanced);
+	ui->horizontalSlider_GrabBloomThreshold->setVisible(advanced);
+	ui->spinBox_GrabBloomThreshold->setVisible(advanced);
+
+	ui->label_GrabContrastPivot->setVisible(advanced);
+	ui->horizontalSlider_GrabContrastPivot->setVisible(advanced);
+	ui->spinBox_GrabContrastPivot->setVisible(advanced);
+
+	ui->label_GrabVibranceProtection->setVisible(advanced);
+	ui->horizontalSlider_GrabVibranceProtection->setVisible(advanced);
+	ui->spinBox_GrabVibranceProtection->setVisible(advanced);
+}
+
+void SettingsWindow::updateMoodLampEffectParamsUi()
+{
+	const int lampId = ui->comboBox_MoodLampLamp->currentData().toInt();
+	const QStringList visibleParams = Settings::isAdvancedModeEnabled()
+		? MoodLampManager::visibleEffectParamsForLamp(lampId)
+		: QStringList();
+
+	const bool showSpeed = visibleParams.contains(QStringLiteral("Speed"));
+	const bool showDensity = visibleParams.contains(QStringLiteral("Density"));
+	const bool showDirection = visibleParams.contains(QStringLiteral("Direction"));
+
+	ui->label_MoodLampEffectSpeed->setVisible(showSpeed);
+	ui->horizontalSlider_MoodLampEffectSpeed->setVisible(showSpeed);
+	ui->spinBox_MoodLampEffectSpeed->setVisible(showSpeed);
+
+	ui->label_MoodLampEffectDensity->setVisible(showDensity);
+	ui->horizontalSlider_MoodLampEffectDensity->setVisible(showDensity);
+	ui->spinBox_MoodLampEffectDensity->setVisible(showDensity);
+
+	ui->checkBox_MoodLampEffectDirectionReversed->setVisible(showDirection);
+}
+
 void SettingsWindow::onGrabHostSmoothing_valueChanged(int value)
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << value;
@@ -1554,10 +1658,33 @@ void SettingsWindow::onMoodLampSpeed_valueChanged(int value)
 
 void SettingsWindow::onMoodLampLamp_currentIndexChanged(int index)
 {
+	const int lampId = ui->comboBox_MoodLampLamp->currentData().toInt();
+
 	if (!updatingFromSettings) {
-		DEBUG_MID_LEVEL << Q_FUNC_INFO << index << ui->comboBox_MoodLampLamp->currentData().toInt();
-		Settings::setMoodLampLamp(ui->comboBox_MoodLampLamp->currentData().toInt());
+		DEBUG_MID_LEVEL << Q_FUNC_INFO << index << lampId;
+		Settings::setMoodLampLamp(lampId);
 	}
+
+	loadMoodLampEffectParamsIntoUi(lampId);
+}
+
+void SettingsWindow::loadMoodLampEffectParamsIntoUi(int lampId)
+{
+	// Reload Speed/Density/Direction for the newly-selected effect and show only the fields
+	// that effect actually uses (e.g. Twinkle has no Direction, Theater Chase no Density).
+	ui->spinBox_MoodLampEffectSpeed->blockSignals(true);
+	ui->spinBox_MoodLampEffectSpeed->setValue(static_cast<int>(Settings::getMoodLampEffectSpeed(lampId) * 100.0));
+	ui->spinBox_MoodLampEffectSpeed->blockSignals(false);
+
+	ui->spinBox_MoodLampEffectDensity->blockSignals(true);
+	ui->spinBox_MoodLampEffectDensity->setValue(static_cast<int>(Settings::getMoodLampEffectDensity(lampId) * 100.0));
+	ui->spinBox_MoodLampEffectDensity->blockSignals(false);
+
+	ui->checkBox_MoodLampEffectDirectionReversed->blockSignals(true);
+	ui->checkBox_MoodLampEffectDirectionReversed->setChecked(Settings::getMoodLampEffectDirection(lampId) < 0);
+	ui->checkBox_MoodLampEffectDirectionReversed->blockSignals(false);
+
+	updateMoodLampEffectParamsUi();
 }
 
 void SettingsWindow::onMoodLampColorMode_toggled(bool checked)
@@ -2010,6 +2137,11 @@ void SettingsWindow::updateUiFromSettings()
 	ui->spinBox_GrabSaturation->setValue								(Settings::getGrabSaturation());
 	ui->spinBox_GrabContrast->setValue									(Settings::getGrabContrast());
 	ui->spinBox_GrabVibrance->setValue									(Settings::getGrabVibrance());
+	ui->checkBox_AdvancedMode->setChecked								(Settings::isAdvancedModeEnabled());
+	ui->spinBox_GrabBloomThreshold->setValue							(Settings::getGrabBloomThreshold());
+	ui->spinBox_GrabContrastPivot->setValue							(Settings::getGrabContrastPivot());
+	ui->spinBox_GrabVibranceProtection->setValue						(Settings::getGrabVibranceProtection());
+	updateAdvancedModeVisibility();
 	ui->spinBox_GrabHostSmoothing->setValue							(Settings::getGrabHostSmoothingDuration());
 	ui->checkBox_GrabApplyBlueLightReduction->setChecked						(Settings::isGrabApplyBlueLightReductionEnabled());
 	ui->checkBox_GrabApplyColorTemperature->setChecked              (Settings::isGrabApplyColorTemperatureEnabled());

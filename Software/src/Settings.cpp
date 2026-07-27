@@ -80,6 +80,7 @@ static const QString SupportedDevices = QStringLiteral("SupportedDevices");
 static const QString CheckForUpdates = QStringLiteral("CheckForUpdates");
 static const QString InstallUpdates = QStringLiteral("InstallForUpdates");
 static const QString AutoUpdatingVersion = QStringLiteral("AutoUpdatingVersion");
+static const QString IsAdvancedModeEnabled = QStringLiteral("IsAdvancedModeEnabled");
 
 // [Hotkeys]
 namespace Hotkeys
@@ -233,6 +234,7 @@ static const QString ColorMode = QStringLiteral("MoodLamp/ColorMode");
 static const QString Color = QStringLiteral("MoodLamp/Color");
 static const QString Speed = QStringLiteral("MoodLamp/Speed");
 static const QString Lamp = QStringLiteral("MoodLamp/Lamp");
+static const QString EffectParams = QStringLiteral("MoodLamp/EffectParams");
 }
 // [SoundVisualizer]
 namespace SoundVisualizer
@@ -415,6 +417,7 @@ bool Settings::Initialize( const QString & applicationDirPath, bool isDebugLevel
 
 	setNewOptionMain(Main::Key::CheckForUpdates,			Main::CheckForUpdates);
 	setNewOptionMain(Main::Key::InstallUpdates,				Main::InstallUpdates);
+	setNewOptionMain(Main::Key::IsAdvancedModeEnabled,		Main::IsAdvancedModeEnabled);
 
 	if (isDebugLevelObtainedFromCmdArgs == false)
 	{
@@ -2117,6 +2120,83 @@ void Settings::setMoodLampLamp(int value)
 	emit m_this->moodLampLampChanged(value);
 }
 
+namespace {
+	// Per-lamp Speed/Density/Direction, keyed by lamp id (stable within a build - lamp ids
+	// are assigned by static registration order in MoodLamp.cpp). Only the 4 lamps with
+	// per-tick parameters (Rainbow/Comet/Theater Chase/Twinkle) ever read these; every other
+	// lamp id simply falls back to the neutral defaults below.
+	QJsonObject loadMoodLampEffectParamsBlob()
+	{
+		const QString raw = Settings::value(Profile::Key::MoodLamp::EffectParams).toString();
+		if (raw.isEmpty())
+			return QJsonObject();
+		const QJsonDocument doc = QJsonDocument::fromJson(raw.toUtf8());
+		return doc.isObject() ? doc.object() : QJsonObject();
+	}
+
+	void saveMoodLampEffectParamsBlob(const QJsonObject& blob)
+	{
+		const QString raw = blob.isEmpty()
+			? QString()
+			: QString::fromUtf8(QJsonDocument(blob).toJson(QJsonDocument::Compact));
+		Settings::setValue(Profile::Key::MoodLamp::EffectParams, raw);
+	}
+}
+
+double Settings::getMoodLampEffectSpeed(int lampId)
+{
+	const QJsonObject entry = loadMoodLampEffectParamsBlob().value(QString::number(lampId)).toObject();
+	return entry.contains(QStringLiteral("speed")) ? entry.value(QStringLiteral("speed")).toDouble() : Profile::MoodLamp::EffectSpeedDefault;
+}
+
+void Settings::setMoodLampEffectSpeed(int lampId, double value)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
+	QJsonObject blob = loadMoodLampEffectParamsBlob();
+	const QString key = QString::number(lampId);
+	QJsonObject entry = blob.value(key).toObject();
+	entry.insert(QStringLiteral("speed"), value);
+	blob.insert(key, entry);
+	saveMoodLampEffectParamsBlob(blob);
+	emit m_this->moodLampEffectParamsChanged(lampId);
+}
+
+double Settings::getMoodLampEffectDensity(int lampId)
+{
+	const QJsonObject entry = loadMoodLampEffectParamsBlob().value(QString::number(lampId)).toObject();
+	return entry.contains(QStringLiteral("density")) ? entry.value(QStringLiteral("density")).toDouble() : Profile::MoodLamp::EffectDensityDefault;
+}
+
+void Settings::setMoodLampEffectDensity(int lampId, double value)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
+	QJsonObject blob = loadMoodLampEffectParamsBlob();
+	const QString key = QString::number(lampId);
+	QJsonObject entry = blob.value(key).toObject();
+	entry.insert(QStringLiteral("density"), value);
+	blob.insert(key, entry);
+	saveMoodLampEffectParamsBlob(blob);
+	emit m_this->moodLampEffectParamsChanged(lampId);
+}
+
+int Settings::getMoodLampEffectDirection(int lampId)
+{
+	const QJsonObject entry = loadMoodLampEffectParamsBlob().value(QString::number(lampId)).toObject();
+	return entry.contains(QStringLiteral("direction")) ? entry.value(QStringLiteral("direction")).toInt() : Profile::MoodLamp::EffectDirectionDefault;
+}
+
+void Settings::setMoodLampEffectDirection(int lampId, int value)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
+	QJsonObject blob = loadMoodLampEffectParamsBlob();
+	const QString key = QString::number(lampId);
+	QJsonObject entry = blob.value(key).toObject();
+	entry.insert(QStringLiteral("direction"), value >= 0 ? 1 : -1);
+	blob.insert(key, entry);
+	saveMoodLampEffectParamsBlob(blob);
+	emit m_this->moodLampEffectParamsChanged(lampId);
+}
+
 #ifdef SOUNDVIZ_SUPPORT
 int Settings::getSoundVisualizerDevice()
 {
@@ -2507,6 +2587,15 @@ bool Settings::isCheckForUpdatesEnabled() {
 
 void Settings::setCheckForUpdatesEnabled(bool isEnabled) {
 	setValueMain(Main::Key::CheckForUpdates, isEnabled);
+}
+
+bool Settings::isAdvancedModeEnabled() {
+	return valueMain(Main::Key::IsAdvancedModeEnabled).toBool();
+}
+
+void Settings::setAdvancedModeEnabled(bool isEnabled) {
+	setValueMain(Main::Key::IsAdvancedModeEnabled, isEnabled);
+	emit m_this->advancedModeEnabledChanged(isEnabled);
 }
 
 bool Settings::isInstallUpdatesEnabled() {

@@ -172,6 +172,13 @@ private slots:
 	void onGrabSaturation_valueChanged(int value);
 	void onGrabContrast_valueChanged(int value);
 	void onGrabVibrance_valueChanged(int value);
+	void onAdvancedMode_toggled(bool checked);
+	void onGrabBloomThreshold_valueChanged(int value);
+	void onGrabContrastPivot_valueChanged(int value);
+	void onGrabVibranceProtection_valueChanged(int value);
+	void onMoodLampEffectSpeed_valueChanged(int value);
+	void onMoodLampEffectDensity_valueChanged(int value);
+	void onMoodLampEffectDirection_toggled(bool checked);
 	void onGrabHostSmoothing_valueChanged(int value);
 	void onGrabApplyBlueLightReduction_toggled(bool state);
 	void onGrabApplyColorTemperature_toggled(bool state);
@@ -289,6 +296,15 @@ private:
 	void showHelpOf(QObject *object);
 	QString getSlotName(const QString &actionName);
 	QString getPluginName(const Plugin *plugin) const;
+	// Shows/hides the fixed advanced-only color-adjustment fields (bloom threshold, contrast
+	// pivot, vibrance protection) based on Settings::isAdvancedModeEnabled().
+	void updateAdvancedModeVisibility();
+	// Shows only the Speed/Density/Direction fields relevant to the currently selected mood
+	// lamp effect (per MoodLampManager::visibleEffectParamsForLamp), and only in advanced mode.
+	void updateMoodLampEffectParamsUi();
+	// Loads lampId's persisted Speed/Density/Direction into the effect-param widgets (without
+	// emitting their valueChanged/toggled signals) and refreshes which of them are visible.
+	void loadMoodLampEffectParamsIntoUi(int lampId);
 
 
 private:

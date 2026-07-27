@@ -428,23 +428,23 @@ You still will be able to place capturing zones manually.</source>
 <context>
     <name>SettingsWindow</name>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="108"/>
-        <location filename="../../src/SettingsWindow.ui" line="244"/>
+        <location filename="../../src/SettingsWindow.ui" line="120"/>
+        <location filename="../../src/SettingsWindow.ui" line="256"/>
         <source>Mode</source>
         <translation>模式</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="368"/>
+        <location filename="../../src/SettingsWindow.ui" line="380"/>
         <source>Grab frequency:</source>
         <translation>抓取频率:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="461"/>
+        <location filename="../../src/SettingsWindow.ui" line="473"/>
         <source>ms</source>
         <translation>ms</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="812"/>
+        <location filename="../../src/SettingsWindow.ui" line="824"/>
         <source>Colored</source>
         <translation>彩色</translation>
     </message>
@@ -453,8 +453,8 @@ You still will be able to place capturing zones manually.</source>
         <translation type="vanished">白色</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="132"/>
-        <location filename="../../src/SettingsWindow.ui" line="1607"/>
+        <location filename="../../src/SettingsWindow.ui" line="144"/>
+        <location filename="../../src/SettingsWindow.ui" line="1879"/>
         <source>Device</source>
         <translation>设备</translation>
     </message>
@@ -475,12 +475,12 @@ You still will be able to place capturing zones manually.</source>
         <translation type="obsolete">波特率:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1806"/>
+        <location filename="../../src/SettingsWindow.ui" line="2078"/>
         <source>Gamma correction:</source>
         <translation>伽玛校正:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2106"/>
+        <location filename="../../src/SettingsWindow.ui" line="2378"/>
         <source>Smoothness:</source>
         <translation>平滑度:</translation>
     </message>
@@ -489,33 +489,33 @@ You still will be able to place capturing zones manually.</source>
         <translation type="obsolete">颜色顺序:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2381"/>
+        <location filename="../../src/SettingsWindow.ui" line="2653"/>
         <source>Virtual</source>
         <translation>虚拟设备</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="147"/>
-        <location filename="../../src/SettingsWindow.ui" line="2420"/>
+        <location filename="../../src/SettingsWindow.ui" line="159"/>
+        <location filename="../../src/SettingsWindow.ui" line="2692"/>
         <source>Profiles</source>
         <translation>配置文件</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="282"/>
+        <location filename="../../src/SettingsWindow.ui" line="294"/>
         <source>Sound visualization</source>
         <translation>声音可视化</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="546"/>
+        <location filename="../../src/SettingsWindow.ui" line="558"/>
         <source>Over-brightening:</source>
         <translation>过度亮化:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="432"/>
+        <location filename="../../src/SettingsWindow.ui" line="444"/>
         <source>Grab interval:</source>
         <translation>视频捕捉间隔:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="407"/>
+        <location filename="../../src/SettingsWindow.ui" line="419"/>
         <source>&lt;h4&gt;Over-brightening&lt;/h4&gt; To achieve a higher overall brightness, Prismatik will set the LEDs to maximum even if the grabbed color is not at full brightness.</source>
         <translation>&lt;h4&gt;过度亮化&lt;/h4&gt; 为了获得更高的整体亮度，即使抓取的颜色不是全亮度，Prismatik 也会将 LED 设置为最大。</translation>
     </message>
@@ -524,55 +524,55 @@ You still will be able to place capturing zones manually.</source>
         <translation type="vanished">不显示捕获区域</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1030"/>
+        <location filename="../../src/SettingsWindow.ui" line="1186"/>
         <source>Constant color:</source>
         <translation>恒定颜色:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1101"/>
-        <location filename="../../src/SettingsWindow.ui" line="1299"/>
+        <location filename="../../src/SettingsWindow.ui" line="1257"/>
+        <location filename="../../src/SettingsWindow.ui" line="1571"/>
         <source>Slow</source>
         <translation>缓慢</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1135"/>
-        <location filename="../../src/SettingsWindow.ui" line="1333"/>
+        <location filename="../../src/SettingsWindow.ui" line="1291"/>
+        <location filename="../../src/SettingsWindow.ui" line="1605"/>
         <source>Fast</source>
         <translation>快速</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1170"/>
+        <location filename="../../src/SettingsWindow.ui" line="1442"/>
         <source>Sound device:</source>
         <translation>音频播放设备:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1215"/>
+        <location filename="../../src/SettingsWindow.ui" line="1487"/>
         <source>Animate colors from</source>
         <translation>使用动画颜色</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1241"/>
+        <location filename="../../src/SettingsWindow.ui" line="1513"/>
         <source>to</source>
         <translation>到</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1345"/>
+        <location filename="../../src/SettingsWindow.ui" line="1617"/>
         <source>Please note: The sound visualizer works best with low smoothness settings (20 and below, 10 recommended)</source>
         <translation>请注意：声音可视化器在低平滑度设置下效果最佳（20 及以下，推荐 10）</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1465"/>
+        <location filename="../../src/SettingsWindow.ui" line="1737"/>
         <source>Eye care settings</source>
         <translation>视力保健环境</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1568"/>
+        <location filename="../../src/SettingsWindow.ui" line="1840"/>
         <source>&lt;h4&gt;Scene luminosity threshold&lt;/h4&gt; It works in two ways: You can either use &lt;b&gt;minimum luminosity level&lt;/b&gt; for soft and gentle light in dark scenes or you can use &lt;b&gt;dead-zone&lt;/b&gt; luminosity grabbing which ignores small non-black objects on black backgrounds and turns lights OFF in dark scenes. This is eye-saving vs. eye-killing options which works mutually. We &lt;b&gt;recommend&lt;/b&gt; to use threshold for minimum luminosity level.</source>
         <translation>&lt;h4&gt;场景亮度阈值&lt;/h4&gt;它有两种工作方式：您可以使用 &lt;b&gt;最小亮度级别&lt;/b&gt; 在黑暗场景中获得柔和柔和的光线，或者您可以使用 &lt;b&gt;dead-zone&lt;/b&gt; 亮度抓取，它忽略黑色背景上的非黑色小物体，并在黑暗场景中关闭灯光。 这是相互起作用的拯救眼睛与扼杀眼睛的选择。我们&lt;b&gt;推荐&lt;/b&gt; 使用最小亮度级别的阈值。
 		</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2224"/>
+        <location filename="../../src/SettingsWindow.ui" line="2496"/>
         <source>Disable USB Power LED</source>
         <translation>禁用 USB 电源 LED</translation>
     </message>
@@ -581,80 +581,80 @@ You still will be able to place capturing zones manually.</source>
         <translation type="vanished">信号丢失后保持背光打开</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2429"/>
+        <location filename="../../src/SettingsWindow.ui" line="2701"/>
         <source>Profile</source>
         <translation>配置文件</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2456"/>
+        <location filename="../../src/SettingsWindow.ui" line="2728"/>
         <source>Add new profile</source>
         <translation>添加新配置文件</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2482"/>
+        <location filename="../../src/SettingsWindow.ui" line="2754"/>
         <source>Reset current profile to defaults</source>
         <translation>将当前配置文件重置为默认值</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2508"/>
+        <location filename="../../src/SettingsWindow.ui" line="2780"/>
         <source>Delete profile</source>
         <translation>删除配置文件</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2533"/>
+        <location filename="../../src/SettingsWindow.ui" line="2805"/>
         <source>Open in text editor</source>
         <translation>在文本编辑器中打开</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2943"/>
+        <location filename="../../src/SettingsWindow.ui" line="3215"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This tab is used for experimental and unstable features. Any tuning with these controls may cause inevitable plane crash, miscarriage or nuclear disaster. Use it at your own risk.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;此选项卡用于实验性和不稳定的功能。 对这些控件的任何调整都可能导致不可避免的飞机失事、流产或核灾难。 需要您自担风险使用它。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2999"/>
-        <location filename="../../src/SettingsWindow.ui" line="3006"/>
+        <location filename="../../src/SettingsWindow.ui" line="3271"/>
+        <location filename="../../src/SettingsWindow.ui" line="3278"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;TCP port to listen.&lt;/p&gt;&lt;p&gt;Default: %1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;要监听的TCP端口。&lt;/p&gt;&lt;p&gt;默认值: %1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3022"/>
+        <location filename="../../src/SettingsWindow.ui" line="3294"/>
         <source>Generate a random one</source>
         <translation type="unfinished">随机生成一个</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3044"/>
-        <location filename="../../src/SettingsWindow.ui" line="3060"/>
+        <location filename="../../src/SettingsWindow.ui" line="3316"/>
+        <location filename="../../src/SettingsWindow.ui" line="3332"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The API Key all the clients should provide to authenticate. Could be any custom string (%1 character limit). &lt;/p&gt;&lt;p&gt;Default: %2&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;所有客户端都应该提供用于身份验证的API密钥。可以是任何自定义字符串(%1个字符限制)。 &lt;/p&gt;&lt;p&gt;默认值: %2&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3109"/>
+        <location filename="../../src/SettingsWindow.ui" line="3381"/>
         <source>Mac AV (Full screen)</source>
         <translation type="unfinished">Mac AV（全屏）</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3220"/>
+        <location filename="../../src/SettingsWindow.ui" line="3492"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Log verbosity: %1-%2 where %1 = no logs.&lt;/p&gt;&lt;p&gt;After enabling logs you need to restart the program.&lt;/p&gt;&lt;p&gt;When enabled you can use the &lt;img src=&quot;:/buttons/arrow_right_dark_24px.png&quot; width=&quot;12&quot;&gt; button to open the log directory.&lt;/p&gt;&lt;p&gt;Default: %3&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;日志详细程度: %1-%2 其中 %1 = 无日志.&lt;/p&gt;&lt;p&gt;启用日志后，您需要重新启动程序。&lt;/p&gt;&lt;p&gt;启用后，您可以使用 &lt;img src=&quot;:/buttons/arrow_right_dark_24px.png&quot; width=&quot;12&quot;&gt; 按钮打开日志目录。&lt;/p&gt;&lt;p&gt;默认值: %3&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3230"/>
-        <location filename="../../src/SettingsWindow.ui" line="3233"/>
+        <location filename="../../src/SettingsWindow.ui" line="3502"/>
+        <location filename="../../src/SettingsWindow.ui" line="3505"/>
         <source>open Log folder</source>
         <translation type="unfinished">打开日志文件夹</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3236"/>
+        <location filename="../../src/SettingsWindow.ui" line="3508"/>
         <source>...</source>
         <translation type="unfinished">...</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3269"/>
+        <location filename="../../src/SettingsWindow.ui" line="3541"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When disabled every frame will be sent to the device. This is recommended for devices with inactivity timers built into firmwares (some custom Adalight sketches for example) or configured via Prismatik (UDP devices with a &amp;lt; 255 timeout value).&lt;/p&gt;&lt;p&gt;When enabled every new frame will be compared with the previous one, and will be sent only if differences are detected (can be useful in low bandwidth situations).&lt;/p&gt;&lt;p&gt;Default: %1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;当被禁用时，每一帧都将被发送到设备。这是推荐与非活动计时器内置固件(一些自定义的Adalight草图例如)或配置通过Prismatik (UDP设备与&amp;lt; 255 超时值).&lt;/p&gt;&lt;p&gt;当启用时，每一个新帧都将与前一帧进行比较，并且只有在检测到差异时才会发送(在低带宽的情况下可能很有用)。&lt;/p&gt;&lt;p&gt;默认值: %1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3272"/>
+        <location filename="../../src/SettingsWindow.ui" line="3544"/>
         <source>Send data only if colors changed</source>
         <translation>仅在颜色更改时发送数据</translation>
     </message>
@@ -663,17 +663,17 @@ You still will be able to place capturing zones manually.</source>
         <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;woodshark团队创建了这个软件 &lt;span style=&quot; font-weight:600;&quot;&gt;与&lt;/span&gt; для &lt;span style=&quot; font-weight:600;&quot;&gt;Lightpack&lt;/span&gt; — 内容适当的环境照明系统与USB接口&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3580"/>
+        <location filename="../../src/SettingsWindow.ui" line="3852"/>
         <source>Check for updates on startup</source>
         <translation>检查启动时的更新</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3590"/>
+        <location filename="../../src/SettingsWindow.ui" line="3862"/>
         <source>Install updates automatically</source>
         <translation type="unfinished">自动安装更新</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3633"/>
+        <location filename="../../src/SettingsWindow.ui" line="3905"/>
         <source>This program is distributed «as is». Its source code is under the &lt;a href=&quot;http://www.gnu.org/licenses/gpl.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;GPL license&lt;/span&gt;&lt;/a&gt;. No warranty of any kind is expressed or implied. The authors will not be liable for data loss, damages, loss of profits or any other kind of loss while using or misusing this software. All content, such as icons, plugins, bitmaps etc. is under &lt;a href=&quot;http://creativecommons.org/licenses/by-sa/3.0/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;CC-BY-SA&lt;/span&gt;&lt;/a&gt; if otherwise is not noticed. &lt;br/&gt;&lt;br/&gt;This software build with the &lt;a href=&quot;http://qt-project.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Qt&lt;/span&gt;&lt;/a&gt; cross-platform framework, the &lt;a href=&quot;http://www.openssl.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;OpenSSL Toolkit&lt;/span&gt;&lt;/a&gt; and &lt;a href=&quot;http://somerandomdude.com/work/iconic/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;«Iconic»&lt;/span&gt;&lt;/a&gt; icon set by P.J. Onori as third-party licensed products.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -682,12 +682,12 @@ You still will be able to place capturing zones manually.</source>
         <translation type="obsolete">热键</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2558"/>
+        <location filename="../../src/SettingsWindow.ui" line="2830"/>
         <source>User interface</source>
         <translation>用户界面</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2575"/>
+        <location filename="../../src/SettingsWindow.ui" line="2847"/>
         <source>Language:</source>
         <translation>语言:</translation>
     </message>
@@ -696,23 +696,23 @@ You still will be able to place capturing zones manually.</source>
         <translation type="vanished">专家模式</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3140"/>
+        <location filename="../../src/SettingsWindow.ui" line="3412"/>
         <source>Win8 Desktop Duplication</source>
         <translation type="unfinished">Win8桌面复制</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3164"/>
+        <location filename="../../src/SettingsWindow.ui" line="3436"/>
         <source>Enable DX hooking</source>
         <translatorcomment>启用 DX API 拦截</translatorcomment>
         <translation>启用 DX API 拦截</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3196"/>
+        <location filename="../../src/SettingsWindow.ui" line="3468"/>
         <source>also hook D3D9 (high performance impact)</source>
         <translation>还捕获 D3D9（高性能影响）</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3210"/>
+        <location filename="../../src/SettingsWindow.ui" line="3482"/>
         <source>Logging level:</source>
         <translation>日志级别:</translation>
     </message>
@@ -733,13 +733,13 @@ You still will be able to place capturing zones manually.</source>
         <translation type="obsolete">&lt;b&gt;Цвета на свои места расставляли:&lt;/b&gt;&lt;br&gt;Тимур Саттаров, Михаил Шатохин, Андрей Исупов&lt;br&gt;&lt;br&gt;&lt;b&gt;Особые благодарности:&lt;/b&gt;&lt;br&gt;Андрей Бурков, Василий Фомин, Даша Ортон, Николай Кудашев, Алексей Яковлев, Михаил Карпелянский, Филипп Бёрджес, Дирк Хейнеке, Михаил Санников</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="162"/>
-        <location filename="../../src/SettingsWindow.ui" line="2630"/>
+        <location filename="../../src/SettingsWindow.ui" line="174"/>
+        <location filename="../../src/SettingsWindow.ui" line="2902"/>
         <source>Plugins</source>
         <translation>插件</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1481"/>
+        <location filename="../../src/SettingsWindow.ui" line="1753"/>
         <source>Scene luminosity threshold:</source>
         <translation>场景亮度阈值:</translation>
     </message>
@@ -748,22 +748,22 @@ You still will be able to place capturing zones manually.</source>
         <translation type="vanished">&lt;h4&gt;场景亮度阈值&lt;/h4&gt; 它有两种工作方式：您可以调整 &lt;b&gt;最小亮度级别&lt;/b&gt; 在黑暗场景中获得柔和柔和的光线，或者您可以调整 &lt;b&gt;dead-zone&lt;/b&gt; 亮度抓取，它忽略黑色背景上的非黑色小物体，并在黑暗场景中关闭灯光。 这是相互起作用的拯救眼睛与扼杀眼睛的选择。 我们&lt;b&gt;推荐值&lt;/b&gt; 使用最小亮度级别的阈值。</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1661"/>
+        <location filename="../../src/SettingsWindow.ui" line="1933"/>
         <source>&lt;h4&gt;Gamma correction&lt;/h4&gt; It controls the level of saturation. The effect is clearly detectable in a video in screen grabbing mode&lt;br/&gt;Recommended value: 2.00</source>
         <translation>&lt;h4&gt;伽玛校正&lt;/h4&gt; 分析后调整每种颜色的饱和度。 在电影中效果很好。&lt;br/&gt;推荐值: 2.00</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2231"/>
+        <location filename="../../src/SettingsWindow.ui" line="2503"/>
         <source>&lt;h4&gt;Refresh delay&lt;/h4&gt; This setting’s values are inversely proportional to the PWM’s frequency. It&apos;s affects to performance.</source>
         <translation>&lt;h4&gt;刷新延迟&lt;/4&gt; 此设置的值与 PWM 的频率成反比。 它对性能有影响。</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2113"/>
+        <location filename="../../src/SettingsWindow.ui" line="2385"/>
         <source>&lt;h4&gt;Color depth&lt;/h4&gt; Number of colors per channel, one RGB LED uses 3 channels (value in power of 3).</source>
         <translation>&lt;h4&gt;色深&lt;/h4&gt;每个通道的颜色数量，一个 RGB LED 使用 3 个通道（3 的幂值）。</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2148"/>
+        <location filename="../../src/SettingsWindow.ui" line="2420"/>
         <source>&lt;h4&gt;Smoothness&lt;/h4&gt; It defines how many steps will be color changed in</source>
         <translation>&lt;h4&gt;平滑度&lt;/h4&gt; 它定义了多少步将改变颜色</translation>
     </message>
@@ -778,22 +778,22 @@ You still will be able to place capturing zones manually.</source>
         <translation type="obsolete">插件设置</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2795"/>
+        <location filename="../../src/SettingsWindow.ui" line="3067"/>
         <source>Info</source>
         <translation>关于插件</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2903"/>
+        <location filename="../../src/SettingsWindow.ui" line="3175"/>
         <source>Version:</source>
         <translation>版本:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2861"/>
+        <location filename="../../src/SettingsWindow.ui" line="3133"/>
         <source>Name:</source>
         <translation>名字:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2819"/>
+        <location filename="../../src/SettingsWindow.ui" line="3091"/>
         <source>Author:</source>
         <translation>作者:</translation>
     </message>
@@ -802,25 +802,25 @@ You still will be able to place capturing zones manually.</source>
         <translation type="obsolete">调试</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="207"/>
-        <location filename="../../src/SettingsWindow.ui" line="3409"/>
+        <location filename="../../src/SettingsWindow.ui" line="219"/>
+        <location filename="../../src/SettingsWindow.ui" line="3681"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="192"/>
-        <location filename="../../src/SettingsWindow.ui" line="3305"/>
+        <location filename="../../src/SettingsWindow.ui" line="204"/>
+        <location filename="../../src/SettingsWindow.ui" line="3577"/>
         <source>Help</source>
         <translation>帮助</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3066"/>
+        <location filename="../../src/SettingsWindow.ui" line="3338"/>
         <source>Key (authorization disabled if empty):</source>
         <translation>密钥（如果为空，则禁用授权）:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="177"/>
-        <location filename="../../src/SettingsWindow.ui" line="2934"/>
+        <location filename="../../src/SettingsWindow.ui" line="189"/>
+        <location filename="../../src/SettingsWindow.ui" line="3206"/>
         <source>Expert</source>
         <translation>专家</translation>
     </message>
@@ -829,7 +829,7 @@ You still will be able to place capturing zones manually.</source>
         <translation type="vanished">使用 API 将此密钥复制并粘贴到应用程序中，以在服务器上进行授权</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3025"/>
+        <location filename="../../src/SettingsWindow.ui" line="3297"/>
         <source>Generate</source>
         <translation>生成</translation>
     </message>
@@ -838,12 +838,12 @@ You still will be able to place capturing zones manually.</source>
         <translation type="vanished">Захватывать каждые:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="477"/>
+        <location filename="../../src/SettingsWindow.ui" line="489"/>
         <source>Average color on all LEDs</source>
         <translation>所有 LED 的平均颜色</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="315"/>
+        <location filename="../../src/SettingsWindow.ui" line="327"/>
         <source>FPS</source>
         <translation>FPS</translation>
     </message>
@@ -852,17 +852,17 @@ You still will be able to place capturing zones manually.</source>
         <translation type="vanished">护眼设置</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1471"/>
+        <location filename="../../src/SettingsWindow.ui" line="1743"/>
         <source>Dead-zone</source>
         <translation>Dead-zone死区</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1491"/>
+        <location filename="../../src/SettingsWindow.ui" line="1763"/>
         <source>Luminosity threshold is used for:</source>
         <translation>亮度阈值用于:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1501"/>
+        <location filename="../../src/SettingsWindow.ui" line="1773"/>
         <source>Minimum luminosity level</source>
         <translation>最低亮度级别</translation>
     </message>
@@ -871,28 +871,40 @@ You still will be able to place capturing zones manually.</source>
         <translation type="vanished">抓取小工具的外观</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1086"/>
-        <location filename="../../src/SettingsWindow.ui" line="1284"/>
+        <location filename="../../src/SettingsWindow.ui" line="1242"/>
+        <location filename="../../src/SettingsWindow.ui" line="1556"/>
         <source>Change color with rate:</source>
         <translation>随速率改变颜色:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="272"/>
+        <location filename="../../src/SettingsWindow.ui" line="284"/>
         <source>Screen grabbing</source>
         <translation>屏幕抓取</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="277"/>
+        <location filename="../../src/SettingsWindow.ui" line="41"/>
+        <source>&lt;h4&gt;Advanced mode&lt;/h4&gt;
+
+Reveals extra fine-grained controls across the color/effect sections: bloom threshold, contrast pivot, vibrance protection, and per-effect speed/density/direction for the Rainbow/Comet/Theater Chase/Twinkle mood lamp effects.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindow.ui" line="46"/>
+        <source>Advanced mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindow.ui" line="289"/>
         <source>Mood lamp</source>
         <translation>心情灯</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="305"/>
+        <location filename="../../src/SettingsWindow.ui" line="317"/>
         <source>Apply screen color modifications (F.lux, redshift)</source>
         <translation type="unfinished">应用屏幕颜色修改（F.lux、红移）</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="584"/>
+        <location filename="../../src/SettingsWindow.ui" line="596"/>
         <source>&lt;h4&gt;Color encoding gamma&lt;/h4&gt;
 
 This is the gamma used for encoding the color with the desired &lt;b&gt;color temperature&lt;/b&gt;. Setting to &lt;b&gt;1.0&lt;/b&gt; cancels the effect.
@@ -903,7 +915,7 @@ This is the reciprocal of the &lt;b&gt;device gamma&lt;/b&gt; which is the decod
 这是&lt;b&gt;设备伽马&lt;/b&gt; 的倒数。 这是解码伽玛。 如果设置为相同的值，它们会相互取消。</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="634"/>
+        <location filename="../../src/SettingsWindow.ui" line="646"/>
         <source>&lt;h4&gt;Color temperature &amp;amp; gamma&lt;/h4&gt;
 
 Internally emulates the effects of f.lux, redshift, Night Light, Night Shift...</source>
@@ -912,214 +924,244 @@ Internally emulates the effects of f.lux, redshift, Night Light, Night Shift...<
 内部模拟通量、红移、夜灯、夜移...的效果</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="639"/>
+        <location filename="../../src/SettingsWindow.ui" line="651"/>
         <source>Apply color temperature and gamma</source>
         <translation type="unfinished">应用色温和伽玛</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="692"/>
+        <location filename="../../src/SettingsWindow.ui" line="704"/>
         <source>Host smoothing:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="705"/>
+        <location filename="../../src/SettingsWindow.ui" line="717"/>
         <source>&lt;h4&gt;Host smoothing&lt;/h4&gt; Linear transition, on the host, from the last displayed color to the most recently captured one. &lt;b&gt;Off&lt;/b&gt; (0) keeps the current instant cut. For devices without their own smoothing (Adalight, Ardulight, WARLS/DRGB/DNRGB/DDP). Not used by the native Lightpack device, which has its own firmware smoothing (see Device Smooth on its tab).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="742"/>
+        <location filename="../../src/SettingsWindow.ui" line="754"/>
         <source>Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="784"/>
+        <location filename="../../src/SettingsWindow.ui" line="796"/>
         <source>The Lightpack device uses its own firmware Device Smooth instead.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="796"/>
+        <location filename="../../src/SettingsWindow.ui" line="808"/>
         <source>Grab widget adjustment</source>
         <translation type="unfinished">抓取小部件调整</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="802"/>
+        <location filename="../../src/SettingsWindow.ui" line="814"/>
         <source>Hidden</source>
         <translation type="unfinished">隐藏</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="822"/>
+        <location filename="../../src/SettingsWindow.ui" line="834"/>
         <source>All white</source>
         <translation type="unfinished">全白</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="832"/>
+        <location filename="../../src/SettingsWindow.ui" line="844"/>
         <source>Color Adjustments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="838"/>
+        <location filename="../../src/SettingsWindow.ui" line="850"/>
         <source>&lt;h4&gt;Bloom&lt;/h4&gt;
 
 Boosts near-white, low-saturation pixels (lens flares, bright highlights) to make them stand out more.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="843"/>
+        <location filename="../../src/SettingsWindow.ui" line="855"/>
         <source>Bloom (boost near-white highlights)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="891"/>
+        <location filename="../../src/SettingsWindow.ui" line="903"/>
         <source>Saturation:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="930"/>
+        <location filename="../../src/SettingsWindow.ui" line="942"/>
         <source>Contrast:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="969"/>
+        <location filename="../../src/SettingsWindow.ui" line="981"/>
         <source>Vibrance:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1021"/>
+        <location filename="../../src/SettingsWindow.ui" line="1023"/>
+        <source>Bloom threshold:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindow.ui" line="1071"/>
+        <source>Contrast pivot:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindow.ui" line="1119"/>
+        <source>Vibrance protection:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindow.ui" line="1177"/>
         <source>Lamp effects only apply in Liquid color mode - Constant color always uses Static so the output truly stops changing.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1043"/>
+        <location filename="../../src/SettingsWindow.ui" line="1199"/>
         <source>Breathing:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1046"/>
+        <location filename="../../src/SettingsWindow.ui" line="1202"/>
         <source>Same fixed color as Constant, with a smooth brightness pulse.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1188"/>
+        <location filename="../../src/SettingsWindow.ui" line="1308"/>
+        <source>Effect speed:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindow.ui" line="1359"/>
+        <source>Effect density:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindow.ui" line="1410"/>
+        <source>Reverse effect direction</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindow.ui" line="1460"/>
         <source>By default, on macOS this feature is limited to input devices (mic, line-in...), a third party software (such as Soundflower etc) is needed to redirect desktop sound into a virtual input that can be used here. The device has to support Linear PCM, 44100Hz (or 32000, 48000) sample rate and 16 (or 24, 32) bits per channel.</source>
         <translation type="unfinished">默认情况下，在 macOS 上，此功能仅限于输入设备（麦克风、线路输入...），需要第三方软件（例如 Soundflower 等）将桌面声音重定向到可在此处使用的虚拟输入。 该设备必须支持线性 PCM、44100Hz（或 32000、48000）采样率和每通道 16（或 24、32）位。</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1458"/>
+        <location filename="../../src/SettingsWindow.ui" line="1730"/>
         <source>Mode:</source>
         <translation>模式:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1648"/>
+        <location filename="../../src/SettingsWindow.ui" line="1920"/>
         <source>Brightness cap:</source>
         <translation type="unfinished">亮度上限:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1692"/>
+        <location filename="../../src/SettingsWindow.ui" line="1964"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Brightness Cap&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Lowers the brightness limit of LEDs (as opposed to overall brightness). Can be used to limit the power draw and the heat output. Defaults to 100% (no limit).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;亮度上限&lt;/span&gt;&lt;/p&gt;&lt;p&gt;降低 LED 的亮度限制（与整体亮度相反）。 可用于限制功耗和热量输出。 默认为 100%（无限制）。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1786"/>
+        <location filename="../../src/SettingsWindow.ui" line="2058"/>
         <source>Keep lights ON after display sleep</source>
         <translation type="unfinished">显示器休眠后保持灯亮</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1818"/>
+        <location filename="../../src/SettingsWindow.ui" line="2090"/>
         <source>Run configuration wizard</source>
         <translation>运行配置向导</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1825"/>
+        <location filename="../../src/SettingsWindow.ui" line="2097"/>
         <source>Reapplies every enabled LED group&apos;s width/height override, without reopening the wizard.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1828"/>
+        <location filename="../../src/SettingsWindow.ui" line="2100"/>
         <source>Reapply LED groups</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1888"/>
+        <location filename="../../src/SettingsWindow.ui" line="2160"/>
         <source>Keep lights ON after exit</source>
         <translation>退出后保持灯亮</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1895"/>
+        <location filename="../../src/SettingsWindow.ui" line="2167"/>
         <source>Keep lights ON after system suspend</source>
         <translation type="unfinished">系统暂停后保持灯亮</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1902"/>
+        <location filename="../../src/SettingsWindow.ui" line="2174"/>
         <source>These buttons redistribute the LED zones within the same profile to match the chosen content aspect ratio. They do not switch profiles and do not change brightness, gamma, smoothing, device settings, or per-LED color coefficients - only the Position and Size of each zone are recalculated. Warning: any manual position/size adjustments you made to individual zones will be replaced by the canonical layout recomputed from the recipe. Profiles without a recorded layout recipe are unaffected - run the setup wizard first.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1905"/>
+        <location filename="../../src/SettingsWindow.ui" line="2177"/>
         <source>Content aspect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1911"/>
+        <location filename="../../src/SettingsWindow.ui" line="2183"/>
         <source>Fill</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1918"/>
+        <location filename="../../src/SettingsWindow.ui" line="2190"/>
         <source>16:9</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1925"/>
+        <location filename="../../src/SettingsWindow.ui" line="2197"/>
         <source>4:3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2007"/>
+        <location filename="../../src/SettingsWindow.ui" line="2279"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;h4 style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:medium; font-weight:600;&quot;&gt;Dithering&lt;/span&gt;&lt;/h4&gt;&lt;p&gt;Increases color accuracy with some devices, but may introduce flickering.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;h4 style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:medium; font-weight:600;&quot;&gt;抖动&lt;/span&gt;&lt;/h4&gt;&lt;p&gt;在某些设备上提高颜色准确度，但可能会引入闪烁。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2010"/>
+        <location filename="../../src/SettingsWindow.ui" line="2282"/>
         <source>Enable Dithering</source>
         <translation type="unfinished">启用抖动</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2662"/>
+        <location filename="../../src/SettingsWindow.ui" line="2934"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:medium; font-weight:600;&quot;&gt;Plugins&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Here you can manage your plugins which are stored in you profile folder. Check each plugin&apos;s documentation for requirements and settings. Plugins work in priority of order — first plugin in the list has the highest priority.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:medium; font-weight:600;&quot;&gt;插件&lt;/span&gt;&lt;/p&gt;&lt;p&gt;在这里您可以管理存储在您的配置文件文件夹中的插件。 检查每个插件的文档以了解要求和设置。 插件按优先级顺序工作 - 列表中的插件优先级最高。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2965"/>
+        <location filename="../../src/SettingsWindow.ui" line="3237"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enables TCP socket server.&lt;/p&gt;&lt;p&gt;You can connect via &amp;quot;telnet &amp;lt;ip&amp;gt; &amp;lt;port&amp;gt;&amp;quot; for example and manually execute available commands.&lt;/p&gt;&lt;p&gt;Default: %1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;启用 TCP socket服务器。&lt;/p&gt;&lt;p&gt;您可以通过&amp;quot;telnet &amp;lt;ip&amp;gt; &amp;lt;port&amp;gt;&amp;quot; 例如并手动执行可用的命令。&lt;/p&gt;&lt;p&gt;默认值: %1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2983"/>
+        <location filename="../../src/SettingsWindow.ui" line="3255"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When enabled, you can connect ONLY from the same computer through 127.0.0.1/localhost address.&lt;/p&gt;&lt;p&gt;Disable this if you want to connect from anywhere else.&lt;/p&gt;&lt;p&gt;Default: %1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;启用后，您只能通过 127.0.0.1/localhost 地址从同一台计算机连接。&lt;/p&gt;&lt;p&gt;如果您想从其他任何地方连接，请禁用此功能。&lt;/p&gt;&lt;p&gt;默认值: %1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2986"/>
+        <location filename="../../src/SettingsWindow.ui" line="3258"/>
         <source>Listen only on local interface (127.0.0.1)</source>
         <translation>仅在本地接口上侦听 (127.0.0.1)</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3095"/>
+        <location filename="../../src/SettingsWindow.ui" line="3367"/>
         <source>X11 (Full screen)</source>
         <translation type="unfinished">X11（全屏）</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3102"/>
+        <location filename="../../src/SettingsWindow.ui" line="3374"/>
         <source>Mac CG (Full screen)</source>
         <translation type="unfinished">Mac CG（全屏）</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3133"/>
+        <location filename="../../src/SettingsWindow.ui" line="3405"/>
         <source>WinAPI (Full screen)</source>
         <translation type="unfinished">WinAPI（全屏）</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3326"/>
+        <location filename="../../src/SettingsWindow.ui" line="3598"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;
 &lt;head&gt;
@@ -1193,12 +1235,12 @@ Boosts near-white, low-saturation pixels (lens flares, bright highlights) to mak
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3477"/>
+        <location filename="../../src/SettingsWindow.ui" line="3749"/>
         <source>&lt;h2&gt;Prismatik (unofficial fork)&lt;/h2&gt;</source>
         <translation type="unfinished">&lt;h2&gt;Prismatik (非官方分叉)  汉化JOYIST&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3511"/>
+        <location filename="../../src/SettingsWindow.ui" line="3783"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The &lt;span style=&quot; font-weight:600;&quot;&gt;Woodenshark&lt;/span&gt; team created this software with &lt;span style=&quot; font-weight:600;&quot;&gt;Lightpack&lt;/span&gt; — content-appropriate ambient lighting system with USB interface&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This is an unofficial fork of the open source project that is not affiliated with Woodenshark or Lightpack&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The &lt;span style=&quot; font-weight:600;&quot;&gt;Woodenshark&lt;/span&gt; 团队使用&lt;span style=&quot; font-weight:600;&quot;&gt;Lightpack&lt;/span&gt; 创建了这个软件——带有 USB 接口的内容适当的环境照明系统&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;这是一个非官方的开源项目分支，不隶属于Woodshark 或Lightpack&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
 		WEB &lt;a href=&quot;http://av98.byethost10.com/&lt;/a&gt;
@@ -1209,12 +1251,12 @@ Boosts near-white, low-saturation pixels (lens flares, bright highlights) to mak
         <translation type="obsolete">该程序是 按原样 分发的。 它的源代码在 &lt;a href=&quot;http://www.gnu.org/licenses/gpl.html&quot;&gt;GPL 下。 没有任何明示或暗示的保证。 作者不对使用或误用本软件时的数据丢失、损坏、利润损失或任何其他类型的损失负责。 所有内容，例如图标、插件、位图等都在&lt;a href=&quot;http://creativecommons.org/licenses/by-sa/3.0/&quot;&gt;CC-BY-SA&lt;/a&gt; 如果没有注意到。&lt;br /&gt;&lt;br /&gt;此软件使用&lt;a href=&quot;http://qt-project.org/&quot;&gt;Qt&lt;/a&gt; 跨平台框架和 &lt;a href=&quot;http://somerandomdude.com/work/iconic/&quot;&gt;&amp;laquo;Iconic&amp;raquo;&lt;/a&gt; 图标由 P.J. Onori 设置为第三方授权产品。</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3665"/>
+        <location filename="../../src/SettingsWindow.ui" line="3937"/>
         <source>qrc:/text/cast.html</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2000"/>
+        <location filename="../../src/SettingsWindow.ui" line="2272"/>
         <source>Overall brightness:</source>
         <translation>整体亮度:</translation>
     </message>
@@ -1223,38 +1265,38 @@ Boosts near-white, low-saturation pixels (lens flares, bright highlights) to mak
         <translation type="obsolete">设备特定设置</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2367"/>
+        <location filename="../../src/SettingsWindow.ui" line="2639"/>
         <source>Refresh delay (Lightpack 5 and below):</source>
         <translation>PWM 更新周期（Lightpack 5 及更低版本）:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2141"/>
+        <location filename="../../src/SettingsWindow.ui" line="2413"/>
         <source>Color depth (Lightpack 5 and below):</source>
         <translation>色深（Lightpack 5 及以下）:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1770"/>
-        <location filename="../../src/SettingsWindow.ui" line="2041"/>
+        <location filename="../../src/SettingsWindow.ui" line="2042"/>
+        <location filename="../../src/SettingsWindow.ui" line="2313"/>
         <source>%</source>
         <translation>%</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1793"/>
+        <location filename="../../src/SettingsWindow.ui" line="2065"/>
         <source>Keep lights ON after lock computer</source>
         <translation>计算机锁定后保持背光打开</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2668"/>
+        <location filename="../../src/SettingsWindow.ui" line="2940"/>
         <source>All plugins:</source>
         <translation>可用插件:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2745"/>
+        <location filename="../../src/SettingsWindow.ui" line="3017"/>
         <source>Increase priority</source>
         <translation>提高优先级</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2759"/>
+        <location filename="../../src/SettingsWindow.ui" line="3031"/>
         <source>Decrease priority</source>
         <translation>降低优先级</translation>
     </message>
@@ -1263,7 +1305,7 @@ Boosts near-white, low-saturation pixels (lens flares, bright highlights) to mak
         <translation type="vanished">打开python控制台</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2773"/>
+        <location filename="../../src/SettingsWindow.ui" line="3045"/>
         <source>Reload plugins</source>
         <translation>重装插件</translation>
     </message>
@@ -1272,22 +1314,22 @@ Boosts near-white, low-saturation pixels (lens flares, bright highlights) to mak
         <translation type="vanished">本节包含可能影响程序稳定性的实验设置。 最好不要管那些你不知道目的的人。 但是，如果您破坏了某些东西，请删除相应的配置文件，或手动修复它。</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2971"/>
+        <location filename="../../src/SettingsWindow.ui" line="3243"/>
         <source>Enable server (API via sockets)</source>
         <translation>启用服务器（通过API sockets）</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3012"/>
+        <location filename="../../src/SettingsWindow.ui" line="3284"/>
         <source>Port:</source>
         <translation>端口:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3085"/>
+        <location filename="../../src/SettingsWindow.ui" line="3357"/>
         <source>Capture source</source>
         <translation>捕获源</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3262"/>
+        <location filename="../../src/SettingsWindow.ui" line="3534"/>
         <source>Ping Lightpack device every second</source>
         <translation>每秒检查一次Lightpack的可用性</translation>
     </message>
@@ -1328,13 +1370,13 @@ Boosts near-white, low-saturation pixels (lens flares, bright highlights) to mak
         <translation type="obsolete">连接设备出错，日志详细</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="406"/>
-        <location filename="../../src/SettingsWindow.cpp" line="1883"/>
+        <location filename="../../src/SettingsWindow.cpp" line="415"/>
+        <location filename="../../src/SettingsWindow.cpp" line="2010"/>
         <source>System default</source>
         <translation>系统默认</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="450"/>
+        <location filename="../../src/SettingsWindow.cpp" line="459"/>
         <source>FPS: %1</source>
         <translation>FPS: %1</translation>
     </message>
@@ -1358,8 +1400,8 @@ Note: You can disable this message by enabling expert mode.</source>
 注意:您可以通过启用专家模式禁用此消息。</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="813"/>
-        <location filename="../../src/SettingsWindow.cpp" line="850"/>
+        <location filename="../../src/SettingsWindow.cpp" line="822"/>
+        <location filename="../../src/SettingsWindow.cpp" line="859"/>
         <source>Turn lights OFF</source>
         <translation>关闭灯</translation>
     </message>
@@ -1372,7 +1414,7 @@ Note: You can disable this message by enabling expert mode.</source>
         <translation type="obsolete">通过插件锁定的设备</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="842"/>
+        <location filename="../../src/SettingsWindow.cpp" line="851"/>
         <source>Turn lights ON</source>
         <translation>打开灯</translation>
     </message>
@@ -1381,96 +1423,96 @@ Note: You can disable this message by enabling expert mode.</source>
         <translation type="obsolete">应用程序已经运行</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="448"/>
-        <location filename="../../src/SettingsWindow.cpp" line="1758"/>
+        <location filename="../../src/SettingsWindow.cpp" line="457"/>
+        <location filename="../../src/SettingsWindow.cpp" line="1885"/>
         <source>Profile: %1</source>
         <translation>配置: %1</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="398"/>
-        <location filename="../../src/SettingsWindow.cpp" line="1846"/>
+        <location filename="../../src/SettingsWindow.cpp" line="407"/>
+        <location filename="../../src/SettingsWindow.cpp" line="1973"/>
         <source>Prismatik: %1</source>
         <translation type="unfinished">Prismatik: %1</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="140"/>
+        <location filename="../../src/SettingsWindow.cpp" line="141"/>
         <source> The sound visualizer uses the &lt;a href=&quot;http://un4seen.com/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;BASS&lt;/span&gt;&lt;/a&gt; library.</source>
         <translation>声音可视化器使用&lt;a href=&quot;http://un4seen.com/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;BASS&lt;/span&gt;&lt;/a&gt; 库.</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="174"/>
-        <location filename="../../src/SettingsWindow.cpp" line="177"/>
-        <location filename="../../src/SettingsWindow.cpp" line="194"/>
+        <location filename="../../src/SettingsWindow.cpp" line="175"/>
+        <location filename="../../src/SettingsWindow.cpp" line="178"/>
+        <location filename="../../src/SettingsWindow.cpp" line="195"/>
         <source>ON</source>
         <translation type="unfinished">开</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="174"/>
-        <location filename="../../src/SettingsWindow.cpp" line="177"/>
-        <location filename="../../src/SettingsWindow.cpp" line="194"/>
+        <location filename="../../src/SettingsWindow.cpp" line="175"/>
+        <location filename="../../src/SettingsWindow.cpp" line="178"/>
+        <location filename="../../src/SettingsWindow.cpp" line="195"/>
         <source>OFF</source>
         <translation type="unfinished">关</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="184"/>
+        <location filename="../../src/SettingsWindow.cpp" line="185"/>
         <source>none</source>
         <translation type="unfinished">无</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="449"/>
+        <location filename="../../src/SettingsWindow.cpp" line="458"/>
         <source>Device: %1</source>
         <translation>设备: %1</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="560"/>
+        <location filename="../../src/SettingsWindow.cpp" line="569"/>
         <source>Prismatik was updated</source>
         <translation type="unfinished">Prismatik 已更新</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="560"/>
+        <location filename="../../src/SettingsWindow.cpp" line="569"/>
         <source>Successfully updated to version %1.</source>
         <translation type="unfinished">已成功更新到版本 %1.</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="564"/>
+        <location filename="../../src/SettingsWindow.cpp" line="573"/>
         <source>Prismatik automatic update failed</source>
         <translation type="unfinished">Prismatik 自动更新失败</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="565"/>
+        <location filename="../../src/SettingsWindow.cpp" line="574"/>
         <source>There was a problem when trying to automatically update Prismatik to the latest version.
 </source>
         <translation type="unfinished">尝试将 Prismatik 自动更新到最新版本时出现问题。</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="566"/>
+        <location filename="../../src/SettingsWindow.cpp" line="575"/>
         <source>You are still on version %1.
 </source>
         <translation type="unfinished">您仍在使用 %1 版本。</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="567"/>
+        <location filename="../../src/SettingsWindow.cpp" line="576"/>
         <source>Installing updates automatically was disabled.</source>
         <translation type="unfinished">自动安装更新被禁用。</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="655"/>
+        <location filename="../../src/SettingsWindow.cpp" line="664"/>
         <source> (restart the program first)</source>
         <translation type="unfinished">（先重启程序）</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="657"/>
-        <location filename="../../src/SettingsWindow.cpp" line="2084"/>
+        <location filename="../../src/SettingsWindow.cpp" line="666"/>
+        <location filename="../../src/SettingsWindow.cpp" line="2216"/>
         <source> (enable logs first and restart the program)</source>
         <translation type="unfinished">（首先启用日志并重新启动程序）</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="1230"/>
+        <location filename="../../src/SettingsWindow.cpp" line="1241"/>
         <source>&lt;html&gt;&lt;body&gt;&lt;p&gt;Your frame rate reached &lt;b&gt;%1 FPS&lt;/b&gt;, your baud rate of &lt;b&gt;%2&lt;/b&gt; might be too low for the amount of LEDs (%3).&lt;/p&gt;&lt;p&gt;You might experience lag or visual artifacts with your LEDs.&lt;/p&gt;&lt;p&gt;Lower your target framerate to &lt;b&gt;under %4 FPS&lt;/b&gt; or increase your baud rate to &lt;b&gt;above %5&lt;/b&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished">&lt;html&gt;&lt;body&gt;&lt;p&gt;你的帧率达到了&lt;b&gt;%1 FPS&lt;/b&gt;, 你的波特率为&lt;b&gt;%2&lt;/b&gt; 对于 LED 的数量(%3)而言可能太低了。&lt;/p&gt;&lt;p&gt;您的 LED 可能会出现延迟或视觉伪影。&lt;/p&gt;&lt;p&gt;将目标帧速率降低到&lt;b&gt;低于 %4 FPS&lt;/b&gt;或将波特率提高到 &lt;b&gt; %5 以上&lt;/b&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="2206"/>
+        <location filename="../../src/SettingsWindow.cpp" line="2338"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt; &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt; p, li { white-space: pre-wrap; } &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt; &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;software &lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;%1&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; (rev &lt;/span&gt;&lt;a href=&quot;https://github.com/psieg/Lightpack/commit/%2&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;%2&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;, Qt %4), firmware &lt;b&gt;%3&lt;/b&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1519,12 +1561,12 @@ Note: You can disable this message by enabling expert mode.</source>
         <translation type="obsolete">通过 API 锁定的设备</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2088"/>
+        <location filename="../../src/SettingsWindow.ui" line="2360"/>
         <source>Lightpack</source>
         <translation>Lightpack</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="1172"/>
+        <location filename="../../src/SettingsWindow.cpp" line="1183"/>
         <source>update firmware</source>
         <translation>更新固件</translation>
     </message>
@@ -1537,7 +1579,7 @@ Note: You can disable this message by enabling expert mode.</source>
         <translation type="obsolete">单击此消息以打开 lightpack 下载页面</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="1247"/>
+        <location filename="../../src/SettingsWindow.cpp" line="1258"/>
         <source>FPS: </source>
         <translation>FPS: </translation>
     </message>
@@ -1546,7 +1588,7 @@ Note: You can disable this message by enabling expert mode.</source>
         <translation type="obsolete">设备:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="1779"/>
+        <location filename="../../src/SettingsWindow.cpp" line="1906"/>
         <source>New profile</source>
         <translation>新的配置</translation>
     </message>

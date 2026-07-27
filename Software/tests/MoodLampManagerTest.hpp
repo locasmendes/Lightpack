@@ -34,4 +34,7 @@ private Q_SLOTS:
 	void testBreathingModeIgnoresRequestedLamp();
 	void testNewLampEffectsPreserveSizeAndRespectDisabledLeds();
 	void testTheaterChaseExactPattern();
+
+	void testVisibleEffectParamsForLamp();
+	void testEffectSpeedRespectsPersistedSetting();
 };

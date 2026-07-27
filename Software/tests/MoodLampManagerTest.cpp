@@ -446,3 +446,65 @@ void MoodLampManagerTest::testTheaterChaseExactPattern()
 
 	delete lamp;
 }
+
+void MoodLampManagerTest::testVisibleEffectParamsForLamp()
+{
+	// Twinkle has no directionality (sparse random flashes), so it exposes Density instead.
+	QCOMPARE(MoodLampManager::visibleEffectParamsForLamp(twinkleLampId()),
+		QStringList({ QStringLiteral("Speed"), QStringLiteral("Density") }));
+
+	// Rainbow/Comet/Theater Chase all move along the strip, so Direction is meaningful
+	// instead of Density.
+	QCOMPARE(MoodLampManager::visibleEffectParamsForLamp(rainbowLampId()),
+		QStringList({ QStringLiteral("Speed"), QStringLiteral("Direction") }));
+	QCOMPARE(MoodLampManager::visibleEffectParamsForLamp(cometLampId()),
+		QStringList({ QStringLiteral("Speed"), QStringLiteral("Direction") }));
+	QCOMPARE(MoodLampManager::visibleEffectParamsForLamp(theaterChaseLampId()),
+		QStringList({ QStringLiteral("Speed"), QStringLiteral("Direction") }));
+
+	// Effects with no per-tick parameters (or no animation at all) expose nothing.
+	QVERIFY(MoodLampManager::visibleEffectParamsForLamp(staticLampId()).isEmpty());
+	QVERIFY(MoodLampManager::visibleEffectParamsForLamp(fireLampId()).isEmpty());
+	QVERIFY(MoodLampManager::visibleEffectParamsForLamp(breathingLampId()).isEmpty());
+	QVERIFY(MoodLampManager::visibleEffectParamsForLamp(-1).isEmpty());
+}
+
+void MoodLampManagerTest::testEffectSpeedRespectsPersistedSetting()
+{
+	const int lampId = cometLampId();
+	QVERIFY(lampId >= 0);
+	for (int i = 0; i < 6; ++i)
+		Settings::setLedEnabled(i, true);
+
+	// 3x speed: the comet head should be 3 LEDs further along on the second tick than the
+	// default 1.0x speed would put it (see testTheaterChaseExactPattern for the 1.0x case).
+	Settings::setMoodLampEffectSpeed(lampId, 3.0);
+	Settings::setMoodLampEffectDirection(lampId, 1);
+	{
+		MoodLampBase* const lamp = MoodLampBase::createWithID(lampId);
+		QVERIFY(lamp != nullptr);
+		QList<QRgb> colors(6, 0);
+		lamp->shine(QColor(255, 255, 255), colors); // frame 0: head at LED 0
+		lamp->shine(QColor(255, 255, 255), colors); // frame 1: head at LED 0 + 3*1 = 3
+		QVERIFY(colors[3] != 0);
+		delete lamp;
+	}
+
+	// Reversed direction at default speed: the head should move backward (wrapping to the
+	// last LED) instead of forward.
+	Settings::setMoodLampEffectSpeed(lampId, 1.0);
+	Settings::setMoodLampEffectDirection(lampId, -1);
+	{
+		MoodLampBase* const lamp = MoodLampBase::createWithID(lampId);
+		QVERIFY(lamp != nullptr);
+		QList<QRgb> colors(6, 0);
+		lamp->shine(QColor(255, 255, 255), colors); // frame 0: head at LED 0
+		lamp->shine(QColor(255, 255, 255), colors); // frame 1: head at LED 0 - 1, wraps to 5
+		QVERIFY(colors[5] != 0);
+		delete lamp;
+	}
+
+	// Restore neutral defaults so later tests aren't affected by this test's persisted state.
+	Settings::setMoodLampEffectSpeed(lampId, 1.0);
+	Settings::setMoodLampEffectDirection(lampId, 1);
+}
