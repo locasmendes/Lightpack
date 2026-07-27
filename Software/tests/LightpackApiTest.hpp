@@ -77,6 +77,12 @@ private Q_SLOTS:
 	void testCase_ContentAspectSettingsDefaultAndRecipeRoundTrip();
 	void testCase_SetContentAspectRequiresRecipeAndLock();
 
+	void testCase_SetLedGroupAndGetLedGroups();
+	void testCase_SetLedGroupInvalidPayload();
+	void testCase_SetLedGroupWithoutLock();
+	void testCase_RemoveLedGroup();
+	void testCase_ApplyLedGroups();
+
 	void testCase_SetProfile();
 	void testCase_SetStatus();
 

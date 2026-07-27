@@ -1624,6 +1624,16 @@ Internally emulates the effects of f.lux, redshift, Night Light, Night Shift...<
            </widget>
           </item>
           <item>
+           <widget class="QPushButton" name="pushButton_ReapplyLedGroups">
+            <property name="toolTip">
+             <string>Reapplies every enabled LED group's width/height override, without reopening the wizard.</string>
+            </property>
+            <property name="text">
+             <string>Reapply LED groups</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <spacer name="horizontalSpacer_3">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>

@@ -6,6 +6,8 @@
 #include "enums.hpp"
 #include "Plugin.hpp"
 
+namespace SettingsScope { struct LedGroup; }
+
 class LightpackPluginInterface : public QObject
 {
 	Q_OBJECT
@@ -32,6 +34,9 @@ public:
 	bool SetHostSmooth(const QString& sessionKey, int hostSmooth);
 	bool SetProfile(const QString& sessionKey, const QString& profile);
 	bool SetContentAspect(const QString& sessionKey, const QString& preset);
+	bool SetLedGroup(const QString& sessionKey, const SettingsScope::LedGroup& group);
+	bool RemoveLedGroup(const QString& sessionKey, const QString& name);
+	bool ApplyLedGroups(const QString& sessionKey);
 	bool SetDevice(const QString& sessionKey, const QString& device);
 #ifdef SOUNDVIZ_SUPPORT
 	bool SetSoundVizColors(const QString& sessionKey, QColor min, QColor max);

@@ -34,6 +34,7 @@
 
 #include "Settings.hpp"
 #include "ZoneLayoutRuntime.hpp"
+#include "LedGroupRuntime.hpp"
 #include "ColorButton.hpp"
 #include "LedDeviceManager.hpp"
 #include "enums.hpp"
@@ -275,6 +276,7 @@ void SettingsWindow::connectSignalsSlots()
 	connect(ui->checkBox_SendDataOnlyIfColorsChanges, &QCheckBox::toggled, this, &SettingsWindow::onDeviceSendDataOnlyIfColorsChanged_toggled);
 
 	connect(ui->pbRunConfigurationWizard, &QPushButton::clicked, this, &SettingsWindow::onRunConfigurationWizard_clicked);
+	connect(ui->pushButton_ReapplyLedGroups, &QPushButton::clicked, this, &SettingsWindow::onReapplyLedGroups_clicked);
 
 	// Content aspect presets (redistribute zones within the same profile)
 	connect(ui->radioButton_ContentAspectFill, &QRadioButton::toggled, this, &SettingsWindow::onContentAspectFill_toggled);
@@ -2363,6 +2365,13 @@ void SettingsWindow::onRunConfigurationWizard_clicked()
 	QProcess::startDetached(cmdLine, args);
 
 	quit();
+}
+
+void SettingsWindow::onReapplyLedGroups_clicked()
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
+
+	LedGroupRuntime::applyAll();
 }
 
 void SettingsWindow::onContentAspectFill_toggled(bool checked)

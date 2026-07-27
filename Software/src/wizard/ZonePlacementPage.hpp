@@ -41,6 +41,7 @@ class AreaDistributor;
 class GrabWidget;
 class QScreen;
 class MonitorIdForm;
+class QListWidgetItem;
 
 class ZonePlacementPage : public WizardPageUsingDevice
 {
@@ -66,6 +67,12 @@ private slots:
 	void onSideLeds_valueChanged(int arg1);
 	void onMonitor_currentIndexChanged(int idx);
 	void onClearDisplay_clicked();
+	void onGrabWidgetRightClicked(int selfId);
+	void onGroupEdge_currentIndexChanged(int idx);
+	void onResizeAllApply_clicked();
+	void onGroupApply_clicked();
+	void onGroupRemove_clicked();
+	void onGroupListItem_clicked(QListWidgetItem *item);
 
 private:
 	void addGrabArea(QList<GrabWidget*>& list, int id, const QRect &rect, const bool enabled = true);
@@ -77,6 +84,11 @@ private:
 	bool checkZoneIssues();
 	QRect screenRect() const;
 	static QRect marginAdjustedRect(const QRect& screen, double topMarginPct, double sideMarginPct, double bottomMarginPct);
+	static void applyResizeToWidgets(const QList<GrabWidget*>& widgets, int newWidth, int newHeight, Qt::Corner anchor);
+	QList<GrabWidget*> selectedForGroupEdit() const;
+	void clearGroupEditSelection();
+	void updateGroupEdgeControlsVisibility();
+	void refreshGroupList();
 
 	Ui::ZonePlacementPage *_ui;
 	QRect _newAreaRect;

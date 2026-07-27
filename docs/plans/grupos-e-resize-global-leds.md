@@ -31,8 +31,8 @@ Decisões:
 ### Fase 1 — motor de resize em lote
 
 - [x] Extrair a matemática pura de "redimensionar mantendo uma âncora" para uma função testável sem `QWidget` real: `QRect resizedKeepingAnchor(const QRect& current, int newWidth, int newHeight, Qt::Corner anchor)` (usar `newWidth <= 0` ou `newHeight <= 0` como "não mexer neste eixo", espelhando o `-1 = unset` de overrides de grupo). Local sugerido: `Software/src/wizard/BulkResize.hpp/.cpp` (nome análogo a `LayoutRecipeGenerator`).
-- [ ] Função de aplicação que recebe `QList<GrabWidget*>` + a mesma assinatura de resize, chama `resizedKeepingAnchor` por widget, e então `widget->resize(...)`/`widget->move(...)` seguido de `widget->saveSizeAndPosition()` (já existe, `Software/src/GrabWidget.cpp:139-147`) para persistir cada `LED_N/Position`/`LED_N/Size` alterado (será conectado pela Fase 4).
-- [ ] Após aplicar, chamar o mesmo caminho de revalidação que o wizard já usa após qualquer mudança de zonas (`ZonePlacementPage::checkZoneIssues()`, `Software/src/wizard/ZonePlacementPage.cpp:154-213`) — não introduzir uma segunda checagem de sobreposição/gap (será conectado pela Fase 4).
+- [x] Função de aplicação que recebe `QList<GrabWidget*>` + a mesma assinatura de resize, chama `resizedKeepingAnchor` por widget, e então `widget->resize(...)`/`widget->move(...)` seguido de `widget->saveSizeAndPosition()`. Implementada como `ZonePlacementPage::applyResizeToWidgets` (não em `BulkResize.cpp`) — `BulkResize.cpp` é compilado direto no binário de testes (`tests.pro`) para manter `resizedKeepingAnchor` testável sem `QApplication`; adicionar uma função que toca `GrabWidget*` ali quebraria o link do `LightpackTests` (`GrabWidget.cpp` não faz parte do binário de testes). A matemática pura continua 100% coberta por `BulkResizeTest`; o loop que toca os widgets vive em `ZonePlacementPage.cpp`, ao lado de quem já lida com `GrabWidget` diretamente.
+- [x] Após aplicar, chamar o mesmo caminho de revalidação que o wizard já usa após qualquer mudança de zonas (`ZonePlacementPage::checkZoneIssues()`, `Software/src/wizard/ZonePlacementPage.cpp:154-213`) — não introduzir uma segunda checagem de sobreposição/gap. Chamado em `onResizeAllApply_clicked()`/`onGroupApply_clicked()` logo após aplicar.
 
 ### Fase 2 — modelo de grupo e persistência
 
@@ -49,15 +49,15 @@ Decisões:
 
 ### Fase 4 — UI no wizard (`ZonePlacementPage`)
 
-- [ ] Grupo de controles "Resize all" (spinboxes largura/altura + botão aplicar) na página de zonas, chamando a Fase 1 sobre `_screens[_ui->cbMonitorSelect->currentIndex()].grabAreas` inteiro (`Software/src/wizard/ZonePlacementPage.hpp:84-107` para a estrutura `MonitorSettings`/`grabAreas` já existente).
-- [ ] Painel de grupos: criar grupo nomeado + combo de `edge`; conectar `GrabWidget::mouseRightButtonClicked` (hoje não conectado, `Software/src/GrabWidget.hpp:80`) a um slot que alterna a caixa clicada dentro/fora do grupo "em edição no momento", com feedback visual (ex.: borda destacada) enquanto o painel de grupo está aberto.
-- [ ] Botão "Aplicar grupo" chama `LedGroupRuntime::applyGroup` (Fase 3) e depois persiste a definição do grupo via `Settings::setLedGroups` (Fase 2) — não persistir o grupo antes de o usuário confirmar a aplicação.
-- [ ] Listar grupos já existentes do perfil (nome + edge + contagem de membros), com opção de editar/remover; remover um grupo não desfaz o resize já aplicado aos LEDs (mesma filosofia de "reaplicar layout canônico" do plano de presets, item 47).
+- [x] Grupo de controles "Resize all" (spinboxes largura/altura + botão aplicar) na página de zonas, chamando a Fase 1 sobre `_screens[_ui->cbMonitorSelect->currentIndex()].grabAreas` inteiro (`Software/src/wizard/ZonePlacementPage.hpp:84-107` para a estrutura `MonitorSettings`/`grabAreas` já existente). `spinBox_ResizeAllWidth/Height` usam `0`/"—" (specialValueText) como sentinela de "não alterar este eixo", mapeado 1:1 para o `<=0` de `resizedKeepingAnchor`.
+- [x] Painel de grupos: criar grupo nomeado + combo de `edge`; conectar `GrabWidget::mouseRightButtonClicked` (hoje não conectado, `Software/src/GrabWidget.hpp:80`) a um slot que alterna a caixa clicada dentro/fora do grupo "em edição no momento", com feedback visual (borda laranja de 3px, ver `GrabWidget::setSelectedForGroupEdit`) — a seleção é limpa automaticamente quando o widget é reciclado do pool para outro LED (`GrabWidget::setId`) e ao concluir/cancelar um "Criar/aplicar grupo".
+- [x] Botão "Aplicar grupo" chama `LedGroupRuntime::applyGroup` (Fase 3) e depois persiste a definição do grupo via `Settings::setLedGroups` (Fase 2) — não persistir o grupo antes de o usuário confirmar a aplicação. Como `LedGroupRuntime::applyGroup` escreve só em `Settings` (não em `GrabWidget` vivo), `ZonePlacementPage::onGroupApply_clicked` relê `Settings::getLedPosition/getLedSize` de volta nos widgets selecionados logo em seguida, para que `validatePage()` capture a geometria já atualizada em vez da posição anterior (os widgets do wizard não têm a feature `SyncSettings`, então `settingsProfileChanged()`/`saveSizeAndPosition()` não fariam esse papel sozinhos).
+- [x] Listar grupos já existentes do perfil (nome + edge + contagem de membros), com opção de editar/remover; remover um grupo não desfaz o resize já aplicado aos LEDs (mesma filosofia de "reaplicar layout canônico" do plano de presets, item 47). "Editar" reaproveita o próprio fluxo de criar/aplicar: clicar num grupo da lista recarrega nome/edge/tamanho nos campos e re-seleciona os LEDs membros; salvar de novo faz upsert por nome.
 
 ### Fase 5 — UI fora do wizard / API (opcional, escopo posterior)
 
-- [ ] Botão "Reaplicar grupos de LEDs" em `SettingsWindow` chamando `LedGroupRuntime::applyAll()` sem precisar reabrir o wizard.
-- [ ] Comandos de API (`getledgroups`/`setledgroup:...`) só depois de validar a sintaxe de um grupo (nome, edge, lista de membros, width, height) num protocolo de texto simples sem ambiguidade — se a sintaxe ficar complexa demais, adiar para um plano futuro em vez de forçar um formato ruim (mesma cautela já registrada para `getcontentaspect` em `docs/plans/presets-aspect-ratio.md` item 62).
+- [x] Botão "Reaplicar grupos de LEDs" em `SettingsWindow` chamando `LedGroupRuntime::applyAll()` sem precisar reabrir o wizard.
+- [x] Comandos de API (`getledgroups`/`setledgroup:...`/`removeledgroup:`/`applyledgroups`) implementados exatamente conforme o protocolo desenhado em §5.1 (validação de nome/edge/campos numéricos em `parseLedGroupPayload`, `ApiServer.cpp`). Testes de API em `Software/tests/LightpackApiTest.cpp` (`testCase_SetLedGroupAndGetLedGroups`, `testCase_SetLedGroupInvalidPayload`, `testCase_SetLedGroupWithoutLock`, `testCase_RemoveLedGroup`, `testCase_ApplyLedGroups`).
 
 #### 5.1 Design do protocolo de API (decidido, ainda não implementado)
 
@@ -88,6 +88,8 @@ Decisões:
 - [x] Teste de `memberIds` inválidos (fora do intervalo de LEDs do perfil): aplicação não falha, ignora os IDs inválidos, aplica normalmente aos válidos.
 - [x] Teste de grupos sobrepostos: dois grupos habilitados com um LED em comum — o resultado final reflete o último grupo aplicado (ordem de criação), não uma mistura.
 - [x] Teste de regressão: perfil sem nenhum `LedGroup` definido (lista vazia/ausente) é bit-a-bit equivalente ao comportamento atual — nenhuma chamada nova a `setLedPosition`/`setLedSize` ocorre sem grupos configurados.
+- [x] Testes de API (Fase 5): `setledgroup:`/`getledgroups`/`removeledgroup:`/`applyledgroups` cobertos em `LightpackApiTest` — upsert por nome, payload inválido (nome com delimitador reservado, edge desconhecido, campo não-numérico, contagem de campos errada), sem lock, remoção de grupo inexistente, e `applyledgroups` reaplicando um override sobre uma posição/tamanho alterados manualmente entre as duas aplicações.
+- [ ] `ZonePlacementPage`/`GrabWidget` (Fase 4, UI) não são testáveis neste binário de testes sem uma `QApplication`/janelas reais (mesma limitação já documentada em `smoothing-host-side.md` para `GrabManager`) — validado por inspeção de código e build limpo, não por teste automatizado.
 
 ## 4. Critérios de aceite
 
