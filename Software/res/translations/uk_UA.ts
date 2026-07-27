@@ -419,6 +419,12 @@ You can do it either via the gear icon of the each zone OR via the global color 
         <translation>Про програму</translation>
     </message>
     <message>
+        <location filename="../../src/SettingsWindow.ui" line="192"/>
+        <location filename="../../src/SettingsWindow.ui" line="3098"/>
+        <source>Help</source>
+        <translation>Довідка</translation>
+    </message>
+    <message>
         <source>Grab delay:</source>
         <translation type="vanished">Затримка захоплення:</translation>
     </message>

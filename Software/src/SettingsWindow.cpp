@@ -205,7 +205,7 @@ void SettingsWindow::changePage(int page)
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << page;
 
 	ui->tabWidget->setCurrentIndex(page);
-	if (page == 5) {
+	if (ui->tabWidget->currentWidget() == ui->tabAbout) {
 		ui->textBrowser->verticalScrollBar()->setValue(0);
 		using namespace std::chrono_literals;
 		m_smoothScrollTimer.setInterval(100ms);
@@ -1055,12 +1055,22 @@ void SettingsWindow::showAbout()
 	emit requestFirmwareVersion();
 
 	ui->tabWidget->setCurrentWidget(ui->tabAbout);
+	ui->listWidget->setCurrentRow(ui->tabWidget->indexOf(ui->tabAbout));
 	this->show();
 
 	using namespace std::chrono_literals;
 	m_smoothScrollTimer.setInterval(100ms);
 	connect(&m_smoothScrollTimer, &QTimer::timeout, this, &SettingsWindow::scrollThanks);
 	m_smoothScrollTimer.start();
+}
+
+void SettingsWindow::showHelp()
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
+
+	ui->tabWidget->setCurrentWidget(ui->tabHelp);
+	ui->listWidget->setCurrentRow(ui->tabWidget->indexOf(ui->tabHelp));
+	this->show();
 }
 
 void SettingsWindow::scrollThanks()

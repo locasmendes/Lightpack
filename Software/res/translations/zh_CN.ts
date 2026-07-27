@@ -795,6 +795,12 @@ You still will be able to place capturing zones manually.</source>
         <translation>关于</translation>
     </message>
     <message>
+        <location filename="../../src/SettingsWindow.ui" line="192"/>
+        <location filename="../../src/SettingsWindow.ui" line="3098"/>
+        <source>Help</source>
+        <translation>帮助</translation>
+    </message>
+    <message>
         <location filename="../../src/SettingsWindow.ui" line="2845"/>
         <source>Key (authorization disabled if empty):</source>
         <translation>密钥（如果为空，则禁用授权）:</translation>

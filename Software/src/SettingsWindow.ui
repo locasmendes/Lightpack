@@ -189,6 +189,21 @@
       </item>
       <item>
        <property name="text">
+        <string>Help</string>
+       </property>
+       <property name="textAlignment">
+        <set>AlignHCenter|AlignTop</set>
+       </property>
+       <property name="icon">
+        <iconset resource="../res/LightpackResources.qrc">
+         <normaloff>:/icons/help.png</normaloff>:/icons/help.png</iconset>
+       </property>
+       <property name="flags">
+        <set>ItemIsSelectable|ItemIsUserCheckable|ItemIsEnabled</set>
+       </property>
+      </item>
+      <item>
+       <property name="text">
         <string>About</string>
        </property>
        <property name="textAlignment">
@@ -3072,7 +3087,111 @@ Internally emulates the effects of f.lux, redshift, Night Light, Night Shift...<
          </spacer>
         </item>
        </layout>
-      </widget>
+       </widget>
+       <widget class="QWidget" name="tabHelp">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <attribute name="title">
+         <string>Help</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_tabHelp">
+         <property name="leftMargin">
+          <number>12</number>
+         </property>
+         <property name="topMargin">
+          <number>12</number>
+         </property>
+         <property name="rightMargin">
+          <number>12</number>
+         </property>
+         <property name="bottomMargin">
+          <number>12</number>
+         </property>
+         <item>
+          <widget class="QTextBrowser" name="textBrowserHelp">
+           <property name="openExternalLinks">
+            <bool>true</bool>
+           </property>
+           <property name="html">
+            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;style type=&quot;text/css&quot;&gt;
+  body { font-family: sans-serif; line-height: 1.5; margin: 10px; }
+  h2 { color: #1a5fb4; border-bottom: 1px solid #ccc; padding-bottom: 4px; margin-top: 15px; }
+  h3 { color: #26a269; margin-top: 12px; margin-bottom: 5px; }
+  ul { margin-top: 5px; padding-left: 20px; }
+  li { margin-bottom: 6px; }
+  b { color: #111; }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h2&gt;Prismatik User Guide &amp;amp; Feature Manual&lt;/h2&gt;
+&lt;p&gt;Welcome to &lt;b&gt;Prismatik&lt;/b&gt;! This ambient lighting (Ambilight) system syncs your desktop screen, audio, or custom color profiles with physical LED hardware, Lightpack USB devices, Wi-Fi controllers (WLED), or serial devices (Arduino/Adalight).&lt;/p&gt;
+
+&lt;h3&gt;1. Main Operating Modes&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;b&gt;Screen Grabbing (Ambilight):&lt;/b&gt; Captures screen pixels in real-time and computes per-zone LED colors to project behind your display.
+    &lt;ul&gt;
+      &lt;li&gt;&lt;b&gt;Desktop Duplication API (DDupl):&lt;/b&gt; High-performance DirectX capture engine for Windows with low CPU overhead.&lt;/li&gt;
+      &lt;li&gt;&lt;b&gt;WinAPI / GDI:&lt;/b&gt; Standard Windows graphics fallback capture engine.&lt;/li&gt;
+      &lt;li&gt;&lt;b&gt;Direct3D 10/11:&lt;/b&gt; Direct capture hook for full-screen games.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Mood Lamp:&lt;/b&gt; Static colors, gradients, or smooth color cycling effects without screen capture.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Sound Visualizer:&lt;/b&gt; Analyzes system audio output in real time to animate LEDs according to sound frequencies and volume.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;2. Device Setup &amp;amp; LED Configurations&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;b&gt;Device Backend:&lt;/b&gt; Supports Lightpack USB (HID), Serial controllers (Adalight / Arduibox), UDP Wi-Fi devices (WLED / WARLS / DRGB / DNRGB), AlienFX, and Virtual devices.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;LED Zones &amp;amp; Alignment:&lt;/b&gt; Drag, resize, and position LED widgets on screen to match your physical LED strip layout.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Color Depth:&lt;/b&gt; Select bit-depth precision (e.g., 8-bit or 12-bit per channel).&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Refresh Frequency &amp;amp; FPS:&lt;/b&gt; Adjust frame grab slowdown (1 ms to 1000 ms) to balance CPU usage and LED smooth responsiveness.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Device Smoothness:&lt;/b&gt; Temporal interpolation on hardware/firmware for smooth transitions between color frames.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Power Supply Caps &amp;amp; Brightness:&lt;/b&gt; Set global maximum brightness and total current limit (mA) to protect power supplies.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;3. Image &amp;amp; Color Post-Processing&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;b&gt;Color Temperature &amp;amp; Night Light:&lt;/b&gt; Adjust color temperature (Kelvin) or reduce blue light during evening hours.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Gamma Correction:&lt;/b&gt; Fine-tune non-linear color luminosity curve for vibrant LED representation.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Overbrighten:&lt;/b&gt; Boosts lower color intensity levels to maintain vivid backlight illumination even in dark scenes.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Luminosity Threshold &amp;amp; Dead Zone:&lt;/b&gt; Ignore very dark pixels to turn off LEDs during pitch-black movie scenes.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Dithering:&lt;/b&gt; Smooths out color banding in low-brightness gradients.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;4. Profiles &amp;amp; Quick Switching&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;Create separate profiles for Gaming, Movies, Night Mode, or Work.&lt;/li&gt;
+  &lt;li&gt;Switch profiles instantly via the System Tray icon menu or hotkeys.&lt;/li&gt;
+  &lt;li&gt;Save and backup your configuration settings per profile.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;5. Plugins &amp;amp; Extensions&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;Enable third-party plugins to expand Prismatik functionality (e.g., smart home integrations, notifications, specialized game effects).&lt;/li&gt;
+  &lt;li&gt;Manage plugin execution order and priority.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;6. Expert &amp;amp; Advanced Features&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;b&gt;API Server (TCP):&lt;/b&gt; Embedded TCP server allows external programs, home automation systems (Home Assistant), or custom scripts to query status and set LED colors.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;API Authentication &amp;amp; Security:&lt;/b&gt; Option to bind to local interface (127.0.0.1) and require API key authentication.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Logging &amp;amp; Diagnostics:&lt;/b&gt; Adjust debug log level (0-3) and access log files for troubleshooting.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Multi-Monitor Support:&lt;/b&gt; Launch multiple instances of Prismatik using &lt;code&gt;--config-dir &amp;lt;path&amp;gt;&lt;/code&gt; to manage multi-monitor setups independently.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
       <widget class="QWidget" name="tabAbout">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">

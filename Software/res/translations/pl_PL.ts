@@ -406,6 +406,12 @@ You can do it either via the gear icon of the each zone OR via the global color 
         <translation>O programie</translation>
     </message>
     <message>
+        <location filename="../../src/SettingsWindow.ui" line="192"/>
+        <location filename="../../src/SettingsWindow.ui" line="3098"/>
+        <source>Help</source>
+        <translation>Pomoc</translation>
+    </message>
+    <message>
         <location filename="../../src/SettingsWindow.ui" line="257"/>
         <source>Screen grabbing</source>
         <translation>Śledzenie obrazu</translation>

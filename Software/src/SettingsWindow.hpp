@@ -151,6 +151,7 @@ private slots:
 #endif
 #endif
 	void showAbout(); /* using in actions */
+	void showHelp(); /* using in actions */
 
 	void scrollThanks();
 

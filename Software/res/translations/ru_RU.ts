@@ -787,6 +787,12 @@ You still will be able to place capturing zones manually.</source>
         <translation>О программе</translation>
     </message>
     <message>
+        <location filename="../../src/SettingsWindow.ui" line="192"/>
+        <location filename="../../src/SettingsWindow.ui" line="3098"/>
+        <source>Help</source>
+        <translation>Справка</translation>
+    </message>
+    <message>
         <location filename="../../src/SettingsWindow.ui" line="2845"/>
         <source>Key (authorization disabled if empty):</source>
         <translation>Ключ авторизации (авторизация отключена если в поле пусто):</translation>

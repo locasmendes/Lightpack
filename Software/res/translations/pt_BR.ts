@@ -413,6 +413,154 @@ Controle auxiliar 3 em 1 para ajustar o ponto de branco</translation>
         <translation>Sobre</translation>
     </message>
     <message>
+        <location filename="../../src/SettingsWindow.ui" line="192"/>
+        <location filename="../../src/SettingsWindow.ui" line="3098"/>
+        <source>Help</source>
+        <translation>Ajuda</translation>
+    </message>
+    <message>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;style type=&quot;text/css&quot;&gt;
+  body { font-family: sans-serif; line-height: 1.5; margin: 10px; }
+  h2 { color: #1a5fb4; border-bottom: 1px solid #ccc; padding-bottom: 4px; margin-top: 15px; }
+  h3 { color: #26a269; margin-top: 12px; margin-bottom: 5px; }
+  ul { margin-top: 5px; padding-left: 20px; }
+  li { margin-bottom: 6px; }
+  b { color: #111; }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h2&gt;Prismatik User Guide &amp;amp; Feature Manual&lt;/h2&gt;
+&lt;p&gt;Welcome to &lt;b&gt;Prismatik&lt;/b&gt;! This ambient lighting (Ambilight) system syncs your desktop screen, audio, or custom color profiles with physical LED hardware, Lightpack USB devices, Wi-Fi controllers (WLED), or serial devices (Arduino/Adalight).&lt;/p&gt;
+
+&lt;h3&gt;1. Main Operating Modes&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;b&gt;Screen Grabbing (Ambilight):&lt;/b&gt; Captures screen pixels in real-time and computes per-zone LED colors to project behind your display.
+    &lt;ul&gt;
+      &lt;li&gt;&lt;b&gt;Desktop Duplication API (DDupl):&lt;/b&gt; High-performance DirectX capture engine for Windows with low CPU overhead.&lt;/li&gt;
+      &lt;li&gt;&lt;b&gt;WinAPI / GDI:&lt;/b&gt; Standard Windows graphics fallback capture engine.&lt;/li&gt;
+      &lt;li&gt;&lt;b&gt;Direct3D 10/11:&lt;/b&gt; Direct capture hook for full-screen games.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Mood Lamp:&lt;/b&gt; Static colors, gradients, or smooth color cycling effects without screen capture.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Sound Visualizer:&lt;/b&gt; Analyzes system audio output in real time to animate LEDs according to sound frequencies and volume.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;2. Device Setup &amp;amp; LED Configurations&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;b&gt;Device Backend:&lt;/b&gt; Supports Lightpack USB (HID), Serial controllers (Adalight / Arduibox), UDP Wi-Fi devices (WLED / WARLS / DRGB / DNRGB), AlienFX, and Virtual devices.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;LED Zones &amp;amp; Alignment:&lt;/b&gt; Drag, resize, and position LED widgets on screen to match your physical LED strip layout.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Color Depth:&lt;/b&gt; Select bit-depth precision (e.g., 8-bit or 12-bit per channel).&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Refresh Frequency &amp;amp; FPS:&lt;/b&gt; Adjust frame grab slowdown (1 ms to 1000 ms) to balance CPU usage and LED smooth responsiveness.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Device Smoothness:&lt;/b&gt; Temporal interpolation on hardware/firmware for smooth transitions between color frames.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Power Supply Caps &amp;amp; Brightness:&lt;/b&gt; Set global maximum brightness and total current limit (mA) to protect power supplies.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;3. Image &amp;amp; Color Post-Processing&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;b&gt;Color Temperature &amp;amp; Night Light:&lt;/b&gt; Adjust color temperature (Kelvin) or reduce blue light during evening hours.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Gamma Correction:&lt;/b&gt; Fine-tune non-linear color luminosity curve for vibrant LED representation.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Overbrighten:&lt;/b&gt; Boosts lower color intensity levels to maintain vivid backlight illumination even in dark scenes.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Luminosity Threshold &amp;amp; Dead Zone:&lt;/b&gt; Ignore very dark pixels to turn off LEDs during pitch-black movie scenes.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Dithering:&lt;/b&gt; Smooths out color banding in low-brightness gradients.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;4. Profiles &amp;amp; Quick Switching&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;Create separate profiles for Gaming, Movies, Night Mode, or Work.&lt;/li&gt;
+  &lt;li&gt;Switch profiles instantly via the System Tray icon menu or hotkeys.&lt;/li&gt;
+  &lt;li&gt;Save and backup your configuration settings per profile.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;5. Plugins &amp;amp; Extensions&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;Enable third-party plugins to expand Prismatik functionality (e.g., smart home integrations, notifications, specialized game effects).&lt;/li&gt;
+  &lt;li&gt;Manage plugin execution order and priority.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;6. Expert &amp;amp; Advanced Features&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;b&gt;API Server (TCP):&lt;/b&gt; Embedded TCP server allows external programs, home automation systems (Home Assistant), or custom scripts to query status and set LED colors.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;API Authentication &amp;amp; Security:&lt;/b&gt; Option to bind to local interface (127.0.0.1) and require API key authentication.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Logging &amp;amp; Diagnostics:&lt;/b&gt; Adjust debug log level (0-3) and access log files for troubleshooting.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Multi-Monitor Support:&lt;/b&gt; Launch multiple instances of Prismatik using &lt;code&gt;--config-dir &amp;lt;path&amp;gt;&lt;/code&gt; to manage multi-monitor setups independently.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</source>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;style type=&quot;text/css&quot;&gt;
+  body { font-family: sans-serif; line-height: 1.5; margin: 10px; }
+  h2 { color: #1a5fb4; border-bottom: 1px solid #ccc; padding-bottom: 4px; margin-top: 15px; }
+  h3 { color: #26a269; margin-top: 12px; margin-bottom: 5px; }
+  ul { margin-top: 5px; padding-left: 20px; }
+  li { margin-bottom: 6px; }
+  b { color: #111; }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h2&gt;Guia de Ajuda e Manual de Recursos do Prismatik&lt;/h2&gt;
+&lt;p&gt;Bem-vindo ao &lt;b&gt;Prismatik&lt;/b&gt;! Este sistema de iluminação ambiente (Ambilight) sincroniza a tela do seu computador, áudio ou perfis de cores com dispositivos físicos de LED, como o Lightpack USB, controladores Wi-Fi (WLED) e dispositivos seriais (Arduino/Adalight).&lt;/p&gt;
+
+&lt;h3&gt;1. Modos Principais de Operação&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;b&gt;Captura de Tela (Ambilight):&lt;/b&gt; Captura os pixels da tela em tempo real e calcula as cores de cada zona de LED para projetar atrás do monitor.
+    &lt;ul&gt;
+      &lt;li&gt;&lt;b&gt;Desktop Duplication API (DDupl):&lt;/b&gt; Captura de altíssimo desempenho via DirectX no Windows com baixíssimo uso de CPU.&lt;/li&gt;
+      &lt;li&gt;&lt;b&gt;WinAPI / GDI:&lt;/b&gt; Captura de compatibilidade padrão do Windows.&lt;/li&gt;
+      &lt;li&gt;&lt;b&gt;Direct3D 10/11:&lt;/b&gt; Captura direta para jogos em tela cheia.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Lâmpada de Humor (Mood Lamp):&lt;/b&gt; Cores estáticas, gradientes ou efeitos de ciclo suave de cores sem capturar a tela.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Visualizador de Som (Sound Visualizer):&lt;/b&gt; Analisa o áudio do sistema em tempo real e anima os LEDs de acordo com as frequências e o volume da música.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;2. Configuração de Dispositivo e LEDs&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;b&gt;Tipo de Dispositivo:&lt;/b&gt; Suporte a Lightpack USB (HID), controladores Seriais (Adalight / Arduibox), dispositivos UDP Wi-Fi (WLED / WARLS / DRGB / DNRGB), AlienFX e dispositivos Virtuais.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Zonas de LED e Alinhamento:&lt;/b&gt; Arraste, redimensione e posicione as zonas de LED na tela para corresponder exatamente à posição da sua fita de LED física.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Profundidade de Cor:&lt;/b&gt; Selecione a precisão dos canais de cor (ex: 8-bit ou 12-bit por canal).&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Frequência de Atualização e FPS:&lt;/b&gt; Ajuste o atraso de captura (1 ms a 1000 ms) para equilibrar o uso da CPU e a fluidez dos LEDs.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Suavização do Dispositivo:&lt;/b&gt; Interpolação temporal no hardware/firmware para transições suaves entre frames de cor.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Limite de Corrente e Brilho Máximo:&lt;/b&gt; Defina o brilho máximo global e o limite de corrente total (mA) para proteger a fonte de alimentação.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;3. Pós-Processamento de Imagem e Cores&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;b&gt;Temperatura de Cor e Filtro Noturno:&lt;/b&gt; Ajuste a temperatura de cor (Kelvin) ou reduza a luz azul durante a noite.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Correção Gamma:&lt;/b&gt; Ajuste fino da curva de luminosidade não-linear para cores mais fiéis nos LEDs.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Realce de Brilho (Overbrighten):&lt;/b&gt; Eleva a intensidade de tons mais escuros para manter a iluminação de fundo viva mesmo em cenas escuras.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Limite de Luminosidade e Zona Morta:&lt;/b&gt; Ignora pixels excessivamente escuros para desligar os LEDs em cenas totalmente pretas de filmes.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Dithering:&lt;/b&gt; Suaviza a transição de gradientes em baixos níveis de brilho.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;4. Perfis e Alternância Rápida&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;Crie perfis independentes para Jogos, Filmes, Modo Noturno ou Trabalho.&lt;/li&gt;
+  &lt;li&gt;Alterne entre perfis instantaneamente pelo menu do ícone na bandeja do sistema (System Tray) ou via atalhos de teclado.&lt;/li&gt;
+  &lt;li&gt;Salve e faça backup das suas configurações por perfil.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;5. Plugins e Extensões&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;Habilite plugins de terceiros para expandir as funcionalidades do Prismatik (ex: integração com casa inteligente, notificações, efeitos especiais para jogos).&lt;/li&gt;
+  &lt;li&gt;Gerencie a ordem de prioridade de execução dos plugins.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;6. Recursos Avançados / Modo Expert&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;b&gt;Servidor API (TCP):&lt;/b&gt; Servidor TCP embutido que permite que programas externos, automações residenciais (Home Assistant) ou scripts personalizados consultem o status e controlem as cores dos LEDs.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Autenticação e Segurança da API:&lt;/b&gt; Opção para restringir a escuta apenas na interface local (127.0.0.1) e exigir chave de autenticação (API Key).&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Logs e Diagnósticos:&lt;/b&gt; Ajuste o nível de log de depuração (0 a 3) e acesse os arquivos de log para solução de problemas.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Suporte a Múltiplos Monitores:&lt;/b&gt; Execute múltiplas instâncias do Prismatik usando a opção &lt;code&gt;--config-dir &amp;lt;caminho&amp;gt;&lt;/code&gt; para controlar telas adicionais de forma independente.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</translation>
+    </message>
+    <message>
         <location filename="../../src/SettingsWindow.ui" line="257"/>
         <source>Screen grabbing</source>
         <translation>Captura de tela</translation>
