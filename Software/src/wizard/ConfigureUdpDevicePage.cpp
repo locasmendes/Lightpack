@@ -32,6 +32,7 @@
 #include "LedDeviceDrgb.hpp"
 #include "LedDeviceDnrgb.hpp"
 #include "LedDeviceWarls.hpp"
+#include "LedDeviceDdp.hpp"
 #include "Wizard.hpp"
 
 using namespace SettingsScope;
@@ -64,6 +65,11 @@ void ConfigureUdpDevicePage::initializePage()
 		currentAddress = Settings::getWarlsAddress();
 		currentPort = Settings::getWarlsPort();
 		currentTimeout = Settings::getWarlsTimeout();
+	}
+	else if (field(QStringLiteral("isDdp")).toBool()) {
+		currentAddress = Settings::getDdpAddress();
+		currentPort = Settings::getDdpPort();
+		currentTimeout = Settings::getDdpTimeout();
 	}
 
 	if (!currentAddress.isEmpty())
@@ -99,6 +105,9 @@ bool ConfigureUdpDevicePage::validatePage()
 	}
 	else if (field(QStringLiteral("isWarls")).toBool()) {
 		_transSettings->ledDevice.reset(new LedDeviceWarls(address, port, timeout));
+	}
+	else if (field(QStringLiteral("isDdp")).toBool()) {
+		_transSettings->ledDevice.reset(new LedDeviceDdp(address, port, timeout));
 	}
 	else {
 		QMessageBox::information(NULL, QStringLiteral("Wrong device"), QStringLiteral("Try to restart the wizard"));

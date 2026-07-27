@@ -628,6 +628,78 @@ void LightpackApiTest::testCase_SetSmoothInvalid_data()
 	QTest::newRow("4") << "1.";
 }
 
+void LightpackApiTest::testCase_GetHostSmooth()
+{
+	QByteArray cmdResultCheck = ApiServer::CmdResultHostSmooth
+			+ QString::number(Settings::getGrabHostSmoothingDuration()).toUtf8();
+
+	writeCommand(m_socket, ApiServer::CmdGetHostSmooth);
+
+	QByteArray result = readResult(m_socket).trimmed();
+	QVERIFY(m_sockReadLineOk);
+
+	QVERIFY(result == cmdResultCheck);
+}
+
+void LightpackApiTest::testCase_SetHostSmoothValid()
+{
+	QVERIFY(lock(m_socket));
+
+	QFETCH(QString, hostSmoothStr);
+	QFETCH(int, hostSmoothValue);
+
+	QByteArray setHostSmoothCmd = ApiServer::CmdSetHostSmooth;
+	setHostSmoothCmd += hostSmoothStr.toUtf8();
+
+	QVERIFY(writeCommandWithCheck(m_socket, setHostSmoothCmd, ApiServer::CmdSetResult_Ok));
+
+	QVERIFY(Settings::getGrabHostSmoothingDuration() == hostSmoothValue);
+
+	QVERIFY(unlock(m_socket));
+}
+
+void LightpackApiTest::testCase_SetHostSmoothValid_data()
+{
+	QTest::addColumn<QString>("hostSmoothStr");
+	QTest::addColumn<int>("hostSmoothValue");
+
+	QTest::newRow("off") << "0" << 0;
+	QTest::newRow("max") << "400" << 400;
+	QTest::newRow("mid") << "150" << 150;
+}
+
+void LightpackApiTest::testCase_SetHostSmoothInvalid()
+{
+	QVERIFY(lock(m_socket));
+
+	QFETCH(QString, hostSmoothStr);
+
+	QByteArray setHostSmoothCmd = ApiServer::CmdSetHostSmooth;
+	setHostSmoothCmd += hostSmoothStr.toUtf8();
+
+	QVERIFY(writeCommandWithCheck(m_socket, setHostSmoothCmd, ApiServer::CmdSetResult_Error));
+
+	QVERIFY(unlock(m_socket));
+}
+
+void LightpackApiTest::testCase_SetHostSmoothInvalid_data()
+{
+	QTest::addColumn<QString>("hostSmoothStr");
+
+	QTest::newRow("negative") << "-1";
+	QTest::newRow("one over max") << "401";
+	QTest::newRow("decimal") << "10.0";
+	QTest::newRow("not a number") << "abc";
+}
+
+void LightpackApiTest::testCase_SetHostSmoothWithoutLock()
+{
+	QByteArray setHostSmoothCmd = ApiServer::CmdSetHostSmooth;
+	setHostSmoothCmd += "150";
+
+	QVERIFY(writeCommandWithCheck(m_socket, setHostSmoothCmd, ApiServer::CmdSetResult_NotLocked));
+}
+
 void LightpackApiTest::testCase_SetProfile()
 {
 	QVERIFY(lock(m_socket));

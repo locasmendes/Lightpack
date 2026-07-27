@@ -32,9 +32,9 @@
 #include "enums.hpp"
 
 #ifdef ALIEN_FX_SUPPORTED
-#	define SUPPORTED_DEVICES			"Lightpack,AlienFx,Adalight,Ardulight,Virtual,DRGB,DNRGB,WARLS"
+#	define SUPPORTED_DEVICES			"Lightpack,AlienFx,Adalight,Ardulight,Virtual,DRGB,DNRGB,WARLS,DDP"
 #else
-#	define SUPPORTED_DEVICES			"Lightpack,Adalight,Ardulight,Virtual,DRGB,DNRGB,WARLS"
+#	define SUPPORTED_DEVICES			"Lightpack,Adalight,Ardulight,Virtual,DRGB,DNRGB,WARLS,DDP"
 #endif
 
 #define _GRABMODE_ENUM(_name_)		::Grab::GrabberType##_name_
@@ -154,6 +154,13 @@ static const QString AddressDefault = QStringLiteral("127.0.0.1");
 static const QString PortDefault = QStringLiteral("21324");
 static const int TimeoutDefault = 255;
 }
+namespace Ddp
+{
+static const int NumberOfLedsDefault = 10;
+static const QString AddressDefault = QStringLiteral("127.0.0.1");
+static const QString PortDefault = QStringLiteral("4048");
+static const int TimeoutDefault = 255;
+}
 }
 
 // ProfileName.ini
@@ -176,6 +183,9 @@ static const bool IsDx9GrabbingEnabledDefault = false;
 static const int SlowdownMin = 1;
 static const int SlowdownDefault = 50;
 static const int SlowdownMax = 1000;
+static const int HostSmoothingDurationMin = 0;
+static const int HostSmoothingDurationDefault = 150;
+static const int HostSmoothingDurationMax = 400;
 static const int LuminosityThresholdMin = 0;
 static const int LuminosityThresholdDefault = 3;
 static const int LuminosityThresholdMax = 100;

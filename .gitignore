@@ -37,6 +37,9 @@ Software/PythonQt/lib/*
 !Software/PythonQt/lib/.keep_me
 Software/tests/Profiles/*
 Software/tests/main.conf
+Software/Profiles/*
+Software/main.conf
+releases/
 Doxyfile
 stuff/
 *.a

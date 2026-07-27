@@ -241,6 +241,7 @@ void SettingsWindow::connectSignalsSlots()
 	connect(ui->radioButton_LuminosityDeadZone, &QRadioButton::toggled, this, &SettingsWindow::onMinimumLumosity_toggled);
 	connect(ui->checkBox_GrabIsAvgColors, &QCheckBox::toggled, this, &SettingsWindow::onGrabIsAvgColors_toggled);
 	connect(ui->spinBox_GrabOverBrighten, qOverload<int>(&QSpinBox::valueChanged), this, &SettingsWindow::onGrabOverBrighten_valueChanged);
+	connect(ui->spinBox_GrabHostSmoothing, qOverload<int>(&QSpinBox::valueChanged), this, &SettingsWindow::onGrabHostSmoothing_valueChanged);
 	connect(ui->checkBox_GrabApplyBlueLightReduction, &QCheckBox::toggled, this, &SettingsWindow::onGrabApplyBlueLightReduction_toggled);
 	connect(ui->checkBox_GrabApplyColorTemperature, &QCheckBox::toggled, this, &SettingsWindow::onGrabApplyColorTemperature_toggled);
 	connect(ui->horizontalSlider_GrabColorTemperature, &QSlider::valueChanged, this, &SettingsWindow::onGrabColorTemperature_valueChanged);
@@ -461,6 +462,16 @@ void SettingsWindow::updateDeviceTabWidgetsVisibility()
 	}
 	setDeviceTabWidgetsVisibility(DeviceTab::Lightpack);
 
+	// Host smoothing is a host-side feature for devices without their own firmware
+	// smoothing; the Lightpack device keeps using Device Smooth exclusively (see
+	// docs/plans/smoothing-host-side.md). Grey it out rather than hiding it, so a
+	// persisted value stays visible even while it doesn't apply.
+	const bool isHostSmoothingApplicable = (connectedDevice != SupportedDevices::DeviceTypeLightpack);
+	ui->label_GrabHostSmoothing_txt->setEnabled(isHostSmoothingApplicable);
+	ui->horizontalSlider_GrabHostSmoothing->setEnabled(isHostSmoothingApplicable);
+	ui->spinBox_GrabHostSmoothing->setEnabled(isHostSmoothingApplicable);
+	ui->pushButton_grabHostSmoothingHelp->setEnabled(isHostSmoothingApplicable);
+	ui->label_GrabHostSmoothing_lightpackNotice->setVisible(!isHostSmoothingApplicable);
 }
 
 void SettingsWindow::setDeviceTabWidgetsVisibility(DeviceTab::Options options)
@@ -1280,6 +1291,13 @@ void SettingsWindow::onGrabOverBrighten_valueChanged(int value)
 	Settings::setGrabOverBrighten(value);
 }
 
+void SettingsWindow::onGrabHostSmoothing_valueChanged(int value)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << value;
+
+	Settings::setGrabHostSmoothingDuration(value);
+}
+
 void SettingsWindow::onGrabApplyBlueLightReduction_toggled(bool state)
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << state;
@@ -1905,6 +1923,7 @@ void SettingsWindow::updateUiFromSettings()
 	ui->checkBox_GrabIsAvgColors->setChecked							(Settings::isGrabAvgColorsEnabled());
 	ui->spinBox_GrabSlowdown->setValue								(Settings::getGrabSlowdown());
 	ui->spinBox_GrabOverBrighten->setValue							(Settings::getGrabOverBrighten());
+	ui->spinBox_GrabHostSmoothing->setValue							(Settings::getGrabHostSmoothingDuration());
 	ui->checkBox_GrabApplyBlueLightReduction->setChecked						(Settings::isGrabApplyBlueLightReductionEnabled());
 	ui->checkBox_GrabApplyColorTemperature->setChecked              (Settings::isGrabApplyColorTemperatureEnabled());
 	ui->spinBox_GrabColorTemperature->setValue                      (Settings::getGrabColorTemperature());
@@ -2174,6 +2193,11 @@ void SettingsWindow::on_pushButton_grabGammaHelp_clicked()
 void SettingsWindow::on_pushButton_grabOverBrightenHelp_clicked()
 {
 	showHelpOf(ui->horizontalSlider_GrabOverBrighten);
+}
+
+void SettingsWindow::on_pushButton_grabHostSmoothingHelp_clicked()
+{
+	showHelpOf(ui->horizontalSlider_GrabHostSmoothing);
 }
 
 void SettingsWindow::on_pushButton_AllPluginsHelp_clicked()

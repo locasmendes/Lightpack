@@ -156,6 +156,15 @@ static const QString Timeout = QStringLiteral("Warls/Timeout");
 static const QString LedMilliAmps = QStringLiteral("Warls/LedMilliAmps");
 static const QString PowerSupplyAmps = QStringLiteral("Warls/PowerSupplyAmps");
 }
+namespace Ddp
+{
+static const QString NumberOfLeds = QStringLiteral("Ddp/NumberOfLeds");
+static const QString Address = QStringLiteral("Ddp/Address");
+static const QString Port = QStringLiteral("Ddp/Port");
+static const QString Timeout = QStringLiteral("Ddp/Timeout");
+static const QString LedMilliAmps = QStringLiteral("Ddp/LedMilliAmps");
+static const QString PowerSupplyAmps = QStringLiteral("Ddp/PowerSupplyAmps");
+}
 } /*Key*/
 
 namespace Value
@@ -172,6 +181,7 @@ static const QString VirtualDevice = QStringLiteral("Virtual");
 static const QString DrgbDevice = QStringLiteral("DRGB");
 static const QString DnrgbDevice = QStringLiteral("DNRGB");
 static const QString WarlsDevice = QStringLiteral("WARLS");
+static const QString DdpDevice = QStringLiteral("DDP");
 }
 
 } /*Value*/
@@ -191,6 +201,7 @@ static const QString Grabber = QStringLiteral("Grab/Grabber");
 static const QString IsAvgColorsEnabled = QStringLiteral("Grab/IsAvgColorsEnabled");
 static const QString IsSendDataOnlyIfColorsChanges = QStringLiteral("Grab/IsSendDataOnlyIfColorsChanges");
 static const QString Slowdown = QStringLiteral("Grab/Slowdown");
+static const QString HostSmoothingDuration = QStringLiteral("Grab/HostSmoothingDuration");
 static const QString LuminosityThreshold = QStringLiteral("Grab/LuminosityThreshold");
 static const QString OverBrighten = QStringLiteral("Grab/OverBrighten");
 static const QString IsMinimumLuminosityEnabled = QStringLiteral("Grab/IsMinimumLuminosityEnabled");
@@ -349,6 +360,7 @@ bool Settings::Initialize( const QString & applicationDirPath, bool isDebugLevel
 	setNewOptionMain(Main::Key::Drgb::NumberOfLeds,			Main::Drgb::NumberOfLedsDefault);
 	setNewOptionMain(Main::Key::Dnrgb::NumberOfLeds,		Main::Dnrgb::NumberOfLedsDefault);
 	setNewOptionMain(Main::Key::Warls::NumberOfLeds,		Main::Warls::NumberOfLedsDefault);
+	setNewOptionMain(Main::Key::Ddp::NumberOfLeds,			Main::Ddp::NumberOfLedsDefault);
 
 	setNewOptionMain(Main::Key::Adalight::LedMilliAmps,		Main::Device::LedMilliAmpsDefault);
 	setNewOptionMain(Main::Key::Ardulight::LedMilliAmps,	Main::Device::LedMilliAmpsDefault);
@@ -358,6 +370,7 @@ bool Settings::Initialize( const QString & applicationDirPath, bool isDebugLevel
 	setNewOptionMain(Main::Key::Drgb::LedMilliAmps,			Main::Device::LedMilliAmpsDefault);
 	setNewOptionMain(Main::Key::Dnrgb::LedMilliAmps,		Main::Device::LedMilliAmpsDefault);
 	setNewOptionMain(Main::Key::Warls::LedMilliAmps,		Main::Device::LedMilliAmpsDefault);
+	setNewOptionMain(Main::Key::Ddp::LedMilliAmps,			Main::Device::LedMilliAmpsDefault);
 
 	setNewOptionMain(Main::Key::Adalight::PowerSupplyAmps,	Main::Device::PowerSupplyAmpsDefault);
 	setNewOptionMain(Main::Key::Ardulight::PowerSupplyAmps,	Main::Device::PowerSupplyAmpsDefault);
@@ -367,6 +380,7 @@ bool Settings::Initialize( const QString & applicationDirPath, bool isDebugLevel
 	setNewOptionMain(Main::Key::Drgb::PowerSupplyAmps,		Main::Device::PowerSupplyAmpsDefault);
 	setNewOptionMain(Main::Key::Dnrgb::PowerSupplyAmps,		Main::Device::PowerSupplyAmpsDefault);
 	setNewOptionMain(Main::Key::Warls::PowerSupplyAmps,		Main::Device::PowerSupplyAmpsDefault);
+	setNewOptionMain(Main::Key::Ddp::PowerSupplyAmps,		Main::Device::PowerSupplyAmpsDefault);
 
 	setNewOptionMain(Main::Key::Drgb::Address,              Main::Drgb::AddressDefault);
 	setNewOptionMain(Main::Key::Drgb::Port,                 Main::Drgb::PortDefault);
@@ -379,6 +393,10 @@ bool Settings::Initialize( const QString & applicationDirPath, bool isDebugLevel
 	setNewOptionMain(Main::Key::Warls::Address,             Main::Warls::AddressDefault);
 	setNewOptionMain(Main::Key::Warls::Port,                Main::Warls::PortDefault);
 	setNewOptionMain(Main::Key::Warls::Timeout,             Main::Warls::TimeoutDefault);
+
+	setNewOptionMain(Main::Key::Ddp::Address,               Main::Ddp::AddressDefault);
+	setNewOptionMain(Main::Key::Ddp::Port,                  Main::Ddp::PortDefault);
+	setNewOptionMain(Main::Key::Ddp::Timeout,               Main::Ddp::TimeoutDefault);
 
 	setNewOptionMain(Main::Key::CheckForUpdates,			Main::CheckForUpdates);
 	setNewOptionMain(Main::Key::InstallUpdates,				Main::InstallUpdates);
@@ -1015,6 +1033,42 @@ void Settings::setWarlsTimeout(const int timeout)
 	emit m_this->warlsTimeoutChanged(timeout);
 }
 
+QString Settings::getDdpAddress()
+{
+	return valueMain(Main::Key::Ddp::Address).toString();
+}
+
+void Settings::setDdpAddress(const QString& address)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
+	setValueMain(Main::Key::Ddp::Address, address);
+	emit m_this->ddpAddressChanged(address);
+}
+
+QString Settings::getDdpPort()
+{
+	return valueMain(Main::Key::Ddp::Port).toString();
+}
+
+void Settings::setDdpPort(const QString& port)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
+	setValueMain(Main::Key::Ddp::Port, port);
+	emit m_this->ddpPortChanged(port);
+}
+
+int Settings::getDdpTimeout()
+{
+	return valueMain(Main::Key::Ddp::Timeout).toInt();
+}
+
+void Settings::setDdpTimeout(const int timeout)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
+	setValueMain(Main::Key::Ddp::Timeout, timeout);
+	emit m_this->ddpTimeoutChanged(timeout);
+}
+
 QStringList Settings::getSupportedSerialPortBaudRates()
 {
 	QStringList list;
@@ -1097,6 +1151,10 @@ void Settings::setNumberOfLeds(SupportedDevices::DeviceType device, int numberOf
 			case DeviceTypeWarls:
 			emit m_this->warlsNumberOfLedsChanged(numberOfLeds);
 			break;
+
+			case DeviceTypeDdp:
+			emit m_this->ddpNumberOfLedsChanged(numberOfLeds);
+			break;
 		default:
 			qCritical() << Q_FUNC_INFO << "Device type not recognized, device ==" << device << "numberOfLeds ==" << numberOfLeds;
 		}
@@ -1163,6 +1221,10 @@ void Settings::setDeviceLedMilliAmps(const SupportedDevices::DeviceType device, 
 
 			case DeviceTypeWarls:
 			emit m_this->warlsLedMilliAmpsChanged(mAmps);
+			break;
+
+			case DeviceTypeDdp:
+			emit m_this->ddpLedMilliAmpsChanged(mAmps);
 			break;
 		default:
 			qCritical() << Q_FUNC_INFO << "Device type not recognized, device ==" << device << "LedMilliAmps ==" << mAmps;
@@ -1232,6 +1294,10 @@ void Settings::setDevicePowerSupplyAmps(const SupportedDevices::DeviceType devic
 			case DeviceTypeWarls:
 			emit m_this->warlsPowerSupplyAmpsChanged(amps);
 			break;
+
+			case DeviceTypeDdp:
+			emit m_this->ddpPowerSupplyAmpsChanged(amps);
+			break;
 		default:
 			qCritical() << Q_FUNC_INFO << "Device type not recognized, device ==" << device << "PowerSupplyAmps ==" << amps;
 		}
@@ -1299,6 +1365,20 @@ void Settings::setGrabSlowdown(int value)
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
 	setValue(Profile::Key::Grab::Slowdown, getValidGrabSlowdown(value));
 	emit m_this->grabSlowdownChanged(value);
+}
+
+int Settings::getGrabHostSmoothingDuration()
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
+	return getValidGrabHostSmoothingDuration(value(Profile::Key::Grab::HostSmoothingDuration).toInt());
+}
+
+void Settings::setGrabHostSmoothingDuration(int value)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
+	const int validValue = getValidGrabHostSmoothingDuration(value);
+	setValue(Profile::Key::Grab::HostSmoothingDuration, validValue);
+	emit m_this->grabHostSmoothingDurationChanged(validValue);
 }
 
 bool Settings::isBacklightEnabled()
@@ -1982,6 +2062,15 @@ int Settings::getValidGrabSlowdown(int value)
 	return value;
 }
 
+int Settings::getValidGrabHostSmoothingDuration(int value)
+{
+	if (value < Profile::Grab::HostSmoothingDurationMin)
+		value = Profile::Grab::HostSmoothingDurationMin;
+	else if (value > Profile::Grab::HostSmoothingDurationMax)
+		value = Profile::Grab::HostSmoothingDurationMax;
+	return value;
+}
+
 int Settings::getValidMoodLampSpeed(int value)
 {
 	if (value < Profile::MoodLamp::SpeedMin)
@@ -2105,6 +2194,7 @@ void Settings::initCurrentProfile(bool isResetDefault)
 	setNewOption(Profile::Key::Grab::OverBrighten,					Profile::Grab::OverBrightenDefault, isResetDefault);
 	setNewOption(Profile::Key::Grab::IsSendDataOnlyIfColorsChanges, Profile::Grab::IsSendDataOnlyIfColorsChangesDefault, isResetDefault);
 	setNewOption(Profile::Key::Grab::Slowdown,						Profile::Grab::SlowdownDefault, isResetDefault);
+	setNewOption(Profile::Key::Grab::HostSmoothingDuration,			Profile::Grab::HostSmoothingDurationDefault, isResetDefault);
 	setNewOption(Profile::Key::Grab::LuminosityThreshold,			Profile::Grab::LuminosityThresholdDefault, isResetDefault);
 	setNewOption(Profile::Key::Grab::IsMinimumLuminosityEnabled,	Profile::Grab::IsMinimumLuminosityEnabledDefault, isResetDefault);
 	setNewOption(Profile::Key::Grab::IsDx1011GrabberEnabled,		Profile::Grab::IsDx1011GrabberEnabledDefault, isResetDefault);
@@ -2266,6 +2356,7 @@ void Settings::initDevicesMap()
 	m_devicesTypeToNameMap[SupportedDevices::DeviceTypeDrgb] = Main::Value::ConnectedDevice::DrgbDevice;
 	m_devicesTypeToNameMap[SupportedDevices::DeviceTypeDnrgb] = Main::Value::ConnectedDevice::DnrgbDevice;
 	m_devicesTypeToNameMap[SupportedDevices::DeviceTypeWarls] = Main::Value::ConnectedDevice::WarlsDevice;
+	m_devicesTypeToNameMap[SupportedDevices::DeviceTypeDdp] = Main::Value::ConnectedDevice::DdpDevice;
 
 	m_devicesTypeToKeyNumberOfLedsMap[SupportedDevices::DeviceTypeAdalight] = Main::Key::Adalight::NumberOfLeds;
 	m_devicesTypeToKeyNumberOfLedsMap[SupportedDevices::DeviceTypeArdulight] = Main::Key::Ardulight::NumberOfLeds;
@@ -2274,6 +2365,7 @@ void Settings::initDevicesMap()
 	m_devicesTypeToKeyNumberOfLedsMap[SupportedDevices::DeviceTypeDrgb] = Main::Key::Drgb::NumberOfLeds;
 	m_devicesTypeToKeyNumberOfLedsMap[SupportedDevices::DeviceTypeDnrgb] = Main::Key::Dnrgb::NumberOfLeds;
 	m_devicesTypeToKeyNumberOfLedsMap[SupportedDevices::DeviceTypeWarls] = Main::Key::Warls::NumberOfLeds;
+	m_devicesTypeToKeyNumberOfLedsMap[SupportedDevices::DeviceTypeDdp] = Main::Key::Ddp::NumberOfLeds;
 
 	m_devicesTypeToKeyLedMilliAmpsMap[SupportedDevices::DeviceTypeAdalight] = Main::Key::Adalight::LedMilliAmps;
 	m_devicesTypeToKeyLedMilliAmpsMap[SupportedDevices::DeviceTypeArdulight] = Main::Key::Ardulight::LedMilliAmps;
@@ -2282,6 +2374,7 @@ void Settings::initDevicesMap()
 	m_devicesTypeToKeyLedMilliAmpsMap[SupportedDevices::DeviceTypeDrgb] = Main::Key::Drgb::LedMilliAmps;
 	m_devicesTypeToKeyLedMilliAmpsMap[SupportedDevices::DeviceTypeDnrgb] = Main::Key::Dnrgb::LedMilliAmps;
 	m_devicesTypeToKeyLedMilliAmpsMap[SupportedDevices::DeviceTypeWarls] = Main::Key::Warls::LedMilliAmps;
+	m_devicesTypeToKeyLedMilliAmpsMap[SupportedDevices::DeviceTypeDdp] = Main::Key::Ddp::LedMilliAmps;
 
 	m_devicesTypeToKeyPowerSupplyAmpsMap[SupportedDevices::DeviceTypeAdalight] = Main::Key::Adalight::PowerSupplyAmps;
 	m_devicesTypeToKeyPowerSupplyAmpsMap[SupportedDevices::DeviceTypeArdulight] = Main::Key::Ardulight::PowerSupplyAmps;
@@ -2290,6 +2383,7 @@ void Settings::initDevicesMap()
 	m_devicesTypeToKeyPowerSupplyAmpsMap[SupportedDevices::DeviceTypeDrgb] = Main::Key::Drgb::PowerSupplyAmps;
 	m_devicesTypeToKeyPowerSupplyAmpsMap[SupportedDevices::DeviceTypeDnrgb] = Main::Key::Dnrgb::PowerSupplyAmps;
 	m_devicesTypeToKeyPowerSupplyAmpsMap[SupportedDevices::DeviceTypeWarls] = Main::Key::Warls::PowerSupplyAmps;
+	m_devicesTypeToKeyPowerSupplyAmpsMap[SupportedDevices::DeviceTypeDdp] = Main::Key::Ddp::PowerSupplyAmps;
 #ifdef ALIEN_FX_SUPPORTED
 	m_devicesTypeToNameMap[SupportedDevices::DeviceTypeAlienFx] = Main::Value::ConnectedDevice::AlienFxDevice;
 	m_devicesTypeToKeyNumberOfLedsMap[SupportedDevices::DeviceTypeAlienFx] = Main::Key::AlienFx::NumberOfLeds;

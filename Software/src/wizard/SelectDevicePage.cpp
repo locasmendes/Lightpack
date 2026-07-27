@@ -65,6 +65,9 @@ void SelectDevicePage::initializePage()
     registerField(QStringLiteral("isWarls"), ui->rbWarls);
 	if (deviceType == SupportedDevices::DeviceTypeWarls)
 		ui->rbWarls->setChecked(true);
+    registerField(QStringLiteral("isDdp"), ui->rbDdp);
+	if (deviceType == SupportedDevices::DeviceTypeDdp)
+		ui->rbDdp->setChecked(true);
 }
 
 void SelectDevicePage::cleanupPage()
@@ -75,6 +78,7 @@ void SelectDevicePage::cleanupPage()
     setField(QStringLiteral("isDrgb"), false);
     setField(QStringLiteral("isDnrgb"), false);
     setField(QStringLiteral("isWarls"), false);
+    setField(QStringLiteral("isDdp"), false);
 }
 
 bool SelectDevicePage::validatePage()
@@ -89,7 +93,7 @@ int SelectDevicePage::nextId() const
 {
 	if (ui->rbVirtual->isChecked())
 		return Page_ChooseProfile;
-    else if (ui->rbDrgb->isChecked() || ui->rbDnrgb->isChecked() || ui->rbWarls->isChecked())
+    else if (ui->rbDrgb->isChecked() || ui->rbDnrgb->isChecked() || ui->rbWarls->isChecked() || ui->rbDdp->isChecked())
         return Page_ConfigureUdpDevice;
 	else
 		return Page_ConfigureDevice;

@@ -166,6 +166,7 @@ private slots:
 	void onGrabSlowdown_valueChanged(int value);
 	void onGrabIsAvgColors_toggled(bool state);
 	void onGrabOverBrighten_valueChanged(int value);
+	void onGrabHostSmoothing_valueChanged(int value);
 	void onGrabApplyBlueLightReduction_toggled(bool state);
 	void onGrabApplyColorTemperature_toggled(bool state);
 	void onGrabColorTemperature_valueChanged(int value);
@@ -224,6 +225,7 @@ private slots:
 	void on_pushButton_grabGammaHelp_clicked();
 
 	void on_pushButton_grabOverBrightenHelp_clicked();
+	void on_pushButton_grabHostSmoothingHelp_clicked();
 
 	void on_pushButton_AllPluginsHelp_clicked();
 

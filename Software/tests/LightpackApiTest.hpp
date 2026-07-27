@@ -67,6 +67,13 @@ private Q_SLOTS:
 	void testCase_SetSmoothInvalid();
 	void testCase_SetSmoothInvalid_data();
 
+	void testCase_GetHostSmooth();
+	void testCase_SetHostSmoothValid();
+	void testCase_SetHostSmoothValid_data();
+	void testCase_SetHostSmoothInvalid();
+	void testCase_SetHostSmoothInvalid_data();
+	void testCase_SetHostSmoothWithoutLock();
+
 	void testCase_SetProfile();
 	void testCase_SetStatus();
 

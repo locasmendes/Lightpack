@@ -39,6 +39,7 @@
 #include "LedDeviceDrgb.hpp"
 #include "LedDeviceDnrgb.hpp"
 #include "LedDeviceWarls.hpp"
+#include "LedDeviceDdp.hpp"
 #include "Settings.hpp"
 #include "SystemSession.hpp"
 
@@ -513,6 +514,11 @@ AbstractLedDevice * LedDeviceManager::createLedDevice(SupportedDevices::DeviceTy
 	case SupportedDevices::DeviceTypeWarls:
 		DEBUG_LOW_LEVEL << Q_FUNC_INFO << "SupportedDevices::WarlsDevice";
 		device = (AbstractLedDevice*)new LedDeviceWarls(Settings::getWarlsAddress(), Settings::getWarlsPort(), Settings::getWarlsTimeout());
+		break;
+
+	case SupportedDevices::DeviceTypeDdp:
+		DEBUG_LOW_LEVEL << Q_FUNC_INFO << "SupportedDevices::DdpDevice";
+		device = (AbstractLedDevice*)new LedDeviceDdp(Settings::getDdpAddress(), Settings::getDdpPort(), Settings::getDdpTimeout());
 		break;
 
 	case SupportedDevices::DeviceTypeVirtual:

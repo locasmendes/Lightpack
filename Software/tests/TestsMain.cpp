@@ -7,6 +7,8 @@
 #include "HooksTest.h"
 #endif
 #include "LightpackCommandLineParserTest.hpp"
+#include "LedDeviceDdpTest.hpp"
+#include "HostColorSmoothingTest.hpp"
 #include "debug.h"
 
 #include <iostream>
@@ -25,14 +27,19 @@ int main(int argc, char *argv[])
 
 	tests.append(new GrabCalculationTest());
 
-#ifdef Q_OS_WIN
-	tests.append(new HooksTest());
-#endif
-
 	tests.append(new LightpackMathTest());
 	tests.append(new LightpackApiTest());
 	tests.append(new AppVersionTest());
 	tests.append(new LightpackCommandLineParserTest());
+	tests.append(new LedDeviceDdpTest());
+	tests.append(new HostColorSmoothingTest());
+
+	// HooksTest does low-level function hooking that is sensitive to the exact
+	// compiler/toolset used to build it; keep it last so a crash there does not
+	// prevent the other suites from running and reporting their results.
+#ifdef Q_OS_WIN
+	tests.append(new HooksTest());
+#endif
 
 	for(int i=0; i < tests.size(); i++) {
 		if (QTest::qExec(tests[i], argc, argv)) {

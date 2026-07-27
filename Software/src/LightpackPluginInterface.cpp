@@ -400,6 +400,22 @@ bool LightpackPluginInterface::SetSmooth(const QString& sessionKey, int smooth)
 			return false;
 }
 
+bool LightpackPluginInterface::SetHostSmooth(const QString& sessionKey, int hostSmooth)
+{
+	if (lockSessionKeys.isEmpty()) return false;
+	if (lockSessionKeys[0]!=sessionKey) return false;
+		if (hostSmooth >= Profile::Grab::HostSmoothingDurationMin && hostSmooth <= Profile::Grab::HostSmoothingDurationMax)
+		{
+			// Settings is the single source of truth for this value (no device
+			// round-trip to await), and its signal already reaches GrabManager
+			// (see LightpackApplication::startLedDeviceManager()), so persisting
+			// here is both the API contract and the live-apply mechanism.
+			Settings::setGrabHostSmoothingDuration(hostSmooth);
+			return true;
+		} else
+			return false;
+}
+
 bool LightpackPluginInterface::SetProfile(const QString& sessionKey, const QString& profile)
 {
 	if (lockSessionKeys.isEmpty()) return false;
@@ -696,6 +712,11 @@ int LightpackPluginInterface::GetBrightness()
 int LightpackPluginInterface::GetSmooth()
 {
 	return m_smooth;
+}
+
+int LightpackPluginInterface::GetHostSmooth()
+{
+	return Settings::getGrabHostSmoothingDuration();
 }
 
 #ifdef SOUNDVIZ_SUPPORT

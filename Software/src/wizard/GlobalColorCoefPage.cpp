@@ -151,6 +151,12 @@ bool GlobalColorCoefPage::validatePage()
 		Settings::setWarlsPort(field(QStringLiteral("port")).toString());
 		Settings::setWarlsTimeout(field(QStringLiteral("timeout")).toInt());
 	}
+	else if (deviceName.compare(QStringLiteral("ddp"), Qt::CaseInsensitive) == 0) {
+		devType = SupportedDevices::DeviceTypeDdp;
+		Settings::setDdpAddress(field(QStringLiteral("address")).toString());
+		Settings::setDdpPort(field(QStringLiteral("port")).toString());
+		Settings::setDdpTimeout(field(QStringLiteral("timeout")).toInt());
+	}
 	else {
 		devType = SupportedDevices::DeviceTypeVirtual;
 	}

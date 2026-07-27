@@ -90,6 +90,7 @@ enum DeviceType {
 	DeviceTypeDrgb,
 	DeviceTypeDnrgb,
 	DeviceTypeWarls,
+	DeviceTypeDdp,
 
 	DeviceTypesCount,
 	DefaultDeviceType = DeviceTypeLightpack
@@ -108,6 +109,7 @@ enum Devices
 	Drgb        = 490,
 	Dnrgb       = 1500,
 	Warls       = 255,
+	Ddp         = 1500, // segmented in 480-LED/1440-byte datagrams, see LedDeviceDdp
 
 	Lightpack4	= 8,
 	Lightpack5	= 10,

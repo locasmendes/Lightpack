@@ -53,6 +53,8 @@ void ConfigureDevicePowerPage::initializePage()
 		device = SupportedDevices::DeviceTypeDnrgb;
 	else if (field(QStringLiteral("isWarls")).toBool())
 		device = SupportedDevices::DeviceTypeWarls;
+	else if (field(QStringLiteral("isDdp")).toBool())
+		device = SupportedDevices::DeviceTypeDdp;
 	else if (field(QStringLiteral("isLightpack")).toBool())
 		device = SupportedDevices::DeviceTypeLightpack;
 	else if (field(QStringLiteral("isAdalight")).toBool())
@@ -78,6 +80,8 @@ bool ConfigureDevicePowerPage::validatePage()
 		device = SupportedDevices::DeviceTypeDnrgb;
 	else if (field(QStringLiteral("isWarls")).toBool())
 		device = SupportedDevices::DeviceTypeWarls;
+	else if (field(QStringLiteral("isDdp")).toBool())
+		device = SupportedDevices::DeviceTypeDdp;
 	else if (field(QStringLiteral("isLightpack")).toBool())
 		device = SupportedDevices::DeviceTypeLightpack;
 	else if (field(QStringLiteral("isAdalight")).toBool())

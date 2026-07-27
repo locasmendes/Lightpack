@@ -148,6 +148,12 @@ public:
 	static void setWarlsPort(const QString& port);
 	static int getWarlsTimeout();
 	static void setWarlsTimeout(const int timeout);
+	static QString getDdpAddress();
+	static void setDdpAddress(const QString& address);
+	static QString getDdpPort();
+	static void setDdpPort(const QString& port);
+	static int getDdpTimeout();
+	static void setDdpTimeout(const int timeout);
 	static int getDeviceLedMilliAmps(const SupportedDevices::DeviceType device);
 	static void setDeviceLedMilliAmps(const SupportedDevices::DeviceType device, const int mamps);
 	static double getDevicePowerSupplyAmps(const SupportedDevices::DeviceType device);
@@ -164,6 +170,8 @@ public:
 	// Profile
 	static int getGrabSlowdown();
 	static void setGrabSlowdown(int value);
+	static int getGrabHostSmoothingDuration();
+	static void setGrabHostSmoothingDuration(int value);
 	static bool isBacklightEnabled();
 	static void setIsBacklightEnabled(bool isEnabled);
 	static bool isGrabAvgColorsEnabled();
@@ -270,6 +278,7 @@ private:
 	static int getValidDeviceColorDepth(int value);
 	static double getValidDeviceGamma(double value);
 	static int getValidGrabSlowdown(int value);
+	static int getValidGrabHostSmoothingDuration(int value);
 	static int getValidMoodLampSpeed(int value);
 	static int getValidSoundVisualizerLiquidSpeed(int value);
 	static int getValidLuminosityThreshold(int value);
@@ -336,6 +345,11 @@ signals:
 	void warlsTimeoutChanged(const int timeout);
 	void warlsLedMilliAmpsChanged(const int mAmps);
 	void warlsPowerSupplyAmpsChanged(const double amps);
+	void ddpAddressChanged(const QString& address);
+	void ddpPortChanged(const QString& port);
+	void ddpTimeoutChanged(const int timeout);
+	void ddpLedMilliAmpsChanged(const int mAmps);
+	void ddpPowerSupplyAmpsChanged(const double amps);
 	void lightpackNumberOfLedsChanged(int numberOfLeds);
 	void lightpackLedMilliAmpsChanged(const int mAmps);
 	void lightpackPowerSupplyAmpsChanged(const double amps);
@@ -344,10 +358,12 @@ signals:
 	void drgbNumberOfLedsChanged(int numberOfLeds);
 	void dnrgbNumberOfLedsChanged(int numberOfLeds);
 	void warlsNumberOfLedsChanged(int numberOfLeds);
+	void ddpNumberOfLedsChanged(int numberOfLeds);
 	void virtualNumberOfLedsChanged(int numberOfLeds);
 	void virtualLedMilliAmpsChanged(const int mAmps);
 	void virtualPowerSupplyAmpsChanged(const double amps);
 	void grabSlowdownChanged(int value);
+	void grabHostSmoothingDurationChanged(int value);
 	void backlightEnabledChanged(bool isEnabled);
 	void grabAvgColorsEnabledChanged(bool isEnabled);
 	void grabOverBrightenChanged(int value);

@@ -29,6 +29,7 @@ public:
 	bool SetBrightness(const QString& sessionKey, int brightness);
 	bool SetCountLeds(const QString& sessionKey, int countLeds);
 	bool SetSmooth(const QString& sessionKey, int smooth);
+	bool SetHostSmooth(const QString& sessionKey, int hostSmooth);
 	bool SetProfile(const QString& sessionKey, const QString& profile);
 	bool SetDevice(const QString& sessionKey, const QString& device);
 #ifdef SOUNDVIZ_SUPPORT
@@ -57,6 +58,12 @@ public:
 	double GetGamma();
 	int GetBrightness();
 	int GetSmooth();
+	// Distinct from GetSmooth()/SetSmooth(): those are the legacy 0-255 firmware
+	// smoothing steps for the Lightpack device; host smoothing is a host-side
+	// millisecond duration used by every other device (see Settings::getGrabHostSmoothingDuration()).
+	// Settings is the sole source of truth here (no device round-trip), so unlike
+	// m_smooth this needs no separate cache slot fed from the device layer.
+	int GetHostSmooth();
 #ifdef SOUNDVIZ_SUPPORT
 	QPair<QColor, QColor> GetSoundVizColors();
 	bool GetSoundVizLiquidMode();

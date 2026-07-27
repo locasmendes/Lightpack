@@ -60,7 +60,7 @@
      </property>
     </spacer>
    </item>
-   <item row="7" column="1">
+   <item row="8" column="1">
     <spacer name="verticalSpacer_2">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -72,6 +72,13 @@
       </size>
      </property>
     </spacer>
+   </item>
+   <item row="7" column="1">
+    <widget class="QRadioButton" name="rbDdp">
+     <property name="text">
+      <string>DDP (UDP, 1500 LEDs)</string>
+     </property>
+    </widget>
    </item>
    <item row="4" column="1">
     <widget class="QRadioButton" name="rbDrgb">

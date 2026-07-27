@@ -26,8 +26,10 @@
 #pragma once
 
 #include <QtGui>
+#include <QElapsedTimer>
 
 #include "GrabberBase.hpp"
+#include "HostColorSmoothing.hpp"
 #include "enums.hpp"
 
 class GrabberContext;
@@ -69,6 +71,8 @@ public slots:
 	void onGrabColorTemperatureChanged(int value);
 	void onGrabGammaChanged(double value);
 	void onSendDataOnlyIfColorsEnabledChanged(bool state);
+	void onGrabHostSmoothingDurationChanged(int ms);
+	void onConnectedDeviceChanged(const SupportedDevices::DeviceType device);
 #ifdef D3D10_GRAB_SUPPORT
 	void onDx1011GrabberEnabledChanged(bool state);
 	void onDx9GrabberEnabledChanged(bool state);
@@ -84,6 +88,7 @@ public slots:
 
 private slots:
 	void handleGrabbedColors();
+	void advanceHostTransition();
 	void timeoutFakeGrab();
 	void timeoutUpdateFPS();
 	void pauseWhileResizeOrMoving();
@@ -104,6 +109,7 @@ private:
 	void clearColorsNew();
 	void clearColorsCurrent();
 	void initLedWidgets(int numberOfLeds);
+	bool isHostSmoothingApplicable() const;
 
 private:
 	QList<GrabberBase*> m_grabbers;
@@ -118,6 +124,9 @@ private:
 
 	QTimer *m_timerUpdateFPS;
 	QTimer *m_timerFakeGrab;
+	QTimer *m_timerHostSmoothing;
+	QElapsedTimer m_hostSmoothingClock;
+	HostColorSmoothing m_hostSmoothing;
 	QWidget *m_parentWidget;
 	QList<GrabWidget *> m_ledWidgets;
 	QList<QRgb> m_grabResult;

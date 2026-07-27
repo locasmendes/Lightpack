@@ -53,6 +53,10 @@ HEADERS += \
     ../src/Plugin.hpp \
     ../src/LightpackPluginInterface.hpp \
     ../src/LightpackCommandLineParser.hpp \
+    ../src/AbstractLedDevice.hpp \
+    ../src/AbstractLedDeviceUdp.hpp \
+    ../src/LedDeviceDdp.hpp \
+    ../src/HostColorSmoothing.hpp \
     ../grab/include/calculations.hpp \
     ../math/include/PrismatikMath.hpp \
     SettingsWindowMockup.hpp \
@@ -61,7 +65,9 @@ HEADERS += \
     lightpackmathtest.hpp \
     AppVersionTest.hpp \
     ../src/UpdatesProcessor.hpp \
-    LightpackCommandLineParserTest.hpp
+    LightpackCommandLineParserTest.hpp \
+    LedDeviceDdpTest.hpp \
+    HostColorSmoothingTest.hpp
 
 SOURCES += \
     ../src/ApiServerSetColorTask.cpp \
@@ -70,6 +76,10 @@ SOURCES += \
     ../src/Plugin.cpp \
     ../src/LightpackPluginInterface.cpp \
     ../src/LightpackCommandLineParser.cpp \
+    ../src/AbstractLedDevice.cpp \
+    ../src/AbstractLedDeviceUdp.cpp \
+    ../src/LedDeviceDdp.cpp \
+    ../src/HostColorSmoothing.cpp \
     LightpackApiTest.cpp \
     SettingsWindowMockup.cpp \
     GrabCalculationTest.cpp \
@@ -77,7 +87,9 @@ SOURCES += \
     TestsMain.cpp \
     AppVersionTest.cpp \
     ../src/UpdatesProcessor.cpp \
-    LightpackCommandLineParserTest.cpp
+    LightpackCommandLineParserTest.cpp \
+    LedDeviceDdpTest.cpp \
+    HostColorSmoothingTest.cpp
 
 win32{
     HEADERS += \

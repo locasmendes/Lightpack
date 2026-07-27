@@ -301,6 +301,8 @@ SOURCES += \
     LedDeviceDrgb.cpp \
     LedDeviceDnrgb.cpp \
     LedDeviceWarls.cpp \
+    LedDeviceDdp.cpp \
+    HostColorSmoothing.cpp \
     ColorButton.cpp \
     ApiServer.cpp \
     ApiServerSetColorTask.cpp \
@@ -353,6 +355,8 @@ HEADERS += \
     LedDeviceDrgb.hpp \
     LedDeviceDnrgb.hpp \
     LedDeviceWarls.hpp \
+    LedDeviceDdp.hpp \
+    HostColorSmoothing.hpp \
     LedDeviceVirtual.hpp \
     ColorButton.hpp \
     ../common/defs.h \

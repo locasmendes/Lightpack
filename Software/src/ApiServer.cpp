@@ -114,6 +114,9 @@ const char * const ApiServer::CmdResultBrightness = "brightness:";
 const char * const ApiServer::CmdGetSmooth = "getsmooth";
 const char * const ApiServer::CmdResultSmooth = "smooth:";
 
+const char * const ApiServer::CmdGetHostSmooth = "gethostsmooth";
+const char * const ApiServer::CmdResultHostSmooth = "hostsmooth:";
+
 #ifdef SOUNDVIZ_SUPPORT
 const char * const ApiServer::CmdGetSoundVizColors = "getsoundvizcolors";
 const char * const ApiServer::CmdResultSoundVizColors = "soundvizcolors:";
@@ -149,6 +152,7 @@ const char * const ApiServer::CmdSetColor = "setcolor:";
 const char * const ApiServer::CmdSetGamma = "setgamma:";
 const char * const ApiServer::CmdSetBrightness = "setbrightness:";
 const char * const ApiServer::CmdSetSmooth = "setsmooth:";
+const char * const ApiServer::CmdSetHostSmooth = "sethostsmooth:";
 const char * const ApiServer::CmdSetProfile = "setprofile:";
 
 #ifdef SOUNDVIZ_SUPPORT
@@ -463,6 +467,9 @@ void ApiServer::clientProcessCommands()
 			case SupportedDevices::DeviceTypeWarls:
 				max = MaximumNumberOfLeds::Warls;
 				break;
+			case SupportedDevices::DeviceTypeDdp:
+				max = MaximumNumberOfLeds::Ddp;
+				break;
 			default:
 				max = MaximumNumberOfLeds::Default;
 			}
@@ -599,6 +606,12 @@ void ApiServer::clientProcessCommands()
 			API_DEBUG_OUT << CmdGetSmooth;
 
 			result = QStringLiteral("%1%2\r\n").arg(CmdResultSmooth).arg(lightpack->GetSmooth());
+		}
+		else if (cmdBuffer == CmdGetHostSmooth)
+		{
+			API_DEBUG_OUT << CmdGetHostSmooth;
+
+			result = QStringLiteral("%1%2\r\n").arg(CmdResultHostSmooth).arg(lightpack->GetHostSmooth());
 		}
 #ifdef SOUNDVIZ_SUPPORT
 		else if (cmdBuffer == CmdGetSoundVizColors)
@@ -856,6 +869,50 @@ void ApiServer::clientProcessCommands()
 						}
 					} else {
 						API_DEBUG_OUT << CmdSetSmooth << "Error (convert fail):" << smooth;
+						result = CmdSetResult_Error;
+					}
+				}
+			}
+			else if (m_lockedClient == 0)
+			{
+				result = CmdSetResult_NotLocked;
+			}
+			else // m_lockedClient != client
+			{
+				result = CmdSetResult_Busy;
+			}
+		}
+		else if (cmdBuffer.startsWith(CmdSetHostSmooth))
+		{
+			API_DEBUG_OUT << CmdSetHostSmooth;
+
+			if (m_lockedClient == 1)
+			{
+				cmdBuffer.remove(0, cmdBuffer.indexOf(':') + 1);
+				API_DEBUG_OUT << QString(cmdBuffer);
+
+				// Host smooth can contain max three chars (0 -- 400)
+				if (cmdBuffer.length() > 3)
+				{
+					API_DEBUG_OUT << CmdSetHostSmooth << "Error (hostsmooth max 3 chars)";
+					result = CmdSetResult_Error;
+				} else {
+					// Try to convert hostsmooth string to int
+					bool ok = false;
+					int hostSmooth = QString(cmdBuffer).toInt(&ok);
+
+					if (ok)
+					{
+						if (lightpack->SetHostSmooth(sessionKey, hostSmooth))
+						{
+							API_DEBUG_OUT << CmdSetHostSmooth << "OK:" << hostSmooth;
+							result = CmdSetResult_Ok;
+						} else {
+							API_DEBUG_OUT << CmdSetHostSmooth << "Error (max min test fail):" << hostSmooth;
+							result = CmdSetResult_Error;
+						}
+					} else {
+						API_DEBUG_OUT << CmdSetHostSmooth << "Error (convert fail):" << hostSmooth;
 						result = CmdSetResult_Error;
 					}
 				}
@@ -1465,6 +1522,11 @@ void ApiServer::initHelpMessage()
 				QStringLiteral("Get the current smooth value"),
 				formatHelp(CmdResultSmooth + QStringLiteral("1"))
 				);
+	m_helpMessage += formatHelp(
+				CmdGetHostSmooth,
+				QStringLiteral("Get the current host smoothing duration in ms (0 = off). Ignored by the native Lightpack device, which uses its own firmware smooth (see getsmooth/setsmooth) instead."),
+				formatHelp(CmdResultHostSmooth + QStringLiteral("150"))
+				);
 #ifdef SOUNDVIZ_SUPPORT
 	m_helpMessage += formatHelp(
 		CmdGetSoundVizColors,
@@ -1526,6 +1588,14 @@ void ApiServer::initHelpMessage()
 				.arg(SettingsScope::Profile::Device::SmoothMin, SettingsScope::Profile::Device::SmoothMax),
 				formatHelp(CmdSetSmooth + QStringLiteral("10")) +
 				formatHelp(CmdSetSmooth + QStringLiteral("128")),
+				helpCmdSetResults);
+
+	m_helpMessage += formatHelp(
+				CmdSetHostSmooth,
+				QStringLiteral("Set host smoothing transition duration in ms [%1 - %2], 0 = off. Ignored by the native Lightpack device. Works only on locking time (see lock).")
+				.arg(SettingsScope::Profile::Grab::HostSmoothingDurationMin, SettingsScope::Profile::Grab::HostSmoothingDurationMax),
+				formatHelp(CmdSetHostSmooth + QStringLiteral("0")) +
+				formatHelp(CmdSetHostSmooth + QStringLiteral("150")),
 				helpCmdSetResults);
 
 	m_helpMessage += formatHelp(
@@ -1602,13 +1672,13 @@ void ApiServer::initShortHelpMessage()
 			<< CmdGetProfile << CmdGetProfiles
 			<< CmdGetCountLeds << CmdGetLeds << CmdGetColors
 			<< CmdGetFPS << CmdGetScreenSize << CmdGetBacklight
-			<< CmdGetGamma << CmdGetBrightness << CmdGetSmooth
+			<< CmdGetGamma << CmdGetBrightness << CmdGetSmooth << CmdGetHostSmooth
 #ifdef SOUNDVIZ_SUPPORT
 			<< CmdGetSoundVizColors << CmdGetSoundVizLiquid
 #endif
 			<< CmdGetPersistOnUnlock
 			<< CmdSetColor << CmdSetLeds
-			<< CmdSetGamma << CmdSetBrightness << CmdSetSmooth
+			<< CmdSetGamma << CmdSetBrightness << CmdSetSmooth << CmdSetHostSmooth
 			<< CmdSetProfile << CmdNewProfile << CmdDeleteProfile
 			<< CmdSetStatus << CmdSetBacklight
 #ifdef SOUNDVIZ_SUPPORT

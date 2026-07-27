@@ -283,7 +283,7 @@
           <widget class="QWidget" name="page">
            <layout class="QVBoxLayout" name="verticalLayout_8">
             <item>
-             <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0,0,0,0,0,0">
+             <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,0,0,0,0,0,0,0,0,0,0">
               <item row="3" column="0" colspan="3">
                <widget class="QCheckBox" name="checkBox_GrabApplyBlueLightReduction">
                 <property name="text">
@@ -668,6 +668,108 @@ Internally emulates the effects of f.lux, redshift, Night Light, Night Shift...<
                 </property>
                 <property name="flat">
                  <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="9" column="0">
+               <widget class="QLabel" name="label_GrabHostSmoothing_txt">
+                <property name="text">
+                 <string>Host smoothing:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="10" column="0">
+               <widget class="QSlider" name="horizontalSlider_GrabHostSmoothing">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="whatsThis">
+                 <string>&lt;h4&gt;Host smoothing&lt;/h4&gt; Linear transition, on the host, from the last displayed color to the most recently captured one. &lt;b&gt;Off&lt;/b&gt; (0) keeps the current instant cut. For devices without their own smoothing (Adalight, Ardulight, WARLS/DRGB/DNRGB/DDP). Not used by the native Lightpack device, which has its own firmware smoothing (see Device Smooth on its tab).</string>
+                </property>
+                <property name="minimum">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <number>400</number>
+                </property>
+                <property name="singleStep">
+                 <number>1</number>
+                </property>
+                <property name="pageStep">
+                 <number>25</number>
+                </property>
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="10" column="1">
+               <widget class="QSpinBox" name="spinBox_GrabHostSmoothing">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>60</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+                <property name="specialValueText">
+                 <string>Off</string>
+                </property>
+                <property name="suffix">
+                 <string notr="true"> ms</string>
+                </property>
+                <property name="minimum">
+                 <number>0</number>
+                </property>
+                <property name="maximum">
+                 <number>400</number>
+                </property>
+                <property name="value">
+                 <number>150</number>
+                </property>
+               </widget>
+              </item>
+              <item row="10" column="2">
+               <widget class="QPushButton" name="pushButton_grabHostSmoothingHelp">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">margin: 0px;</string>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset resource="../res/LightpackResources.qrc">
+                  <normaloff>:/icons/help.png</normaloff>:/icons/help.png</iconset>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="11" column="0" colspan="3">
+               <widget class="QLabel" name="label_GrabHostSmoothing_lightpackNotice">
+                <property name="text">
+                 <string>The Lightpack device uses its own firmware Device Smooth instead.</string>
+                </property>
+                <property name="enabled">
+                 <bool>false</bool>
                 </property>
                </widget>
               </item>
@@ -3231,6 +3333,9 @@ Internally emulates the effects of f.lux, redshift, Night Light, Night Shift...<
   <tabstop>horizontalSlider_GrabOverBrighten</tabstop>
   <tabstop>spinBox_GrabOverBrighten</tabstop>
   <tabstop>pushButton_grabOverBrightenHelp</tabstop>
+  <tabstop>horizontalSlider_GrabHostSmoothing</tabstop>
+  <tabstop>spinBox_GrabHostSmoothing</tabstop>
+  <tabstop>pushButton_grabHostSmoothingHelp</tabstop>
   <tabstop>radioButton_GrabWidgetsDontShow</tabstop>
   <tabstop>radioButton_Colored</tabstop>
   <tabstop>radioButton_White</tabstop>
@@ -3505,6 +3610,38 @@ Internally emulates the effects of f.lux, redshift, Night Light, Night Shift...<
     <hint type="destinationlabel">
      <x>422</x>
      <y>246</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBox_GrabHostSmoothing</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSlider_GrabHostSmoothing</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>422</x>
+     <y>284</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>368</x>
+     <y>280</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSlider_GrabHostSmoothing</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBox_GrabHostSmoothing</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>368</x>
+     <y>280</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>422</x>
+     <y>284</y>
     </hint>
    </hints>
   </connection>

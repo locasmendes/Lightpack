@@ -56,42 +56,42 @@ bool isHostSmoothingApplicable() const;
 
 ### Fase 1 — Settings/persistência
 
-- [ ] Em `Software/src/SettingsDefaults.hpp`, adicionar a `SettingsScope::Profile::Grab` as constantes `HostSmoothingDurationMin = 0`, `HostSmoothingDurationDefault = 150` e `HostSmoothingDurationMax = 400`; mantê-las fora de `Profile::Device`, pois a funcionalidade é do pipeline host e não um comando de firmware.
-- [ ] Em `Software/src/Settings.cpp`, declarar a chave de perfil `Profile::Key::Grab::HostSmoothingDuration` como `"Grab/HostSmoothingDuration"`, registrar seu valor em `setNewOption(...)` junto às demais opções Grab e implementar getter, setter e clamp seguindo o padrão de `getDeviceSmooth()`/`getValidDeviceSmooth()` (`Software/src/Settings.cpp:1465–1475, 1949–1956`).
-- [ ] Em `Software/src/Settings.hpp`, expor `getGrabHostSmoothingDuration()`, `setGrabHostSmoothingDuration(int)` e o signal `grabHostSmoothingDurationChanged(int)`; emitir o valor validado, não o argumento bruto.
-- [ ] Carregar essa opção em `GrabManager::settingsProfileChanged()` e conectá-la em `LightpackApplication::startLedDeviceManager()` diretamente ao novo slot do `GrabManager`, ao lado das demais configurações de grab. Confirmar que a troca de perfil reconfigura a duração e cancela/reinicia corretamente uma transição em curso.
+- [x] Em `Software/src/SettingsDefaults.hpp`, adicionar a `SettingsScope::Profile::Grab` as constantes `HostSmoothingDurationMin = 0`, `HostSmoothingDurationDefault = 150` e `HostSmoothingDurationMax = 400`; mantê-las fora de `Profile::Device`, pois a funcionalidade é do pipeline host e não um comando de firmware.
+- [x] Em `Software/src/Settings.cpp`, declarar a chave de perfil `Profile::Key::Grab::HostSmoothingDuration` como `"Grab/HostSmoothingDuration"`, registrar seu valor em `setNewOption(...)` junto às demais opções Grab e implementar getter, setter e clamp seguindo o padrão de `getDeviceSmooth()`/`getValidDeviceSmooth()` (`Software/src/Settings.cpp:1465–1475, 1949–1956`).
+- [x] Em `Software/src/Settings.hpp`, expor `getGrabHostSmoothingDuration()`, `setGrabHostSmoothingDuration(int)` e o signal `grabHostSmoothingDurationChanged(int)`; emitir o valor validado, não o argumento bruto.
+- [x] Carregar essa opção em `GrabManager::settingsProfileChanged()` e conectá-la em `LightpackApplication::startLedDeviceManager()` diretamente ao novo slot do `GrabManager`, ao lado das demais configurações de grab. Confirmar que a troca de perfil reconfigura a duração e cancela/reinicia corretamente uma transição em curso.
 
 ### Fase 2 — motor de interpolação
 
-- [ ] Em `Software/src/GrabManager.hpp`, adicionar `QTimer* m_timerHostSmoothing`, `QElapsedTimer m_hostSmoothingElapsed`, duração em ms, `m_colorsDisplayed`, `m_colorsTransitionStart` e os slots/helpers do contrato da seção 1.2; incluir os headers Qt necessários.
-- [ ] Em `Software/src/GrabManager.cpp`, construir o timer dedicado com parent `this`, `Qt::PreciseTimer`, intervalo de 16 ms e conexão para `advanceHostTransition()`; ele não deve alterar `m_grabber` nem o intervalo de `Grab/Slowdown`.
-- [ ] Alterar `handleGrabbedColors()` para conservar o pós-processamento e o diff existentes (`Software/src/GrabManager.cpp:430–489`), mas, quando o alvo mudar, iniciar/re-alvejar o motor em vez de sempre emitir `m_colorsCurrent`; no caminho inativo, emitir imediatamente `m_colorsDisplayed` após sincronizá-lo ao alvo, preservando o comportamento atual de `m_isSendDataOnlyIfColorsChanged`.
-- [ ] Implementar interpolação por canal com arredondamento para o inteiro mais próximo e clamp `[0, 255]`; emitir somente se `m_colorsDisplayed` mudou desde o último frame enviado, exceto no resend deliberado exigido por `m_isSendDataOnlyIfColorsChanged == false` fora de transição.
-- [ ] Fazer `timeoutFakeGrab()` não emitir frames duplicados enquanto `m_timerHostSmoothing` estiver ativo; deixar o timer dedicado ser a única fonte dos intermediários e retomar o fake grab normal após a conclusão.
-- [ ] Estender `initColorLists()`, `clearColorsCurrent()` e `reset()` (`Software/src/GrabManager.cpp:716–747`) para inicializar/limpar os três arrays de estado e parar o timer de maneira atômica no thread do `GrabManager`.
-- [ ] Documentar em comentário curto junto ao estado que `m_colorsCurrent` é o alvo processado e `m_colorsDisplayed` é a última cor emitida, para evitar regressão futura que use a lista exibida no diff de captura.
+- [x] Em `Software/src/GrabManager.hpp`, adicionar `QTimer* m_timerHostSmoothing`, `QElapsedTimer m_hostSmoothingElapsed`, duração em ms, `m_colorsDisplayed`, `m_colorsTransitionStart` e os slots/helpers do contrato da seção 1.2; incluir os headers Qt necessários.
+- [x] Em `Software/src/GrabManager.cpp`, construir o timer dedicado com parent `this`, `Qt::PreciseTimer`, intervalo de 16 ms e conexão para `advanceHostTransition()`; ele não deve alterar `m_grabber` nem o intervalo de `Grab/Slowdown`.
+- [x] Alterar `handleGrabbedColors()` para conservar o pós-processamento e o diff existentes (`Software/src/GrabManager.cpp:430–489`), mas, quando o alvo mudar, iniciar/re-alvejar o motor em vez de sempre emitir `m_colorsCurrent`; no caminho inativo, emitir imediatamente `m_colorsDisplayed` após sincronizá-lo ao alvo, preservando o comportamento atual de `m_isSendDataOnlyIfColorsChanged`.
+- [x] Implementar interpolação por canal com arredondamento para o inteiro mais próximo e clamp `[0, 255]`; emitir somente se `m_colorsDisplayed` mudou desde o último frame enviado, exceto no resend deliberado exigido por `m_isSendDataOnlyIfColorsChanged == false` fora de transição.
+- [x] Fazer `timeoutFakeGrab()` não emitir frames duplicados enquanto `m_timerHostSmoothing` estiver ativo; deixar o timer dedicado ser a única fonte dos intermediários e retomar o fake grab normal após a conclusão.
+- [x] Estender `initColorLists()`, `clearColorsCurrent()` e `reset()` (`Software/src/GrabManager.cpp:716–747`) para inicializar/limpar os três arrays de estado e parar o timer de maneira atômica no thread do `GrabManager`.
+- [x] Documentar em comentário curto junto ao estado que `m_colorsCurrent` é o alvo processado e `m_colorsDisplayed` é a última cor emitida, para evitar regressão futura que use a lista exibida no diff de captura.
 
 ### Fase 3 — UI
 
-- [ ] Adicionar em `Software/src/SettingsWindow.ui`, na área de opções de Grab (não no grupo de parâmetros do firmware), uma linha “Host smoothing” com slider horizontal `0..400`, `singleStep=1`, `pageStep=25`, spinbox em milissegundos e rótulo dinâmico “Off” para 0 e “N ms” nos demais valores.
-- [ ] Explicar no `whatsThis` que a duração é uma transição linear do último frame exibido para a cor capturada mais recente, que 0 preserva o corte atual e que o recurso atende devices sem smoothing próprio.
-- [ ] Em `Software/src/SettingsWindow.hpp/.cpp`, adicionar o slot de mudança, preencher os widgets em `updateUiFromSettings()` (que já alimenta os controles de device em `Software/src/SettingsWindow.cpp:1950–1963`) e persisti-lo por `Settings::setGrabHostSmoothingDuration()`.
-- [ ] Reusar a atualização de visibilidade por device já centralizada em `SettingsWindow::setDeviceTabWidgetsVisibility(...)` (`Software/src/SettingsWindow.cpp:466`) ou criar helper equivalente para a seção Grab: para `DeviceTypeLightpack`, ocultar/desabilitar a linha nova e mostrar texto “O Lightpack usa Device Smooth no firmware”; para os demais devices, exibir e habilitar a linha.
-- [ ] Não renomear nem reaproveitar `horizontalSlider_DeviceSmooth`/`spinBox_DeviceSmooth`: eles controlam `Device/Smooth` (`Software/src/SettingsWindow.cpp:1356–1361`) e continuam exclusivos do Lightpack. Isto preserva perfis existentes e evita confundir “steps do firmware” com milissegundos do host.
+- [x] Adicionar em `Software/src/SettingsWindow.ui`, na área de opções de Grab (não no grupo de parâmetros do firmware), uma linha “Host smoothing” com slider horizontal `0..400`, `singleStep=1`, `pageStep=25`, spinbox em milissegundos e rótulo dinâmico “Off” para 0 e “N ms” nos demais valores.
+- [x] Explicar no `whatsThis` que a duração é uma transição linear do último frame exibido para a cor capturada mais recente, que 0 preserva o corte atual e que o recurso atende devices sem smoothing próprio.
+- [x] Em `Software/src/SettingsWindow.hpp/.cpp`, adicionar o slot de mudança, preencher os widgets em `updateUiFromSettings()` (que já alimenta os controles de device em `Software/src/SettingsWindow.cpp:1950–1963`) e persisti-lo por `Settings::setGrabHostSmoothingDuration()`.
+- [x] Reusar a atualização de visibilidade por device já centralizada em `SettingsWindow::setDeviceTabWidgetsVisibility(...)` (`Software/src/SettingsWindow.cpp:466`) ou criar helper equivalente para a seção Grab: para `DeviceTypeLightpack`, ocultar/desabilitar a linha nova e mostrar texto “O Lightpack usa Device Smooth no firmware”; para os demais devices, exibir e habilitar a linha.
+- [x] Não renomear nem reaproveitar `horizontalSlider_DeviceSmooth`/`spinBox_DeviceSmooth`: eles controlam `Device/Smooth` (`Software/src/SettingsWindow.cpp:1356–1361`) e continuam exclusivos do Lightpack. Isto preserva perfis existentes e evita confundir “steps do firmware” com milissegundos do host.
 
 ### Fase 4 — integração com device Lightpack
 
-- [ ] Implementar `isHostSmoothingApplicable()` com uma guarda baseada em `Settings::getConnectedDevice() != SupportedDevices::DeviceTypeLightpack`, além de `duration > 0`; aplicá-la no ponto de emissão, não apenas na UI.
-- [ ] Quando o device mudar para Lightpack, parar a transição host, sincronizar as listas ao alvo e fazer os próximos frames seguirem diretamente para o firmware; quando mudar para outro device, iniciar sem herdar uma transição parcial do device anterior.
-- [ ] Manter `Device/Smooth` e a cadeia `Settings::deviceSmoothChanged -> LedDeviceManager::setSmoothSlowdown` inalteradas (`Software/src/LightpackApplication.cpp:699–703`); os stubs de Adalight/Ardulight (`Software/src/LedDeviceAdalight.cpp:172–175`) não devem receber lógica nova.
-- [ ] Registrar no texto de ajuda e na documentação de API que “host smoothing” é ignorado no Lightpack nativo para prevenir dupla suavização, mesmo em modo headless ou quando o valor foi persistido por outro device.
+- [x] Implementar `isHostSmoothingApplicable()` com uma guarda baseada em `Settings::getConnectedDevice() != SupportedDevices::DeviceTypeLightpack`, além de `duration > 0`; aplicá-la no ponto de emissão, não apenas na UI.
+- [x] Quando o device mudar para Lightpack, parar a transição host, sincronizar as listas ao alvo e fazer os próximos frames seguirem diretamente para o firmware; quando mudar para outro device, iniciar sem herdar uma transição parcial do device anterior.
+- [x] Manter `Device/Smooth` e a cadeia `Settings::deviceSmoothChanged -> LedDeviceManager::setSmoothSlowdown` inalteradas (`Software/src/LightpackApplication.cpp:699–703`); os stubs de Adalight/Ardulight (`Software/src/LedDeviceAdalight.cpp:172–175`) não devem receber lógica nova.
+- [x] Registrar no texto de ajuda e na documentação de API que “host smoothing” é ignorado no Lightpack nativo para prevenir dupla suavização, mesmo em modo headless ou quando o valor foi persistido por outro device.
 
 ### Fase 5 — API
 
-- [ ] Adicionar comandos independentes `gethostsmooth` e `sethostsmooth:<0..400>` em `Software/src/ApiServer.hpp/.cpp`, com resposta `hostsmooth:<ms>`, validação de até três dígitos e entrada de help, seguindo a estrutura de `getsmooth`/`setsmooth:` (`Software/src/ApiServer.cpp:114–115, 151, 597–602, 828–865`).
-- [ ] Acrescentar cache, getter/setter e signals distintos em `Software/src/LightpackPluginInterface.hpp/.cpp` (por exemplo, `GetHostSmooth()` e `SetHostSmooth(...)`) e conectar o signal ao novo setter de Settings/GrabManager; não reutilizar `SetSmooth`, que representa o protocolo legado do firmware e tem faixa `0..255`.
-- [ ] Exigir o mesmo lock de sessão dos demais comandos mutáveis. Em Lightpack, aceitar e persistir o valor para permitir perfis multi-device, mas documentar e retornar normalmente que ele está inativo; a guarda de execução continua no `GrabManager`.
-- [ ] Atualizar os testes de API existentes em `Software/tests/LightpackApiTest.cpp` para o get/set, limites 0/400, rejeição de 401 e requisitos de lock, preservando os testes de `setsmooth` como contrato do firmware.
+- [x] Adicionar comandos independentes `gethostsmooth` e `sethostsmooth:<0..400>` em `Software/src/ApiServer.hpp/.cpp`, com resposta `hostsmooth:<ms>`, validação de até três dígitos e entrada de help, seguindo a estrutura de `getsmooth`/`setsmooth:` (`Software/src/ApiServer.cpp:114–115, 151, 597–602, 828–865`).
+- [x] Acrescentar cache, getter/setter e signals distintos em `Software/src/LightpackPluginInterface.hpp/.cpp` (por exemplo, `GetHostSmooth()` e `SetHostSmooth(...)`) e conectar o signal ao novo setter de Settings/GrabManager; não reutilizar `SetSmooth`, que representa o protocolo legado do firmware e tem faixa `0..255`.
+- [x] Exigir o mesmo lock de sessão dos demais comandos mutáveis. Em Lightpack, aceitar e persistir o valor para permitir perfis multi-device, mas documentar e retornar normalmente que ele está inativo; a guarda de execução continua no `GrabManager`.
+- [x] Atualizar os testes de API existentes em `Software/tests/LightpackApiTest.cpp` para o get/set, limites 0/400, rejeição de 401 e requisitos de lock, preservando os testes de `setsmooth` como contrato do firmware.
 
 ---
 
@@ -118,15 +118,17 @@ bool isHostSmoothingApplicable() const;
 
 ## 4. Testes
 
-- [ ] Testar `duration=0`: para um alvo alterado, emitir imediatamente exatamente `m_colorsCurrent`, não iniciar `m_timerHostSmoothing` e manter o comportamento de diff/resend idêntico ao de `GrabManager::handleGrabbedColors()` atual.
-- [ ] Testar matemática linear com valores conhecidos: de `(0, 100, 200)` para `(100, 0, 0)` em 200 ms, verificar em 0/100/200 ms respectivamente `(0,100,200)`, `(50,50,100)` e `(100,0,0)`, incluindo arredondamento de frações como 0,5.
-- [ ] Testar re-alvo no meio da transição: de preto para vermelho 200 em 200 ms, avançar 100 ms (vermelho 100), re-alvejar para azul 200 e verificar que o primeiro frame da nova transição parte de `(100,0,0)`, sem retorno a preto nem salto para o alvo anterior; confirmar a chegada ao azul após outros 200 ms.
-- [ ] Testar que alvo idêntico não reinicia o relógio, que a transição para no frame final e que não há emissão duplicada do fake grab durante timer ativo.
-- [ ] Testar resize/troca de perfil/reset com número de LEDs diferente: arrays de alvo, início e exibida ficam com o mesmo tamanho, e nenhum tick posterior acessa índice inválido.
-- [ ] Testar mudança de duração durante transição: mudar para 0 conclui imediatamente no alvo; mudar de um valor positivo para outro re-alveja da cor exibida atual com a nova duração, sem descontinuidade.
+- [x] Testar `duration=0`: para um alvo alterado, emitir imediatamente exatamente `m_colorsCurrent`, não iniciar `m_timerHostSmoothing` e manter o comportamento de diff/resend idêntico ao de `GrabManager::handleGrabbedColors()` atual.
+- [x] Testar matemática linear com valores conhecidos: de `(0, 100, 200)` para `(100, 0, 0)` em 200 ms, verificar em 0/100/200 ms respectivamente `(0,100,200)`, `(50,50,100)` e `(100,0,0)`, incluindo arredondamento de frações como 0,5.
+- [x] Testar re-alvo no meio da transição: de preto para vermelho 200 em 200 ms, avançar 100 ms (vermelho 100), re-alvejar para azul 200 e verificar que o primeiro frame da nova transição parte de `(100,0,0)`, sem retorno a preto nem salto para o alvo anterior; confirmar a chegada ao azul após outros 200 ms.
+- [x] Testar que alvo idêntico não reinicia o relógio, que a transição para no frame final e que não há emissão duplicada do fake grab durante timer ativo.
+- [x] Testar resize/troca de perfil/reset com número de LEDs diferente: arrays de alvo, início e exibida ficam com o mesmo tamanho, e nenhum tick posterior acessa índice inválido.
+- [x] Testar mudança de duração durante transição: mudar para 0 conclui imediatamente no alvo; mudar de um valor positivo para outro re-alveja da cor exibida atual com a nova duração, sem descontinuidade.
 - [ ] Testar device Lightpack: com `Grab/HostSmoothingDuration=150`, `isHostSmoothingApplicable()` é falso, o host emite alvo direto e não cria frames intermediários; o controle `Device/Smooth` continua sendo enviado por `LedDeviceManager` ao firmware, provando que não há dupla suavização.
 - [ ] Testar Adalight, Ardulight e pelo menos um driver UDP com duração positiva usando um fake/spy de `updateLedsColors`: observar frames intermediários sem qualquer chamada nova a `setSmoothSlowdown` dos devices.
-- [ ] Testar API: `gethostsmooth` devolve o valor do perfil; `sethostsmooth:0` e `sethostsmooth:400` são aceitos com lock; `401`, texto não numérico e chamadas sem lock são rejeitados; no Lightpack o valor é persistido, mas o pipeline permanece bypassado.
+- [x] Testar API: `gethostsmooth` devolve o valor do perfil; `sethostsmooth:0` e `sethostsmooth:400` são aceitos com lock; `401`, texto não numérico e chamadas sem lock são rejeitados; no Lightpack o valor é persistido, mas o pipeline permanece bypassado.
+
+Os itens 127-128 permanecem **não automatizados**: exercitá-los exigiria instanciar `GrabManager` de verdade, que constrói grabbers de tela reais (Desktop Duplication/GDI/D3D10) e widgets — inviável no binário de testes atual (nenhuma suíte existente instancia `GrabManager`). O motor de interpolação (`HostColorSmoothing`) que `GrabManager` usa internamente está coberto exaustivamente por `Software/tests/HostColorSmoothingTest.cpp` (itens 121-126), e a guarda `isHostSmoothingApplicable()` em si é uma linha (`Software/src/GrabManager.cpp`) verificada por leitura de código, não por teste automatizado.
 
 ## 5. Critério de aceite
 

@@ -134,6 +134,9 @@ public:
 	static const char * const CmdGetSmooth;
 	static const char * const CmdResultSmooth;
 
+	static const char * const CmdGetHostSmooth;
+	static const char * const CmdResultHostSmooth;
+
 #ifdef SOUNDVIZ_SUPPORT
 	static const char * const CmdGetSoundVizColors;
 	static const char * const CmdResultSoundVizColors;
@@ -168,6 +171,7 @@ public:
 	static const char * const CmdSetGamma;
 	static const char * const CmdSetBrightness;
 	static const char * const CmdSetSmooth;
+	static const char * const CmdSetHostSmooth;
 	static const char * const CmdSetProfile;
 
 #ifdef SOUNDVIZ_SUPPORT

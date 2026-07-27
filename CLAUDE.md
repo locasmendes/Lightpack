@@ -94,3 +94,16 @@ Other components worth knowing about:
 - Grabber availability per platform is controlled by `Software/grab/configure-grabbers.prf` (`X11_GRAB_SUPPORT`, `MAC_OS_CG_GRAB_SUPPORT`, `MAC_OS_AV_GRAB_SUPPORT`, `WINAPI_GRAB_SUPPORT`, `DDUPL_GRAB_SUPPORT`, `D3D10_GRAB_SUPPORT`), not by `#ifdef Q_OS_*` scattered in code.
 - Optional features are toggled via `DEFINES` in `Software/build-vars.prf` (copy from `build-vars.prf.default`): `PULSEAUDIO_SUPPORT`/BASS for sound viz, `NIGHTLIGHT_SUPPORT`, `NO_OPENSSL`.
 - `Software/UpdateElevate` is a git submodule (Windows auto-updater elevation helper) — run `git submodule update --init` if it's missing.
+
+## agy-bridge (delegação opcional)
+
+Se as ferramentas MCP do `agy-bridge` estiverem disponíveis, você pode usá-las
+para tarefas que consumiriam muito contexto — analisar muitos arquivos grandes,
+investigação extensa de git, ou lookups na web. É opcional, não obrigatório:
+use seu julgamento sobre se delegar realmente compensa. Sempre mantenha os
+prompts normais de permissão ativos.
+
+Quando aplicável, você pode rodar o `agy` em paralelo ao seu próprio trabalho
+(ex.: delegar uma investigação enquanto segue com outra parte da tarefa) em vez
+de esperar a resposta antes de continuar — mas só quando as duas linhas de
+trabalho forem de fato independentes.
