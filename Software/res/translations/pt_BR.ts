@@ -4,7 +4,7 @@
 <context>
     <name>ApiServer</name>
     <message>
-        <location filename="../../src/ApiServer.cpp" line="1375"/>
+        <location filename="../../src/ApiServer.cpp" line="1557"/>
         <source>API server unable to start (port: %1): %2.</source>
         <translation>Não foi possível iniciar o servidor API (porta: %1): %2.</translation>
     </message>
@@ -395,36 +395,36 @@ Controle auxiliar 3 em 1 para ajustar o ponto de branco</translation>
     </message>
     <message>
         <location filename="../../src/SettingsWindow.ui" line="147"/>
-        <location filename="../../src/SettingsWindow.ui" line="2218"/>
+        <location filename="../../src/SettingsWindow.ui" line="2228"/>
         <source>Profiles</source>
         <translation>Perfis</translation>
     </message>
     <message>
         <location filename="../../src/SettingsWindow.ui" line="162"/>
-        <location filename="../../src/SettingsWindow.ui" line="2428"/>
+        <location filename="../../src/SettingsWindow.ui" line="2438"/>
         <source>Plugins</source>
         <translation>Plugins</translation>
     </message>
     <message>
         <location filename="../../src/SettingsWindow.ui" line="177"/>
-        <location filename="../../src/SettingsWindow.ui" line="2732"/>
+        <location filename="../../src/SettingsWindow.ui" line="2742"/>
         <source>Expert</source>
         <translation>Avançado</translation>
     </message>
     <message>
         <location filename="../../src/SettingsWindow.ui" line="207"/>
-        <location filename="../../src/SettingsWindow.ui" line="3207"/>
+        <location filename="../../src/SettingsWindow.ui" line="3217"/>
         <source>About</source>
         <translation>Sobre</translation>
     </message>
     <message>
         <location filename="../../src/SettingsWindow.ui" line="192"/>
-        <location filename="../../src/SettingsWindow.ui" line="3103"/>
+        <location filename="../../src/SettingsWindow.ui" line="3113"/>
         <source>Help</source>
         <translation>Ajuda</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3124"/>
+        <location filename="../../src/SettingsWindow.ui" line="3134"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;
 &lt;head&gt;
@@ -791,7 +791,7 @@ Emula internamente os efeitos do f.lux, Redshift, Luz Noturna, Night Shift...</t
     </message>
     <message>
         <location filename="../../src/SettingsWindow.ui" line="1578"/>
-        <location filename="../../src/SettingsWindow.ui" line="1839"/>
+        <location filename="../../src/SettingsWindow.ui" line="1849"/>
         <source>%</source>
         <translation>%</translation>
     </message>
@@ -816,473 +816,483 @@ Emula internamente os efeitos do f.lux, Redshift, Luz Noturna, Night Shift...</t
         <translation>Executar assistente de configuração</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1686"/>
+        <location filename="../../src/SettingsWindow.ui" line="1633"/>
+        <source>Reapplies every enabled LED group&apos;s width/height override, without reopening the wizard.</source>
+        <translation>Reaplica o override de largura/altura de cada grupo de LEDs habilitado, sem precisar reabrir o assistente.</translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindow.ui" line="1636"/>
+        <source>Reapply LED groups</source>
+        <translation>Reaplicar grupos de LEDs</translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindow.ui" line="1696"/>
         <source>Keep lights ON after exit</source>
         <translation>Manter luzes LIGADAS após sair</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1693"/>
+        <location filename="../../src/SettingsWindow.ui" line="1703"/>
         <source>Keep lights ON after system suspend</source>
         <translation>Manter luzes LIGADAS após suspensão do sistema</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1700"/>
+        <location filename="../../src/SettingsWindow.ui" line="1710"/>
         <source>These buttons redistribute the LED zones within the same profile to match the chosen content aspect ratio. They do not switch profiles and do not change brightness, gamma, smoothing, device settings, or per-LED color coefficients - only the Position and Size of each zone are recalculated. Warning: any manual position/size adjustments you made to individual zones will be replaced by the canonical layout recomputed from the recipe. Profiles without a recorded layout recipe are unaffected - run the setup wizard first.</source>
         <translation>Estes botões redistribuem as zonas de LED dentro do mesmo perfil para corresponder à proporção de aspecto escolhida. Eles não alternam perfis e não alteram brilho, gama, suavização, configurações do dispositivo ou coeficientes de cor por LED - apenas a Posição e o Tamanho de cada zona são recalculados. Aviso: ajustes manuais de posição/tamanho feitos em zonas individuais serão substituídos pelo layout canônico recalculado a partir da receita. Perfis sem receita de layout registrada não são afetados — execute o assistente de configuração primeiro.</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1703"/>
+        <location filename="../../src/SettingsWindow.ui" line="1713"/>
         <source>Content aspect</source>
         <translation>Proporção do conteúdo</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1709"/>
+        <location filename="../../src/SettingsWindow.ui" line="1719"/>
         <source>Fill</source>
         <translation>Preencher</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1716"/>
+        <location filename="../../src/SettingsWindow.ui" line="1726"/>
         <source>16:9</source>
         <translation>16:9</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1723"/>
+        <location filename="../../src/SettingsWindow.ui" line="1733"/>
         <source>4:3</source>
         <translation>4:3</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1798"/>
+        <location filename="../../src/SettingsWindow.ui" line="1808"/>
         <source>Overall brightness:</source>
         <translation>Brilho geral:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1805"/>
+        <location filename="../../src/SettingsWindow.ui" line="1815"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;h4 style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:medium; font-weight:600;&quot;&gt;Dithering&lt;/span&gt;&lt;/h4&gt;&lt;p&gt;Increases color accuracy with some devices, but may introduce flickering.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;h4 style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:medium; font-weight:600;&quot;&gt;Dithering&lt;/span&gt;&lt;/h4&gt;&lt;p&gt;Aumenta a precisão de cores em alguns dispositivos, mas pode introduzir cintilação (flicker).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1808"/>
+        <location filename="../../src/SettingsWindow.ui" line="1818"/>
         <source>Enable Dithering</source>
         <translation>Ativar Dithering</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1886"/>
+        <location filename="../../src/SettingsWindow.ui" line="1896"/>
         <source>Lightpack</source>
         <translation>Lightpack</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1904"/>
+        <location filename="../../src/SettingsWindow.ui" line="1914"/>
         <source>Smoothness:</source>
         <translation>Suavização:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1911"/>
+        <location filename="../../src/SettingsWindow.ui" line="1921"/>
         <source>&lt;h4&gt;Color depth&lt;/h4&gt; Number of colors per channel, one RGB LED uses 3 channels (value in power of 3).</source>
         <translation>&lt;h4&gt;Profundidade de cor&lt;/h4&gt; Número de cores por canal; um LED RGB usa 3 canais (valor em potência de 3).</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1939"/>
+        <location filename="../../src/SettingsWindow.ui" line="1949"/>
         <source>Color depth (Lightpack 5 and below):</source>
         <translation>Profundidade de cor (Lightpack 5 e anterior):</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1946"/>
+        <location filename="../../src/SettingsWindow.ui" line="1956"/>
         <source>&lt;h4&gt;Smoothness&lt;/h4&gt; It defines how many steps will be color changed in</source>
         <translation>&lt;h4&gt;Suavização&lt;/h4&gt; Define em quantas etapas a cor será alterada em</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2022"/>
+        <location filename="../../src/SettingsWindow.ui" line="2032"/>
         <source>Disable USB Power LED</source>
         <translation>Desativar LED indicador de energia USB</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2029"/>
+        <location filename="../../src/SettingsWindow.ui" line="2039"/>
         <source>&lt;h4&gt;Refresh delay&lt;/h4&gt; This setting’s values are inversely proportional to the PWM’s frequency. It&apos;s affects to performance.</source>
         <translation>&lt;h4&gt;Atraso de atualização&lt;/h4&gt; Os valores desta configuração são inversamente proporcionais à frequência do PWM. Afeta o desempenho.</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2165"/>
+        <location filename="../../src/SettingsWindow.ui" line="2175"/>
         <source>Refresh delay (Lightpack 5 and below):</source>
         <translation>Atraso de atualização (Lightpack 5 e anterior):</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2179"/>
+        <location filename="../../src/SettingsWindow.ui" line="2189"/>
         <source>Virtual</source>
         <translation>Virtual</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2227"/>
+        <location filename="../../src/SettingsWindow.ui" line="2237"/>
         <source>Profile</source>
         <translation>Perfil</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2254"/>
+        <location filename="../../src/SettingsWindow.ui" line="2264"/>
         <source>Add new profile</source>
         <translation>Adicionar novo perfil</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2280"/>
+        <location filename="../../src/SettingsWindow.ui" line="2290"/>
         <source>Reset current profile to defaults</source>
         <translation>Restaurar perfil atual para o padrão</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2306"/>
+        <location filename="../../src/SettingsWindow.ui" line="2316"/>
         <source>Delete profile</source>
         <translation>Excluir perfil</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2331"/>
+        <location filename="../../src/SettingsWindow.ui" line="2341"/>
         <source>Open in text editor</source>
         <translation>Abrir no editor de texto</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2356"/>
+        <location filename="../../src/SettingsWindow.ui" line="2366"/>
         <source>User interface</source>
         <translation>Interface do usuário</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2373"/>
+        <location filename="../../src/SettingsWindow.ui" line="2383"/>
         <source>Language:</source>
         <translation>Idioma:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2460"/>
+        <location filename="../../src/SettingsWindow.ui" line="2470"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:medium; font-weight:600;&quot;&gt;Plugins&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Here you can manage your plugins which are stored in you profile folder. Check each plugin&apos;s documentation for requirements and settings. Plugins work in priority of order — first plugin in the list has the highest priority.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:medium; font-weight:600;&quot;&gt;Plugins&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Aqui você pode gerenciar seus plugins armazenados na sua pasta de perfis. Consulte a documentação de cada plugin para requisitos e configurações. Os plugins funcionam em ordem de prioridade — o primeiro plugin da lista tem a prioridade mais alta.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2466"/>
+        <location filename="../../src/SettingsWindow.ui" line="2476"/>
         <source>All plugins:</source>
         <translation>Todos os plugins:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2543"/>
+        <location filename="../../src/SettingsWindow.ui" line="2553"/>
         <source>Increase priority</source>
         <translation>Aumentar prioridade</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2557"/>
+        <location filename="../../src/SettingsWindow.ui" line="2567"/>
         <source>Decrease priority</source>
         <translation>Diminuir prioridade</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2571"/>
+        <location filename="../../src/SettingsWindow.ui" line="2581"/>
         <source>Reload plugins</source>
         <translation>Recarregar plugins</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2593"/>
+        <location filename="../../src/SettingsWindow.ui" line="2603"/>
         <source>Info</source>
         <translation>Informações</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2617"/>
+        <location filename="../../src/SettingsWindow.ui" line="2627"/>
         <source>Author:</source>
         <translation>Autor:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2659"/>
+        <location filename="../../src/SettingsWindow.ui" line="2669"/>
         <source>Name:</source>
         <translation>Nome:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2701"/>
+        <location filename="../../src/SettingsWindow.ui" line="2711"/>
         <source>Version:</source>
         <translation>Versão:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2741"/>
+        <location filename="../../src/SettingsWindow.ui" line="2751"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This tab is used for experimental and unstable features. Any tuning with these controls may cause inevitable plane crash, miscarriage or nuclear disaster. Use it at your own risk.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Esta aba é usada para recursos experimentais e instáveis. Qualquer alteração nestes controles é por sua conta e risco.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2763"/>
+        <location filename="../../src/SettingsWindow.ui" line="2773"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enables TCP socket server.&lt;/p&gt;&lt;p&gt;You can connect via &amp;quot;telnet &amp;lt;ip&amp;gt; &amp;lt;port&amp;gt;&amp;quot; for example and manually execute available commands.&lt;/p&gt;&lt;p&gt;Default: %1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Ativa o servidor de socket TCP.&lt;/p&gt;&lt;p&gt;Você pode se conectar via &amp;quot;telnet &amp;lt;ip&amp;gt; &amp;lt;porta&amp;gt;&amp;quot;, por exemplo, e executar manualmente os comandos disponíveis.&lt;/p&gt;&lt;p&gt;Padrão: %1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2769"/>
+        <location filename="../../src/SettingsWindow.ui" line="2779"/>
         <source>Enable server (API via sockets)</source>
         <translation>Ativar servidor (API via sockets)</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2781"/>
+        <location filename="../../src/SettingsWindow.ui" line="2791"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When enabled, you can connect ONLY from the same computer through 127.0.0.1/localhost address.&lt;/p&gt;&lt;p&gt;Disable this if you want to connect from anywhere else.&lt;/p&gt;&lt;p&gt;Default: %1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Quando ativado, você poderá se conectar APENAS a partir do mesmo computador através do endereço 127.0.0.1/localhost.&lt;/p&gt;&lt;p&gt;Desative esta opção se desejar se conectar de qualquer outro lugar.&lt;/p&gt;&lt;p&gt;Padrão: %1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2784"/>
+        <location filename="../../src/SettingsWindow.ui" line="2794"/>
         <source>Listen only on local interface (127.0.0.1)</source>
         <translation>Ouvir apenas na interface local (127.0.0.1)</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2797"/>
-        <location filename="../../src/SettingsWindow.ui" line="2804"/>
+        <location filename="../../src/SettingsWindow.ui" line="2807"/>
+        <location filename="../../src/SettingsWindow.ui" line="2814"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;TCP port to listen.&lt;/p&gt;&lt;p&gt;Default: %1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Porta TCP para escutar conexões.&lt;/p&gt;&lt;p&gt;Padrão: %1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2810"/>
+        <location filename="../../src/SettingsWindow.ui" line="2820"/>
         <source>Port:</source>
         <translation>Porta:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2820"/>
+        <location filename="../../src/SettingsWindow.ui" line="2830"/>
         <source>Generate a random one</source>
         <translation>Gerar uma aleatória</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2823"/>
+        <location filename="../../src/SettingsWindow.ui" line="2833"/>
         <source>Generate</source>
         <translation>Gerar</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2842"/>
-        <location filename="../../src/SettingsWindow.ui" line="2858"/>
+        <location filename="../../src/SettingsWindow.ui" line="2852"/>
+        <location filename="../../src/SettingsWindow.ui" line="2868"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The API Key all the clients should provide to authenticate. Could be any custom string (%1 character limit). &lt;/p&gt;&lt;p&gt;Default: %2&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A Chave de API que todos os clientes devem fornecer para autenticação. Pode ser qualquer texto personalizado (limite de %1 caracteres).&lt;/p&gt;&lt;p&gt;Padrão: %2&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2864"/>
+        <location filename="../../src/SettingsWindow.ui" line="2874"/>
         <source>Key (authorization disabled if empty):</source>
         <translation>Chave (autorização desativada se vazia):</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2883"/>
+        <location filename="../../src/SettingsWindow.ui" line="2893"/>
         <source>Capture source</source>
         <translation>Fonte de captura</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2893"/>
+        <location filename="../../src/SettingsWindow.ui" line="2903"/>
         <source>X11 (Full screen)</source>
         <translation>X11 (Tela cheia)</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2900"/>
+        <location filename="../../src/SettingsWindow.ui" line="2910"/>
         <source>Mac CG (Full screen)</source>
         <translation>Mac CG (Tela cheia)</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2907"/>
+        <location filename="../../src/SettingsWindow.ui" line="2917"/>
         <source>Mac AV (Full screen)</source>
         <translation>Mac AV (Tela cheia)</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2931"/>
+        <location filename="../../src/SettingsWindow.ui" line="2941"/>
         <source>WinAPI (Full screen)</source>
         <translation>WinAPI (Tela cheia)</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2938"/>
+        <location filename="../../src/SettingsWindow.ui" line="2948"/>
         <source>Win8 Desktop Duplication</source>
         <translation>Win8 Desktop Duplication</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2962"/>
+        <location filename="../../src/SettingsWindow.ui" line="2972"/>
         <source>Enable DX hooking</source>
         <translation>Ativar hooking DirectX</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2994"/>
+        <location filename="../../src/SettingsWindow.ui" line="3004"/>
         <source>also hook D3D9 (high performance impact)</source>
         <translation>também fazer hook no D3D9 (alto impacto de desempenho)</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3008"/>
+        <location filename="../../src/SettingsWindow.ui" line="3018"/>
         <source>Logging level:</source>
         <translation>Nível de log:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3018"/>
+        <location filename="../../src/SettingsWindow.ui" line="3028"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Log verbosity: %1-%2 where %1 = no logs.&lt;/p&gt;&lt;p&gt;After enabling logs you need to restart the program.&lt;/p&gt;&lt;p&gt;When enabled you can use the &lt;img src=&quot;:/buttons/arrow_right_dark_24px.png&quot; width=&quot;12&quot;&gt; button to open the log directory.&lt;/p&gt;&lt;p&gt;Default: %3&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Nível de detalhes do log: %1-%2, onde %1 = sem logs.&lt;/p&gt;&lt;p&gt;Após ativar os logs, é necessário reiniciar o programa.&lt;/p&gt;&lt;p&gt;Quando ativado, você pode usar o botão &lt;img src=&quot;:/buttons/arrow_right_dark_24px.png&quot; width=&quot;12&quot;&gt; para abrir a pasta de logs.&lt;/p&gt;&lt;p&gt;Padrão: %3&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3028"/>
-        <location filename="../../src/SettingsWindow.ui" line="3031"/>
+        <location filename="../../src/SettingsWindow.ui" line="3038"/>
+        <location filename="../../src/SettingsWindow.ui" line="3041"/>
         <source>open Log folder</source>
         <translation>abrir pasta de Logs</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3034"/>
+        <location filename="../../src/SettingsWindow.ui" line="3044"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3060"/>
+        <location filename="../../src/SettingsWindow.ui" line="3070"/>
         <source>Ping Lightpack device every second</source>
         <translation>Enviar ping ao dispositivo Lightpack a cada segundo</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3067"/>
+        <location filename="../../src/SettingsWindow.ui" line="3077"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When disabled every frame will be sent to the device. This is recommended for devices with inactivity timers built into firmwares (some custom Adalight sketches for example) or configured via Prismatik (UDP devices with a &amp;lt; 255 timeout value).&lt;/p&gt;&lt;p&gt;When enabled every new frame will be compared with the previous one, and will be sent only if differences are detected (can be useful in low bandwidth situations).&lt;/p&gt;&lt;p&gt;Default: %1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Quando desativado, cada quadro será enviado ao dispositivo. Recomendado para dispositivos com temporizadores de inatividade no firmware (como alguns sketches Adalight personalizados) ou configurados via Prismatik (dispositivos UDP com tempo limite &amp;lt; 255).&lt;/p&gt;&lt;p&gt;Quando ativado, cada novo quadro é comparado ao anterior e enviado apenas se houver diferenças detectadas (útil em conexões de baixa largura de banda).&lt;/p&gt;&lt;p&gt;Padrão: %1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3070"/>
+        <location filename="../../src/SettingsWindow.ui" line="3080"/>
         <source>Send data only if colors changed</source>
         <translation>Enviar dados apenas se as cores mudarem</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3275"/>
+        <location filename="../../src/SettingsWindow.ui" line="3285"/>
         <source>&lt;h2&gt;Prismatik (unofficial fork)&lt;/h2&gt;</source>
         <translation>&lt;h2&gt;Prismatik (fork não oficial)&lt;/h2&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3309"/>
+        <location filename="../../src/SettingsWindow.ui" line="3319"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The &lt;span style=&quot; font-weight:600;&quot;&gt;Woodenshark&lt;/span&gt; team created this software with &lt;span style=&quot; font-weight:600;&quot;&gt;Lightpack&lt;/span&gt; — content-appropriate ambient lighting system with USB interface&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This is an unofficial fork of the open source project that is not affiliated with Woodenshark or Lightpack&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A equipe &lt;span style=&quot; font-weight:600;&quot;&gt;Woodenshark&lt;/span&gt; criou este software para o &lt;span style=&quot; font-weight:600;&quot;&gt;Lightpack&lt;/span&gt; — sistema de iluminação ambiente com interface USB&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Este é um fork não oficial do projeto de código aberto, sem afiliação com a Woodenshark ou Lightpack&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3378"/>
+        <location filename="../../src/SettingsWindow.ui" line="3388"/>
         <source>Check for updates on startup</source>
         <translation>Verificar atualizações ao iniciar</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3388"/>
+        <location filename="../../src/SettingsWindow.ui" line="3398"/>
         <source>Install updates automatically</source>
         <translation>Instalar atualizações automaticamente</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3431"/>
+        <location filename="../../src/SettingsWindow.ui" line="3441"/>
         <source>This program is distributed «as is». Its source code is under the &lt;a href=&quot;http://www.gnu.org/licenses/gpl.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;GPL license&lt;/span&gt;&lt;/a&gt;. No warranty of any kind is expressed or implied. The authors will not be liable for data loss, damages, loss of profits or any other kind of loss while using or misusing this software. All content, such as icons, plugins, bitmaps etc. is under &lt;a href=&quot;http://creativecommons.org/licenses/by-sa/3.0/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;CC-BY-SA&lt;/span&gt;&lt;/a&gt; if otherwise is not noticed. &lt;br/&gt;&lt;br/&gt;This software build with the &lt;a href=&quot;http://qt-project.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Qt&lt;/span&gt;&lt;/a&gt; cross-platform framework, the &lt;a href=&quot;http://www.openssl.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;OpenSSL Toolkit&lt;/span&gt;&lt;/a&gt; and &lt;a href=&quot;http://somerandomdude.com/work/iconic/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;«Iconic»&lt;/span&gt;&lt;/a&gt; icon set by P.J. Onori as third-party licensed products.</source>
         <translation>Este programa é distribuído &quot;como está&quot;. Seu código-fonte está sob a &lt;a href=&quot;http://www.gnu.org/licenses/gpl.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;licença GPL&lt;/span&gt;&lt;/a&gt;. Nenhuma garantia de qualquer tipo é expressa ou implícita. Os autores não serão responsáveis por perda de dados, danos, perda de lucros ou qualquer outro tipo de prejuízo decorrente do uso ou mau uso deste software. Todo o conteúdo, como ícones, plugins, bitmaps, etc., está sob a licença &lt;a href=&quot;http://creativecommons.org/licenses/by-sa/3.0/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;CC-BY-SA&lt;/span&gt;&lt;/a&gt;, salvo indicação em contrário.&lt;br/&gt;&lt;br/&gt;Este software foi construído com o framework multiplataforma &lt;a href=&quot;http://qt-project.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Qt&lt;/span&gt;&lt;/a&gt;, o &lt;a href=&quot;http://www.openssl.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;OpenSSL Toolkit&lt;/span&gt;&lt;/a&gt; e o conjunto de ícones &lt;a href=&quot;http://somerandomdude.com/work/iconic/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;&quot;Iconic&quot;&lt;/span&gt;&lt;/a&gt; de P.J. Onori como produtos licenciados de terceiros.</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3463"/>
+        <location filename="../../src/SettingsWindow.ui" line="3473"/>
         <source>qrc:/text/cast.html</source>
         <translation>qrc:/text/cast.html</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="139"/>
+        <location filename="../../src/SettingsWindow.cpp" line="140"/>
         <source> The sound visualizer uses the &lt;a href=&quot;http://un4seen.com/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;BASS&lt;/span&gt;&lt;/a&gt; library.</source>
         <translation> O visualizador de som usa a biblioteca &lt;a href=&quot;http://un4seen.com/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;BASS&lt;/span&gt;&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="173"/>
-        <location filename="../../src/SettingsWindow.cpp" line="176"/>
-        <location filename="../../src/SettingsWindow.cpp" line="193"/>
+        <location filename="../../src/SettingsWindow.cpp" line="174"/>
+        <location filename="../../src/SettingsWindow.cpp" line="177"/>
+        <location filename="../../src/SettingsWindow.cpp" line="194"/>
         <source>ON</source>
         <translation>LIGADO</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="173"/>
-        <location filename="../../src/SettingsWindow.cpp" line="176"/>
-        <location filename="../../src/SettingsWindow.cpp" line="193"/>
+        <location filename="../../src/SettingsWindow.cpp" line="174"/>
+        <location filename="../../src/SettingsWindow.cpp" line="177"/>
+        <location filename="../../src/SettingsWindow.cpp" line="194"/>
         <source>OFF</source>
         <translation>DESLIGADO</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="183"/>
+        <location filename="../../src/SettingsWindow.cpp" line="184"/>
         <source>none</source>
         <translation>nenhum</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="389"/>
-        <location filename="../../src/SettingsWindow.cpp" line="1794"/>
+        <location filename="../../src/SettingsWindow.cpp" line="391"/>
+        <location filename="../../src/SettingsWindow.cpp" line="1796"/>
         <source>Prismatik: %1</source>
         <translation>Prismatik: %1</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="397"/>
-        <location filename="../../src/SettingsWindow.cpp" line="1831"/>
+        <location filename="../../src/SettingsWindow.cpp" line="399"/>
+        <location filename="../../src/SettingsWindow.cpp" line="1833"/>
         <source>System default</source>
         <translation>Padrão do sistema</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="439"/>
-        <location filename="../../src/SettingsWindow.cpp" line="1706"/>
+        <location filename="../../src/SettingsWindow.cpp" line="441"/>
+        <location filename="../../src/SettingsWindow.cpp" line="1708"/>
         <source>Profile: %1</source>
         <translation>Perfil: %1</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="440"/>
+        <location filename="../../src/SettingsWindow.cpp" line="442"/>
         <source>Device: %1</source>
         <translation>Dispositivo: %1</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="441"/>
+        <location filename="../../src/SettingsWindow.cpp" line="443"/>
         <source>FPS: %1</source>
         <translation>FPS: %1</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="551"/>
+        <location filename="../../src/SettingsWindow.cpp" line="553"/>
         <source>Prismatik was updated</source>
         <translation>O Prismatik foi atualizado</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="551"/>
+        <location filename="../../src/SettingsWindow.cpp" line="553"/>
         <source>Successfully updated to version %1.</source>
         <translation>Atualizado com sucesso para a versão %1.</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="555"/>
+        <location filename="../../src/SettingsWindow.cpp" line="557"/>
         <source>Prismatik automatic update failed</source>
         <translation>Falha na atualização automática do Prismatik</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="556"/>
+        <location filename="../../src/SettingsWindow.cpp" line="558"/>
         <source>There was a problem when trying to automatically update Prismatik to the latest version.
 </source>
         <translation>Ocorreu um problema ao tentar atualizar o Prismatik automaticamente para a versão mais recente.
 </translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="557"/>
+        <location filename="../../src/SettingsWindow.cpp" line="559"/>
         <source>You are still on version %1.
 </source>
         <translation>Você ainda está na versão %1.
 </translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="558"/>
+        <location filename="../../src/SettingsWindow.cpp" line="560"/>
         <source>Installing updates automatically was disabled.</source>
         <translation>A instalação automática de atualizações foi desativada.</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="646"/>
+        <location filename="../../src/SettingsWindow.cpp" line="648"/>
         <source> (restart the program first)</source>
         <translation> (reinicie o programa primeiro)</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="648"/>
-        <location filename="../../src/SettingsWindow.cpp" line="2022"/>
+        <location filename="../../src/SettingsWindow.cpp" line="650"/>
+        <location filename="../../src/SettingsWindow.cpp" line="2024"/>
         <source> (enable logs first and restart the program)</source>
         <translation> (ative os logs primeiro e reinicie o programa)</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="804"/>
-        <location filename="../../src/SettingsWindow.cpp" line="841"/>
+        <location filename="../../src/SettingsWindow.cpp" line="806"/>
+        <location filename="../../src/SettingsWindow.cpp" line="843"/>
         <source>Turn lights OFF</source>
         <translation>Desligar luzes</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="833"/>
+        <location filename="../../src/SettingsWindow.cpp" line="835"/>
         <source>Turn lights ON</source>
         <translation>Ligar luzes</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="1163"/>
+        <location filename="../../src/SettingsWindow.cpp" line="1165"/>
         <source>update firmware</source>
         <translation>atualizar firmware</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="1221"/>
+        <location filename="../../src/SettingsWindow.cpp" line="1223"/>
         <source>&lt;html&gt;&lt;body&gt;&lt;p&gt;Your frame rate reached &lt;b&gt;%1 FPS&lt;/b&gt;, your baud rate of &lt;b&gt;%2&lt;/b&gt; might be too low for the amount of LEDs (%3).&lt;/p&gt;&lt;p&gt;You might experience lag or visual artifacts with your LEDs.&lt;/p&gt;&lt;p&gt;Lower your target framerate to &lt;b&gt;under %4 FPS&lt;/b&gt; or increase your baud rate to &lt;b&gt;above %5&lt;/b&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;body&gt;&lt;p&gt;Sua taxa de quadros atingiu &lt;b&gt;%1 FPS&lt;/b&gt;; a taxa de baud de &lt;b&gt;%2&lt;/b&gt; pode ser muito baixa para a quantidade de LEDs (%3).&lt;/p&gt;&lt;p&gt;Você pode notar atrasos ou artefatos visuais nos LEDs.&lt;/p&gt;&lt;p&gt;Reduza a taxa de quadros desejada para &lt;b&gt;menos de %4 FPS&lt;/b&gt; ou aumente o baud rate para &lt;b&gt;acima de %5&lt;/b&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="1238"/>
+        <location filename="../../src/SettingsWindow.cpp" line="1240"/>
         <source>FPS: </source>
         <translation>FPS: </translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="1727"/>
+        <location filename="../../src/SettingsWindow.cpp" line="1729"/>
         <source>New profile</source>
         <translation>Novo perfil</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="2144"/>
+        <location filename="../../src/SettingsWindow.cpp" line="2146"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt; &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt; p, li { white-space: pre-wrap; } &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt; &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;software &lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;%1&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; (rev &lt;/span&gt;&lt;a href=&quot;https://github.com/psieg/Lightpack/commit/%2&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;%2&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;, Qt %4), firmware &lt;b&gt;%3&lt;/b&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt; &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt; p, li { white-space: pre-wrap; } &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt; &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;software &lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;%1&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; (rev &lt;/span&gt;&lt;a href=&quot;https://github.com/psieg/Lightpack/commit/%2&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;%2&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;, Qt %4), firmware &lt;b&gt;%3&lt;/b&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
@@ -1460,6 +1470,7 @@ Aba Modo &gt; Modo de captura de tela &gt; Ajuste das zonas de captura&lt;/p&gt;
     </message>
     <message>
         <location filename="../../src/wizard/ZonePlacementPage.ui" line="115"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="505"/>
         <source>Bottom</source>
         <translation>Parte inferior</translation>
     </message>
@@ -1494,6 +1505,7 @@ Aba Modo &gt; Modo de captura de tela &gt; Ajuste das zonas de captura&lt;/p&gt;
     </message>
     <message>
         <location filename="../../src/wizard/ZonePlacementPage.ui" line="195"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="500"/>
         <source>Top</source>
         <translation>Parte superior</translation>
     </message>
@@ -1521,6 +1533,101 @@ Aba Modo &gt; Modo de captura de tela &gt; Ajuste das zonas de captura&lt;/p&gt;
         <location filename="../../src/wizard/ZonePlacementPage.ui" line="339"/>
         <source>Starting LED for this display</source>
         <translation>LED inicial para este monitor</translation>
+    </message>
+    <message>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="395"/>
+        <source>Resize all boxes</source>
+        <translation>Redimensionar todas as caixas</translation>
+    </message>
+    <message>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="401"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="532"/>
+        <source>Width</source>
+        <translation>Largura</translation>
+    </message>
+    <message>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="408"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="428"/>
+        <source>—</source>
+        <translation>—</translation>
+    </message>
+    <message>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="421"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="552"/>
+        <source>Height</source>
+        <translation>Altura</translation>
+    </message>
+    <message>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="441"/>
+        <source>Apply to all boxes on this display</source>
+        <translation>Aplicar a todas as caixas desta tela</translation>
+    </message>
+    <message>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="464"/>
+        <source>LED groups</source>
+        <translation>Grupos de LEDs</translation>
+    </message>
+    <message>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="470"/>
+        <location filename="../../src/wizard/ZonePlacementPage.cpp" line="574"/>
+        <location filename="../../src/wizard/ZonePlacementPage.cpp" line="692"/>
+        <source>Right-click boxes to mark them as members of the group being edited.</source>
+        <translation>Clique com o botão direito nas caixas para marcá-las como membros do grupo em edição.</translation>
+    </message>
+    <message>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="482"/>
+        <source>Name</source>
+        <translation>Nome</translation>
+    </message>
+    <message>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="492"/>
+        <source>Edge</source>
+        <translation>Borda</translation>
+    </message>
+    <message>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="510"/>
+        <source>Left</source>
+        <translation>Esquerda</translation>
+    </message>
+    <message>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="515"/>
+        <source>Right</source>
+        <translation>Direita</translation>
+    </message>
+    <message>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="520"/>
+        <source>Custom</source>
+        <translation>Personalizado</translation>
+    </message>
+    <message>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="572"/>
+        <source>Create / apply group</source>
+        <translation>Criar / aplicar grupo</translation>
+    </message>
+    <message>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="586"/>
+        <source>Remove selected</source>
+        <translation>Remover selecionado</translation>
+    </message>
+    <message>
+        <location filename="../../src/wizard/ZonePlacementPage.cpp" line="573"/>
+        <source>%1 box(es) selected for the group. Right-click to toggle.</source>
+        <translation>%1 caixa(s) selecionada(s) para o grupo. Clique com o botão direito para alternar.</translation>
+    </message>
+    <message>
+        <location filename="../../src/wizard/ZonePlacementPage.cpp" line="637"/>
+        <source>%1 (%2, %3 members)</source>
+        <translation>%1 (%2, %3 membros)</translation>
+    </message>
+    <message>
+        <location filename="../../src/wizard/ZonePlacementPage.cpp" line="647"/>
+        <source>Enter a name for the group before applying it.</source>
+        <translation>Informe um nome para o grupo antes de aplicá-lo.</translation>
+    </message>
+    <message>
+        <location filename="../../src/wizard/ZonePlacementPage.cpp" line="653"/>
+        <source>Right-click at least one box before applying the group.</source>
+        <translation>Clique com o botão direito em pelo menos uma caixa antes de aplicar o grupo.</translation>
     </message>
 </context>
 </TS>
