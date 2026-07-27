@@ -13,6 +13,7 @@ private slots:
 	void testCase1();
 	void testColorWheel();
 	void testBloom();
+	void testColorAdjustments();
 };
 
 #endif // LIGHTPACKMATHTEST_HPP

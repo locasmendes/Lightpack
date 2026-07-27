@@ -71,6 +71,16 @@ namespace PrismatikMath
 	// strongly it qualifies per bloomFactor(). intensity<=0 or a non-bloom-worthy pixel
 	// (bloomFactor()==0) returns rgb unchanged.
 	QRgb applyBloom(const QRgb rgb, int intensity, int whitenessThresholdPercent);
+
+	// Scales chroma by factor (1.0 = unchanged, 0.0 = grayscale, >1.0 = more saturated).
+	QRgb adjustSaturation(const QRgb rgb, double factor);
+	// Scales each channel's distance from pivot by factor (1.0 = unchanged). Clamps to [0,255].
+	QRgb adjustContrast(const QRgb rgb, double factor, int pivot = 128);
+	// Like adjustSaturation, but the effective factor is pulled toward 1.0 (no change) the
+	// more saturated the pixel already is, weighted by protectionStrength [0,1] (0 = behaves
+	// exactly like adjustSaturation, 1 = fully-saturated pixels are left untouched).
+	QRgb adjustVibrance(const QRgb rgb, double factor, double protectionStrength = 0.6);
+
 	double theoreticalMaxFrameRate(const double ledCount, const double baudRate);
 	double theoreticalMinBaudRate(const double ledCount, const double frameRate);
 

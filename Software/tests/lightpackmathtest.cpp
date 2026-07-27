@@ -73,3 +73,30 @@ void LightpackMathTest::testBloom()
 	const QRgb boostedDim = PrismatikMath::applyBloom(dim, 100, 50);
 	QVERIFY(qRed(boostedDim) > qRed(dim));
 }
+
+void LightpackMathTest::testColorAdjustments()
+{
+	const QRgb testRgb = qRgb(200, 100, 50);
+
+	// Neutral factor (1.0) is identity for all three adjustments.
+	QCOMPARE(PrismatikMath::adjustSaturation(testRgb, 1.0), testRgb);
+	QCOMPARE(PrismatikMath::adjustContrast(testRgb, 1.0), testRgb);
+	QCOMPARE(PrismatikMath::adjustVibrance(testRgb, 1.0, 0.6), testRgb);
+
+	// Saturation factor 0 fully desaturates (grayscale: R==G==B).
+	const QRgb desaturated = PrismatikMath::adjustSaturation(testRgb, 0.0);
+	QCOMPARE(qRed(desaturated), qGreen(desaturated));
+	QCOMPARE(qGreen(desaturated), qBlue(desaturated));
+
+	// Contrast pushes channels away from the pivot, clamped to [0,255].
+	const QRgb highContrast = PrismatikMath::adjustContrast(qRgb(200, 50, 0), 3.0, 128);
+	QCOMPARE(qRed(highContrast), 255);
+	QCOMPARE(qBlue(highContrast), 0);
+
+	// Vibrance protects already-saturated pixels: with full protection, boosting a
+	// partially-saturated pixel's chroma moves it less than plain saturation would.
+	const QRgb partiallySaturated = qRgb(200, 100, 100); // chroma = 100, not maxed out
+	const int chromaFromSaturation = PrismatikMath::getChromaHSV(PrismatikMath::adjustSaturation(partiallySaturated, 1.5));
+	const int chromaFromVibrance = PrismatikMath::getChromaHSV(PrismatikMath::adjustVibrance(partiallySaturated, 1.5, 1.0));
+	QVERIFY(chromaFromVibrance < chromaFromSaturation);
+}

@@ -245,6 +245,9 @@ void SettingsWindow::connectSignalsSlots()
 	connect(ui->spinBox_GrabOverBrighten, qOverload<int>(&QSpinBox::valueChanged), this, &SettingsWindow::onGrabOverBrighten_valueChanged);
 	connect(ui->checkBox_GrabBloomEnabled, &QCheckBox::toggled, this, &SettingsWindow::onGrabBloomEnabled_toggled);
 	connect(ui->spinBox_GrabBloomIntensity, qOverload<int>(&QSpinBox::valueChanged), this, &SettingsWindow::onGrabBloomIntensity_valueChanged);
+	connect(ui->spinBox_GrabSaturation, qOverload<int>(&QSpinBox::valueChanged), this, &SettingsWindow::onGrabSaturation_valueChanged);
+	connect(ui->spinBox_GrabContrast, qOverload<int>(&QSpinBox::valueChanged), this, &SettingsWindow::onGrabContrast_valueChanged);
+	connect(ui->spinBox_GrabVibrance, qOverload<int>(&QSpinBox::valueChanged), this, &SettingsWindow::onGrabVibrance_valueChanged);
 	connect(ui->spinBox_GrabHostSmoothing, qOverload<int>(&QSpinBox::valueChanged), this, &SettingsWindow::onGrabHostSmoothing_valueChanged);
 	connect(ui->checkBox_GrabApplyBlueLightReduction, &QCheckBox::toggled, this, &SettingsWindow::onGrabApplyBlueLightReduction_toggled);
 	connect(ui->checkBox_GrabApplyColorTemperature, &QCheckBox::toggled, this, &SettingsWindow::onGrabApplyColorTemperature_toggled);
@@ -1328,6 +1331,27 @@ void SettingsWindow::onGrabBloomIntensity_valueChanged(int value)
 	Settings::setGrabBloomIntensity(value);
 }
 
+void SettingsWindow::onGrabSaturation_valueChanged(int value)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << value;
+
+	Settings::setGrabSaturation(value);
+}
+
+void SettingsWindow::onGrabContrast_valueChanged(int value)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << value;
+
+	Settings::setGrabContrast(value);
+}
+
+void SettingsWindow::onGrabVibrance_valueChanged(int value)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << value;
+
+	Settings::setGrabVibrance(value);
+}
+
 void SettingsWindow::onGrabHostSmoothing_valueChanged(int value)
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << value;
@@ -1983,6 +2007,9 @@ void SettingsWindow::updateUiFromSettings()
 	ui->spinBox_GrabOverBrighten->setValue							(Settings::getGrabOverBrighten());
 	ui->checkBox_GrabBloomEnabled->setChecked							(Settings::isGrabBloomEnabled());
 	ui->spinBox_GrabBloomIntensity->setValue							(Settings::getGrabBloomIntensity());
+	ui->spinBox_GrabSaturation->setValue								(Settings::getGrabSaturation());
+	ui->spinBox_GrabContrast->setValue									(Settings::getGrabContrast());
+	ui->spinBox_GrabVibrance->setValue									(Settings::getGrabVibrance());
 	ui->spinBox_GrabHostSmoothing->setValue							(Settings::getGrabHostSmoothingDuration());
 	ui->checkBox_GrabApplyBlueLightReduction->setChecked						(Settings::isGrabApplyBlueLightReductionEnabled());
 	ui->checkBox_GrabApplyColorTemperature->setChecked              (Settings::isGrabApplyColorTemperatureEnabled());

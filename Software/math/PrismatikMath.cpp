@@ -395,6 +395,28 @@ namespace PrismatikMath
 		return qRgb(r, g, b);
 	}
 
+	QRgb adjustSaturation(const QRgb rgb, double factor) {
+		const int currentChroma = getChromaHSV(rgb);
+		const int newChroma = withinRange(static_cast<int>(round(currentChroma * factor)), 0, 255);
+		return withChromaHSV(rgb, newChroma);
+	}
+
+	QRgb adjustContrast(const QRgb rgb, double factor, int pivot) {
+		const int r = withinRange(static_cast<int>(round(pivot + (qRed(rgb) - pivot) * factor)), 0, 255);
+		const int g = withinRange(static_cast<int>(round(pivot + (qGreen(rgb) - pivot) * factor)), 0, 255);
+		const int b = withinRange(static_cast<int>(round(pivot + (qBlue(rgb) - pivot) * factor)), 0, 255);
+		return qRgb(r, g, b);
+	}
+
+	QRgb adjustVibrance(const QRgb rgb, double factor, double protectionStrength) {
+		const int currentChroma = getChromaHSV(rgb);
+		const double saturationRatio = currentChroma / 255.0;
+		const double protection = withinRange(protectionStrength, 0.0, 1.0);
+		const double effectiveFactor = 1.0 + (factor - 1.0) * (1.0 - saturationRatio * protection);
+		const int newChroma = withinRange(static_cast<int>(round(currentChroma * effectiveFactor)), 0, 255);
+		return withChromaHSV(rgb, newChroma);
+	}
+
 	double theoreticalMaxFrameRate(const double ledCount, const double baudRate) {
 		// math credit https://www.partsnotincluded.com/calculating-adalight-framerate-limits/
 		return pow((10.0 * (3.0 * ledCount + 6.0)) / baudRate + 0.00003 * ledCount, -1.0);

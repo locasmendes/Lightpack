@@ -69,6 +69,11 @@ public slots:
 	void onGrabBloomEnabledChanged(bool state);
 	void onGrabBloomIntensityChanged(int value);
 	void onGrabBloomThresholdChanged(int value);
+	void onGrabSaturationChanged(int value);
+	void onGrabContrastChanged(int value);
+	void onGrabVibranceChanged(int value);
+	void onGrabContrastPivotChanged(int value);
+	void onGrabVibranceProtectionChanged(int value);
 	void onGrabApplyBlueLightReductionChanged(bool state);
 	void onGrabApplyColorTemperatureChanged(bool state);
 	void onGrabColorTemperatureChanged(int value);
@@ -151,6 +156,11 @@ private:
 	bool m_bloomEnabled;
 	int m_bloomIntensity;
 	int m_bloomThreshold;
+	int m_saturation;
+	int m_contrast;
+	int m_vibrance;
+	int m_contrastPivot;
+	int m_vibranceProtection;
 	bool m_isApplyBlueLightReduction;
 	bool m_isApplyColorTemperature;
 	double m_gamma;

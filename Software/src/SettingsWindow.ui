@@ -885,6 +885,123 @@ Boosts near-white, low-saturation pixels (lens flares, bright highlights) to mak
                  </property>
                 </widget>
                </item>
+               <item row="2" column="0" colspan="3">
+                <widget class="QLabel" name="label_GrabSaturation">
+                 <property name="text">
+                  <string>Saturation:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QSlider" name="horizontalSlider_GrabSaturation">
+                 <property name="minimum">
+                  <number>0</number>
+                 </property>
+                 <property name="maximum">
+                  <number>100</number>
+                 </property>
+                 <property name="value">
+                  <number>50</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="1">
+                <widget class="QSpinBox" name="spinBox_GrabSaturation">
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                 <property name="minimum">
+                  <number>0</number>
+                 </property>
+                 <property name="maximum">
+                  <number>100</number>
+                 </property>
+                 <property name="value">
+                  <number>50</number>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="0" colspan="3">
+                <widget class="QLabel" name="label_GrabContrast">
+                 <property name="text">
+                  <string>Contrast:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="0">
+                <widget class="QSlider" name="horizontalSlider_GrabContrast">
+                 <property name="minimum">
+                  <number>0</number>
+                 </property>
+                 <property name="maximum">
+                  <number>100</number>
+                 </property>
+                 <property name="value">
+                  <number>50</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="1">
+                <widget class="QSpinBox" name="spinBox_GrabContrast">
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                 <property name="minimum">
+                  <number>0</number>
+                 </property>
+                 <property name="maximum">
+                  <number>100</number>
+                 </property>
+                 <property name="value">
+                  <number>50</number>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="0" colspan="3">
+                <widget class="QLabel" name="label_GrabVibrance">
+                 <property name="text">
+                  <string>Vibrance:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="7" column="0">
+                <widget class="QSlider" name="horizontalSlider_GrabVibrance">
+                 <property name="minimum">
+                  <number>0</number>
+                 </property>
+                 <property name="maximum">
+                  <number>100</number>
+                 </property>
+                 <property name="value">
+                  <number>50</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="7" column="1">
+                <widget class="QSpinBox" name="spinBox_GrabVibrance">
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                 <property name="minimum">
+                  <number>0</number>
+                 </property>
+                 <property name="maximum">
+                  <number>100</number>
+                 </property>
+                 <property name="value">
+                  <number>50</number>
+                 </property>
+                </widget>
+               </item>
               </layout>
              </widget>
             </item>
@@ -3593,6 +3710,12 @@ Boosts near-white, low-saturation pixels (lens flares, bright highlights) to mak
   <tabstop>checkBox_GrabBloomEnabled</tabstop>
   <tabstop>horizontalSlider_GrabBloomIntensity</tabstop>
   <tabstop>spinBox_GrabBloomIntensity</tabstop>
+  <tabstop>horizontalSlider_GrabSaturation</tabstop>
+  <tabstop>spinBox_GrabSaturation</tabstop>
+  <tabstop>horizontalSlider_GrabContrast</tabstop>
+  <tabstop>spinBox_GrabContrast</tabstop>
+  <tabstop>horizontalSlider_GrabVibrance</tabstop>
+  <tabstop>spinBox_GrabVibrance</tabstop>
   <tabstop>horizontalSlider_LuminosityThreshold</tabstop>
   <tabstop>spinBox_LuminosityThreshold</tabstop>
   <tabstop>pushButton_lumosityThresholdHelp</tabstop>
@@ -4057,6 +4180,102 @@ Boosts near-white, low-saturation pixels (lens flares, bright highlights) to mak
     <hint type="destinationlabel">
      <x>422</x>
      <y>210</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSlider_GrabSaturation</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBox_GrabSaturation</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>368</x>
+     <y>320</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>422</x>
+     <y>320</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBox_GrabSaturation</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSlider_GrabSaturation</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>422</x>
+     <y>320</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>368</x>
+     <y>320</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSlider_GrabContrast</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBox_GrabContrast</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>368</x>
+     <y>340</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>422</x>
+     <y>340</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBox_GrabContrast</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSlider_GrabContrast</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>422</x>
+     <y>340</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>368</x>
+     <y>340</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>horizontalSlider_GrabVibrance</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinBox_GrabVibrance</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>368</x>
+     <y>360</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>422</x>
+     <y>360</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBox_GrabVibrance</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>horizontalSlider_GrabVibrance</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>422</x>
+     <y>360</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>368</x>
+     <y>360</y>
     </hint>
    </hints>
   </connection>

@@ -301,6 +301,31 @@ void GrabManager::onGrabBloomThresholdChanged(int value) {
 	m_bloomThreshold = value;
 }
 
+void GrabManager::onGrabSaturationChanged(int value) {
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << value;
+	m_saturation = value;
+}
+
+void GrabManager::onGrabContrastChanged(int value) {
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << value;
+	m_contrast = value;
+}
+
+void GrabManager::onGrabVibranceChanged(int value) {
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << value;
+	m_vibrance = value;
+}
+
+void GrabManager::onGrabContrastPivotChanged(int value) {
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << value;
+	m_contrastPivot = value;
+}
+
+void GrabManager::onGrabVibranceProtectionChanged(int value) {
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << value;
+	m_vibranceProtection = value;
+}
+
 void GrabManager::onGrabApplyBlueLightReductionChanged(bool state)
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << state;
@@ -387,6 +412,11 @@ void GrabManager::settingsProfileChanged(const QString &profileName)
 	m_bloomEnabled = Settings::isGrabBloomEnabled();
 	m_bloomIntensity = Settings::getGrabBloomIntensity();
 	m_bloomThreshold = Settings::getGrabBloomThreshold();
+	m_saturation = Settings::getGrabSaturation();
+	m_contrast = Settings::getGrabContrast();
+	m_vibrance = Settings::getGrabVibrance();
+	m_contrastPivot = Settings::getGrabContrastPivot();
+	m_vibranceProtection = Settings::getGrabVibranceProtection();
 	m_isApplyBlueLightReduction = Settings::isGrabApplyBlueLightReductionEnabled();
 	m_isApplyColorTemperature = Settings::isGrabApplyColorTemperatureEnabled();
 	m_colorTemperature = Settings::getGrabColorTemperature();
@@ -500,6 +530,15 @@ void GrabManager::handleGrabbedColors()
 	for (int i = 0; i < m_ledWidgets.size(); i++)
 	{
 		QRgb newColor = m_colorsProcessing[i];
+
+		if (m_saturation != 50)
+			newColor = PrismatikMath::adjustSaturation(newColor, m_saturation / 50.0);
+
+		if (m_contrast != 50)
+			newColor = PrismatikMath::adjustContrast(newColor, m_contrast / 50.0, m_contrastPivot);
+
+		if (m_vibrance != 50)
+			newColor = PrismatikMath::adjustVibrance(newColor, m_vibrance / 50.0, m_vibranceProtection / 100.0);
 
 		if (m_bloomEnabled)
 			newColor = PrismatikMath::applyBloom(newColor, m_bloomIntensity, m_bloomThreshold);

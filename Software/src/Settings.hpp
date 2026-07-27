@@ -226,6 +226,16 @@ public:
 	static void setGrabBloomIntensity(int value);
 	static int getGrabBloomThreshold();
 	static void setGrabBloomThreshold(int value);
+	static int getGrabSaturation();
+	static void setGrabSaturation(int value);
+	static int getGrabContrast();
+	static void setGrabContrast(int value);
+	static int getGrabVibrance();
+	static void setGrabVibrance(int value);
+	static int getGrabContrastPivot();
+	static void setGrabContrastPivot(int value);
+	static int getGrabVibranceProtection();
+	static void setGrabVibranceProtection(int value);
 	static bool isGrabApplyBlueLightReductionEnabled();
 	static void setGrabApplyBlueLightReductionEnabled(bool value);
 	static bool isGrabApplyColorTemperatureEnabled();
@@ -335,6 +345,11 @@ private:
 	static int getValidGrabOverBrighten(int value);
 	static int getValidGrabBloomIntensity(int value);
 	static int getValidGrabBloomThreshold(int value);
+	static int getValidGrabSaturation(int value);
+	static int getValidGrabContrast(int value);
+	static int getValidGrabVibrance(int value);
+	static int getValidGrabContrastPivot(int value);
+	static int getValidGrabVibranceProtection(int value);
 	static void setValidLedCoef(int ledIndex, const QString & keyCoef, double coef);
 	static double getValidLedCoef(int ledIndex, const QString & keyCoef);
 
@@ -425,6 +440,11 @@ signals:
 	void grabBloomEnabledChanged(bool isEnabled);
 	void grabBloomIntensityChanged(int value);
 	void grabBloomThresholdChanged(int value);
+	void grabSaturationChanged(int value);
+	void grabContrastChanged(int value);
+	void grabVibranceChanged(int value);
+	void grabContrastPivotChanged(int value);
+	void grabVibranceProtectionChanged(int value);
 	void grabApplyBlueLightReductionChanged(bool isEnabled);
 	void grabApplyColorTemperatureChanged(bool isEnabled);
 	void grabColorTemperatureChanged(int value);

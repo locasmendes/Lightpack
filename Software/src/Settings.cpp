@@ -212,6 +212,11 @@ static const QString OverBrighten = QStringLiteral("Grab/OverBrighten");
 static const QString IsBloomEnabled = QStringLiteral("Grab/IsBloomEnabled");
 static const QString BloomIntensity = QStringLiteral("Grab/BloomIntensity");
 static const QString BloomThreshold = QStringLiteral("Grab/BloomThreshold");
+static const QString Saturation = QStringLiteral("Grab/Saturation");
+static const QString Contrast = QStringLiteral("Grab/Contrast");
+static const QString Vibrance = QStringLiteral("Grab/Vibrance");
+static const QString ContrastPivot = QStringLiteral("Grab/ContrastPivot");
+static const QString VibranceProtection = QStringLiteral("Grab/VibranceProtection");
 static const QString IsMinimumLuminosityEnabled = QStringLiteral("Grab/IsMinimumLuminosityEnabled");
 static const QString IsDx1011GrabberEnabled = QStringLiteral("Grab/IsDX1011GrabberEnabled");
 static const QString IsDx9GrabbingEnabled = QStringLiteral("Grab/IsDX9GrabbingEnabled");
@@ -1588,6 +1593,66 @@ void Settings::setGrabBloomThreshold(int value)
 	emit m_this->grabBloomThresholdChanged(value);
 }
 
+int Settings::getGrabSaturation()
+{
+	return getValidGrabSaturation(value(Profile::Key::Grab::Saturation).toInt());
+}
+
+void Settings::setGrabSaturation(int value)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
+	setValue(Profile::Key::Grab::Saturation, getValidGrabSaturation(value));
+	emit m_this->grabSaturationChanged(value);
+}
+
+int Settings::getGrabContrast()
+{
+	return getValidGrabContrast(value(Profile::Key::Grab::Contrast).toInt());
+}
+
+void Settings::setGrabContrast(int value)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
+	setValue(Profile::Key::Grab::Contrast, getValidGrabContrast(value));
+	emit m_this->grabContrastChanged(value);
+}
+
+int Settings::getGrabVibrance()
+{
+	return getValidGrabVibrance(value(Profile::Key::Grab::Vibrance).toInt());
+}
+
+void Settings::setGrabVibrance(int value)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
+	setValue(Profile::Key::Grab::Vibrance, getValidGrabVibrance(value));
+	emit m_this->grabVibranceChanged(value);
+}
+
+int Settings::getGrabContrastPivot()
+{
+	return getValidGrabContrastPivot(value(Profile::Key::Grab::ContrastPivot).toInt());
+}
+
+void Settings::setGrabContrastPivot(int value)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
+	setValue(Profile::Key::Grab::ContrastPivot, getValidGrabContrastPivot(value));
+	emit m_this->grabContrastPivotChanged(value);
+}
+
+int Settings::getGrabVibranceProtection()
+{
+	return getValidGrabVibranceProtection(value(Profile::Key::Grab::VibranceProtection).toInt());
+}
+
+void Settings::setGrabVibranceProtection(int value)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
+	setValue(Profile::Key::Grab::VibranceProtection, getValidGrabVibranceProtection(value));
+	emit m_this->grabVibranceProtectionChanged(value);
+}
+
 bool Settings::isGrabApplyBlueLightReductionEnabled()
 {
 	return value(Profile::Key::Grab::IsApplyBlueLightReductionEnabled).toBool();
@@ -2345,6 +2410,51 @@ int Settings::getValidGrabBloomThreshold(int value)
 	return value;
 }
 
+int Settings::getValidGrabSaturation(int value)
+{
+	if (value < Profile::Grab::SaturationMin)
+		value = Profile::Grab::SaturationMin;
+	else if (value > Profile::Grab::SaturationMax)
+		value = Profile::Grab::SaturationMax;
+	return value;
+}
+
+int Settings::getValidGrabContrast(int value)
+{
+	if (value < Profile::Grab::ContrastMin)
+		value = Profile::Grab::ContrastMin;
+	else if (value > Profile::Grab::ContrastMax)
+		value = Profile::Grab::ContrastMax;
+	return value;
+}
+
+int Settings::getValidGrabVibrance(int value)
+{
+	if (value < Profile::Grab::VibranceMin)
+		value = Profile::Grab::VibranceMin;
+	else if (value > Profile::Grab::VibranceMax)
+		value = Profile::Grab::VibranceMax;
+	return value;
+}
+
+int Settings::getValidGrabContrastPivot(int value)
+{
+	if (value < Profile::Grab::ContrastPivotMin)
+		value = Profile::Grab::ContrastPivotMin;
+	else if (value > Profile::Grab::ContrastPivotMax)
+		value = Profile::Grab::ContrastPivotMax;
+	return value;
+}
+
+int Settings::getValidGrabVibranceProtection(int value)
+{
+	if (value < Profile::Grab::VibranceProtectionMin)
+		value = Profile::Grab::VibranceProtectionMin;
+	else if (value > Profile::Grab::VibranceProtectionMax)
+		value = Profile::Grab::VibranceProtectionMax;
+	return value;
+}
+
 void Settings::setValidLedCoef(int ledIndex, const QString & keyCoef, double coef)
 {
 	if (coef < Profile::Led::CoefMin || coef > Profile::Led::CoefMax){
@@ -2433,6 +2543,11 @@ void Settings::initCurrentProfile(bool isResetDefault)
 	setNewOption(Profile::Key::Grab::IsBloomEnabled,				Profile::Grab::IsBloomEnabledDefault, isResetDefault);
 	setNewOption(Profile::Key::Grab::BloomIntensity,				Profile::Grab::BloomIntensityDefault, isResetDefault);
 	setNewOption(Profile::Key::Grab::BloomThreshold,				Profile::Grab::BloomThresholdDefault, isResetDefault);
+	setNewOption(Profile::Key::Grab::Saturation,					Profile::Grab::SaturationDefault, isResetDefault);
+	setNewOption(Profile::Key::Grab::Contrast,						Profile::Grab::ContrastDefault, isResetDefault);
+	setNewOption(Profile::Key::Grab::Vibrance,						Profile::Grab::VibranceDefault, isResetDefault);
+	setNewOption(Profile::Key::Grab::ContrastPivot,				Profile::Grab::ContrastPivotDefault, isResetDefault);
+	setNewOption(Profile::Key::Grab::VibranceProtection,			Profile::Grab::VibranceProtectionDefault, isResetDefault);
 	setNewOption(Profile::Key::Grab::IsSendDataOnlyIfColorsChanges, Profile::Grab::IsSendDataOnlyIfColorsChangesDefault, isResetDefault);
 	setNewOption(Profile::Key::Grab::Slowdown,						Profile::Grab::SlowdownDefault, isResetDefault);
 	setNewOption(Profile::Key::Grab::HostSmoothingDuration,			Profile::Grab::HostSmoothingDurationDefault, isResetDefault);
