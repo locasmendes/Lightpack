@@ -27,6 +27,8 @@
 #include <QtAlgorithms>
 #include <QStatusBar>
 #include <QMenu>
+#include <QScreen>
+#include <QGuiApplication>
 #include "LightpackApplication.hpp"
 
 #include "SettingsWindow.hpp"
@@ -47,6 +49,10 @@
 #include <QStringBuilder>
 #include <QScrollBar>
 #include <QMessageBox>
+#include <QAbstractSpinBox>
+#include <QAbstractSlider>
+#include <QComboBox>
+#include <QEvent>
 #include "PrismatikMath.hpp"
 
 using namespace SettingsScope;
@@ -60,6 +66,41 @@ const QString BaudrateWarningSign = QStringLiteral(" <b>!!!</b>");
 #else
 const QString BaudrateWarningSign = QStringLiteral(" ⚠️");
 #endif
+
+	// Spin boxes/combo boxes/sliders normally react to the mouse wheel even without focus,
+	// which is fine standalone but means scrolling past one inside a QScrollArea silently
+	// changes its value instead of scrolling the page. Swallow the wheel event for these
+	// while unfocused so the scroll area gets it instead - installed once on every such
+	// descendant of the "Mode"/"Device" tabs' new scroll areas (see installWheelIgnoreFilter).
+	class WheelIgnoreFilter : public QObject
+	{
+	public:
+		using QObject::QObject;
+
+	protected:
+		bool eventFilter(QObject* watched, QEvent* event) override
+		{
+			if (event->type() == QEvent::Wheel) {
+				QWidget* widget = qobject_cast<QWidget*>(watched);
+				if (widget && !widget->hasFocus()) {
+					event->ignore();
+					return true;
+				}
+			}
+			return QObject::eventFilter(watched, event);
+		}
+	};
+
+	void installWheelIgnoreFilter(QWidget* root)
+	{
+		auto* filter = new WheelIgnoreFilter(root);
+		for (QAbstractSpinBox* w : root->findChildren<QAbstractSpinBox*>())
+			w->installEventFilter(filter);
+		for (QComboBox* w : root->findChildren<QComboBox*>())
+			w->installEventFilter(filter);
+		for (QAbstractSlider* w : root->findChildren<QAbstractSlider*>())
+			w->installEventFilter(filter);
+	}
 }
 const QString SettingsWindow::DeviceFirmvareVersionUndef = QStringLiteral("undef");
 const QString SettingsWindow::LightpackDownloadsPageUrl = QStringLiteral("http://code.google.com/p/lightpack/downloads/list");
@@ -196,8 +237,10 @@ SettingsWindow::SettingsWindow(QWidget *parent) :
 
 	// /Expert tab tooltips update
 
-	adjustSize();
-	resize(minimumSize());
+	installWheelIgnoreFilter(ui->scrollAreaWidgetContents_LightpackModes);
+	installWheelIgnoreFilter(ui->scrollAreaWidgetContents_DeviceOptions);
+
+	resizeToFitScreen();
 
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << "initialized";
 }
@@ -276,6 +319,9 @@ void SettingsWindow::connectSignalsSlots()
 
 	// Main options
 	connect(ui->comboBox_LightpackModes, qOverload<int>(&QComboBox::currentIndexChanged), this, &SettingsWindow::onLightpackModes_currentIndexChanged);
+	connect(ui->stackedWidget_LightpackModes, &QStackedWidget::currentChanged, this, [this](int) {
+		ui->scrollArea_LightpackModes->verticalScrollBar()->setValue(0);
+	});
 	connect(ui->comboBox_Language, &QComboBox::currentTextChanged, this, &SettingsWindow::loadTranslation);
 	connect(ui->pushButton_EnableDisableDevice, &QPushButton::clicked, this, &SettingsWindow::toggleBacklight);
 
@@ -2354,8 +2400,34 @@ void SettingsWindow::versionsUpdate()
 
 	ui->labelVersions->setText( versionsTemplate );
 
+	resizeToFitScreen();
+}
+
+void SettingsWindow::resizeToFitScreen()
+{
+	// QScrollArea deliberately decouples its own sizeHint()/minimumSize() from its content's -
+	// that's what stops the window from growing forever as more controls get added inside
+	// scrollArea_LightpackModes/DeviceOptions. So instead of the old resize(minimumSize()),
+	// explicitly ask each scrolled tab's content how tall it would *like* to be (unclamped),
+	// and grow the window to fit the tallest one - but never past what the current screen can
+	// actually show. Whatever doesn't fit stays reachable via the scrollbar instead of pushing
+	// the window off-screen with no way back, which is what prompted this in the first place.
 	adjustSize();
-	resize(minimumSize());
+
+	const int chromeHeight = height() - ui->scrollArea_LightpackModes->height();
+	const int modeNaturalHeight = ui->scrollAreaWidgetContents_LightpackModes->sizeHint().height();
+	const int deviceNaturalHeight = ui->scrollAreaWidgetContents_DeviceOptions->sizeHint().height();
+	const int desiredHeight = chromeHeight + qMax(modeNaturalHeight, deviceNaturalHeight);
+
+	QScreen* activeScreen = windowHandle() ? windowHandle()->screen() : nullptr;
+	if (!activeScreen)
+		activeScreen = QGuiApplication::primaryScreen();
+	const QRect avail = activeScreen ? activeScreen->availableGeometry() : QRect(0, 0, 1024, 768);
+
+	QSize target = size();
+	target.setHeight(qBound(target.height(), desiredHeight, avail.height() - 60));
+	target.setWidth(qMin(target.width(), avail.width() - 60));
+	resize(target);
 }
 
 void SettingsWindow::showHelpOf(QObject *object)
@@ -2418,6 +2490,11 @@ void SettingsWindow::on_pushButton_grabGammaHelp_clicked()
 void SettingsWindow::on_pushButton_grabOverBrightenHelp_clicked()
 {
 	showHelpOf(ui->horizontalSlider_GrabOverBrighten);
+}
+
+void SettingsWindow::on_pushButton_ReapplyLedGroupsHelp_clicked()
+{
+	showHelpOf(ui->pushButton_ReapplyLedGroups);
 }
 
 void SettingsWindow::on_pushButton_grabHostSmoothingHelp_clicked()

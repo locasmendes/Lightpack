@@ -239,6 +239,7 @@ private slots:
 
 	void on_pushButton_grabOverBrightenHelp_clicked();
 	void on_pushButton_grabHostSmoothingHelp_clicked();
+	void on_pushButton_ReapplyLedGroupsHelp_clicked();
 
 	void on_pushButton_AllPluginsHelp_clicked();
 
@@ -305,6 +306,11 @@ private:
 	// Loads lampId's persisted Speed/Density/Direction into the effect-param widgets (without
 	// emitting their valueChanged/toggled signals) and refreshes which of them are visible.
 	void loadMoodLampEffectParamsIntoUi(int lampId);
+	// Sizes the window tall enough to show the "Mode"/"Device" tabs' content without
+	// scrolling on a typical screen, but never taller than what actually fits on the
+	// current screen - anything beyond that is reachable via the QScrollArea in each tab
+	// instead of growing the window off-screen (see scrollArea_LightpackModes/DeviceOptions).
+	void resizeToFitScreen();
 
 
 private:

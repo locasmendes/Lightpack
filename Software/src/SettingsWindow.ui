@@ -297,7 +297,29 @@ Reveals extra fine-grained controls across the color/effect sections: bloom thre
          </widget>
         </item>
         <item row="3" column="0">
-         <widget class="QStackedWidget" name="stackedWidget_LightpackModes">
+         <widget class="QScrollArea" name="scrollArea_LightpackModes">
+          <property name="widgetResizable">
+           <bool>true</bool>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <widget class="QWidget" name="scrollAreaWidgetContents_LightpackModes">
+           <layout class="QVBoxLayout" name="verticalLayout_scrollAreaLightpackModes">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QStackedWidget" name="stackedWidget_LightpackModes">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -899,6 +921,9 @@ Boosts near-white, low-saturation pixels (lens flares, bright highlights) to mak
                </item>
                <item row="2" column="0" colspan="3">
                 <widget class="QLabel" name="label_GrabSaturation">
+                 <property name="toolTip">
+                  <string>50 = unchanged. Below 50 mutes colors toward grayscale, above 50 makes them more vivid.</string>
+                 </property>
                  <property name="text">
                   <string>Saturation:</string>
                  </property>
@@ -938,6 +963,9 @@ Boosts near-white, low-saturation pixels (lens flares, bright highlights) to mak
                </item>
                <item row="4" column="0" colspan="3">
                 <widget class="QLabel" name="label_GrabContrast">
+                 <property name="toolTip">
+                  <string>50 = unchanged. Below 50 flattens the difference between light and dark, above 50 exaggerates it.</string>
+                 </property>
                  <property name="text">
                   <string>Contrast:</string>
                  </property>
@@ -977,6 +1005,9 @@ Boosts near-white, low-saturation pixels (lens flares, bright highlights) to mak
                </item>
                <item row="6" column="0" colspan="3">
                 <widget class="QLabel" name="label_GrabVibrance">
+                 <property name="toolTip">
+                  <string>Like Saturation, but eases off on colors that are already vivid - boosts dull colors without oversaturating skin tones or colors that are already vibrant. 50 = unchanged.</string>
+                 </property>
                  <property name="text">
                   <string>Vibrance:</string>
                  </property>
@@ -1018,6 +1049,9 @@ Boosts near-white, low-saturation pixels (lens flares, bright highlights) to mak
                 <widget class="QLabel" name="label_GrabBloomThreshold">
                  <property name="visible">
                   <bool>false</bool>
+                 </property>
+                 <property name="toolTip">
+                  <string>How close to pure white/gray a pixel's color must be before Bloom boosts it at all. Higher = stricter (only near-pure-white qualifies); lower = more colors get treated as bloom-worthy.</string>
                  </property>
                  <property name="text">
                   <string>Bloom threshold:</string>
@@ -1067,6 +1101,9 @@ Boosts near-white, low-saturation pixels (lens flares, bright highlights) to mak
                  <property name="visible">
                   <bool>false</bool>
                  </property>
+                 <property name="toolTip">
+                  <string>The brightness level (0-255) that Contrast pivots around - values above it get brighter and values below it get darker as Contrast increases. 128 (middle gray) is the default.</string>
+                 </property>
                  <property name="text">
                   <string>Contrast pivot:</string>
                  </property>
@@ -1114,6 +1151,9 @@ Boosts near-white, low-saturation pixels (lens flares, bright highlights) to mak
                 <widget class="QLabel" name="label_GrabVibranceProtection">
                  <property name="visible">
                   <bool>false</bool>
+                 </property>
+                 <property name="toolTip">
+                  <string>How strongly Vibrance backs off on colors that are already saturated. 0 = behaves exactly like Saturation (no protection); 100 = fully-saturated colors are left completely untouched.</string>
                  </property>
                  <property name="text">
                   <string>Vibrance protection:</string>
@@ -1304,6 +1344,9 @@ Boosts near-white, low-saturation pixels (lens flares, bright highlights) to mak
                 <property name="visible">
                  <bool>false</bool>
                 </property>
+                <property name="toolTip">
+                 <string>100% = the effect's normal speed. Only affects the currently selected effect (Rainbow/Comet/Theater Chase/Twinkle).</string>
+                </property>
                 <property name="text">
                  <string>Effect speed:</string>
                 </property>
@@ -1355,6 +1398,9 @@ Boosts near-white, low-saturation pixels (lens flares, bright highlights) to mak
                 <property name="visible">
                  <bool>false</bool>
                 </property>
+                <property name="toolTip">
+                 <string>Only shown for Twinkle: 100% = normal amount of simultaneous sparkles. Higher shows more at once, lower makes them sparser.</string>
+                </property>
                 <property name="text">
                  <string>Effect density:</string>
                 </property>
@@ -1405,6 +1451,9 @@ Boosts near-white, low-saturation pixels (lens flares, bright highlights) to mak
                <widget class="QCheckBox" name="checkBox_MoodLampEffectDirectionReversed">
                 <property name="visible">
                  <bool>false</bool>
+                </property>
+                <property name="toolTip">
+                 <string>Not shown for Twinkle (it has no direction). Reverses which way the effect travels along the strip.</string>
                 </property>
                 <property name="text">
                  <string>Reverse effect direction</string>
@@ -1633,6 +1682,10 @@ Boosts near-white, low-saturation pixels (lens flares, bright highlights) to mak
                </size>
               </property>
              </spacer>
+            </item>
+           </layout>
+          </widget>
+         </widget>
             </item>
            </layout>
           </widget>
@@ -1878,7 +1931,29 @@ Boosts near-white, low-saturation pixels (lens flares, bright highlights) to mak
        <attribute name="title">
         <string>Device</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_12" columnstretch="0,0,0,0,0,0">
+       <layout class="QVBoxLayout" name="verticalLayout_tabDeviceOptions">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QScrollArea" name="scrollArea_DeviceOptions">
+          <property name="widgetResizable">
+           <bool>true</bool>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <widget class="QWidget" name="scrollAreaWidgetContents_DeviceOptions">
+           <layout class="QGridLayout" name="gridLayout_12" columnstretch="0,0,0,0,0,0">
         <property name="leftMargin">
          <number>20</number>
         </property>
@@ -2096,8 +2171,42 @@ Boosts near-white, low-saturation pixels (lens flares, bright highlights) to mak
             <property name="toolTip">
              <string>Reapplies every enabled LED group's width/height override, without reopening the wizard.</string>
             </property>
+            <property name="whatsThis">
+             <string>&lt;h4&gt;Reapply LED groups&lt;/h4&gt;
+
+LED groups (created in the configuration wizard's zone placement step) let you resize several LEDs at once by a shared width/height override, instead of a fixed value per LED. If you've manually resized individual LEDs afterwards and want to snap them back to their group's override without redoing the whole wizard, click this.</string>
+            </property>
             <property name="text">
              <string>Reapply LED groups</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_ReapplyLedGroupsHelp">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">margin:0px;</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../res/LightpackResources.qrc">
+              <normaloff>:/icons/help.png</normaloff>:/icons/help.png</iconset>
+            </property>
+            <property name="flat">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -2676,6 +2785,10 @@ Boosts near-white, low-saturation pixels (lens flares, bright highlights) to mak
              </spacer>
             </item>
            </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
           </widget>
          </widget>
         </item>
@@ -3620,7 +3733,13 @@ Boosts near-white, low-saturation pixels (lens flares, bright highlights) to mak
       &lt;li&gt;&lt;b&gt;Direct3D 10/11:&lt;/b&gt; Direct capture hook for full-screen games.&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;&lt;b&gt;Mood Lamp:&lt;/b&gt; Static colors, gradients, or smooth color cycling effects without screen capture.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Mood Lamp:&lt;/b&gt; Static colors, gradients, or animated effects without screen capture. Three color modes (Mode tab &amp;gt; Mood lamp):
+    &lt;ul&gt;
+      &lt;li&gt;&lt;b&gt;Constant:&lt;/b&gt; One fixed color, chosen with the color wheel. Always uses the Static effect, so it truly stops changing.&lt;/li&gt;
+      &lt;li&gt;&lt;b&gt;Breathing:&lt;/b&gt; Same fixed color as Constant, with a smooth brightness pulse.&lt;/li&gt;
+      &lt;li&gt;&lt;b&gt;Liquid:&lt;/b&gt; Cycles through colors over time, animated by whichever effect you pick from the lamp dropdown: Static, Fire, RGB is Life, Rainbow (full spectrum sweep across the strip), Comet (a bright head with a fading trail), Theater Chase (marquee-style moving dots), or Twinkle (random sparkles). In &lt;b&gt;Advanced mode&lt;/b&gt;, Rainbow/Comet/Theater Chase/Twinkle each expose extra Speed/Density/Direction sliders next to the dropdown.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
   &lt;li&gt;&lt;b&gt;Sound Visualizer:&lt;/b&gt; Analyzes system audio output in real time to animate LEDs according to sound frequencies and volume.&lt;/li&gt;
 &lt;/ul&gt;
 
@@ -3634,29 +3753,48 @@ Boosts near-white, low-saturation pixels (lens flares, bright highlights) to mak
   &lt;li&gt;&lt;b&gt;Power Supply Caps &amp;amp; Brightness:&lt;/b&gt; Set global maximum brightness and total current limit (mA) to protect power supplies.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3&gt;3. Image &amp;amp; Color Post-Processing&lt;/h3&gt;
+&lt;h3&gt;3. LED Groups &amp;amp; Colors&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;b&gt;Color wheel:&lt;/b&gt; Every color button in Prismatik (Mood Lamp color, group colors) opens a hue/saturation wheel plus a brightness slider, instead of the system color dialog.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;LED groups:&lt;/b&gt; Created in the configuration wizard's zone placement step - select several LEDs and give them a shared width/height override, so resizing one group resizes all its members together.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Per-group color (Constant mode only):&lt;/b&gt; A group can also have its own fixed color, checked with the &amp;quot;Color&amp;quot; box next to it in the wizard. It overrides that group's LEDs whenever Mood Lamp is in Constant color mode; it's ignored in Breathing/Liquid mode, but stays saved for when you switch back.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Reapply LED groups (Device tab):&lt;/b&gt; Re-applies every enabled group's width/height override without reopening the wizard - useful if you've manually resized an individual LED afterwards and want it to snap back to its group.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;4. Image &amp;amp; Color Post-Processing&lt;/h3&gt;
 &lt;ul&gt;
   &lt;li&gt;&lt;b&gt;Color Temperature &amp;amp; Night Light:&lt;/b&gt; Adjust color temperature (Kelvin) or reduce blue light during evening hours.&lt;/li&gt;
   &lt;li&gt;&lt;b&gt;Gamma Correction:&lt;/b&gt; Fine-tune non-linear color luminosity curve for vibrant LED representation.&lt;/li&gt;
   &lt;li&gt;&lt;b&gt;Overbrighten:&lt;/b&gt; Boosts lower color intensity levels to maintain vivid backlight illumination even in dark scenes.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Bloom:&lt;/b&gt; Boosts near-white, low-saturation pixels - lens flares, bright highlights - so they stand out more instead of blending into the rest of the frame.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Saturation / Contrast / Vibrance:&lt;/b&gt; Three sliders, all on a 0-100 scale where 50 = unchanged, applied to every captured pixel (in that order, before Bloom). Vibrance is like Saturation but eases off on colors that are already vivid, to avoid oversaturating skin tones.&lt;/li&gt;
   &lt;li&gt;&lt;b&gt;Luminosity Threshold &amp;amp; Dead Zone:&lt;/b&gt; Ignore very dark pixels to turn off LEDs during pitch-black movie scenes.&lt;/li&gt;
   &lt;li&gt;&lt;b&gt;Dithering:&lt;/b&gt; Smooths out color banding in low-brightness gradients.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3&gt;4. Profiles &amp;amp; Quick Switching&lt;/h3&gt;
+&lt;h3&gt;5. Advanced Mode&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;A single &amp;quot;Advanced mode&amp;quot; checkbox at the top of this window reveals extra fine-grained controls across the Mode tab that stay hidden by default:&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Bloom threshold:&lt;/b&gt; How close to pure white a pixel must be before Bloom treats it as bloom-worthy at all.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Contrast pivot:&lt;/b&gt; The brightness level (0-255) Contrast pivots around instead of the default middle gray (128).&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Vibrance protection:&lt;/b&gt; How strongly Vibrance backs off on already-saturated colors.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Per-effect Speed/Density/Direction:&lt;/b&gt; Next to the Mood Lamp effect dropdown, for the 4 animated effects that support it (Rainbow/Comet/Theater Chase/Twinkle) - only the fields that effect actually uses are shown.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3&gt;6. Profiles &amp;amp; Quick Switching&lt;/h3&gt;
 &lt;ul&gt;
   &lt;li&gt;Create separate profiles for Gaming, Movies, Night Mode, or Work.&lt;/li&gt;
   &lt;li&gt;Switch profiles instantly via the System Tray icon menu or hotkeys.&lt;/li&gt;
   &lt;li&gt;Save and backup your configuration settings per profile.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3&gt;5. Plugins &amp;amp; Extensions&lt;/h3&gt;
+&lt;h3&gt;7. Plugins &amp;amp; Extensions&lt;/h3&gt;
 &lt;ul&gt;
   &lt;li&gt;Enable third-party plugins to expand Prismatik functionality (e.g., smart home integrations, notifications, specialized game effects).&lt;/li&gt;
   &lt;li&gt;Manage plugin execution order and priority.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3&gt;6. Expert &amp;amp; Advanced Features&lt;/h3&gt;
+&lt;h3&gt;8. Expert &amp;amp; Advanced Features&lt;/h3&gt;
 &lt;ul&gt;
   &lt;li&gt;&lt;b&gt;API Server (TCP):&lt;/b&gt; Embedded TCP server allows external programs, home automation systems (Home Assistant), or custom scripts to query status and set LED colors.&lt;/li&gt;
   &lt;li&gt;&lt;b&gt;API Authentication &amp;amp; Security:&lt;/b&gt; Option to bind to local interface (127.0.0.1) and require API key authentication.&lt;/li&gt;
@@ -4012,6 +4150,8 @@ Boosts near-white, low-saturation pixels (lens flares, bright highlights) to mak
   <tabstop>checkBox_EnableDithering</tabstop>
   <tabstop>pushButton_DitheringHelp</tabstop>
   <tabstop>pbRunConfigurationWizard</tabstop>
+  <tabstop>pushButton_ReapplyLedGroups</tabstop>
+  <tabstop>pushButton_ReapplyLedGroupsHelp</tabstop>
   <tabstop>tabDevices</tabstop>
   <tabstop>checkBox_DisableUsbPowerLed</tabstop>
   <tabstop>horizontalSlider_DeviceColorDepth</tabstop>
