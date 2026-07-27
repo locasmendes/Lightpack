@@ -1525,9 +1525,19 @@ void SettingsWindow::onMoodLampLiquidMode_Toggled(bool checked)
 	{
 		ui->pushButton_SelectColorMoodLamp->setEnabled(false);
 		ui->horizontalSlider_MoodLampSpeed->setEnabled(true);
+		ui->comboBox_MoodLampLamp->setEnabled(true);
 	} else {
 		ui->pushButton_SelectColorMoodLamp->setEnabled(true);
 		ui->horizontalSlider_MoodLampSpeed->setEnabled(false);
+
+		// Lamp effects (Fire/RGB is Life) animate every tick regardless of
+		// which color they're fed - only Static keeps the output truly
+		// unchanging. Constant color mode forces Static at runtime
+		// (MoodLampManager::applyEffectiveLamp) without touching the
+		// persisted preference, so just disable the combo here rather than
+		// resetting its selection - it's ready again as soon as Liquid mode
+		// is re-enabled.
+		ui->comboBox_MoodLampLamp->setEnabled(false);
 	}
 }
 

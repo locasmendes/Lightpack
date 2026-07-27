@@ -111,6 +111,14 @@ void MoodLampBase::populateNameList(QList<MoodLampLampInfo>& list, int& recommen
 		recommended = list[0].id;
 }
 
+int MoodLampBase::defaultLampId()
+{
+	QList<MoodLampLampInfo> list;
+	int recommended = 0;
+	populateNameList(list, recommended);
+	return recommended;
+}
+
 DECLARE_LAMP(Static, "Static (default)",
 public:
 	std::chrono::milliseconds interval() const { return 50ms; };

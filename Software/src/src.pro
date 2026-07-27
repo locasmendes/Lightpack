@@ -333,6 +333,7 @@ SOURCES += \
     wizard/CustomDistributor.cpp \
     wizard/ContentAspectPreset.cpp \
     wizard/LayoutRecipeGenerator.cpp \
+    wizard/DeviceDiscoveryDefault.cpp \
     ZoneLayoutRuntime.cpp \
     systrayicon/SysTrayIcon.cpp \
     UpdatesProcessor.cpp \
@@ -396,6 +397,7 @@ HEADERS += \
     wizard/CustomDistributor.hpp \
     wizard/ContentAspectPreset.hpp \
     wizard/LayoutRecipeGenerator.hpp \
+    wizard/DeviceDiscoveryDefault.hpp \
     ZoneLayoutRuntime.hpp \
     systrayicon/SysTrayIcon.hpp \
     UpdatesProcessor.hpp \

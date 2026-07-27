@@ -51,6 +51,10 @@ public:
 	static MoodLampBase* create() { Q_ASSERT_X(false, "MoodLampBase::create()", "not implemented"); return nullptr; };
 	static MoodLampBase* createWithID(const int id);
 	static void populateNameList(QList<MoodLampLampInfo>& list, int& recommended);
+	// The recommended/first-registered lamp (Static) - the only effect with no
+	// per-tick animation, so MoodLampManager falls back to it whenever
+	// Constant color mode is active regardless of which lamp is persisted.
+	static int defaultLampId();
 
 	virtual void init() {};
 	virtual std::chrono::milliseconds interval() const { return DefaultInterval; };

@@ -29,6 +29,7 @@
 #include "LedDeviceLightpack.hpp"
 #include "Settings.hpp"
 #include "Wizard.hpp"
+#include "DeviceDiscoveryDefault.hpp"
 
 LightpackDiscoveryPage::LightpackDiscoveryPage(bool isInitFromSettings, TransientSettings *ts, QWidget *parent) :
 	QWizardPage(parent),
@@ -55,7 +56,10 @@ void LightpackDiscoveryPage::initializePage() {
 		_ui->rbChooseAnotherDevice->setEnabled(true);
 		_ui->rbLightpackSelected->setEnabled(true);
 
-		_ui->rbLightpackSelected->setChecked(true);
+		const bool defaultToLightpack = DeviceDiscoveryDefault::shouldSelectLightpack(
+			_isInitFromSettings, SettingsScope::Settings::getConnectedDevice());
+		_ui->rbLightpackSelected->setChecked(defaultToLightpack);
+		_ui->rbChooseAnotherDevice->setChecked(!defaultToLightpack);
 
 		QString caption = tr("%n Lightpack(s) found", 0, lpack->lightpacksFound());
 		QString caption2 = tr("%n zones are available", 0, lpack->maxLedsCount());

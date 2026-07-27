@@ -25,6 +25,7 @@
  */
 
 #include <QMessageBox>
+#include <QtSerialPort/QSerialPortInfo>
 
 #include "ConfigureDevicePage.hpp"
 #include "ui_ConfigureDevicePage.h"
@@ -67,12 +68,19 @@ void ConfigureDevicePage::initializePage()
 
 	if (currentBaudRate > 0)
 		ui->cbBaudRate->setCurrentText(QString::number(currentBaudRate));
+
+	ui->cbSerialPortName->clear();
+	for (const QSerialPortInfo &portInfo : QSerialPortInfo::availablePorts())
+		ui->cbSerialPortName->addItem(portInfo.portName());
+	// Editable, so the previously configured port is always shown even if it's
+	// not currently detected (device unplugged, or a port QSerialPortInfo
+	// doesn't enumerate on this platform).
 	if (!currentSerialPort.isEmpty())
-		ui->leSerialPortName->setText(currentSerialPort);
+		ui->cbSerialPortName->setCurrentText(currentSerialPort);
 	if (!currentColorSequence.isEmpty())
 		ui->cbColorFormat->setCurrentText(currentColorSequence);
 
-	registerField(QStringLiteral("serialPort"), ui->leSerialPortName);
+	registerField(QStringLiteral("serialPort"), ui->cbSerialPortName, "currentText");
 	registerField(QStringLiteral("baudRate"), ui->cbBaudRate, "currentText");
 	registerField(QStringLiteral("colorFormat"), ui->cbColorFormat, "currentText");
 

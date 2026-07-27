@@ -61,7 +61,11 @@ HEADERS += \
     ../src/wizard/CustomDistributor.hpp \
     ../src/wizard/ContentAspectPreset.hpp \
     ../src/wizard/LayoutRecipeGenerator.hpp \
+    ../src/wizard/DeviceDiscoveryDefault.hpp \
     ../src/ZoneLayoutRuntime.hpp \
+    ../src/MoodLamp.hpp \
+    ../src/LiquidColorGenerator.hpp \
+    ../src/MoodLampManager.hpp \
     ../grab/include/calculations.hpp \
     ../math/include/PrismatikMath.hpp \
     SettingsWindowMockup.hpp \
@@ -74,7 +78,9 @@ HEADERS += \
     LedDeviceDdpTest.hpp \
     HostColorSmoothingTest.hpp \
     ContentAspectPresetTest.hpp \
-    LayoutRecipeGeneratorTest.hpp
+    LayoutRecipeGeneratorTest.hpp \
+    DeviceDiscoveryDefaultTest.hpp \
+    MoodLampManagerTest.hpp
 
 SOURCES += \
     ../src/ApiServerSetColorTask.cpp \
@@ -90,7 +96,11 @@ SOURCES += \
     ../src/wizard/CustomDistributor.cpp \
     ../src/wizard/ContentAspectPreset.cpp \
     ../src/wizard/LayoutRecipeGenerator.cpp \
+    ../src/wizard/DeviceDiscoveryDefault.cpp \
     ../src/ZoneLayoutRuntime.cpp \
+    ../src/MoodLamp.cpp \
+    ../src/LiquidColorGenerator.cpp \
+    ../src/MoodLampManager.cpp \
     LightpackApiTest.cpp \
     SettingsWindowMockup.cpp \
     GrabCalculationTest.cpp \
@@ -102,7 +112,9 @@ SOURCES += \
     LedDeviceDdpTest.cpp \
     HostColorSmoothingTest.cpp \
     ContentAspectPresetTest.cpp \
-    LayoutRecipeGeneratorTest.cpp
+    LayoutRecipeGeneratorTest.cpp \
+    DeviceDiscoveryDefaultTest.cpp \
+    MoodLampManagerTest.cpp
 
 win32{
     HEADERS += \

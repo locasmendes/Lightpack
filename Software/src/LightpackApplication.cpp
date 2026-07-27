@@ -789,6 +789,8 @@ void LightpackApplication::initGrabManager()
 	connect(settings(), &Settings::moodLampLiquidModeChanged,				m_moodlampManager, &MoodLampManager::setLiquidMode);
 	connect(settings(), &Settings::moodLampLampChanged,						m_moodlampManager, &MoodLampManager::setCurrentLamp);
 	connect(settings(), &Settings::sendDataOnlyIfColorsChangesChanged,		m_moodlampManager, &MoodLampManager::setSendDataOnlyIfColorsChanged);
+	connect(settings(), &Settings::grabHostSmoothingDurationChanged,		m_moodlampManager, &MoodLampManager::onHostSmoothingDurationChanged,		Qt::QueuedConnection);
+	connect(settings(), &Settings::connectedDeviceChanged,					m_moodlampManager, &MoodLampManager::onConnectedDeviceChanged,			Qt::QueuedConnection);
 
 #ifdef SOUNDVIZ_SUPPORT
 	if (m_soundManager)

@@ -71,7 +71,14 @@
         </spacer>
        </item>
        <item row="2" column="1">
-        <widget class="QLineEdit" name="leSerialPortName"/>
+        <widget class="QComboBox" name="cbSerialPortName">
+         <property name="editable">
+          <bool>true</bool>
+         </property>
+         <property name="toolTip">
+          <string>Auto-detected serial ports - pick one, or type a port name manually (e.g. for a port not currently plugged in).</string>
+         </property>
+        </widget>
        </item>
        <item row="0" column="1">
         <spacer name="verticalSpacer">

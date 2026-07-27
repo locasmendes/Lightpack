@@ -837,7 +837,11 @@ Internally emulates the effects of f.lux, redshift, Night Light, Night Shift...<
              <number>0</number>
             </property>
             <item>
-             <widget class="QComboBox" name="comboBox_MoodLampLamp"/>
+             <widget class="QComboBox" name="comboBox_MoodLampLamp">
+             <property name="toolTip">
+              <string>Lamp effects only apply in Liquid color mode - Constant color always uses Static so the output truly stops changing.</string>
+             </property>
+            </widget>
             </item>
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_2">

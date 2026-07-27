@@ -31,6 +31,8 @@
 #include <QElapsedTimer>
 #include "LiquidColorGenerator.hpp"
 #include "MoodLamp.hpp"
+#include "HostColorSmoothing.hpp"
+#include "enums.hpp"
 
 class MoodLampManager : public QObject
 {
@@ -60,16 +62,28 @@ public slots:
 	void setCurrentLamp(const int id);
 	void requestLampList();
 	void setSendDataOnlyIfColorsChanged(bool state);
+	void onHostSmoothingDurationChanged(int ms);
+	void onConnectedDeviceChanged(const SupportedDevices::DeviceType device);
 
 private slots:
 	void updateColors(const bool forceUpdate);
 	void updateColors() { updateColors(false); };
+	void advanceHostTransition();
 
 private:
 	void initColors(int numberOfLeds);
+	// Recreates m_lamp from m_requestedLampId, except while !m_isLiquidMode:
+	// lamp effects (Fire/RGB is Life) animate every tick regardless of which
+	// color they're fed, so "Constant color" forces Static (the only effect
+	// with no per-tick animation) to actually hold still, without touching
+	// the persisted MoodLampLamp preference (restored as soon as Liquid mode
+	// is re-enabled).
+	void applyEffectiveLamp();
+	bool isHostSmoothingApplicable() const;
 
 private:
 	MoodLampBase* m_lamp{ nullptr };
+	int m_requestedLampId{ 0 };
 
 	LiquidColorGenerator m_generator;
 	QList<QRgb> m_colors;
@@ -82,4 +96,8 @@ private:
 	QTimer m_timer;
 	QElapsedTimer m_elapsedTimer;
 	size_t m_frames{ 1 };
+
+	QTimer *m_timerHostSmoothing;
+	QElapsedTimer m_hostSmoothingClock;
+	HostColorSmoothing m_hostSmoothing;
 };
