@@ -61,6 +61,8 @@ HEADERS += \
     ../src/wizard/CustomDistributor.hpp \
     ../src/wizard/ContentAspectPreset.hpp \
     ../src/wizard/LayoutRecipeGenerator.hpp \
+    ../src/wizard/BulkResize.hpp \
+    ../src/LedGroupRuntime.hpp \
     ../src/ZoneLayoutRuntime.hpp \
     ../grab/include/calculations.hpp \
     ../math/include/PrismatikMath.hpp \
@@ -74,7 +76,9 @@ HEADERS += \
     LedDeviceDdpTest.hpp \
     HostColorSmoothingTest.hpp \
     ContentAspectPresetTest.hpp \
-    LayoutRecipeGeneratorTest.hpp
+    LayoutRecipeGeneratorTest.hpp \
+    BulkResizeTest.hpp \
+    LedGroupRuntimeTest.hpp
 
 SOURCES += \
     ../src/ApiServerSetColorTask.cpp \
@@ -90,7 +94,9 @@ SOURCES += \
     ../src/wizard/CustomDistributor.cpp \
     ../src/wizard/ContentAspectPreset.cpp \
     ../src/wizard/LayoutRecipeGenerator.cpp \
+    ../src/wizard/BulkResize.cpp \
     ../src/ZoneLayoutRuntime.cpp \
+    ../src/LedGroupRuntime.cpp \
     LightpackApiTest.cpp \
     SettingsWindowMockup.cpp \
     GrabCalculationTest.cpp \
@@ -102,7 +108,9 @@ SOURCES += \
     LedDeviceDdpTest.cpp \
     HostColorSmoothingTest.cpp \
     ContentAspectPresetTest.cpp \
-    LayoutRecipeGeneratorTest.cpp
+    LayoutRecipeGeneratorTest.cpp \
+    BulkResizeTest.cpp \
+    LedGroupRuntimeTest.cpp
 
 win32{
     HEADERS += \

@@ -30,22 +30,22 @@ Decisões:
 
 ### Fase 1 — motor de resize em lote
 
-- [ ] Extrair a matemática pura de "redimensionar mantendo uma âncora" para uma função testável sem `QWidget` real: `QRect resizedKeepingAnchor(const QRect& current, int newWidth, int newHeight, Qt::Corner anchor)` (usar `newWidth <= 0` ou `newHeight <= 0` como "não mexer neste eixo", espelhando o `-1 = unset` de overrides de grupo). Local sugerido: `Software/src/wizard/BulkResize.hpp/.cpp` (nome análogo a `LayoutRecipeGenerator`).
-- [ ] Função de aplicação que recebe `QList<GrabWidget*>` + a mesma assinatura de resize, chama `resizedKeepingAnchor` por widget, e então `widget->resize(...)`/`widget->move(...)` seguido de `widget->saveSizeAndPosition()` (já existe, `Software/src/GrabWidget.cpp:139-147`) para persistir cada `LED_N/Position`/`LED_N/Size` alterado.
-- [ ] Após aplicar, chamar o mesmo caminho de revalidação que o wizard já usa após qualquer mudança de zonas (`ZonePlacementPage::checkZoneIssues()`, `Software/src/wizard/ZonePlacementPage.cpp:154-213`) — não introduzir uma segunda checagem de sobreposição/gap.
+- [x] Extrair a matemática pura de "redimensionar mantendo uma âncora" para uma função testável sem `QWidget` real: `QRect resizedKeepingAnchor(const QRect& current, int newWidth, int newHeight, Qt::Corner anchor)` (usar `newWidth <= 0` ou `newHeight <= 0` como "não mexer neste eixo", espelhando o `-1 = unset` de overrides de grupo). Local sugerido: `Software/src/wizard/BulkResize.hpp/.cpp` (nome análogo a `LayoutRecipeGenerator`).
+- [ ] Função de aplicação que recebe `QList<GrabWidget*>` + a mesma assinatura de resize, chama `resizedKeepingAnchor` por widget, e então `widget->resize(...)`/`widget->move(...)` seguido de `widget->saveSizeAndPosition()` (já existe, `Software/src/GrabWidget.cpp:139-147`) para persistir cada `LED_N/Position`/`LED_N/Size` alterado (será conectado pela Fase 4).
+- [ ] Após aplicar, chamar o mesmo caminho de revalidação que o wizard já usa após qualquer mudança de zonas (`ZonePlacementPage::checkZoneIssues()`, `Software/src/wizard/ZonePlacementPage.cpp:154-213`) — não introduzir uma segunda checagem de sobreposição/gap (será conectado pela Fase 4).
 
 ### Fase 2 — modelo de grupo e persistência
 
-- [ ] Struct `LedGroup { QString name; QList<int> memberIds; enum class Edge { Top, Bottom, Left, Right, Custom } edge; int width = -1; int height = -1; bool enabled = true; }` — `width`/`height` = `-1` significa "sem override, preserva o valor atual da caixa".
-- [ ] `SettingsScope::Profile::Key::Grab::LedGroups = "Grab/LedGroups"`, persistido como JSON (mesmo padrão de `Grab/LayoutRecipe`, `Software/src/Settings.cpp`, ver `docs/plans/presets-aspect-ratio.md` Fase 2), default lista vazia — perfil sem grupos definidos é 100% equivalente ao comportamento atual (feature opt-in).
-- [ ] `Settings::getLedGroups()`/`setLedGroups(...)` + sinal de mudança, seguindo exatamente o padrão de `getLayoutRecipe()`/`setLayoutRecipe(...)`.
-- [ ] Validar ao carregar: `memberIds` fora do intervalo `[0, numberOfLeds)` do perfil atual são ignorados silenciosamente na aplicação (Fase 3), não removidos da persistência (o perfil pode ter menos LEDs temporariamente por edição em andamento) — nunca deixar um ID inválido travar a aplicação do grupo inteiro.
+- [x] Struct `LedGroup { QString name; QList<int> memberIds; enum class Edge { Top, Bottom, Left, Right, Custom } edge; int width = -1; int height = -1; bool enabled = true; }` — `width`/`height` = `-1` significa "sem override, preserva o valor atual da caixa".
+- [x] `SettingsScope::Profile::Key::Grab::LedGroups = "Grab/LedGroups"`, persistido como JSON (mesmo padrão de `Grab/LayoutRecipe`, `Software/src/Settings.cpp`, ver `docs/plans/presets-aspect-ratio.md` Fase 2), default lista vazia — perfil sem grupos definidos é 100% equivalente ao comportamento atual (feature opt-in).
+- [x] `Settings::getLedGroups()`/`setLedGroups(...)` + sinal de mudança, seguindo exatamente o padrão de `getLayoutRecipe()`/`setLayoutRecipe(...)`.
+- [x] Validar ao carregar: `memberIds` fora do intervalo `[0, numberOfLeds)` do perfil atual são ignorados silenciosamente na aplicação (Fase 3), não removidos da persistência (o perfil pode ter menos LEDs temporariamente por edição em andamento) — nunca deixar um ID inválido travar a aplicação do grupo inteiro.
 
 ### Fase 3 — aplicação runtime (ponto único, dentro e fora do wizard)
 
-- [ ] `Software/src/LedGroupRuntime.hpp/.cpp` (mesmo nível de `ZoneLayoutRuntime`, não em `wizard/`, pois roda também fora do wizard): `static bool LedGroupRuntime::applyGroup(const LedGroup& group)` — resolve `memberIds` válidos do perfil atual para `GrabWidget`s vivos (quando chamado de dentro do wizard) OU direto via `Settings::setLedPosition/setLedSize` (quando chamado fora do wizard, sem `GrabWidget`s instanciados) usando a mesma direção por `edge` da Fase 1.
-- [ ] `static bool LedGroupRuntime::applyAll()` — aplica todos os grupos habilitados do perfil atual, na ordem em que foram criados; grupos com membros sobrepostos aplicam em ordem, o último grupo que toca um LED vence (documentar explicitamente, não é erro).
-- [ ] Reaproveitar exatamente o mesmo ponto de entrada tanto da UI do wizard (Fase 4) quanto de um botão em `SettingsWindow` fora do wizard (não duplicar a lógica de resolução de membros/edge entre os dois contextos).
+- [x] `Software/src/LedGroupRuntime.hpp/.cpp` (mesmo nível de `ZoneLayoutRuntime`, não em `wizard/`, pois roda também fora do wizard): `static bool LedGroupRuntime::applyGroup(const LedGroup& group)` — resolve `memberIds` válidos do perfil atual direto via `Settings::setLedPosition/setLedSize` (quando chamado fora do wizard, sem `GrabWidget`s instanciados; dentro do wizard os GrabWidgets sincronizam via Settings) usando a mesma direção por `edge` da Fase 1.
+- [x] `static bool LedGroupRuntime::applyAll()` — aplica todos os grupos habilitados do perfil atual, na ordem em que foram criados; grupos com membros sobrepostos aplicam em ordem, o último grupo que toca um LED vence (documentar explicitamente, não é erro).
+- [x] Reaproveitar exatamente o mesmo ponto de entrada tanto da UI do wizard (Fase 4) quanto de um botão em `SettingsWindow` fora do wizard (não duplicar a lógica de resolução de membros/edge entre os dois contextos).
 
 ### Fase 4 — UI no wizard (`ZonePlacementPage`)
 
@@ -82,12 +82,12 @@ Decisões:
 
 ## 3. Testes
 
-- [ ] Teste unitário de `resizedKeepingAnchor`: cada uma das 4 âncoras (`Qt::TopLeftCorner`, etc.) mantém o canto oposto fixo corretamente; `newWidth<=0`/`newHeight<=0` preserva o eixo correspondente; resultado nunca tem largura/altura menor que 1.
-- [ ] Teste unitário de serialização de `LedGroup` (JSON round-trip), mesmo padrão de `LayoutRecipeGeneratorTest::testJsonRoundTrip` (`Software/tests/LayoutRecipeGeneratorTest.cpp`).
-- [ ] Teste de `LedGroupRuntime::applyGroup` operando direto sobre `Settings::setLedPosition/setLedSize` (sem `GrabWidget` real — evita depender de `QApplication`/janelas reais, mesmo limite já aceito para `GrabManager` em `docs/plans/smoothing-host-side.md`): grupo com `edge=Top` só altera `height` dos membros, preserva `width`/posição horizontal; `edge=Custom` altera ambos.
-- [ ] Teste de `memberIds` inválidos (fora do intervalo de LEDs do perfil): aplicação não falha, ignora os IDs inválidos, aplica normalmente aos válidos.
-- [ ] Teste de grupos sobrepostos: dois grupos habilitados com um LED em comum — o resultado final reflete o último grupo aplicado (ordem de criação), não uma mistura.
-- [ ] Teste de regressão: perfil sem nenhum `LedGroup` definido (lista vazia/ausente) é bit-a-bit equivalente ao comportamento atual — nenhuma chamada nova a `setLedPosition`/`setLedSize` ocorre sem grupos configurados.
+- [x] Teste unitário de `resizedKeepingAnchor`: cada uma das 4 âncoras (`Qt::TopLeftCorner`, etc.) mantém o canto oposto fixo corretamente; `newWidth<=0`/`newHeight<=0` preserva o eixo correspondente; resultado nunca tem largura/altura menor que 1.
+- [x] Teste unitário de serialização de `LedGroup` (JSON round-trip), mesmo padrão de `LayoutRecipeGeneratorTest::testJsonRoundTrip` (`Software/tests/LayoutRecipeGeneratorTest.cpp`).
+- [x] Teste de `LedGroupRuntime::applyGroup` operando direto sobre `Settings::setLedPosition/setLedSize` (sem `GrabWidget` real — evita depender de `QApplication`/janelas reais, mesmo limite já aceito para `GrabManager` em `docs/plans/smoothing-host-side.md`): grupo com `edge=Top` só altera `height` dos membros, preserva `width`/posição horizontal; `edge=Custom` altera ambos.
+- [x] Teste de `memberIds` inválidos (fora do intervalo de LEDs do perfil): aplicação não falha, ignora os IDs inválidos, aplica normalmente aos válidos.
+- [x] Teste de grupos sobrepostos: dois grupos habilitados com um LED em comum — o resultado final reflete o último grupo aplicado (ordem de criação), não uma mistura.
+- [x] Teste de regressão: perfil sem nenhum `LedGroup` definido (lista vazia/ausente) é bit-a-bit equivalente ao comportamento atual — nenhuma chamada nova a `setLedPosition`/`setLedSize` ocorre sem grupos configurados.
 
 ## 4. Critérios de aceite
 

@@ -333,7 +333,9 @@ SOURCES += \
     wizard/CustomDistributor.cpp \
     wizard/ContentAspectPreset.cpp \
     wizard/LayoutRecipeGenerator.cpp \
+    wizard/BulkResize.cpp \
     ZoneLayoutRuntime.cpp \
+    LedGroupRuntime.cpp \
     systrayicon/SysTrayIcon.cpp \
     UpdatesProcessor.cpp \
     LightpackCommandLineParser.cpp
@@ -396,7 +398,9 @@ HEADERS += \
     wizard/CustomDistributor.hpp \
     wizard/ContentAspectPreset.hpp \
     wizard/LayoutRecipeGenerator.hpp \
+    wizard/BulkResize.hpp \
     ZoneLayoutRuntime.hpp \
+    LedGroupRuntime.hpp \
     systrayicon/SysTrayIcon.hpp \
     UpdatesProcessor.hpp \
     LightpackCommandLineParser.hpp
