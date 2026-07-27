@@ -209,6 +209,9 @@ static const QString LayoutRecipe = QStringLiteral("Grab/LayoutRecipe");
 static const QString LedGroups = QStringLiteral("Grab/LedGroups");
 static const QString LuminosityThreshold = QStringLiteral("Grab/LuminosityThreshold");
 static const QString OverBrighten = QStringLiteral("Grab/OverBrighten");
+static const QString IsBloomEnabled = QStringLiteral("Grab/IsBloomEnabled");
+static const QString BloomIntensity = QStringLiteral("Grab/BloomIntensity");
+static const QString BloomThreshold = QStringLiteral("Grab/BloomThreshold");
 static const QString IsMinimumLuminosityEnabled = QStringLiteral("Grab/IsMinimumLuminosityEnabled");
 static const QString IsDx1011GrabberEnabled = QStringLiteral("Grab/IsDX1011GrabberEnabled");
 static const QString IsDx9GrabbingEnabled = QStringLiteral("Grab/IsDX9GrabbingEnabled");
@@ -1549,6 +1552,42 @@ void Settings::setGrabOverBrighten(int value)
 	emit m_this->grabOverBrightenChanged(value);
 }
 
+bool Settings::isGrabBloomEnabled()
+{
+	return value(Profile::Key::Grab::IsBloomEnabled).toBool();
+}
+
+void Settings::setGrabBloomEnabled(bool isEnabled)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
+	setValue(Profile::Key::Grab::IsBloomEnabled, isEnabled);
+	emit m_this->grabBloomEnabledChanged(isEnabled);
+}
+
+int Settings::getGrabBloomIntensity()
+{
+	return getValidGrabBloomIntensity(value(Profile::Key::Grab::BloomIntensity).toInt());
+}
+
+void Settings::setGrabBloomIntensity(int value)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
+	setValue(Profile::Key::Grab::BloomIntensity, getValidGrabBloomIntensity(value));
+	emit m_this->grabBloomIntensityChanged(value);
+}
+
+int Settings::getGrabBloomThreshold()
+{
+	return getValidGrabBloomThreshold(value(Profile::Key::Grab::BloomThreshold).toInt());
+}
+
+void Settings::setGrabBloomThreshold(int value)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
+	setValue(Profile::Key::Grab::BloomThreshold, getValidGrabBloomThreshold(value));
+	emit m_this->grabBloomThresholdChanged(value);
+}
+
 bool Settings::isGrabApplyBlueLightReductionEnabled()
 {
 	return value(Profile::Key::Grab::IsApplyBlueLightReductionEnabled).toBool();
@@ -2288,6 +2327,24 @@ int Settings::getValidGrabOverBrighten(int value)
 	return value;
 }
 
+int Settings::getValidGrabBloomIntensity(int value)
+{
+	if (value < Profile::Grab::BloomIntensityMin)
+		value = Profile::Grab::BloomIntensityMin;
+	else if (value > Profile::Grab::BloomIntensityMax)
+		value = Profile::Grab::BloomIntensityMax;
+	return value;
+}
+
+int Settings::getValidGrabBloomThreshold(int value)
+{
+	if (value < Profile::Grab::BloomThresholdMin)
+		value = Profile::Grab::BloomThresholdMin;
+	else if (value > Profile::Grab::BloomThresholdMax)
+		value = Profile::Grab::BloomThresholdMax;
+	return value;
+}
+
 void Settings::setValidLedCoef(int ledIndex, const QString & keyCoef, double coef)
 {
 	if (coef < Profile::Led::CoefMin || coef > Profile::Led::CoefMax){
@@ -2373,6 +2430,9 @@ void Settings::initCurrentProfile(bool isResetDefault)
 	setNewOption(Profile::Key::Grab::Grabber,						Profile::Grab::GrabberDefaultString, isResetDefault);
 	setNewOption(Profile::Key::Grab::IsAvgColorsEnabled,			Profile::Grab::IsAvgColorsEnabledDefault, isResetDefault);
 	setNewOption(Profile::Key::Grab::OverBrighten,					Profile::Grab::OverBrightenDefault, isResetDefault);
+	setNewOption(Profile::Key::Grab::IsBloomEnabled,				Profile::Grab::IsBloomEnabledDefault, isResetDefault);
+	setNewOption(Profile::Key::Grab::BloomIntensity,				Profile::Grab::BloomIntensityDefault, isResetDefault);
+	setNewOption(Profile::Key::Grab::BloomThreshold,				Profile::Grab::BloomThresholdDefault, isResetDefault);
 	setNewOption(Profile::Key::Grab::IsSendDataOnlyIfColorsChanges, Profile::Grab::IsSendDataOnlyIfColorsChangesDefault, isResetDefault);
 	setNewOption(Profile::Key::Grab::Slowdown,						Profile::Grab::SlowdownDefault, isResetDefault);
 	setNewOption(Profile::Key::Grab::HostSmoothingDuration,			Profile::Grab::HostSmoothingDurationDefault, isResetDefault);

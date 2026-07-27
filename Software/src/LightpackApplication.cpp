@@ -773,6 +773,9 @@ void LightpackApplication::initGrabManager()
 	connect(settings(), &Settings::grabSlowdownChanged,						m_grabManager, &GrabManager::onGrabSlowdownChanged,						Qt::QueuedConnection);
 	connect(settings(), &Settings::grabAvgColorsEnabledChanged,				m_grabManager, &GrabManager::onGrabAvgColorsEnabledChanged,				Qt::QueuedConnection);
 	connect(settings(), &Settings::grabOverBrightenChanged,					m_grabManager, &GrabManager::onGrabOverBrightenChanged,					Qt::QueuedConnection);
+	connect(settings(), &Settings::grabBloomEnabledChanged,					m_grabManager, &GrabManager::onGrabBloomEnabledChanged,					Qt::QueuedConnection);
+	connect(settings(), &Settings::grabBloomIntensityChanged,					m_grabManager, &GrabManager::onGrabBloomIntensityChanged,					Qt::QueuedConnection);
+	connect(settings(), &Settings::grabBloomThresholdChanged,					m_grabManager, &GrabManager::onGrabBloomThresholdChanged,					Qt::QueuedConnection);
 	connect(settings(), &Settings::grabApplyBlueLightReductionChanged,				m_grabManager, &GrabManager::onGrabApplyBlueLightReductionChanged,				Qt::QueuedConnection);
 	connect(settings(), &Settings::grabApplyColorTemperatureChanged,         m_grabManager, &GrabManager::onGrabApplyColorTemperatureChanged,           Qt::QueuedConnection);
 	connect(settings(), &Settings::grabColorTemperatureChanged,               m_grabManager, &GrabManager::onGrabColorTemperatureChanged,                 Qt::QueuedConnection);

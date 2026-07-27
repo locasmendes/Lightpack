@@ -366,6 +366,35 @@ namespace PrismatikMath
 		return static_cast<quint8>(qRed(rgb) * 0.299 + qGreen(rgb) * 0.587 + qBlue(rgb) * 0.114);
 	}
 
+	int bloomFactor(const QRgb rgb, int whitenessThresholdPercent) {
+		const int value = getValueHSV(rgb);
+		const int chroma = getChromaHSV(rgb);
+		const int whiteness = 255 - chroma; // higher = closer to gray/white
+
+		const int threshold = withinRange(whitenessThresholdPercent, 0, 100) * 255 / 100;
+		if (whiteness < threshold)
+			return 0;
+
+		const int range = 255 - threshold;
+		const int whitenessScore = range > 0 ? ((whiteness - threshold) * 255) / range : 255;
+		return (whitenessScore * value) / 255;
+	}
+
+	QRgb applyBloom(const QRgb rgb, int intensity, int whitenessThresholdPercent) {
+		if (intensity <= 0)
+			return rgb;
+
+		const int factor = bloomFactor(rgb, whitenessThresholdPercent);
+		if (factor <= 0)
+			return rgb;
+
+		const double boost = 1.0 + (intensity / 100.0) * (factor / 255.0);
+		const int r = withinRange(static_cast<int>(qRed(rgb) * boost), 0, 255);
+		const int g = withinRange(static_cast<int>(qGreen(rgb) * boost), 0, 255);
+		const int b = withinRange(static_cast<int>(qBlue(rgb) * boost), 0, 255);
+		return qRgb(r, g, b);
+	}
+
 	double theoreticalMaxFrameRate(const double ledCount, const double baudRate) {
 		// math credit https://www.partsnotincluded.com/calculating-adalight-framerate-limits/
 		return pow((10.0 * (3.0 * ledCount + 6.0)) / baudRate + 0.00003 * ledCount, -1.0);

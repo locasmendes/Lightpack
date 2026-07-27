@@ -220,6 +220,12 @@ public:
 	static void setGrabAvgColorsEnabled(bool isEnabled);
 	static int getGrabOverBrighten();
 	static void setGrabOverBrighten(int value);
+	static bool isGrabBloomEnabled();
+	static void setGrabBloomEnabled(bool isEnabled);
+	static int getGrabBloomIntensity();
+	static void setGrabBloomIntensity(int value);
+	static int getGrabBloomThreshold();
+	static void setGrabBloomThreshold(int value);
 	static bool isGrabApplyBlueLightReductionEnabled();
 	static void setGrabApplyBlueLightReductionEnabled(bool value);
 	static bool isGrabApplyColorTemperatureEnabled();
@@ -327,6 +333,8 @@ private:
 	static int getValidSoundVisualizerLiquidSpeed(int value);
 	static int getValidLuminosityThreshold(int value);
 	static int getValidGrabOverBrighten(int value);
+	static int getValidGrabBloomIntensity(int value);
+	static int getValidGrabBloomThreshold(int value);
 	static void setValidLedCoef(int ledIndex, const QString & keyCoef, double coef);
 	static double getValidLedCoef(int ledIndex, const QString & keyCoef);
 
@@ -414,6 +422,9 @@ signals:
 	void backlightEnabledChanged(bool isEnabled);
 	void grabAvgColorsEnabledChanged(bool isEnabled);
 	void grabOverBrightenChanged(int value);
+	void grabBloomEnabledChanged(bool isEnabled);
+	void grabBloomIntensityChanged(int value);
+	void grabBloomThresholdChanged(int value);
 	void grabApplyBlueLightReductionChanged(bool isEnabled);
 	void grabApplyColorTemperatureChanged(bool isEnabled);
 	void grabColorTemperatureChanged(int value);

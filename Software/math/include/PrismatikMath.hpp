@@ -61,6 +61,16 @@ namespace PrismatikMath
 	StructRgb toRgb(const StructXyz &);
 	StructRgb toRgb(const StructLab &);
 	quint8 getBrightness(const QRgb);
+
+	// Returns 0-255: how strongly a pixel qualifies for the "bloom" effect (bright AND
+	// desaturated - a true white/near-white flare-type pixel, not just any bright color).
+	// whitenessThresholdPercent (0-100) is how close to pure white/gray a pixel's chroma
+	// must be before it counts as bloom-worthy at all; 0 below that cutoff.
+	int bloomFactor(const QRgb rgb, int whitenessThresholdPercent);
+	// Boosts rgb's brightness by up to `intensity` percent (0-100), scaled by how
+	// strongly it qualifies per bloomFactor(). intensity<=0 or a non-bloom-worthy pixel
+	// (bloomFactor()==0) returns rgb unchanged.
+	QRgb applyBloom(const QRgb rgb, int intensity, int whitenessThresholdPercent);
 	double theoreticalMaxFrameRate(const double ledCount, const double baudRate);
 	double theoreticalMinBaudRate(const double ledCount, const double frameRate);
 

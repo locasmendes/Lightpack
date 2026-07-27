@@ -66,6 +66,9 @@ public slots:
 	void onGrabSlowdownChanged(int ms);
 	void onGrabAvgColorsEnabledChanged(bool state);
 	void onGrabOverBrightenChanged(int value);
+	void onGrabBloomEnabledChanged(bool state);
+	void onGrabBloomIntensityChanged(int value);
+	void onGrabBloomThresholdChanged(int value);
 	void onGrabApplyBlueLightReductionChanged(bool state);
 	void onGrabApplyColorTemperatureChanged(bool state);
 	void onGrabColorTemperatureChanged(int value);
@@ -145,6 +148,9 @@ private:
 	bool m_isGrabbingStarted;
 	bool m_isGrabbingSuspendedDueToDeviceError;
 	int m_overBrighten;
+	bool m_bloomEnabled;
+	int m_bloomIntensity;
+	int m_bloomThreshold;
 	bool m_isApplyBlueLightReduction;
 	bool m_isApplyColorTemperature;
 	double m_gamma;

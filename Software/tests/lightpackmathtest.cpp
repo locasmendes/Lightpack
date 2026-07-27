@@ -43,3 +43,33 @@ void LightpackMathTest::testColorWheel()
 	QVERIFY(!PrismatikMath::pointToHueSat(QPointF(radius * 2, 0), radius, hue, sat));
 	QCOMPARE(sat, 100);
 }
+
+void LightpackMathTest::testBloom()
+{
+	// Pure white qualifies strongly at a fairly strict (70%) threshold.
+	QVERIFY(PrismatikMath::bloomFactor(qRgb(255, 255, 255), 70) > 200);
+
+	// A near-white (slightly desaturated) pixel qualifies at a lenient threshold.
+	QVERIFY(PrismatikMath::bloomFactor(qRgb(240, 245, 250), 50) > 0);
+
+	// A fully saturated color never qualifies, regardless of threshold.
+	QCOMPARE(PrismatikMath::bloomFactor(qRgb(255, 0, 0), 0), 0);
+
+	// Black never qualifies either (value is 0, even though chroma is too).
+	QCOMPARE(PrismatikMath::bloomFactor(qRgb(0, 0, 0), 50), 0);
+
+	// intensity<=0 is always identity, regardless of how bloom-worthy the pixel is.
+	QCOMPARE(PrismatikMath::applyBloom(qRgb(255, 255, 255), 0, 50), qRgb(255, 255, 255));
+
+	// A non-bloom-worthy (saturated) pixel is unchanged even at full intensity.
+	QCOMPARE(PrismatikMath::applyBloom(qRgb(255, 0, 0), 100, 50), qRgb(255, 0, 0));
+
+	// Never overflows past 255 per channel.
+	const QRgb boosted = PrismatikMath::applyBloom(qRgb(255, 255, 255), 100, 50);
+	QVERIFY(qRed(boosted) <= 255 && qGreen(boosted) <= 255 && qBlue(boosted) <= 255);
+
+	// A moderately bright near-white pixel actually gets boosted at full intensity.
+	const QRgb dim = qRgb(180, 180, 180);
+	const QRgb boostedDim = PrismatikMath::applyBloom(dim, 100, 50);
+	QVERIFY(qRed(boostedDim) > qRed(dim));
+}

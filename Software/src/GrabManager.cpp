@@ -286,6 +286,21 @@ void GrabManager::onGrabOverBrightenChanged(int value) {
 	m_overBrighten = value;
 }
 
+void GrabManager::onGrabBloomEnabledChanged(bool state) {
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << state;
+	m_bloomEnabled = state;
+}
+
+void GrabManager::onGrabBloomIntensityChanged(int value) {
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << value;
+	m_bloomIntensity = value;
+}
+
+void GrabManager::onGrabBloomThresholdChanged(int value) {
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << value;
+	m_bloomThreshold = value;
+}
+
 void GrabManager::onGrabApplyBlueLightReductionChanged(bool state)
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << state;
@@ -369,6 +384,9 @@ void GrabManager::settingsProfileChanged(const QString &profileName)
 	m_isSendDataOnlyIfColorsChanged = Settings::isSendDataOnlyIfColorsChanges();
 	m_avgColorsOnAllLeds = Settings::isGrabAvgColorsEnabled();
 	m_overBrighten = Settings::getGrabOverBrighten();
+	m_bloomEnabled = Settings::isGrabBloomEnabled();
+	m_bloomIntensity = Settings::getGrabBloomIntensity();
+	m_bloomThreshold = Settings::getGrabBloomThreshold();
 	m_isApplyBlueLightReduction = Settings::isGrabApplyBlueLightReductionEnabled();
 	m_isApplyColorTemperature = Settings::isGrabApplyColorTemperatureEnabled();
 	m_colorTemperature = Settings::getGrabColorTemperature();
@@ -482,6 +500,10 @@ void GrabManager::handleGrabbedColors()
 	for (int i = 0; i < m_ledWidgets.size(); i++)
 	{
 		QRgb newColor = m_colorsProcessing[i];
+
+		if (m_bloomEnabled)
+			newColor = PrismatikMath::applyBloom(newColor, m_bloomIntensity, m_bloomThreshold);
+
 		if (m_overBrighten) {
 			int dRed = qRed(newColor);
 			int dGreen = qGreen(newColor);
