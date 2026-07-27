@@ -41,8 +41,6 @@
 using namespace std;
 using namespace SettingsScope;
 
-#define VERSION_API_TESTS	"1.4"
-
 LightpackApiTest::LightpackApiTest()
 {
 	// Register QMetaType for Qt::QueuedConnection
@@ -743,11 +741,13 @@ void LightpackApiTest::processEventsFromLittle()
 
 bool LightpackApiTest::checkVersion(QTcpSocket * socket)
 {
-	// Check the version of the API and API Tests on match
+	// Check the version banner sent by ApiServer on connect matches what it
+	// actually sends today, instead of a copy that can drift out of sync
+	// (see ApiServer::ApiVersion, ApiServer.cpp).
 
 	QString result = readResult(socket);
 
-	QString versionTests = "Lightpack API v" VERSION_API_TESTS " (type \"help\" for more info)";
+	QString versionTests = QString(ApiServer::ApiVersion).trimmed();
 
 	return (m_sockReadLineOk && result.trimmed() == versionTests);
 }
