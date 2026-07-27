@@ -1812,6 +1812,7 @@ void SettingsWindow::initLanguages()
 	ui->comboBox_Language->addItem(QStringLiteral("English"));
 	ui->comboBox_Language->addItem(QStringLiteral("Russian"));
 	ui->comboBox_Language->addItem(QStringLiteral("Ukrainian"));
+	ui->comboBox_Language->addItem(QStringLiteral("Portuguese (Brazil)"));
 
 	int langIndex = 0; // "System default"
 	QString langSaved = Settings::getLanguage();
@@ -1846,12 +1847,14 @@ void SettingsWindow::loadTranslation(const QString & language)
 		if (locale.startsWith(QStringLiteral("en_"))) locale = QStringLiteral("en_EN"); // :/translations/en_EN.qm
 		else if (locale.startsWith(QStringLiteral("ru_"))) locale = QStringLiteral("ru_RU"); // :/translations/ru_RU.qm
 		else if (locale.startsWith(QStringLiteral("uk_"))) locale = QStringLiteral("uk_UA"); // :/translations/uk_UA.qm
+		else if (locale.startsWith(QStringLiteral("pt_"))) locale = QStringLiteral("pt_BR"); // :/translations/pt_BR.qm
 
 		DEBUG_LOW_LEVEL << "System translation" << locale;
 	}
 	else if (language == QStringLiteral("English")) locale = QStringLiteral("en_EN"); // :/translations/en_EN.qm
 	else if (language == QStringLiteral("Russian")) locale = QStringLiteral("ru_RU"); // :/translations/ru_RU.qm
 	else if (language == QStringLiteral("Ukrainian")) locale = QStringLiteral("uk_UA"); // :/translations/uk_UA.qm
+	else if (language == QStringLiteral("Portuguese (Brazil)")) locale = QStringLiteral("pt_BR"); // :/translations/pt_BR.qm
 	// append line for new language/locale here
 	else {
 		qWarning() << "Language" << language << "not found. Set to default" << SettingsScope::Main::LanguageDefault;

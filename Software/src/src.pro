@@ -50,7 +50,8 @@ TRANSLATIONS += ../res/translations/en.ts \
        ../res/translations/ru_RU.ts \
        ../res/translations/uk_UA.ts \
        ../res/translations/pl_PL.ts \
-       ../res/translations/zh_CN.ts
+       ../res/translations/zh_CN.ts \
+       ../res/translations/pt_BR.ts
 RESOURCES    = ../res/LightpackResources.qrc
 RC_FILE      = ../res/Lightpack.rc
 
