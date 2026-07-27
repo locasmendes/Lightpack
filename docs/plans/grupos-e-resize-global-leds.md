@@ -59,6 +59,27 @@ Decisões:
 - [ ] Botão "Reaplicar grupos de LEDs" em `SettingsWindow` chamando `LedGroupRuntime::applyAll()` sem precisar reabrir o wizard.
 - [ ] Comandos de API (`getledgroups`/`setledgroup:...`) só depois de validar a sintaxe de um grupo (nome, edge, lista de membros, width, height) num protocolo de texto simples sem ambiguidade — se a sintaxe ficar complexa demais, adiar para um plano futuro em vez de forçar um formato ruim (mesma cautela já registrada para `getcontentaspect` em `docs/plans/presets-aspect-ratio.md` item 62).
 
+#### 5.1 Design do protocolo de API (decidido, ainda não implementado)
+
+Sintaxe escolhida seguindo o mesmo estilo já usado em `ApiServer.cpp` (campos separados por `,` dentro de uma entrada, entradas separadas por `;`, ver `CmdGetLeds`/`CmdResultLeds` — formato `id-x,y,w,h;` — e valores simples em minúsculas como em `CmdSetContentAspect` — `fill`/`16:9`/`4:3`):
+
+| Comando | Direção | Formato | Exemplo |
+|---|---|---|---|
+| `getledgroups` | pedido (sem args) | — | `getledgroups\r\n` |
+| resposta | `ledgroups:` + uma entrada por grupo, `;`-terminada | `ledgroups:<name>,<edge>,<width>,<height>,<enabled>,<id1>\|<id2>\|...;` | `ledgroups:bottom,bottom,-1,140,1,4\|5\|6\|7;top,top,-1,90,1,0\|1\|2\|3;\r\n` |
+| `setledgroup:` | pedido | `setledgroup:<name>,<edge>,<width>,<height>,<enabled>,<id1>\|<id2>\|...` | `setledgroup:bottom,bottom,-1,140,1,4\|5\|6\|7\r\n` |
+| `removeledgroup:` | pedido | `removeledgroup:<name>` | `removeledgroup:bottom\r\n` |
+| `applyledgroups` | pedido (sem args) | reaplica todos os grupos habilitados (mesmo caminho do botão em `SettingsWindow`, Fase 5 item 1) | `applyledgroups\r\n` |
+
+Decisões:
+- Ordem dos campos espelha exatamente a ordem de declaração do struct `LedGroup` (Fase 2): `name, edge, width, height, enabled, memberIds` — evita uma segunda convenção de ordem para memorizar.
+- `edge` como string minúscula (`top`/`bottom`/`left`/`right`/`custom`), mesmo padrão de `fill`/`16:9`/`4:3` em `setcontentaspect`, não o índice numérico do enum (frágil a reordenação do enum).
+- `width`/`height` usam `-1` literal para "sem override", igual ao struct — nenhuma tradução extra de valor.
+- `memberIds` usa `|` como separador (não `,`, que já separa os campos de nível superior, nem `-`, que aparece em valores negativos de `width`/`height`).
+- Nomes de grupo não podem conter `,`, `;` ou `|` — validado na entrada de `setledgroup:`, rejeitado com `CmdSetResult_Error` (mesmo resultado usado por `setcontentaspect` para presets inválidos); não é uma limitação nova, apenas evita ambiguidade de parsing.
+- `setledgroup:` faz upsert (cria se o nome não existir, substitui por completo se existir) — não há um comando de "editar só um campo", mesma filosofia de "documento completo" já usada por `setledgroups`/`LayoutRecipe`.
+- Todos os comandos de escrita (`setledgroup:`, `removeledgroup:`, `applyledgroups`) exigem client locked, retornam `CmdSetResult_Ok`/`CmdSetResult_Error`/`CmdSetResult_NotLocked`/`CmdSetResult_Busy`, exatamente como `setcontentaspect`.
+
 ## 3. Testes
 
 - [ ] Teste unitário de `resizedKeepingAnchor`: cada uma das 4 âncoras (`Qt::TopLeftCorner`, etc.) mantém o canto oposto fixo corretamente; `newWidth<=0`/`newHeight<=0` preserva o eixo correspondente; resultado nunca tem largura/altura menor que 1.
