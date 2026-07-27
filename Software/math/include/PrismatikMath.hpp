@@ -27,12 +27,21 @@
 
 #include <QList>
 #include <QRgb>
+#include <QPointF>
 #include <cmath>
 #include "colorspace_types.h"
 #include "../../common/defs.h"
 
 namespace PrismatikMath
 {
+	// Hue/saturation <-> Cartesian point on a color wheel of the given radius, center at
+	// the origin. hue is in degrees [0,360), sat in [0,100]. Extracted from
+	// ColorWheelWidget so the wheel's polar math is unit-testable without QApplication/painting.
+	QPointF hueSatToPoint(int hue, int sat, double radius);
+	// Inverse of hueSatToPoint. Returns false (and clamps sat to 100) if point falls
+	// outside the circle of the given radius, true otherwise.
+	bool pointToHueSat(const QPointF& point, double radius, int& hue, int& sat);
+
 	void gammaCorrection(double gamma, StructRgb &);
 	void brightnessCorrection(unsigned int brightness, StructRgb &);
 	void maxCorrection(unsigned int max, StructRgb &);

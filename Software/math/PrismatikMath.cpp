@@ -48,6 +48,38 @@ namespace PrismatikMath
 		return result;
 	}
 
+	QPointF hueSatToPoint(int hue, int sat, double radius)
+	{
+		const double angleRad = hue * M_PI / 180.0;
+		const double r = (sat / 100.0) * radius;
+		// Negate y: hue increases counter-clockwise (standard color-wheel convention,
+		// 0deg at 3 o'clock) while Qt widget coordinates grow downward.
+		return QPointF(r * std::cos(angleRad), -r * std::sin(angleRad));
+	}
+
+	bool pointToHueSat(const QPointF& point, double radius, int& hue, int& sat)
+	{
+		if (radius <= 0) {
+			hue = 0;
+			sat = 0;
+			return false;
+		}
+
+		const double r = std::sqrt(point.x() * point.x() + point.y() * point.y());
+		const bool inside = r <= radius;
+
+		double satF = (r / radius) * 100.0;
+		if (satF > 100.0) satF = 100.0;
+		if (satF < 0.0) satF = 0.0;
+		sat = static_cast<int>(round(satF));
+
+		double angleDeg = std::atan2(-point.y(), point.x()) * 180.0 / M_PI;
+		if (angleDeg < 0.0) angleDeg += 360.0;
+		hue = static_cast<int>(round(angleDeg)) % 360;
+
+		return inside;
+	}
+
 	void gammaCorrection(double gamma, StructRgb & eRgb)
 	{
 		eRgb.r = 4095 * pow(eRgb.r / 4095.0, gamma);

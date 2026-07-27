@@ -305,6 +305,8 @@ SOURCES += \
     LedDeviceDdp.cpp \
     HostColorSmoothing.cpp \
     ColorButton.cpp \
+    ColorWheelWidget.cpp \
+    ColorWheelDialog.cpp \
     ApiServer.cpp \
     ApiServerSetColorTask.cpp \
     MoodLampManager.cpp \
@@ -366,6 +368,8 @@ HEADERS += \
     HostColorSmoothing.hpp \
     LedDeviceVirtual.hpp \
     ColorButton.hpp \
+    ColorWheelWidget.hpp \
+    ColorWheelDialog.hpp \
     ../common/defs.h \
     enums.hpp         ApiServer.hpp     ApiServerSetColorTask.hpp \
     hidapi/hidapi.h \

@@ -1,8 +1,8 @@
 #include "../common/defs.h"
 #include "ColorButton.hpp"
+#include "ColorWheelDialog.hpp"
 #include "debug.h"
 #include <QPainter>
-#include <QColorDialog>
 
 #define COLOR_LABEL_SPACING 5
 
@@ -44,15 +44,14 @@ void ColorButton::currentColorChanged(QColor color)
 
 void ColorButton::click()
 {
-	QColorDialog * dialog = new QColorDialog(this);
+	ColorWheelDialog * dialog = new ColorWheelDialog(getColor(), this);
 	dialog->setWindowFlags(Qt::Window
 							| Qt::WindowStaysOnTopHint
 							| Qt::CustomizeWindowHint
 							| Qt::WindowCloseButtonHint);
 
 	QColor savedColor = getColor();
-	connect(dialog, &QColorDialog::currentColorChanged, this, &ColorButton::currentColorChanged);
-	dialog->setCurrentColor(getColor());
+	connect(dialog, &ColorWheelDialog::currentColorChanged, this, &ColorButton::currentColorChanged);
 	if (dialog->exec() != QDialog::Accepted)
 		setColor(savedColor);
 	delete dialog;
