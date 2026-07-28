@@ -21,7 +21,7 @@
 
 using namespace std;
 
-unsigned g_debugLevel = Debug::LowLevel;
+std::atomic<unsigned> g_debugLevel{Debug::LowLevel};
 
 int main(int argc, char *argv[])
 {

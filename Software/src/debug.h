@@ -31,8 +31,11 @@
 #include <QString>
 #include <QRect>
 #endif
-// Set and store in main.cpp file
-extern unsigned g_debugLevel;
+#include <atomic>
+// Set and store in main.cpp file. Atomic because it's written from the GUI thread
+// (SettingsWindow's logging-level spin box) and read from every thread that logs via the
+// DEBUG_* macros below (e.g. the LED device thread) - see SettingsWindow.cpp's write site.
+extern std::atomic<unsigned> g_debugLevel;
 
 // Using:
 //

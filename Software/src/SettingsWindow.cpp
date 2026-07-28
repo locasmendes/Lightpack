@@ -695,7 +695,6 @@ void SettingsWindow::onLoggingLevel_valueChanged(int value)
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << value;
 
-	// WARNING: Multithreading bug here with g_debugLevel
 	g_debugLevel = value;
 
 	Settings::setDebugLevel(value);

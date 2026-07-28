@@ -127,6 +127,8 @@ win32 {
 
     LIBS    += -lpsapi
     LIBS    += -lwtsapi32
+    # For MiniDumpWriteDump (CrashHandler.cpp)
+    LIBS    += -ldbghelp
 
     CONFIG(msvc) {
         versionAtLeast(QT_VERSION, 6.0.0) {
@@ -294,6 +296,7 @@ SOURCES += \
     LightpackApplication.cpp  main.cpp   SettingsWindow.cpp  Settings.cpp \
     GrabWidget.cpp  GrabConfigWidget.cpp \
     LogWriter.cpp \
+    CrashHandler.cpp \
     LedDeviceLightpack.cpp \
     LedDeviceAdalight.cpp \
     LedDeviceArdulight.cpp \
@@ -355,6 +358,7 @@ HEADERS += \
     GrabConfigWidget.hpp \
     debug.h \
     LogWriter.hpp \
+    CrashHandler.hpp \
     alienfx/LFXDecl.h \
     alienfx/LFX2.h \
     LedDeviceLightpack.hpp \

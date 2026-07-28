@@ -36,6 +36,7 @@
 #include "Plugin.hpp"
 #include "SystemSession.hpp"
 #include "LightpackCommandLineParser.hpp"
+#include "CrashHandler.hpp"
 
 #ifdef Q_OS_WIN
 #include "WinUtils.hpp"
@@ -72,6 +73,9 @@ LightpackApplication::~LightpackApplication()
 
 	delete m_settingsWindow;
 	m_settingsWindow = NULL;
+	// Unregister before deleting - otherwise a crash during the rest of this destructor
+	// would have CrashHandler call into an about-to-be-dangling m_ledDeviceManager.
+	CrashHandler::setShutdownCallback(nullptr);
 	delete m_ledDeviceManager;
 	m_ledDeviceManager = NULL;
 	delete m_ledDeviceManagerThread;
@@ -667,6 +671,14 @@ void LightpackApplication::startLedDeviceManager()
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
 	m_ledDeviceManager = new LedDeviceManager();
 	m_ledDeviceManagerThread = new QThread();
+
+	// Best-effort "turn the LEDs off" for CrashHandler: posts to the (still-alive, since a
+	// crash on the main thread doesn't touch this one) LED device thread and gives it a
+	// moment to actually send the command before the process exits.
+	CrashHandler::setShutdownCallback([this]() {
+		QMetaObject::invokeMethod(m_ledDeviceManager, "switchOffLeds", Qt::QueuedConnection);
+		QThread::msleep(400);
+	});
 
 //	connect(settings(), &Settings::connectedDeviceChanged, this, &LightpackApplication::handleConnectedDeviceChange, Qt::DirectConnection);
 //	connect(settings(), &Settings::adalightSerialPortNameChanged,				m_ledDeviceManager, &LedDeviceManager::recreateLedDevice, Qt::DirectConnection);

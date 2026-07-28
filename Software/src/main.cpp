@@ -32,6 +32,7 @@
 #include "Settings.hpp"
 #include "debug.h"
 #include "LogWriter.hpp"
+#include "CrashHandler.hpp"
 #include "SettingsWizard.hpp"
 
 #ifdef Q_OS_WIN
@@ -52,7 +53,7 @@
 
 using namespace std;
 
-unsigned g_debugLevel = SettingsScope::Main::DebugLevelDefault;
+std::atomic<unsigned> g_debugLevel{SettingsScope::Main::DebugLevelDefault};
 
 QString getApplicationDirectoryPath(const char * firstCmdArgument)
 {
@@ -137,6 +138,13 @@ int main(int argc, char **argv)
 	Q_UNUSED(messageHandlerGuard);
 
 	LightpackApplication lightpackApp(argc, argv);
+
+	// Catches fatal errors (SEH exceptions on Windows, uncaught C++ exceptions from any
+	// thread) that would otherwise just make the process vanish with no trace: writes a
+	// crash log/minidump, best-effort turns the LEDs off, and shows what happened before
+	// exiting. Independent of the debug log level below - a crash is exceptional, not
+	// routine verbosity, so it's always captured.
+	CrashHandler::install(lightpackApp.configDir() + QStringLiteral("/Logs"));
 
 	// init the logger after initializeAll to know the configured debugLevel
 
