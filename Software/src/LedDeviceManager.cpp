@@ -111,8 +111,16 @@ void LedDeviceManager::recreateLedDevice()
 
 	disconnectSignalSlotsLedDevice();
 
-	if (m_ledDevice != NULL)
-		m_ledDevice->close();
+	if (m_ledDevice != NULL) {
+		// m_ledDevice lives on m_ledDeviceThread (see initLedDevice()'s moveToThread()), but
+		// this function runs on LedDeviceManager's own thread - a direct call here runs
+		// close() (which does real teardown, e.g. LedDeviceAdalight/Ardulight delete their
+		// QSerialPort) on the WRONG thread, racing whatever m_ledDeviceThread is doing at
+		// that moment. Queuing it, like every other cross-thread call to m_ledDevice, fixed
+		// a reproducible crash (pure virtual call / access violation inside QSerialPort
+		// open/close, confirmed via crash dumps) caused by exactly this race.
+		QMetaObject::invokeMethod(m_ledDevice, "close", Qt::QueuedConnection);
+	}
 
 	initLedDevice();
 }
@@ -713,8 +721,10 @@ void LedDeviceManager::onSessionChange(SystemSession::Status status)
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << "status:" << status;
 
-	if (status == SystemSession::Status::Sleeping)
-		m_ledDevice->close();
-	else if (status == SystemSession::Status::Resuming)
+	if (status == SystemSession::Status::Sleeping) {
+		// Queued for the same cross-thread-safety reason as in recreateLedDevice() above.
+		if (m_ledDevice != NULL)
+			QMetaObject::invokeMethod(m_ledDevice, "close", Qt::QueuedConnection);
+	} else if (status == SystemSession::Status::Resuming)
 		recreateLedDevice();
 }
