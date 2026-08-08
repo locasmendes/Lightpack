@@ -95,6 +95,7 @@ HEADERS += \
     ScreenTopologyTest.hpp \
     ColorOpsTest.hpp \
     ColorPipelineGoldenTest.hpp \
+    ColorPipelineHysteresisTest.hpp \
     SettingsMigrationTest.hpp \
     CalibrationTest.hpp
 
@@ -141,6 +142,7 @@ SOURCES += \
     ScreenTopologyTest.cpp \
     ColorOpsTest.cpp \
     ColorPipelineGoldenTest.cpp \
+    ColorPipelineHysteresisTest.cpp \
     SettingsMigrationTest.cpp \
     CalibrationTest.cpp
 

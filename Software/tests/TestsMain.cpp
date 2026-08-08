@@ -19,6 +19,7 @@
 #include "ScreenTopologyTest.hpp"
 #include "ColorOpsTest.hpp"
 #include "ColorPipelineGoldenTest.hpp"
+#include "ColorPipelineHysteresisTest.hpp"
 #include "SettingsMigrationTest.hpp"
 #include "CalibrationTest.hpp"
 #include "debug.h"
@@ -43,6 +44,7 @@ int main(int argc, char *argv[])
 	tests.append(new ColorOpsTest());
 	tests.append(new LightpackMathTest());
 	tests.append(new ColorPipelineGoldenTest());
+	tests.append(new ColorPipelineHysteresisTest());
 	tests.append(new SettingsMigrationTest());
 	tests.append(new LightpackApiTest());
 	tests.append(new AppVersionTest());
