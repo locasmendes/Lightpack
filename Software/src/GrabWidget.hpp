@@ -70,6 +70,8 @@ public:
 	void setAreaEnabled(const bool);
 	void fillBackgroundWhite();
 	void fillBackgroundColored();
+	/*! Phase 4 Live colors: paint zone with post-pipeline LED color. */
+	void fillBackgroundLive(const QColor &color);
 	bool isSelectedForGroupEdit() const;
 	void setSelectedForGroupEdit(const bool selected);
 

@@ -781,6 +781,16 @@ Internally emulates the effects of f.lux, redshift, Night Light, Night Shift...<
                  </property>
                 </widget>
                </item>
+               <item>
+                <widget class="QRadioButton" name="radioButton_LiveColors">
+                 <property name="toolTip">
+                  <string>Paint each grab zone with the color actually sent to the LED after the full device pipeline.</string>
+                 </property>
+                 <property name="text">
+                  <string>Live colors</string>
+                 </property>
+                </widget>
+               </item>
               </layout>
              </widget>
             </item>
@@ -2683,7 +2693,7 @@ LED groups (created in the configuration wizard's zone placement step) let you r
             </sizepolicy>
            </property>
            <attribute name="title">
-            <string>Virtual</string>
+            <string>Stage</string>
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout_12">
             <item>
@@ -4039,6 +4049,7 @@ LED groups (created in the configuration wizard's zone placement step) let you r
   <tabstop>radioButton_GrabWidgetsDontShow</tabstop>
   <tabstop>radioButton_Colored</tabstop>
   <tabstop>radioButton_White</tabstop>
+  <tabstop>radioButton_LiveColors</tabstop>
   <tabstop>checkBox_GrabBloomEnabled</tabstop>
   <tabstop>horizontalSlider_GrabBloomIntensity</tabstop>
   <tabstop>spinBox_GrabBloomIntensity</tabstop>

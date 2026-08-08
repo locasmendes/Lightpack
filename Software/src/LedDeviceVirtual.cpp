@@ -44,18 +44,11 @@ void LedDeviceVirtual::setColors(const QList<LinearRgbF> & colors)
 	{
 		m_colorsSaved = colors;
 
-		QList<QRgb> callbackColors;
-		callbackColors.reserve(colors.size());
-
 		resizeColorsBuffer(colors.count());
 
 		applyColorModifications(colors, m_colorsBuffer);
+		// applyDithering emits colorsUpdated when color feedback is enabled (Phase 4).
 		applyDithering(m_colorsBuffer, 8);
-
-		for (const StructRgb& color : m_colorsBuffer)
-			callbackColors.append(qRgb(color.r, color.g, color.b));
-
-		emit colorsUpdated(callbackColors);
 	}
 	emit commandCompleted(true);
 }
@@ -69,8 +62,7 @@ void LedDeviceVirtual::switchOffLeds()
 {
 	const int count = m_colorsSaved.count();
 	m_colorsSaved = QList<LinearRgbF>(count);
-	QList<QRgb> black(count, qRgb(0, 0, 0));
-	emit colorsUpdated(black);
+	emitBlackColorsUpdatedIfEnabled(count);
 	emit commandCompleted(true);
 }
 

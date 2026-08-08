@@ -66,6 +66,8 @@ signals:
 	void switchOnLeds();
 	void showLedWidgets(bool visible);
 	void setColoredLedWidget(bool colored);
+	void setLiveColorsLedWidget(bool live);
+	void setColorFeedbackEnabled(bool enabled);
 	void updateLedsColors(const QList<QRgb> &);
 	void updateRefreshDelay(int value);
 	void updateColorDepth(int value);
@@ -108,6 +110,8 @@ public slots:
 	void profileSwitchCombobox(const QString& profile);
 	void updateVirtualLedsColors(const QList<QRgb> & colors);
 	void requestBacklightStatus();
+	/*! Phase 4 / Phase 3 prep: force post-pipeline color feedback on (calibration will use this). */
+	void setColorFeedbackForced(bool forced);
 	void onApiServer_ErrorOnStartListening(const QString& errorMessage);
 	void onPingDeviceEverySecond_Toggled(bool state);
 	void processMessage(const QString &message);
@@ -202,6 +206,7 @@ private slots:
 	void onDontShowLedWidgets_Toggled(bool checked);
 	void onSetColoredLedWidgets(bool checked);
 	void onSetWhiteLedWidgets(bool checked);
+	void onSetLiveColorsLedWidgets(bool checked);
 
 	void openCurrentProfile();
 
@@ -268,6 +273,7 @@ private:
 	void setDeviceTabWidgetsVisibility(DeviceTab::Options options);
 	void syncLedDeviceWithSettingsWindow();
 	int getLigtpackFirmwareVersionMajor();
+	void updateColorFeedbackGate();
 
 	void updateStatusBar();
 
@@ -326,6 +332,8 @@ private:
 
 	QList<QLabel *> m_labelsGrabbedColors;
 
+	/*! When true (calibration mode), color feedback stays on regardless of UI watchers. */
+	bool m_colorFeedbackForced{ false };
 
 	bool m_isHotkeySelectionChanging;
 	SysTrayIcon *m_trayIcon;

@@ -159,6 +159,7 @@ void LedDeviceArdulight::switchOffLeds()
 
 	bool ok = writeBuffer(m_writeBuffer);
 
+	emitBlackColorsUpdatedIfEnabled(count);
 	emit commandCompleted(ok);
 }
 

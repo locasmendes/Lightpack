@@ -99,12 +99,19 @@ public slots:
 
 	virtual void setUsbPowerLedDisabled(bool isDisabled);
 
+	/*! Phase 4: emit colorsUpdated only while a UI watcher is active (Live colors / Stage / calibration). */
+	void setColorFeedbackEnabled(bool enabled);
+	bool isColorFeedbackEnabled() const { return m_colorFeedbackEnabled; }
+
 protected:
 	virtual void applyColorModifications(const QList<QRgb> & inColors, QList<StructRgb> & outColors, const bool rawColors = false);
 	/*! Float-transport entry (step 7); same D1–D5 path without sRGB decode. */
 	void applyColorModifications(const QList<LinearRgbF> & inColors, QList<StructRgb> & outColors);
 	virtual void applyDithering(QList<StructRgb>& colors, int colorDepth);
 	ColorOps::DeviceStageParams deviceStageParams() const;
+	/*! Convert post-pipeline StructRgb (N-bit) to display QRgb and emit if feedback is enabled. */
+	void emitColorsUpdatedIfEnabled(const QList<StructRgb> & colors, int colorDepth);
+	void emitBlackColorsUpdatedIfEnabled(int count);
 
 protected:
 	QString m_colorSequence;
@@ -122,4 +129,5 @@ protected:
 
 	QList<LinearRgbF> m_colorsSaved;
 	QList<StructRgb> m_colorsBuffer;
+	bool m_colorFeedbackEnabled{ false };
 };

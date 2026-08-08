@@ -98,6 +98,8 @@ public slots:
 	void setVisibleLedWidgets(bool state);
 	void setColoredLedWidgets(bool state);
 	void setWhiteLedWidgets(bool state);
+	void setLiveColorsLedWidgets(bool state);
+	void updateLiveLedColors(const QList<QRgb> & colors);
 	void onGrabberStateChangeRequested(bool isStartRequested);
 
 private slots:
@@ -146,6 +148,12 @@ private:
 
 	QTimer *m_timerUpdateFPS;
 	QTimer *m_timerFakeGrab;
+	// TODO(Phase 2 follow-up): migrate host-smoothing orchestration to SmoothingDriver
+	// (Software/src/SmoothingDriver.*) — GrabManager and MoodLampManager still own local
+	// QTimer + QElapsedTimer + HostColorSmoothing triplets; SoundManagerBase has none yet.
+	// Risk: Lightpack firmware-smoothing bypass (isHostSmoothingApplicable) and
+	// send-always / forceUpdate edge cases must stay bit-identical. Prefer a dedicated
+	// pass with HostColorSmoothingTest + MoodLampManagerTest green before swapping.
 	QTimer *m_timerHostSmoothing;
 	QTimer *m_timerRestoreLedPositions;
 	QElapsedTimer m_hostSmoothingClock;
@@ -187,5 +195,6 @@ private:
 	int m_grabCountLastInterval;
 
 	bool m_isGrabWidgetsVisible;
+	bool m_isLiveColorsEnabled;
 	GrabberContext * m_grabberContext;
 };
