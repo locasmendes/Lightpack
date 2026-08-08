@@ -10,6 +10,7 @@ Planos acionáveis, cada um transformando um achado já documentado em `docs/*.m
 | [presets-aspect-ratio.md](./presets-aspect-ratio.md) | Presets de AR (`Fill`/`16:9`/`4:3`) sobre o mesmo layout físico de LEDs, sem duplicar perfil inteiro (item Q1) | [`pesquisa-zonas-led-content-aware.md`](../pesquisa-zonas-led-content-aware.md) §5.1 | 39 | ✅ | Implementado (`master`) |
 | [suporte-protocolo-ddp.md](./suporte-protocolo-ddp.md) | Novo `LedDeviceDdp`, seguindo o padrão de WARLS/DRGB/DNRGB | [`firmware-hardware-datados.md`](../firmware-hardware-datados.md) §3.3 | 22 | ✅ | Implementado (`master`) |
 | [grupos-e-resize-global-leds.md](./grupos-e-resize-global-leds.md) | Resize em lote de todas as caixinhas + grupos nomeados de LEDs (`top`/`bottom`/custom) com overrides próprios, sem arrastar caixa por caixa | [`redesign-ui-prismatik.md`](../redesign-ui-prismatik.md) §4.2/§6 | 20 | — | Não implementado |
+| — (plano 5.17 externo) | Pipeline float / calibração / UI / multi-tela — Fase 6 só documentação | [`efeitos-dinamicos-propostos.md`](../efeitos-dinamicos-propostos.md) | doc | — | Doc escrito (`docs/phase-6-effects-doc`); sem código |
 
 ## Como usar
 
