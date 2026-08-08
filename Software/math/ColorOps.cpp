@@ -7,6 +7,7 @@
 
 #include "ColorOps.hpp"
 #include "PrismatikMath.hpp"
+#include <QDebug>
 #include <algorithm>
 #include <cmath>
 #include <cstring>
@@ -365,10 +366,19 @@ void applyDeviceStage(const QList<LinearRgbF> &linearIn, QList<StructRgb> &out12
 
 	applyLuminosityThreshold(wire, params.luminosityThreshold, params.minimumLuminosityEnabled);
 
-	const bool applyWb = (params.wb.size() == wire.size());
+	const int wbCount = std::min(params.wb.size(), wire.size());
+	if (!params.wb.isEmpty() && params.wb.size() != wire.size()) {
+		static bool s_warnedWbMismatch = false;
+		if (!s_warnedWbMismatch) {
+			qWarning() << "ColorOps::applyDeviceStage: WB coef count" << params.wb.size()
+				<< "!= LED count" << wire.size() << "; applying min(count)";
+			s_warnedWbMismatch = true;
+		}
+	}
+
 	for (int i = 0; i < wire.size(); ++i) {
 		applyBrightness(wire[i], params.brightnessPercent);
-		if (applyWb)
+		if (i < wbCount)
 			applyWhiteBalance(wire[i], params.wb[i].r, params.wb[i].g, params.wb[i].b);
 	}
 
