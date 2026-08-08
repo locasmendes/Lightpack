@@ -14,242 +14,242 @@
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="37"/>
         <source>White 100%</source>
-        <translation type="unfinished"></translation>
+        <translation>Branco 100%</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="38"/>
         <source>White 75%</source>
-        <translation type="unfinished"></translation>
+        <translation>Branco 75%</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="39"/>
         <source>White 50%</source>
-        <translation type="unfinished"></translation>
+        <translation>Branco 50%</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="40"/>
         <source>White 25%</source>
-        <translation type="unfinished"></translation>
+        <translation>Branco 25%</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="41"/>
         <source>Red</source>
-        <translation type="unfinished">Vermelho</translation>
+        <translation>Vermelho</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="42"/>
         <source>Green</source>
-        <translation type="unfinished">Verde</translation>
+        <translation>Verde</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="43"/>
         <source>Blue</source>
-        <translation type="unfinished">Azul</translation>
+        <translation>Azul</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="44"/>
         <source>Cyan</source>
-        <translation type="unfinished"></translation>
+        <translation>Ciano</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="45"/>
         <source>Magenta</source>
-        <translation type="unfinished"></translation>
+        <translation>Magenta</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="46"/>
         <source>Yellow</source>
-        <translation type="unfinished"></translation>
+        <translation>Amarelo</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="47"/>
         <source>Gray ramp</source>
-        <translation type="unfinished"></translation>
+        <translation>Rampa de cinza</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="48"/>
         <source>Color bars (per LED)</source>
-        <translation type="unfinished"></translation>
+        <translation>Barras de cor (por LED)</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="49"/>
         <source>Identify LED (chase)</source>
-        <translation type="unfinished"></translation>
+        <translation>Identificar LED (chase)</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="67"/>
         <source>&lt;b&gt;Calibration&lt;/b&gt; — patterns go host→device (grabber bypass). Live zone colors stay forced on while this page is active.</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;Calibração&lt;/b&gt; — padrões vão host→dispositivo (sem grabber). Cores ao vivo das zonas ficam forçadas enquanto esta página estiver ativa.</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="74"/>
         <source>Test patterns</source>
-        <translation type="unfinished"></translation>
+        <translation>Padrões de teste</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="82"/>
         <source>LED </source>
-        <translation type="unfinished"></translation>
+        <translation>LED </translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="84"/>
         <source>Apply pattern</source>
-        <translation type="unfinished"></translation>
+        <translation>Aplicar padrão</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="91"/>
         <source>Controls</source>
-        <translation type="unfinished"></translation>
+        <translation>Controles</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="95"/>
         <source>D65 (6500 K)</source>
-        <translation type="unfinished"></translation>
+        <translation>D65 (6500 K)</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="96"/>
         <source>D93 (9300 K)</source>
-        <translation type="unfinished"></translation>
+        <translation>D93 (9300 K)</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="97"/>
         <source>Warm (4000 K)</source>
-        <translation type="unfinished"></translation>
+        <translation>Quente (4000 K)</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="98"/>
         <source>Cool (7500 K)</source>
-        <translation type="unfinished"></translation>
+        <translation>Frio (7500 K)</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="99"/>
         <source>Manual Kelvin</source>
-        <translation type="unfinished"></translation>
+        <translation>Kelvin manual</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="109"/>
         <source>1.00 = Linear (physical). 1.32 = Classic (migrated default).</source>
-        <translation type="unfinished"></translation>
+        <translation>1,00 = Linear (físico). 1,32 = Clássico (padrão migrado).</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="111"/>
         <source>A/B: bypass per-LED coefficients (neutral 1.0)</source>
-        <translation type="unfinished"></translation>
+        <translation>A/B: ignorar coeficientes por LED (neutro 1,0)</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="112"/>
         <source>Reset calibration defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>Restaurar padrões de calibração</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="117"/>
         <source>White point</source>
-        <translation type="unfinished"></translation>
+        <translation>Ponto branco</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="118"/>
         <source>Kelvin</source>
-        <translation type="unfinished"></translation>
+        <translation>Kelvin</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="119"/>
         <source>Output gamma</source>
-        <translation type="unfinished"></translation>
+        <translation>Gamma de saída</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="126"/>
         <source>Assisted measurement</source>
-        <translation type="unfinished"></translation>
+        <translation>Medição assistida</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="129"/>
         <source>CIE xy</source>
-        <translation type="unfinished"></translation>
+        <translation>CIE xy</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="130"/>
         <source>Measured RGB</source>
-        <translation type="unfinished"></translation>
+        <translation>RGB medido</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="148"/>
         <source>x</source>
-        <translation type="unfinished"></translation>
+        <translation>x</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="150"/>
         <source>y</source>
-        <translation type="unfinished"></translation>
+        <translation>y</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="162"/>
         <source>R</source>
-        <translation type="unfinished"></translation>
+        <translation>R</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="164"/>
         <source>G</source>
-        <translation type="unfinished"></translation>
+        <translation>G</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="166"/>
         <source>B</source>
-        <translation type="unfinished"></translation>
+        <translation>B</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="170"/>
         <source>ΔE before/after: —</source>
-        <translation type="unfinished"></translation>
+        <translation>ΔE antes/depois: —</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="172"/>
         <source>Solve gains</source>
-        <translation type="unfinished"></translation>
+        <translation>Resolver ganhos</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="173"/>
         <source>Apply solved gains to all LEDs</source>
-        <translation type="unfinished"></translation>
+        <translation>Aplicar ganhos resolvidos a todos os LEDs</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="181"/>
         <source>Named calibration snapshot</source>
-        <translation type="unfinished"></translation>
+        <translation>Snapshot de calibração nomeado</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="185"/>
         <source>Name (stored under CalibrationProfiles/…)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome (salvo em CalibrationProfiles/…)</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="186"/>
         <source>Save</source>
-        <translation type="unfinished"></translation>
+        <translation>Salvar</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="187"/>
         <source>Load</source>
-        <translation type="unfinished"></translation>
+        <translation>Carregar</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="191"/>
         <source>TODO(Phase 5): split calibration profiles from layout profiles completely. Snapshots currently live in the application settings file, not the LED layout profile.</source>
-        <translation type="unfinished"></translation>
+        <translation>TODO(Phase 5): separar completamente perfis de calibração dos perfis de layout. Snapshots ficam no arquivo de settings do app, não no perfil de layout dos LEDs.</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="400"/>
         <source>Per-LED white-balance coefficients already deviate more than 5%% from neutral. Temperature is applied separately and will not overwrite those coefficients.</source>
-        <translation type="unfinished"></translation>
+        <translation>Os coeficientes de balanço de branco por LED já desviam mais de 5%% do neutro. A temperatura é aplicada à parte e não sobrescreve esses coeficientes.</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="404"/>
         <source>Color temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Temperatura de cor</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="420"/>
         <source>ΔE before: %1   after: %2   gains R=%3 G=%4 B=%5</source>
-        <translation type="unfinished"></translation>
+        <translation>ΔE antes: %1   depois: %2   ganhos R=%3 G=%4 B=%5</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="431"/>
@@ -259,33 +259,33 @@
         <location filename="../../src/CalibrationPage.cpp" line="474"/>
         <location filename="../../src/CalibrationPage.cpp" line="493"/>
         <source>Calibration</source>
-        <translation type="unfinished">Calibração</translation>
+        <translation>Calibração</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="431"/>
         <source>Solve gains first.</source>
-        <translation type="unfinished"></translation>
+        <translation>Resolva os ganhos primeiro.</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="443"/>
         <location filename="../../src/CalibrationPage.cpp" line="467"/>
         <source>Enter a profile name.</source>
-        <translation type="unfinished"></translation>
+        <translation>Informe um nome de perfil.</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="460"/>
         <source>Saved snapshot &quot;%1&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Snapshot &quot;%1&quot; salvo.</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="474"/>
         <source>Snapshot &quot;%1&quot; not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Snapshot &quot;%1&quot; não encontrado.</translation>
     </message>
     <message>
         <location filename="../../src/CalibrationPage.cpp" line="493"/>
         <source>Loaded snapshot &quot;%1&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Snapshot &quot;%1&quot; carregado.</translation>
     </message>
 </context>
 <context>
@@ -850,12 +850,12 @@ Internally emulates the effects of f.lux, redshift, Night Light, Night Shift...<
     <message>
         <location filename="../../src/SettingsWindow.ui" line="805"/>
         <source>Paint each grab zone with the color actually sent to the LED after the full device pipeline.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pinta cada zona de captura com a cor realmente enviada ao LED após o pipeline completo do dispositivo.</translation>
     </message>
     <message>
         <location filename="../../src/SettingsWindow.ui" line="808"/>
         <source>Live colors</source>
-        <translation type="unfinished"></translation>
+        <translation>Cores ao vivo</translation>
     </message>
     <message>
         <location filename="../../src/SettingsWindow.ui" line="818"/>
@@ -1072,7 +1072,7 @@ Realça pixels quase brancos e pouco saturados (lens flares, reflexos brilhantes
     <message>
         <location filename="../../src/SettingsWindow.ui" line="1960"/>
         <source>&lt;h4&gt;Output gamma&lt;/h4&gt; Single transfer function from linear scene light to LED PWM duty: w = L^(1/γ). &lt;b&gt;1.00&lt;/b&gt; = Linear (physically correct). &lt;b&gt;1.32&lt;/b&gt; = Classic (pre-5.17 look with temperature on). UI range 0.5–3.0.</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h4&gt;Gamma de saída&lt;/h4&gt; Função de transferência única da luz linear da cena para o duty PWM do LED: w = L^(1/γ). &lt;b&gt;1,00&lt;/b&gt; = Linear (fisicamente correto). &lt;b&gt;1,32&lt;/b&gt; = Clássico (look pré-5.17 com temperatura ligada). Faixa da UI 0,5–3,0.</translation>
     </message>
     <message>
         <location filename="../../src/SettingsWindow.ui" line="2105"/>
