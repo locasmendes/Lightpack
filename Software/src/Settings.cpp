@@ -197,6 +197,7 @@ namespace Key
 // [General]
 static const QString LightpackMode = QStringLiteral("LightpackMode");
 static const QString IsBacklightEnabled = QStringLiteral("IsBacklightEnabled");
+static const QString ProfileVersion = QStringLiteral("General/ProfileVersion");
 // [Grab]
 namespace Grab
 {
@@ -256,6 +257,7 @@ static const QString Brightness = QStringLiteral("Device/Brightness");
 static const QString BrightnessCap = QStringLiteral("Device/BrightnessCap");
 static const QString ColorDepth = QStringLiteral("Device/ColorDepth");
 static const QString Gamma = QStringLiteral("Device/Gamma");
+static const QString OutputGamma = QStringLiteral("Device/OutputGamma");
 static const QString IsDitheringEnabled = QStringLiteral("Device/IsDitheringEnabled");
 }
 // [LED_i]
@@ -1817,6 +1819,18 @@ void Settings::setDeviceGamma(double gamma)
 	emit m_this->deviceGammaChanged(gamma);
 }
 
+double Settings::getDeviceOutputGamma()
+{
+	return getValidDeviceOutputGamma(value(Profile::Key::Device::OutputGamma).toDouble());
+}
+
+void Settings::setDeviceOutputGamma(double gamma)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
+	setValue(Profile::Key::Device::OutputGamma, getValidDeviceOutputGamma(gamma));
+	emit m_this->deviceOutputGammaChanged(gamma);
+}
+
 bool Settings::isDeviceDitheringEnabled()
 {
 	return value(Profile::Key::Device::IsDitheringEnabled).toBool();
@@ -2418,6 +2432,15 @@ double Settings::getValidDeviceGamma(double value)
 	return value;
 }
 
+double Settings::getValidDeviceOutputGamma(double value)
+{
+	if (value < Profile::Device::OutputGammaMin)
+		value = Profile::Device::OutputGammaMin;
+	else if (value > Profile::Device::OutputGammaMax)
+		value = Profile::Device::OutputGammaMax;
+	return value;
+}
+
 int Settings::getValidGrabSlowdown(int value)
 {
 	if (value < Profile::Grab::SlowdownMin)
@@ -2671,6 +2694,7 @@ void Settings::initCurrentProfile(bool isResetDefault)
 	setNewOption(Profile::Key::Device::BrightnessCap,				Profile::Device::BrightnessCapDefault, isResetDefault);
 	setNewOption(Profile::Key::Device::Smooth,						Profile::Device::SmoothDefault, isResetDefault);
 	setNewOption(Profile::Key::Device::Gamma,						Profile::Device::GammaDefault, isResetDefault);
+	setNewOption(Profile::Key::Device::OutputGamma,					Profile::Device::OutputGammaDefault, isResetDefault);
 	setNewOption(Profile::Key::Device::ColorDepth,					Profile::Device::ColorDepthDefault, isResetDefault);
 	setNewOption(Profile::Key::Device::IsDitheringEnabled,			Profile::Device::IsDitheringEnabledDefault, isResetDefault);
 
@@ -2701,6 +2725,9 @@ void Settings::initCurrentProfile(bool isResetDefault)
 	QMutexLocker locker(&m_mutex);
 	m_currentProfile->sync();
 	locker.unlock();
+
+	migrateCurrentProfile();
+
 	emit m_this->currentProfileInited(getCurrentProfileName());
 }
 
@@ -2907,4 +2934,34 @@ void Settings::migrateSettings()
 		setValueMain(Main::Key::MainConfigVersion, QStringLiteral("4.0"));
 	}
 }
+
+void Settings::migrateCurrentProfile()
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
+
+	if (m_currentProfile == NULL)
+		return;
+
+	const QString ver = value(Profile::Key::ProfileVersion).toString();
+	if (ver == Profile::ProfileVersionCurrent)
+		return;
+
+	// ProfileVersion absent or older than "2":
+	// OutputGamma = clamp(2.2 * effGrab / gDevice, 0.2, 10.0)
+	// where effGrab = tempOn ? Grab/Gamma : 1.0 (Grab gamma only applied inside applyColorTemperature).
+	const double gGrab = value(Profile::Key::Grab::Gamma).toDouble();
+	const double gDevice = value(Profile::Key::Device::Gamma).toDouble();
+	const bool tempOn = value(Profile::Key::Grab::IsApplyColorTemperatureEnabled).toBool();
+	const double effGrab = tempOn ? gGrab : 1.0;
+	const double safeDevice = (gDevice == 0.0) ? Profile::Device::GammaDefault : gDevice;
+	const double outputGamma = getValidDeviceOutputGamma(2.2 * effGrab / safeDevice);
+
+	setValue(Profile::Key::Device::OutputGamma, outputGamma);
+	setValue(Profile::Key::ProfileVersion, Profile::ProfileVersionCurrent);
+	// Grab/Gamma and Device/Gamma remain on disk for downgrade compatibility.
+
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << "migrated OutputGamma to" << outputGamma
+		<< "tempOn=" << tempOn << "gGrab=" << gGrab << "gDevice=" << gDevice;
+}
+
 } /*SettingsScope*/

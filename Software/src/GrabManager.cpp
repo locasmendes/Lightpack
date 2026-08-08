@@ -29,6 +29,8 @@
 
 #include "debug.h"
 #include "PrismatikMath.hpp"
+#include "ColorOps.hpp"
+#include "ColorPipeline.hpp"
 #include "Settings.hpp"
 #include "GrabWidget.hpp"
 #include "GrabberContext.hpp"
@@ -48,6 +50,15 @@
 using namespace SettingsScope;
 
 using namespace std::chrono_literals;
+
+namespace {
+
+EncodedRgbF encodedFromLinear(const LinearRgbF &L)
+{
+	return ColorOps::srgbEncode(L);
+}
+
+} // namespace
 constexpr const std::chrono::milliseconds FPS_UPDATE_INTERVAL = 500ms;
 constexpr const std::chrono::milliseconds FAKE_GRAB_INTERVAL = 900ms;
 constexpr const std::chrono::milliseconds HOST_SMOOTHING_INTERVAL = 16ms; // ~62.5 Hz
@@ -484,78 +495,66 @@ void GrabManager::handleGrabbedColors()
 		return;
 	}
 
-	// Work on a copy
 	m_colorsProcessing = m_colorsNew;
 
+	ColorPipeline::ContentParams params;
+	params.avgColorsOnAllLeds = m_avgColorsOnAllLeds;
+	params.saturation = m_saturation;
+	params.contrast = m_contrast;
+	params.vibrance = m_vibrance;
+	params.contrastPivot = m_contrastPivot;
+	params.vibranceProtection = m_vibranceProtection;
+	params.bloomEnabled = m_bloomEnabled;
+	params.bloomIntensity = m_bloomIntensity;
+	params.bloomThreshold = m_bloomThreshold;
+	params.overBrighten = m_overBrighten;
+
+	params.areaEnabled.reserve(m_ledWidgets.size());
+	for (GrabWidget *w : m_ledWidgets)
+		params.areaEnabled.append(w->isAreaEnabled());
+
+	if (m_isApplyColorTemperature) {
+		params.applyColorTemperature = true;
+		params.colorTemperatureK = static_cast<quint16>(m_colorTemperature);
+	} else if (m_isApplyBlueLightReduction && m_blueLightClient) {
+		const quint16 kelvin = m_blueLightClient->colorTemperatureKelvin();
+		if (kelvin > 0) {
+			params.applyBlueLightReduction = true;
+			params.blueLightKelvin = kelvin;
+		} else {
+			// GammaRamp (or other LUT) path: apply on encoded bytes before decode.
+			m_blueLightClient->apply(m_colorsProcessing);
+		}
+	}
+
+	const QList<LinearRgbF> linearOut = ColorPipeline::processContent(m_colorsProcessing, params);
+
 	bool isColorsChanged = false;
+	if (m_changeLatch.size() != linearOut.size())
+		m_changeLatch = QList<bool>(linearOut.size(), false);
 
-	int avgR = 0, avgG = 0, avgB = 0;
-	int countGrabEnabled = 0;
-
-	if (m_isApplyColorTemperature)
+	for (int i = 0; i < linearOut.size(); i++)
 	{
-		PrismatikMath::applyColorTemperature(m_colorsProcessing, m_colorTemperature, m_gamma);
-	}
-	else if (m_isApplyBlueLightReduction && m_blueLightClient)
-		m_blueLightClient->apply(m_colorsProcessing, SettingsScope::Profile::Grab::GammaDefault);
+		const EncodedRgbF nextEnc = encodedFromLinear(linearOut[i]);
+		const EncodedRgbF prevEnc = encodedFromLinear(m_colorsCurrent[i]);
+		const float d = std::max({
+			std::fabs(nextEnc.r - prevEnc.r),
+			std::fabs(nextEnc.g - prevEnc.g),
+			std::fabs(nextEnc.b - prevEnc.b)});
 
-	if (m_avgColorsOnAllLeds)
-	{
-		for (int i = 0; i < m_ledWidgets.size(); i++)
-		{
-			if (m_ledWidgets[i]->isAreaEnabled())
-			{
-				avgR += qRed(m_colorsProcessing[i]);
-				avgG += qGreen(m_colorsProcessing[i]);
-				avgB += qBlue(m_colorsProcessing[i]);
-				countGrabEnabled++;
+		if (!m_changeLatch[i]) {
+			if (d >= ColorPipeline::kChangeEnterEncoded) {
+				m_changeLatch[i] = true;
+				m_colorsCurrent[i] = linearOut[i];
+				isColorsChanged = true;
 			}
-		}
-		if (countGrabEnabled != 0)
-		{
-			avgR /= countGrabEnabled;
-			avgG /= countGrabEnabled;
-			avgB /= countGrabEnabled;
-		}
-		// Set one AVG color to all LEDs
-		for (int ledIndex = 0; ledIndex < m_ledWidgets.size(); ledIndex++)
-		{
-			if (m_ledWidgets[ledIndex]->isAreaEnabled())
-			{
-				m_colorsProcessing[ledIndex] = qRgb(avgR, avgG, avgB);
+		} else {
+			if (d >= ColorPipeline::kChangeExitEncoded) {
+				m_colorsCurrent[i] = linearOut[i];
+				isColorsChanged = true;
+			} else {
+				m_changeLatch[i] = false;
 			}
-		}
-	}
-
-	for (int i = 0; i < m_ledWidgets.size(); i++)
-	{
-		QRgb newColor = m_colorsProcessing[i];
-
-		if (m_saturation != 50)
-			newColor = PrismatikMath::adjustSaturation(newColor, m_saturation / 50.0);
-
-		if (m_contrast != 50)
-			newColor = PrismatikMath::adjustContrast(newColor, m_contrast / 50.0, m_contrastPivot);
-
-		if (m_vibrance != 50)
-			newColor = PrismatikMath::adjustVibrance(newColor, m_vibrance / 50.0, m_vibranceProtection / 100.0);
-
-		if (m_bloomEnabled)
-			newColor = PrismatikMath::applyBloom(newColor, m_bloomIntensity, m_bloomThreshold);
-
-		if (m_overBrighten) {
-			int dRed = qRed(newColor);
-			int dGreen = qGreen(newColor);
-			int dBlue = qBlue(newColor);
-			int highest = qMax(dRed, qMax(dGreen, dBlue));
-			double scaleFactor = qMin((100 + 5 * m_overBrighten) / 100.0, 255.0 / highest);
-			newColor = qRgb(dRed * scaleFactor, dGreen * scaleFactor, dBlue * scaleFactor);
-		}
-
-		if (m_colorsCurrent[i] != newColor)
-		{
-			m_colorsCurrent[i] = newColor;
-			isColorsChanged = true;
 		}
 	}
 
@@ -862,9 +861,10 @@ void GrabManager::initColorLists(int numberOfLeds)
 
 	for (int i = 0; i < numberOfLeds; i++)
 	{
-		m_colorsCurrent << 0;
+		m_colorsCurrent << LinearRgbF{};
 		m_colorsNew		<< 0;
 	}
+	m_changeLatch = QList<bool>(numberOfLeds, false);
 
 	// Resize/clear the smoothing engine's arrays to match, and cancel any in-flight
 	// transition: a resize/profile switch must never let a tick interpolate between
@@ -889,8 +889,9 @@ void GrabManager::clearColorsCurrent()
 
 	for (int i = 0; i < m_colorsCurrent.size(); i++)
 	{
-		m_colorsCurrent[i] = 0;
+		m_colorsCurrent[i] = LinearRgbF{};
 	}
+	m_changeLatch.fill(false);
 
 	// Cancel any in-flight transition and sync the engine to black so a pending
 	// transition can never keep emitting stale colors after grabbing stops.

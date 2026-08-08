@@ -110,9 +110,14 @@ namespace MacUtils
         return NightShiftImpl::isSupported(true);
     }
 
-    void NightShift::apply(QList<QRgb> &colors, const double gamma)
+    void NightShift::apply(QList<QRgb> &colors)
     {
-        PrismatikMath::applyColorTemperature(colors, _impl->getColorTemperature(), gamma);
+        Q_UNUSED(colors);
+    }
+
+    quint16 NightShift::colorTemperatureKelvin() const
+    {
+        return static_cast<quint16>(_impl->getColorTemperature());
     }
     
     
@@ -178,7 +183,7 @@ namespace MacUtils
         return true;
     }
     
-    void GammaRamp::apply(QList<QRgb> &colors, const double /*gamma*/)
+    void GammaRamp::apply(QList<QRgb> &colors)
     {
         uint32_t sampleCount = 0;
         if (loadGammaTables(&_gammaR, &_gammaG, &_gammaB, &_rampCapacity, &sampleCount))

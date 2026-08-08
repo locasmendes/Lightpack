@@ -16,7 +16,8 @@ namespace MacUtils {
     public:
         NightShift();
         ~NightShift();
-        void apply(QList<QRgb>& colors, const double gamma);
+        void apply(QList<QRgb>& colors) override;
+        quint16 colorTemperatureKelvin() const override;
         static bool isSupported();
     private:
         class NightShiftImpl;
@@ -28,7 +29,7 @@ namespace MacUtils {
     public:
         GammaRamp();
         ~GammaRamp();
-        void apply(QList<QRgb>& colors, const double /*gamma*/);
+        void apply(QList<QRgb>& colors) override;
         static bool isSupported();
     private:
         CGGammaValue* _gammaR;

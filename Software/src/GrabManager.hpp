@@ -30,6 +30,7 @@
 
 #include "GrabberBase.hpp"
 #include "HostColorSmoothing.hpp"
+#include "ColorF.h"
 #include "enums.hpp"
 
 class GrabberContext;
@@ -48,7 +49,7 @@ public:
 	virtual ~GrabManager();
 
 signals:
-	void updateLedsColors(const QList<QRgb> & colors);
+	void updateLedsColors(const QList<LinearRgbF> & colors);
 	void ambilightTimeOfUpdatingColors(double ms);
 	void changeScreen();
 	void onSessionChange(SystemSession::Status change);
@@ -140,7 +141,7 @@ private:
 	QList<QRgb> m_grabResult;
 	const static QColor m_backgroundAndTextColors[10][2];
 
-	QList<QRgb> m_colorsCurrent;
+	QList<LinearRgbF> m_colorsCurrent;
 	QList<QRgb> m_colorsNew;
 	QList<QRgb> m_colorsProcessing;
 
@@ -165,6 +166,8 @@ private:
 	bool m_isApplyColorTemperature;
 	double m_gamma;
 	int m_colorTemperature;
+
+	QList<bool> m_changeLatch;
 
 	int m_grabCountThisInterval;
 	int m_grabCountLastInterval;

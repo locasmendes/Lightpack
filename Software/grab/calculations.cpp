@@ -452,6 +452,9 @@ simdupgrade avxup;
 namespace Grab {
 	namespace Calculations {
 		QRgb calculateAvgColor(const unsigned char * const buffer, BufferFormat bufferFormat, const size_t pitch, const QRect &rect) {
+			// TODO(linear-average): zone mean is of sRGB-encoded bytes (Jensen bias vs
+			// mean(EOTF(x))). Future: sum-of-squares approx (gamma≈2.0) via _mm_madd_epi16,
+			// or 16-bit LUT + gather. Out of scope for the float post-grab pipeline.
 
 			ColorValue color;
 			switch(bufferFormat) {
