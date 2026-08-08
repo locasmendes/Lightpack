@@ -1,4 +1,4 @@
-﻿#include <QtTest>
+#include <QtTest>
 #include "ColorF.h"
 #include "LightpackApiTest.hpp"
 #include "GrabCalculationTest.hpp"
@@ -20,6 +20,7 @@
 #include "ColorOpsTest.hpp"
 #include "ColorPipelineGoldenTest.hpp"
 #include "SettingsMigrationTest.hpp"
+#include "CalibrationTest.hpp"
 #include "debug.h"
 
 #include <iostream>
@@ -55,6 +56,7 @@ int main(int argc, char *argv[])
 	tests.append(new BulkResizeTest());
 	tests.append(new LedGroupRuntimeTest());
 	tests.append(new ScreenTopologyTest());
+	tests.append(new CalibrationTest());
 
 	int failedSuites = 0;
 	for(int i=0; i < tests.size(); i++) {

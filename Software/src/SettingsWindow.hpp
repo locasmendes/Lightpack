@@ -40,6 +40,7 @@
 #include "ColorButton.hpp"
 #include "enums.hpp"
 #include "Plugin.hpp"
+#include "CalibrationPage.hpp"
 
 namespace Ui {
 	class SettingsWindow;
@@ -90,6 +91,8 @@ signals:
 	void updateApiKey(QString key);
 	void updateApiDeviceNumberOfLeds(int value);
 	void reloadPlugins();
+	/*! Emitted when the temporary Calibration tab session starts/stops (Phase 3). */
+	void calibrationSessionActive(bool active);
 
 public slots:
 	void ledDeviceOpenSuccess(bool isSuccess);
@@ -162,6 +165,8 @@ private slots:
 	void updateTrayAndActionStates();
 
 	void changePage(int page);
+
+	void onCalibrationSessionActive(bool active);
 
 	void toggleBacklight();
 	void nextProfile();
@@ -269,6 +274,8 @@ private slots:
 	void clearBaudrateWarning();
 
 private:
+	void initCalibrationTab();
+
 	void updateDeviceTabWidgetsVisibility();
 	void setDeviceTabWidgetsVisibility(DeviceTab::Options options);
 	void syncLedDeviceWithSettingsWindow();
@@ -334,6 +341,9 @@ private:
 
 	/*! When true (calibration mode), color feedback stays on regardless of UI watchers. */
 	bool m_colorFeedbackForced{ false };
+
+	CalibrationPage *m_calibrationPage{ nullptr };
+	int m_calibrationNavIndex{ -1 };
 
 	bool m_isHotkeySelectionChanging;
 	SysTrayIcon *m_trayIcon;

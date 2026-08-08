@@ -98,6 +98,7 @@ private:
 	void initGrabManager();
 	void startPluginManager();
 	void startBacklight();
+	void setCalibrationSessionActive(bool active);
 
 	void runWizardLoop(bool isInitFromSettings);
 
@@ -145,4 +146,5 @@ private:
 	// Phase 1: mirror display-sleep accounting for zone-screen disconnect
 	bool m_isScreenDisconnected = false;
 	bool m_isLightsWereOnBeforeScreenDisconnect = false;
+	bool m_calibrationSessionActive = false;
 };

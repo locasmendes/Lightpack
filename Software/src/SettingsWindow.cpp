@@ -29,6 +29,7 @@
 #include <QMenu>
 #include <QScreen>
 #include <QGuiApplication>
+#include <QIcon>
 #include "LightpackApplication.hpp"
 
 #include "SettingsWindow.hpp"
@@ -240,14 +241,48 @@ SettingsWindow::SettingsWindow(QWidget *parent) :
 	installWheelIgnoreFilter(ui->scrollAreaWidgetContents_LightpackModes);
 	installWheelIgnoreFilter(ui->scrollAreaWidgetContents_DeviceOptions);
 
+	initCalibrationTab();
+
 	resizeToFitScreen();
 
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << "initialized";
 }
 
+void SettingsWindow::initCalibrationTab()
+{
+	// Phase 3 temporary surface until Phase 5 IA hosts Calibration as its own nav item.
+	// Insert after Device (index 1) so Mode=0, Device=1, Calibration=2, then the rest shift.
+	m_calibrationPage = new CalibrationPage(this);
+	m_calibrationNavIndex = 2;
+
+	auto *item = new QListWidgetItem(tr("Calibration"));
+	item->setTextAlignment(Qt::AlignHCenter | Qt::AlignTop);
+	item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
+	item->setIcon(QIcon(QStringLiteral(":/icons/profiles2.png")));
+	ui->listWidget->insertItem(m_calibrationNavIndex, item);
+	ui->tabWidget->insertTab(m_calibrationNavIndex, m_calibrationPage, tr("Calibration"));
+
+	connect(m_calibrationPage, &CalibrationPage::updateLedsColors, this, &SettingsWindow::updateLedsColors);
+	connect(m_calibrationPage, &CalibrationPage::showLedWidgets, this, &SettingsWindow::showLedWidgets);
+	connect(m_calibrationPage, &CalibrationPage::setColorFeedbackForced, this, &SettingsWindow::setColorFeedbackForced);
+	connect(m_calibrationPage, &CalibrationPage::sessionActiveChanged, this, &SettingsWindow::onCalibrationSessionActive);
+}
+
+void SettingsWindow::onCalibrationSessionActive(bool active)
+{
+	emit calibrationSessionActive(active);
+}
+
 void SettingsWindow::changePage(int page)
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << page;
+
+	const bool enteringCalibration = (m_calibrationPage && page == m_calibrationNavIndex);
+	const bool leavingCalibration = (m_calibrationPage && m_calibrationPage->isSessionActive()
+		&& page != m_calibrationNavIndex);
+
+	if (leavingCalibration)
+		m_calibrationPage->leaveSession();
 
 	ui->tabWidget->setCurrentIndex(page);
 	if (ui->tabWidget->currentWidget() == ui->tabAbout) {
@@ -259,6 +294,8 @@ void SettingsWindow::changePage(int page)
 		m_smoothScrollTimer.stop();
 	}
 
+	if (enteringCalibration)
+		m_calibrationPage->enterSession();
 }
 
 SettingsWindow::~SettingsWindow()
@@ -1162,6 +1199,9 @@ void SettingsWindow::showSettings()
 void SettingsWindow::hideSettings()
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
+
+	if (m_calibrationPage && m_calibrationPage->isSessionActive())
+		m_calibrationPage->leaveSession();
 
 	emit showLedWidgets(false);
 
