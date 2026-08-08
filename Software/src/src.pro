@@ -310,6 +310,7 @@ SOURCES += \
     ColorPipeline.cpp \
     SmoothingDriver.cpp \
     CalibrationPage.cpp \
+    SettingsWindowPhase5.cpp \
     ColorButton.cpp \
     ColorWheelWidget.cpp \
     ColorWheelDialog.cpp \

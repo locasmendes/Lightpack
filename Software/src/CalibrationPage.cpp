@@ -1,5 +1,5 @@
 /*
- * CalibrationPage.cpp — Phase 3 calibration UI (temporary tab until Phase 5).
+ * CalibrationPage.cpp — Phase 3/5 calibration UI (hosted under Calibration nav).
  */
 
 #include "CalibrationPage.hpp"
@@ -65,7 +65,7 @@ void CalibrationPage::buildUi()
 	auto *root = new QVBoxLayout(this);
 
 	auto *note = new QLabel(tr(
-		"<b>Calibration</b> — temporary tab until Phase 5 IA. Patterns go host→device "
+		"<b>Calibration</b> — patterns go host→device "
 		"(grabber bypass). Live zone colors stay forced on while this page is active."));
 	note->setWordWrap(true);
 	root->addWidget(note);

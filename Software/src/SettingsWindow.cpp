@@ -126,15 +126,8 @@ SettingsWindow::SettingsWindow(QWidget *parent) :
 
 	ui->tabWidget->setCurrentIndex(0);
 
-	setWindowFlags(Qt::Window |
-					Qt::CustomizeWindowHint |
-					Qt::WindowCloseButtonHint );
+	applyPhase5Ui();
 	setFocus(Qt::OtherFocusReason);
-
-#ifdef Q_OS_LINUX
-	ui->listWidget->setSpacing(0);
-	ui->listWidget->setGridSize(QSize(115, 85));
-#endif
 
 	// Check windows reserved symbols in profile input name
 	#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
@@ -240,32 +233,14 @@ SettingsWindow::SettingsWindow(QWidget *parent) :
 
 	installWheelIgnoreFilter(ui->scrollAreaWidgetContents_LightpackModes);
 	installWheelIgnoreFilter(ui->scrollAreaWidgetContents_DeviceOptions);
-
-	initCalibrationTab();
+	if (m_scrollAreaColor && m_scrollAreaColor->widget())
+		installWheelIgnoreFilter(m_scrollAreaColor->widget());
+	if (m_scrollAreaGeometry && m_scrollAreaGeometry->widget())
+		installWheelIgnoreFilter(m_scrollAreaGeometry->widget());
 
 	resizeToFitScreen();
 
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << "initialized";
-}
-
-void SettingsWindow::initCalibrationTab()
-{
-	// Phase 3 temporary surface until Phase 5 IA hosts Calibration as its own nav item.
-	// Insert after Device (index 1) so Mode=0, Device=1, Calibration=2, then the rest shift.
-	m_calibrationPage = new CalibrationPage(this);
-	m_calibrationNavIndex = 2;
-
-	auto *item = new QListWidgetItem(tr("Calibration"));
-	item->setTextAlignment(Qt::AlignHCenter | Qt::AlignTop);
-	item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
-	item->setIcon(QIcon(QStringLiteral(":/icons/profiles2.png")));
-	ui->listWidget->insertItem(m_calibrationNavIndex, item);
-	ui->tabWidget->insertTab(m_calibrationNavIndex, m_calibrationPage, tr("Calibration"));
-
-	connect(m_calibrationPage, &CalibrationPage::updateLedsColors, this, &SettingsWindow::updateLedsColors);
-	connect(m_calibrationPage, &CalibrationPage::showLedWidgets, this, &SettingsWindow::showLedWidgets);
-	connect(m_calibrationPage, &CalibrationPage::setColorFeedbackForced, this, &SettingsWindow::setColorFeedbackForced);
-	connect(m_calibrationPage, &CalibrationPage::sessionActiveChanged, this, &SettingsWindow::onCalibrationSessionActive);
 }
 
 void SettingsWindow::onCalibrationSessionActive(bool active)
@@ -548,25 +523,19 @@ void SettingsWindow::updateDeviceTabWidgetsVisibility()
 	SupportedDevices::DeviceType connectedDevice = Settings::getConnectedDevice();
 	const int ledCount = Settings::getNumberOfLeds(connectedDevice);
 
-	// Phase 4: Stage preview (post-pipeline colors) for every device — not only Virtual.
+	// Phase 4/5: Stage preview lives on Geometry; Device only shows hardware pages.
 	initVirtualLeds(ledCount);
 
 	switch (connectedDevice)
 	{
-	case SupportedDevices::DeviceTypeVirtual:
-		ui->tabDevices->show();
-		ui->tabDevices->setCurrentWidget(ui->tabDeviceVirtual);
-		break;
-
 	case SupportedDevices::DeviceTypeLightpack:
 		ui->tabDevices->show();
 		ui->tabDevices->setCurrentWidget(ui->tabDeviceLightpack);
 		break;
 
 	default:
-		// Serial / UDP / etc.: show Stage on the former Virtual tab.
-		ui->tabDevices->show();
-		ui->tabDevices->setCurrentWidget(ui->tabDeviceVirtual);
+		// Serial / UDP / Virtual: no Lightpack firmware page; Stage is on Geometry.
+		ui->tabDevices->hide();
 		break;
 	}
 	setDeviceTabWidgetsVisibility(DeviceTab::Lightpack);
@@ -1173,8 +1142,10 @@ void SettingsWindow::showHelp()
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
 
-	ui->tabWidget->setCurrentWidget(ui->tabHelp);
-	ui->listWidget->setCurrentRow(ui->tabWidget->indexOf(ui->tabHelp));
+	ui->tabWidget->setCurrentWidget(ui->tabAbout);
+	ui->listWidget->setCurrentRow(ui->tabWidget->indexOf(ui->tabAbout));
+	if (ui->textBrowserHelp)
+		ui->textBrowserHelp->setFocus(Qt::OtherFocusReason);
 	this->show();
 }
 
@@ -2129,6 +2100,8 @@ void SettingsWindow::initLanguages()
 	ui->comboBox_Language->addItem(QStringLiteral("Russian"));
 	ui->comboBox_Language->addItem(QStringLiteral("Ukrainian"));
 	ui->comboBox_Language->addItem(QStringLiteral("Portuguese (Brazil)"));
+	ui->comboBox_Language->addItem(QStringLiteral("Polish"));
+	ui->comboBox_Language->addItem(QStringLiteral("Chinese (Simplified)"));
 
 	int langIndex = 0; // "System default"
 	QString langSaved = Settings::getLanguage();
@@ -2164,6 +2137,8 @@ void SettingsWindow::loadTranslation(const QString & language)
 		else if (locale.startsWith(QStringLiteral("ru_"))) locale = QStringLiteral("ru_RU"); // :/translations/ru_RU.qm
 		else if (locale.startsWith(QStringLiteral("uk_"))) locale = QStringLiteral("uk_UA"); // :/translations/uk_UA.qm
 		else if (locale.startsWith(QStringLiteral("pt_"))) locale = QStringLiteral("pt_BR"); // :/translations/pt_BR.qm
+		else if (locale.startsWith(QStringLiteral("pl_"))) locale = QStringLiteral("pl_PL"); // :/translations/pl_PL.qm
+		else if (locale.startsWith(QStringLiteral("zh_"))) locale = QStringLiteral("zh_CN"); // :/translations/zh_CN.qm
 
 		DEBUG_LOW_LEVEL << "System translation" << locale;
 	}
@@ -2171,6 +2146,8 @@ void SettingsWindow::loadTranslation(const QString & language)
 	else if (language == QStringLiteral("Russian")) locale = QStringLiteral("ru_RU"); // :/translations/ru_RU.qm
 	else if (language == QStringLiteral("Ukrainian")) locale = QStringLiteral("uk_UA"); // :/translations/uk_UA.qm
 	else if (language == QStringLiteral("Portuguese (Brazil)")) locale = QStringLiteral("pt_BR"); // :/translations/pt_BR.qm
+	else if (language == QStringLiteral("Polish")) locale = QStringLiteral("pl_PL"); // :/translations/pl_PL.qm
+	else if (language == QStringLiteral("Chinese (Simplified)")) locale = QStringLiteral("zh_CN"); // :/translations/zh_CN.qm
 	// append line for new language/locale here
 	else {
 		qWarning() << "Language" << language << "not found. Set to default" << SettingsScope::Main::LanguageDefault;
@@ -2486,7 +2463,14 @@ void SettingsWindow::resizeToFitScreen()
 	const int chromeHeight = height() - ui->scrollArea_LightpackModes->height();
 	const int modeNaturalHeight = ui->scrollAreaWidgetContents_LightpackModes->sizeHint().height();
 	const int deviceNaturalHeight = ui->scrollAreaWidgetContents_DeviceOptions->sizeHint().height();
-	const int desiredHeight = chromeHeight + qMax(modeNaturalHeight, deviceNaturalHeight);
+	int colorNaturalHeight = 0;
+	int geoNaturalHeight = 0;
+	if (m_scrollAreaColor && m_scrollAreaColor->widget())
+		colorNaturalHeight = m_scrollAreaColor->widget()->sizeHint().height();
+	if (m_scrollAreaGeometry && m_scrollAreaGeometry->widget())
+		geoNaturalHeight = m_scrollAreaGeometry->widget()->sizeHint().height();
+	const int desiredHeight = chromeHeight + qMax(qMax(modeNaturalHeight, deviceNaturalHeight),
+		qMax(colorNaturalHeight, geoNaturalHeight));
 
 	QScreen* activeScreen = windowHandle() ? windowHandle()->screen() : nullptr;
 	if (!activeScreen)

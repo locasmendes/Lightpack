@@ -31,6 +31,7 @@
 #include <QMainWindow>
 #include <QSystemTrayIcon>
 #include <QLabel>
+#include <QScrollArea>
 #include "Settings.hpp"
 #include "GrabManager.hpp"
 #include "MoodLampManager.hpp"
@@ -272,9 +273,15 @@ private slots:
 	void onCheckBox_installUpdates_Toggled(bool isEnabled);
 
 	void clearBaudrateWarning();
+	void onScreenGeometryOrDpiChanged();
 
 private:
-	void initCalibrationTab();
+	void applyPhase5Ui();
+	void applyPaletteDerivedTheme();
+	void applyResponsiveShell();
+	void rebuildInformationArchitecture();
+	void connectScreenGeometryHooks();
+	QString paletteDerivedStyleSheet() const;
 
 	void updateDeviceTabWidgetsVisibility();
 	void setDeviceTabWidgetsVisibility(DeviceTab::Options options);
@@ -344,6 +351,10 @@ private:
 
 	CalibrationPage *m_calibrationPage{ nullptr };
 	int m_calibrationNavIndex{ -1 };
+	QWidget *m_tabGeometry{ nullptr };
+	QWidget *m_tabColor{ nullptr };
+	QScrollArea *m_scrollAreaGeometry{ nullptr };
+	QScrollArea *m_scrollAreaColor{ nullptr };
 
 	bool m_isHotkeySelectionChanging;
 	SysTrayIcon *m_trayIcon;
