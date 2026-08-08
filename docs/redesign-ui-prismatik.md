@@ -1,5 +1,7 @@
 # Reimaginação da UI — Prismatik
 
+> **Superseded (Prismatik 5.17):** a IA Home/Geometry/Look/Device/More e a paleta light-only “Halo Desk” deste doc foram **substituídas** pela IA revisada **Cena | Geometria | Cor | Calibração | Dispositivo | Avançado | Sobre** e por tema **QSS derivado de `QPalette`** (lime/teal só como acento). Motivo: o split Look/Device congelaria a duplicação de gamma/white point eliminada no pipeline unificado. Protótipos em `docs/prototypes/prismatik-ui` e `tools/zone-editor` **não** são atualizados. Ver o plano 5.17 §5.1–5.2.
+
 Proposta de redesenho da interface do Prismatik (hoje: `SettingsWindow` Qt clássica), alinhada aos problemas já documentados (zonas/AR, gargalos, captação de cor).
 
 **Protótipo interativo:** [`prototypes/prismatik-ui/index.html`](./prototypes/prismatik-ui/index.html)

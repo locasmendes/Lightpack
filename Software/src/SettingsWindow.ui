@@ -7,9 +7,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>485</width>
+    <width>520</width>
     <height>668</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>420</width>
+    <height>480</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string notr="true">Prismatik (unofficial)</string>
@@ -19,7 +31,7 @@
     <normaloff>:/icons/settings.png</normaloff>:/icons/settings.png</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true">QMainWindow[style=QWindowsVistaStyle]{}</string>
+   <string notr="true"/>
   </property>
   <property name="locale">
    <locale language="English" country="UnitedStates"/>
@@ -53,15 +65,21 @@ Reveals extra fine-grained controls across the color/effect sections: bloom thre
        <bool>true</bool>
       </property>
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
         <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
+        <verstretch>1</verstretch>
        </sizepolicy>
       </property>
       <property name="minimumSize">
        <size>
-        <width>115</width>
-        <height>580</height>
+        <width>96</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>160</width>
+        <height>16777215</height>
        </size>
       </property>
       <property name="layoutDirection">
