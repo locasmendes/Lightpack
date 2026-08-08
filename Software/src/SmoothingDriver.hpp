@@ -1,9 +1,7 @@
 /*
  * SmoothingDriver.hpp — shared QTimer + QElapsedTimer + HostColorSmoothing orchestration.
  *
- * TODO(Phase 2 follow-up): class is built and linked (src.pro) but GrabManager /
- * MoodLampManager still use their own timer triplets. Wire them (and SoundManagerBase)
- * here in a dedicated pass — see GrabManager.hpp note on isHostSmoothingApplicable risk.
+ * Used by GrabManager, MoodLampManager, and SoundManagerBase (§2.7 / §2.13 step 8).
  *
  *	Created on: 08.08.2026
  *		Project: Lightpack
@@ -29,9 +27,17 @@ public:
 	void reset(int numberOfLeds);
 	void setDurationMs(int ms);
 	void setSendAlways(bool sendAlways);
+	/*! When false (e.g. Lightpack firmware smoothing), onColors snaps immediately. */
 	void setEnabled(bool enabled);
+	bool isEnabled() const { return m_enabled; }
+
+	/*! True while a host transition timer is running. */
+	bool isActive() const { return m_timer.isActive(); }
+
+	const QList<LinearRgbF> &displayedColors() const { return m_engine.displayedColors(); }
 
 	void onColors(const QList<LinearRgbF> &colors);
+	void setDisplayedImmediately(const QList<LinearRgbF> &colors);
 	void emitDisplayed();
 
 signals:

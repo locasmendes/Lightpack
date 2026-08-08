@@ -57,6 +57,11 @@ SoundManagerBase* SoundManagerBase::create(int hWnd, QObject* parent)
 SoundManagerBase::SoundManagerBase(QObject *parent) : QObject(parent)
 {
 	m_fft = (float *)calloc(fftSize(), sizeof(*m_fft));
+
+	m_smoothingDriver = new SmoothingDriver(this);
+	connect(m_smoothingDriver, &SmoothingDriver::colorsUpdated,
+		this, &SoundManagerBase::updateLedsColors);
+
 	initFromSettings();
 }
 
@@ -147,6 +152,7 @@ void SoundManagerBase::setSendDataOnlyIfColorsChanged(bool state)
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << state;
 	m_isSendDataOnlyIfColorsChanged = state;
+	m_smoothingDriver->setSendAlways(!state);
 }
 
 void SoundManagerBase::setNumberOfLeds(int numberOfLeds)
@@ -170,6 +176,9 @@ void SoundManagerBase::initFromSettings()
 	setVisualizer(Settings::getSoundVisualizerVisualizer());
 
 	m_isSendDataOnlyIfColorsChanged = Settings::isSendDataOnlyIfColorsChanges();
+	m_smoothingDriver->setDurationMs(Settings::getGrabHostSmoothingDuration());
+	m_smoothingDriver->setSendAlways(!m_isSendDataOnlyIfColorsChanged);
+	syncHostSmoothingEnabled();
 
 	initColors(Settings::getNumberOfLeds(Settings::getConnectedDevice()));
 }
@@ -192,13 +201,38 @@ void SoundManagerBase::updateColors()
 		linear.reserve(m_colors.size());
 		for (QRgb c : m_colors)
 			linear.append(ColorOps::srgbDecode(c));
-		emit updateLedsColors(linear);
+		m_smoothingDriver->onColors(linear);
 		if (m_elapsedTimer.hasExpired(1000)) { // 1s
 			emit visualizerFrametime(m_elapsedTimer.restart() / m_frames);
 			m_frames = 0;
 		}
 		m_frames++;
 	}
+}
+
+void SoundManagerBase::onHostSmoothingDurationChanged(int ms)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << ms;
+	m_smoothingDriver->setDurationMs(ms);
+}
+
+void SoundManagerBase::onConnectedDeviceChanged(const SupportedDevices::DeviceType device)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << device;
+	if (device == SupportedDevices::DeviceTypeLightpack) {
+		QList<LinearRgbF> linear;
+		linear.reserve(m_colors.size());
+		for (QRgb c : m_colors)
+			linear.append(ColorOps::srgbDecode(c));
+		m_smoothingDriver->setDisplayedImmediately(linear);
+	}
+	syncHostSmoothingEnabled();
+}
+
+void SoundManagerBase::syncHostSmoothingEnabled()
+{
+	m_smoothingDriver->setEnabled(
+		Settings::getConnectedDevice() != SupportedDevices::DeviceTypeLightpack);
 }
 
 void SoundManagerBase::initColors(int numberOfLeds)
@@ -211,6 +245,8 @@ void SoundManagerBase::initColors(int numberOfLeds)
 
 	for (int i = 0; i < numberOfLeds; i++)
 		m_colors << 0;
+
+	m_smoothingDriver->reset(numberOfLeds);
 }
 
 void SoundManagerBase::setVisualizer(int value)

@@ -34,8 +34,6 @@
 using namespace SettingsScope;
 
 namespace {
-	constexpr int HostSmoothingIntervalMs = 16; // ~62.5 Hz, matches GrabManager::HOST_SMOOTHING_INTERVAL
-
 	QList<LinearRgbF> toLinearList(const QList<QRgb> &colors)
 	{
 		QList<LinearRgbF> out;
@@ -53,12 +51,11 @@ MoodLampManager::MoodLampManager(QObject *parent) : QObject(parent)
 	m_timer.setTimerType(Qt::PreciseTimer);
 	connect(&m_timer, &QTimer::timeout, this, qOverload<>(&MoodLampManager::updateColors));
 
-	m_timerHostSmoothing = new QTimer(this);
-	m_timerHostSmoothing->setTimerType(Qt::PreciseTimer);
-	connect(m_timerHostSmoothing, &QTimer::timeout, this, &MoodLampManager::advanceHostTransition);
-	m_timerHostSmoothing->setSingleShot(false);
-	m_timerHostSmoothing->setInterval(HostSmoothingIntervalMs);
-	m_hostSmoothingClock.start();
+	m_smoothingDriver = new SmoothingDriver(this);
+	connect(m_smoothingDriver, &SmoothingDriver::colorsUpdated,
+		this, &MoodLampManager::updateLedsColors);
+	m_smoothingDriver->setDurationMs(Settings::getGrabHostSmoothingDuration());
+	syncHostSmoothingEnabled();
 
 	initFromSettings();
 }
@@ -127,6 +124,7 @@ void MoodLampManager::setSendDataOnlyIfColorsChanged(bool state)
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << state;
 	m_isSendDataOnlyIfColorsChanged = state;
+	m_smoothingDriver->setSendAlways(!state);
 	emit moodlampFrametime(1000); // reset FPS to 1
 }
 
@@ -155,7 +153,9 @@ void MoodLampManager::initFromSettings()
 	m_currentColor = Settings::getMoodLampColor();
 	setColorMode(Settings::getMoodLampColorMode());
 	m_isSendDataOnlyIfColorsChanged = Settings::isSendDataOnlyIfColorsChanges();
-	m_hostSmoothing.setDurationMs(Settings::getGrabHostSmoothingDuration());
+	m_smoothingDriver->setDurationMs(Settings::getGrabHostSmoothingDuration());
+	m_smoothingDriver->setSendAlways(!m_isSendDataOnlyIfColorsChanged);
+	syncHostSmoothingEnabled();
 
 	initColors(Settings::getNumberOfLeds(Settings::getConnectedDevice()));
 	setCurrentLamp(Settings::getMoodLampLamp());
@@ -216,14 +216,7 @@ void MoodLampManager::updateColors(const bool forceUpdate)
 
 	if (changed || !m_isSendDataOnlyIfColorsChanged || forceUpdate) {
 		const QList<LinearRgbF> linear = toLinearList(m_colors);
-		if (isHostSmoothingApplicable()) {
-			m_hostSmoothing.retarget(linear, m_hostSmoothingClock.elapsed());
-			if (!m_timerHostSmoothing->isActive())
-				m_timerHostSmoothing->start();
-		} else {
-			m_hostSmoothing.setDisplayedImmediately(linear);
-			emit updateLedsColors(m_hostSmoothing.displayedColors());
-		}
+		m_smoothingDriver->onColors(linear);
 		if (forceUpdate) {
 			emit moodlampFrametime(1000);
 			m_elapsedTimer.restart();
@@ -236,30 +229,10 @@ void MoodLampManager::updateColors(const bool forceUpdate)
 	}
 }
 
-void MoodLampManager::advanceHostTransition()
-{
-	const bool changed = m_hostSmoothing.advance(m_hostSmoothingClock.elapsed());
-
-	if (changed || !m_isSendDataOnlyIfColorsChanged)
-		emit updateLedsColors(m_hostSmoothing.displayedColors());
-
-	if (!m_hostSmoothing.isActive())
-		m_timerHostSmoothing->stop();
-}
-
 void MoodLampManager::onHostSmoothingDurationChanged(int ms)
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << ms;
-
-	m_hostSmoothing.changeDurationAndRetarget(ms, m_hostSmoothingClock.elapsed());
-
-	if (m_hostSmoothing.isActive()) {
-		if (!m_timerHostSmoothing->isActive())
-			m_timerHostSmoothing->start();
-	} else {
-		m_timerHostSmoothing->stop();
-		emit updateLedsColors(m_hostSmoothing.displayedColors());
-	}
+	m_smoothingDriver->setDurationMs(ms);
 }
 
 void MoodLampManager::onConnectedDeviceChanged(const SupportedDevices::DeviceType device)
@@ -269,10 +242,15 @@ void MoodLampManager::onConnectedDeviceChanged(const SupportedDevices::DeviceTyp
 	// The Lightpack device owns its own firmware smoothing; cancel any
 	// in-flight host transition immediately, mirroring GrabManager's handling
 	// of the same setting (see GrabManager::onConnectedDeviceChanged).
-	if (device == SupportedDevices::DeviceTypeLightpack) {
-		m_timerHostSmoothing->stop();
-		m_hostSmoothing.setDisplayedImmediately(toLinearList(m_colors));
-	}
+	if (device == SupportedDevices::DeviceTypeLightpack)
+		m_smoothingDriver->setDisplayedImmediately(toLinearList(m_colors));
+	syncHostSmoothingEnabled();
+}
+
+void MoodLampManager::syncHostSmoothingEnabled()
+{
+	m_smoothingDriver->setEnabled(
+		Settings::getConnectedDevice() != SupportedDevices::DeviceTypeLightpack);
 }
 
 void MoodLampManager::onMoodLampEffectParamsChanged(int lampId)
@@ -301,12 +279,6 @@ QStringList MoodLampManager::visibleEffectParamsForLamp(int lampId)
 	return QStringList();
 }
 
-bool MoodLampManager::isHostSmoothingApplicable() const
-{
-	return m_hostSmoothing.durationMs() > 0
-		&& Settings::getConnectedDevice() != SupportedDevices::DeviceTypeLightpack;
-}
-
 void MoodLampManager::initColors(int numberOfLeds)
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << numberOfLeds;
@@ -316,8 +288,7 @@ void MoodLampManager::initColors(int numberOfLeds)
 	for (int i = 0; i < numberOfLeds; i++)
 		m_colors << 0;
 
-	m_timerHostSmoothing->stop();
-	m_hostSmoothing.reset(numberOfLeds);
+	m_smoothingDriver->reset(numberOfLeds);
 }
 
 bool MoodLampManager::applyGroupColorOverrides(QList<QRgb>& colors, const QList<SettingsScope::LedGroup>& groups)

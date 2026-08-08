@@ -876,7 +876,6 @@ void LightpackApplication::initGrabManager()
 	connect(settings(), &Settings::grabApplyBlueLightReductionChanged,				m_grabManager, &GrabManager::onGrabApplyBlueLightReductionChanged,				Qt::QueuedConnection);
 	connect(settings(), &Settings::grabApplyColorTemperatureChanged,         m_grabManager, &GrabManager::onGrabApplyColorTemperatureChanged,           Qt::QueuedConnection);
 	connect(settings(), &Settings::grabColorTemperatureChanged,               m_grabManager, &GrabManager::onGrabColorTemperatureChanged,                 Qt::QueuedConnection);
-	connect(settings(), &Settings::grabGammaChanged,                       m_grabManager, &GrabManager::onGrabGammaChanged,                         Qt::QueuedConnection);
 	connect(settings(), &Settings::grabHostSmoothingDurationChanged,       m_grabManager, &GrabManager::onGrabHostSmoothingDurationChanged,          Qt::QueuedConnection);
 	connect(settings(), &Settings::connectedDeviceChanged,                 m_grabManager, &GrabManager::onConnectedDeviceChanged,                    Qt::QueuedConnection);
 	connect(settings(), &Settings::sendDataOnlyIfColorsChangesChanged,		m_grabManager, &GrabManager::onSendDataOnlyIfColorsEnabledChanged,		Qt::QueuedConnection);
@@ -904,6 +903,8 @@ void LightpackApplication::initGrabManager()
 		connect(settings(), &Settings::soundVisualizerLiquidSpeedChanged,			m_soundManager, &SoundManagerBase::setLiquidModeSpeed);
 		connect(settings(), &Settings::soundVisualizerLiquidModeChanged,			m_soundManager, &SoundManagerBase::setLiquidMode);
 		connect(settings(), &Settings::sendDataOnlyIfColorsChangesChanged,		m_soundManager, &SoundManagerBase::setSendDataOnlyIfColorsChanged);
+		connect(settings(), &Settings::grabHostSmoothingDurationChanged,		m_soundManager, &SoundManagerBase::onHostSmoothingDurationChanged,		Qt::QueuedConnection);
+		connect(settings(), &Settings::connectedDeviceChanged,					m_soundManager, &SoundManagerBase::onConnectedDeviceChanged,			Qt::QueuedConnection);
 
 		connect(m_pluginInterface, &LightpackPluginInterface::updateSoundVizMinColor,			m_soundManager, &SoundManagerBase::setMinColor,								Qt::QueuedConnection);
 		connect(m_pluginInterface, &LightpackPluginInterface::updateSoundVizMaxColor,			m_soundManager, &SoundManagerBase::setMaxColor,								Qt::QueuedConnection);

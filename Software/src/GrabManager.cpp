@@ -62,7 +62,6 @@ EncodedRgbF encodedFromLinear(const LinearRgbF &L)
 } // namespace
 constexpr const std::chrono::milliseconds FPS_UPDATE_INTERVAL = 500ms;
 constexpr const std::chrono::milliseconds FAKE_GRAB_INTERVAL = 900ms;
-constexpr const std::chrono::milliseconds HOST_SMOOTHING_INTERVAL = 16ms; // ~62.5 Hz
 /*! Phase 1.2: coalesce geometryChanged/screenAdded/Removed bursts before restoring zones. */
 constexpr const std::chrono::milliseconds RESTORE_LED_POSITIONS_DEBOUNCE = 300ms;
 
@@ -109,12 +108,12 @@ GrabManager::GrabManager(QWidget *parent) : QObject(parent)
 	m_timerFakeGrab->setSingleShot(false);
 	m_timerFakeGrab->setInterval(FAKE_GRAB_INTERVAL);
 
-	m_timerHostSmoothing = new QTimer(this);
-	m_timerHostSmoothing->setTimerType(Qt::PreciseTimer);
-	connect(m_timerHostSmoothing, &QTimer::timeout, this, &GrabManager::advanceHostTransition);
-	m_timerHostSmoothing->setSingleShot(false);
-	m_timerHostSmoothing->setInterval(HOST_SMOOTHING_INTERVAL);
-	m_hostSmoothingClock.start();
+	m_smoothingDriver = new SmoothingDriver(this);
+	connect(m_smoothingDriver, &SmoothingDriver::colorsUpdated,
+		this, &GrabManager::updateLedsColors);
+	m_smoothingDriver->setDurationMs(Settings::getGrabHostSmoothingDuration());
+	m_smoothingDriver->setSendAlways(!m_isSendDataOnlyIfColorsChanged);
+	syncHostSmoothingEnabled();
 
 	m_timerRestoreLedPositions = new QTimer(this);
 	m_timerRestoreLedPositions->setSingleShot(true);
@@ -149,7 +148,6 @@ GrabManager::~GrabManager()
 	m_grabber = NULL;
 	delete m_timerFakeGrab;
 	delete m_timerUpdateFPS;
-	delete m_timerHostSmoothing;
 	delete m_timerRestoreLedPositions;
 
 	if (m_blueLightClient)
@@ -371,16 +369,11 @@ void GrabManager::onGrabColorTemperatureChanged(int value)
 	m_colorTemperature = value;
 }
 
-void GrabManager::onGrabGammaChanged(double gamma)
-{
-	DEBUG_LOW_LEVEL << Q_FUNC_INFO << gamma;
-	m_gamma = gamma;
-}
-
 void GrabManager::onSendDataOnlyIfColorsEnabledChanged(bool state)
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << state;
 	m_isSendDataOnlyIfColorsChanged = state;
+	m_smoothingDriver->setSendAlways(!state);
 }
 
 #ifdef D3D10_GRAB_SUPPORT
@@ -435,8 +428,9 @@ void GrabManager::settingsProfileChanged(const QString &profileName)
 	m_isApplyBlueLightReduction = Settings::isGrabApplyBlueLightReductionEnabled();
 	m_isApplyColorTemperature = Settings::isGrabApplyColorTemperatureEnabled();
 	m_colorTemperature = Settings::getGrabColorTemperature();
-	m_gamma = Settings::getGrabGamma();
-	m_hostSmoothing.setDurationMs(Settings::getGrabHostSmoothingDuration());
+	m_smoothingDriver->setDurationMs(Settings::getGrabHostSmoothingDuration());
+	m_smoothingDriver->setSendAlways(!m_isSendDataOnlyIfColorsChanged);
+	syncHostSmoothingEnabled();
 
 	setNumberOfLeds(Settings::getNumberOfLeds(Settings::getConnectedDevice()));
 	persistZoneScreenIdentity();
@@ -583,23 +577,13 @@ void GrabManager::handleGrabbedColors()
 
 	if (isColorsChanged)
 	{
-		if (isHostSmoothingApplicable())
-		{
-			m_hostSmoothing.retarget(m_colorsCurrent, m_hostSmoothingClock.elapsed());
-			if (!m_timerHostSmoothing->isActive())
-				m_timerHostSmoothing->start();
-		}
-		else
-		{
-			m_hostSmoothing.setDisplayedImmediately(m_colorsCurrent);
-			emit updateLedsColors(m_hostSmoothing.displayedColors());
-		}
+		m_smoothingDriver->onColors(m_colorsCurrent);
 	}
-	else if (m_isSendDataOnlyIfColorsChanged == false && !m_timerHostSmoothing->isActive())
+	else if (m_isSendDataOnlyIfColorsChanged == false && !m_smoothingDriver->isActive())
 	{
 		// Resend path for devices that want a steady stream even without changes; while
 		// a host transition is active, its own ticks are the sole source of frames.
-		emit updateLedsColors(m_hostSmoothing.displayedColors());
+		emit updateLedsColors(m_smoothingDriver->displayedColors());
 	}
 
 	m_grabCountThisInterval++;
@@ -610,33 +594,10 @@ void GrabManager::handleGrabbedColors()
 	}
 }
 
-void GrabManager::advanceHostTransition()
-{
-	const bool changed = m_hostSmoothing.advance(m_hostSmoothingClock.elapsed());
-
-	if (changed || m_isSendDataOnlyIfColorsChanged == false)
-		emit updateLedsColors(m_hostSmoothing.displayedColors());
-
-	if (!m_hostSmoothing.isActive())
-		m_timerHostSmoothing->stop();
-}
-
 void GrabManager::onGrabHostSmoothingDurationChanged(int ms)
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << ms;
-
-	m_hostSmoothing.changeDurationAndRetarget(ms, m_hostSmoothingClock.elapsed());
-
-	if (m_hostSmoothing.isActive())
-	{
-		if (!m_timerHostSmoothing->isActive())
-			m_timerHostSmoothing->start();
-	}
-	else
-	{
-		m_timerHostSmoothing->stop();
-		emit updateLedsColors(m_hostSmoothing.displayedColors());
-	}
+	m_smoothingDriver->setDurationMs(ms);
 }
 
 void GrabManager::onConnectedDeviceChanged(const SupportedDevices::DeviceType device)
@@ -646,28 +607,25 @@ void GrabManager::onConnectedDeviceChanged(const SupportedDevices::DeviceType de
 	// The Lightpack device owns its own firmware smoothing (Device/Smooth); cancel any
 	// in-flight host transition immediately rather than waiting for the next grab tick,
 	// so frames start going straight through as soon as the switch happens. Switching
-	// away from Lightpack needs no extra action: while it was selected, the engine was
-	// always kept in the immediate/bypass state, so there is no partial transition to
-	// inherit.
+	// away from Lightpack needs no extra action beyond re-enabling the driver: while it
+	// was selected, the engine was always kept in the immediate/bypass state.
 	if (device == SupportedDevices::DeviceTypeLightpack)
-	{
-		m_timerHostSmoothing->stop();
-		m_hostSmoothing.setDisplayedImmediately(m_colorsCurrent);
-	}
+		m_smoothingDriver->setDisplayedImmediately(m_colorsCurrent);
+	syncHostSmoothingEnabled();
 }
 
-bool GrabManager::isHostSmoothingApplicable() const
+void GrabManager::syncHostSmoothingEnabled()
 {
-	return m_hostSmoothing.durationMs() > 0
-		&& Settings::getConnectedDevice() != SupportedDevices::DeviceTypeLightpack;
+	m_smoothingDriver->setEnabled(
+		Settings::getConnectedDevice() != SupportedDevices::DeviceTypeLightpack);
 }
 
 void GrabManager::timeoutFakeGrab()
 {
 	if (m_isSendDataOnlyIfColorsChanged == false && m_isGrabbingStarted)
 	{
-		if (!m_timerHostSmoothing->isActive())
-			emit updateLedsColors(m_hostSmoothing.displayedColors());
+		if (!m_smoothingDriver->isActive())
+			emit updateLedsColors(m_smoothingDriver->displayedColors());
 	}
 	else
 	{
@@ -952,8 +910,7 @@ void GrabManager::initColorLists(int numberOfLeds)
 	// Resize/clear the smoothing engine's arrays to match, and cancel any in-flight
 	// transition: a resize/profile switch must never let a tick interpolate between
 	// arrays of mismatched sizes.
-	m_timerHostSmoothing->stop();
-	m_hostSmoothing.reset(numberOfLeds);
+	m_smoothingDriver->reset(numberOfLeds);
 }
 
 void GrabManager::clearColorsNew()
@@ -978,8 +935,7 @@ void GrabManager::clearColorsCurrent()
 
 	// Cancel any in-flight transition and sync the engine to black so a pending
 	// transition can never keep emitting stale colors after grabbing stops.
-	m_timerHostSmoothing->stop();
-	m_hostSmoothing.setDisplayedImmediately(m_colorsCurrent);
+	m_smoothingDriver->setDisplayedImmediately(m_colorsCurrent);
 }
 
 void GrabManager::initLedWidgets(int numberOfLeds)

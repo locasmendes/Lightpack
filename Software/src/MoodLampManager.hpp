@@ -32,7 +32,7 @@
 #include <QElapsedTimer>
 #include "LiquidColorGenerator.hpp"
 #include "MoodLamp.hpp"
-#include "HostColorSmoothing.hpp"
+#include "SmoothingDriver.hpp"
 #include "ColorF.h"
 #include "enums.hpp"
 
@@ -87,7 +87,6 @@ public:
 private slots:
 	void updateColors(const bool forceUpdate);
 	void updateColors() { updateColors(false); };
-	void advanceHostTransition();
 
 private:
 	void initColors(int numberOfLeds);
@@ -98,7 +97,7 @@ private:
 	// touching the persisted MoodLampLamp preference (restored as soon as Liquid mode is
 	// re-enabled).
 	void applyEffectiveLamp();
-	bool isHostSmoothingApplicable() const;
+	void syncHostSmoothingEnabled();
 
 private:
 	MoodLampBase* m_lamp{ nullptr };
@@ -116,9 +115,5 @@ private:
 	QElapsedTimer m_elapsedTimer;
 	size_t m_frames{ 1 };
 
-	// TODO(Phase 2 follow-up): migrate host-smoothing orchestration to SmoothingDriver
-	// (see GrabManager.hpp / SmoothingDriver.hpp). Local QTimer triplet kept for now.
-	QTimer *m_timerHostSmoothing;
-	QElapsedTimer m_hostSmoothingClock;
-	HostColorSmoothing m_hostSmoothing;
+	SmoothingDriver *m_smoothingDriver{ nullptr };
 };

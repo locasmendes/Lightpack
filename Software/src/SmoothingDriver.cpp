@@ -11,6 +11,8 @@ SmoothingDriver::SmoothingDriver(QObject *parent)
 	: QObject(parent)
 {
 	m_timer.setTimerType(Qt::PreciseTimer);
+	m_timer.setSingleShot(false);
+	m_timer.setInterval(16); // ~62.5 Hz
 	connect(&m_timer, &QTimer::timeout, this, &SmoothingDriver::onTick);
 	m_clock.start();
 }
@@ -26,7 +28,7 @@ void SmoothingDriver::setDurationMs(int ms)
 	m_engine.changeDurationAndRetarget(ms, m_clock.elapsed());
 	if (m_engine.isActive()) {
 		if (m_enabled && !m_timer.isActive())
-			m_timer.start(16);
+			m_timer.start();
 	} else {
 		m_timer.stop();
 		emitDisplayed();
@@ -47,6 +49,12 @@ void SmoothingDriver::setEnabled(bool enabled)
 	}
 }
 
+void SmoothingDriver::setDisplayedImmediately(const QList<LinearRgbF> &colors)
+{
+	m_timer.stop();
+	m_engine.setDisplayedImmediately(colors);
+}
+
 void SmoothingDriver::onColors(const QList<LinearRgbF> &colors)
 {
 	if (!m_enabled || m_engine.durationMs() <= 0) {
@@ -57,7 +65,7 @@ void SmoothingDriver::onColors(const QList<LinearRgbF> &colors)
 
 	m_engine.retarget(colors, m_clock.elapsed());
 	if (m_engine.isActive() && !m_timer.isActive())
-		m_timer.start(16);
+		m_timer.start();
 	else if (!m_engine.isActive())
 		emit colorsUpdated(m_engine.displayedColors());
 }

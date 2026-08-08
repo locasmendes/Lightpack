@@ -26,11 +26,10 @@
 #pragma once
 
 #include <QtGui>
-#include <QElapsedTimer>
 #include <QHash>
 
 #include "GrabberBase.hpp"
-#include "HostColorSmoothing.hpp"
+#include "SmoothingDriver.hpp"
 #include "ColorF.h"
 #include "enums.hpp"
 
@@ -83,7 +82,6 @@ public slots:
 	void onGrabApplyBlueLightReductionChanged(bool state);
 	void onGrabApplyColorTemperatureChanged(bool state);
 	void onGrabColorTemperatureChanged(int value);
-	void onGrabGammaChanged(double value);
 	void onSendDataOnlyIfColorsEnabledChanged(bool state);
 	void onGrabHostSmoothingDurationChanged(int ms);
 	void onConnectedDeviceChanged(const SupportedDevices::DeviceType device);
@@ -104,7 +102,6 @@ public slots:
 
 private slots:
 	void handleGrabbedColors();
-	void advanceHostTransition();
 	void timeoutFakeGrab();
 	void timeoutUpdateFPS();
 	void pauseWhileResizeOrMoving();
@@ -132,7 +129,7 @@ private:
 	void clearColorsNew();
 	void clearColorsCurrent();
 	void initLedWidgets(int numberOfLeds);
-	bool isHostSmoothingApplicable() const;
+	void syncHostSmoothingEnabled();
 
 private:
 	QList<GrabberBase*> m_grabbers;
@@ -148,16 +145,8 @@ private:
 
 	QTimer *m_timerUpdateFPS;
 	QTimer *m_timerFakeGrab;
-	// TODO(Phase 2 follow-up): migrate host-smoothing orchestration to SmoothingDriver
-	// (Software/src/SmoothingDriver.*) — GrabManager and MoodLampManager still own local
-	// QTimer + QElapsedTimer + HostColorSmoothing triplets; SoundManagerBase has none yet.
-	// Risk: Lightpack firmware-smoothing bypass (isHostSmoothingApplicable) and
-	// send-always / forceUpdate edge cases must stay bit-identical. Prefer a dedicated
-	// pass with HostColorSmoothingTest + MoodLampManagerTest green before swapping.
-	QTimer *m_timerHostSmoothing;
 	QTimer *m_timerRestoreLedPositions;
-	QElapsedTimer m_hostSmoothingClock;
-	HostColorSmoothing m_hostSmoothing;
+	SmoothingDriver *m_smoothingDriver;
 	QWidget *m_parentWidget;
 	QList<GrabWidget *> m_ledWidgets;
 	QList<QRgb> m_grabResult;
@@ -186,7 +175,6 @@ private:
 	int m_vibranceProtection;
 	bool m_isApplyBlueLightReduction;
 	bool m_isApplyColorTemperature;
-	double m_gamma;
 	int m_colorTemperature;
 
 	QList<bool> m_changeLatch;
