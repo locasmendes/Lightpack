@@ -183,8 +183,6 @@ private slots:
 	void onGrabApplyBlueLightReduction_toggled(bool state);
 	void onGrabApplyColorTemperature_toggled(bool state);
 	void onGrabColorTemperature_valueChanged(int value);
-	void onGrabGamma_valueChanged(double value);
-	void onSliderGrabGamma_valueChanged(int value);
 	void onLuminosityThreshold_valueChanged(int value);
 	void onMinimumLumosity_toggled(bool value);
 
@@ -194,8 +192,8 @@ private slots:
 	void onDeviceBrightness_valueChanged(int value);
 	void onDeviceBrightnessCap_valueChanged(int value);
 	void onDeviceColorDepth_valueChanged(int value);
-	void onDeviceGammaCorrection_valueChanged(double value);
-	void onSliderDeviceGammaCorrection_valueChanged(int value);
+	void onDeviceOutputGamma_valueChanged(double value);
+	void onSliderDeviceOutputGamma_valueChanged(int value);
 	void onDeviceDitheringEnabled_toggled(bool state);
 	void onDeviceSendDataOnlyIfColorsChanged_toggled(bool state);
 	void onDx1011CaptureEnabledChanged(bool isEnabled);
@@ -235,7 +233,6 @@ private slots:
 	void on_pushButton_lumosityThresholdHelp_clicked();
 
 	void on_pushButton_grabApplyColorTemperatureHelp_clicked();
-	void on_pushButton_grabGammaHelp_clicked();
 
 	void on_pushButton_grabOverBrightenHelp_clicked();
 	void on_pushButton_grabHostSmoothingHelp_clicked();

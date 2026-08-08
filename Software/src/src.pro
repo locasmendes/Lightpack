@@ -307,6 +307,8 @@ SOURCES += \
     LedDeviceWarls.cpp \
     LedDeviceDdp.cpp \
     HostColorSmoothing.cpp \
+    ColorPipeline.cpp \
+    SmoothingDriver.cpp \
     ColorButton.cpp \
     ColorWheelWidget.cpp \
     ColorWheelDialog.cpp \
@@ -371,6 +373,8 @@ HEADERS += \
     LedDeviceWarls.hpp \
     LedDeviceDdp.hpp \
     HostColorSmoothing.hpp \
+    ColorPipeline.hpp \
+    SmoothingDriver.hpp \
     LedDeviceVirtual.hpp \
     ColorButton.hpp \
     ColorWheelWidget.hpp \

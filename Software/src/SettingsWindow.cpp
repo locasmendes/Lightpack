@@ -296,8 +296,6 @@ void SettingsWindow::connectSignalsSlots()
 	connect(ui->checkBox_GrabApplyBlueLightReduction, &QCheckBox::toggled, this, &SettingsWindow::onGrabApplyBlueLightReduction_toggled);
 	connect(ui->checkBox_GrabApplyColorTemperature, &QCheckBox::toggled, this, &SettingsWindow::onGrabApplyColorTemperature_toggled);
 	connect(ui->horizontalSlider_GrabColorTemperature, &QSlider::valueChanged, this, &SettingsWindow::onGrabColorTemperature_valueChanged);
-	connect(ui->horizontalSlider_GrabGamma, &QSlider::valueChanged, this, &SettingsWindow::onSliderGrabGamma_valueChanged);
-	connect(ui->doubleSpinBox_GrabGamma, qOverload<double>(&QDoubleSpinBox::valueChanged), this, &SettingsWindow::onGrabGamma_valueChanged);
 
 	connect(ui->radioButton_GrabWidgetsDontShow, &QRadioButton::toggled, this, &SettingsWindow:: onDontShowLedWidgets_Toggled);
 	connect(ui->radioButton_Colored, &QRadioButton::toggled, this, &SettingsWindow::onSetColoredLedWidgets);
@@ -332,9 +330,9 @@ void SettingsWindow::connectSignalsSlots()
 	connect(ui->spinBox_DeviceBrightness, qOverload<int>(&QSpinBox::valueChanged), this, &SettingsWindow::onDeviceBrightness_valueChanged);
 	connect(ui->spinBox_DeviceBrightnessCap, qOverload<int>(&QSpinBox::valueChanged), this, &SettingsWindow::onDeviceBrightnessCap_valueChanged);
 	connect(ui->spinBox_DeviceColorDepth, qOverload<int>(&QSpinBox::valueChanged), this, &SettingsWindow::onDeviceColorDepth_valueChanged);
-	connect(ui->doubleSpinBox_DeviceGamma, qOverload<double>(&QDoubleSpinBox::valueChanged), this, &SettingsWindow::onDeviceGammaCorrection_valueChanged);
+	connect(ui->doubleSpinBox_DeviceGamma, qOverload<double>(&QDoubleSpinBox::valueChanged), this, &SettingsWindow::onDeviceOutputGamma_valueChanged);
 	connect(ui->checkBox_EnableDithering, &QCheckBox::toggled, this, &SettingsWindow::onDeviceDitheringEnabled_toggled);
-	connect(ui->horizontalSlider_GammaCorrection, &QSlider::valueChanged, this, &SettingsWindow::onSliderDeviceGammaCorrection_valueChanged);
+	connect(ui->horizontalSlider_GammaCorrection, &QSlider::valueChanged, this, &SettingsWindow::onSliderDeviceOutputGamma_valueChanged);
 	connect(ui->checkBox_SendDataOnlyIfColorsChanges, &QCheckBox::toggled, this, &SettingsWindow::onDeviceSendDataOnlyIfColorsChanged_toggled);
 
 	connect(ui->pbRunConfigurationWizard, &QPushButton::clicked, this, &SettingsWindow::onRunConfigurationWizard_clicked);
@@ -570,7 +568,7 @@ void SettingsWindow::syncLedDeviceWithSettingsWindow()
 {
 	emit updateBrightness(Settings::getDeviceBrightness());
 	emit updateBrightnessCap(Settings::getDeviceBrightnessCap());
-	emit updateGamma(Settings::getDeviceGamma());
+	emit updateGamma(Settings::getDeviceOutputGamma());
 }
 
 int SettingsWindow::getLigtpackFirmwareVersionMajor()
@@ -1539,21 +1537,6 @@ void SettingsWindow::onGrabColorTemperature_valueChanged(int value)
 	Settings::setGrabColorTemperature(value);
 }
 
-void SettingsWindow::onGrabGamma_valueChanged(double value)
-{
-	DEBUG_LOW_LEVEL << Q_FUNC_INFO << value;
-
-	Settings::setGrabGamma(value);
-	ui->horizontalSlider_GrabGamma->setValue(floor((value * 100)));
-}
-
-void SettingsWindow::onSliderGrabGamma_valueChanged(int value)
-{
-	DEBUG_LOW_LEVEL << Q_FUNC_INFO << value;
-	Settings::setGrabGamma(value / 100.0);
-	ui->doubleSpinBox_GrabGamma->setValue(value / 100.0);
-}
-
 void SettingsWindow::onLuminosityThreshold_valueChanged(int value)
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << value;
@@ -1609,21 +1592,28 @@ void SettingsWindow::onDeviceColorDepth_valueChanged(int value)
 	Settings::setDeviceColorDepth(value);
 }
 
-void SettingsWindow::onDeviceGammaCorrection_valueChanged(double value)
+void SettingsWindow::onDeviceOutputGamma_valueChanged(double value)
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << value;
 
-	Settings::setDeviceGamma(value);
-	ui->horizontalSlider_GammaCorrection->setValue(floor((value * 100 + 0.5)));
-	emit updateGamma(Settings::getDeviceGamma());
+	using namespace SettingsScope::Profile::Device;
+	if (value < OutputGammaUiMin) value = OutputGammaUiMin;
+	if (value > OutputGammaUiMax) value = OutputGammaUiMax;
+	Settings::setDeviceOutputGamma(value);
+	ui->horizontalSlider_GammaCorrection->setValue(static_cast<int>(floor(value * 100 + 0.5)));
+	emit updateGamma(Settings::getDeviceOutputGamma());
 }
 
-void SettingsWindow::onSliderDeviceGammaCorrection_valueChanged(int value)
+void SettingsWindow::onSliderDeviceOutputGamma_valueChanged(int value)
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << value;
-	Settings::setDeviceGamma(static_cast<double>(value + 0.4) / 100);
-	ui->doubleSpinBox_DeviceGamma->setValue(Settings::getDeviceGamma());
-	emit updateGamma(Settings::getDeviceGamma());
+	using namespace SettingsScope::Profile::Device;
+	double gamma = static_cast<double>(value) / 100.0;
+	if (gamma < OutputGammaUiMin) gamma = OutputGammaUiMin;
+	if (gamma > OutputGammaUiMax) gamma = OutputGammaUiMax;
+	Settings::setDeviceOutputGamma(gamma);
+	ui->doubleSpinBox_DeviceGamma->setValue(Settings::getDeviceOutputGamma());
+	emit updateGamma(Settings::getDeviceOutputGamma());
 }
 
 void SettingsWindow::onDeviceDitheringEnabled_toggled(bool state) {
@@ -2192,8 +2182,6 @@ void SettingsWindow::updateUiFromSettings()
 	ui->checkBox_GrabApplyColorTemperature->setChecked              (Settings::isGrabApplyColorTemperatureEnabled());
 	ui->spinBox_GrabColorTemperature->setValue                      (Settings::getGrabColorTemperature());
 	ui->horizontalSlider_GrabColorTemperature->setValue             (Settings::getGrabColorTemperature());
-	ui->doubleSpinBox_GrabGamma->setValue                           (Settings::getGrabGamma());
-	ui->horizontalSlider_GrabGamma->setValue                        (Settings::getGrabGamma() * 100);
 	ui->spinBox_LuminosityThreshold->setValue						(Settings::getLuminosityThreshold());
 
 	// Check the selected moodlamp mode (setChecked(false) not working to select another)
@@ -2245,8 +2233,8 @@ void SettingsWindow::updateUiFromSettings()
 	ui->horizontalSlider_DeviceBrightnessCap->setValue				(Settings::getDeviceBrightnessCap());
 	ui->horizontalSlider_DeviceSmooth->setValue						(Settings::getDeviceSmooth());
 	ui->horizontalSlider_DeviceColorDepth->setValue					(Settings::getDeviceColorDepth());
-	ui->doubleSpinBox_DeviceGamma->setValue							(Settings::getDeviceGamma());
-	ui->horizontalSlider_GammaCorrection->setValue					(floor((Settings::getDeviceGamma() * 100 + 0.5)));
+	ui->doubleSpinBox_DeviceGamma->setValue							(Settings::getDeviceOutputGamma());
+	ui->horizontalSlider_GammaCorrection->setValue					(floor((Settings::getDeviceOutputGamma() * 100 + 0.5)));
 	ui->checkBox_EnableDithering->setChecked						(Settings::isDeviceDitheringEnabled());
 
 	ui->groupBox_Api->setChecked									(Settings::isApiEnabled());
@@ -2479,11 +2467,6 @@ void SettingsWindow::on_pushButton_lumosityThresholdHelp_clicked()
 void SettingsWindow::on_pushButton_grabApplyColorTemperatureHelp_clicked()
 {
 	showHelpOf(ui->checkBox_GrabApplyColorTemperature);
-}
-
-void SettingsWindow::on_pushButton_grabGammaHelp_clicked()
-{
-	showHelpOf(ui->horizontalSlider_GrabGamma);
 }
 
 void SettingsWindow::on_pushButton_grabOverBrightenHelp_clicked()

@@ -58,7 +58,7 @@ void WizardPageUsingDevice::resetDeviceSettings()
 	device()->updateWBAdjustments(adjustments);
 	device()->setBrightness(SettingsScope::Profile::Device::BrightnessDefault);
 	device()->setSmoothSlowdown(SettingsScope::Profile::Device::SmoothDefault);
-	device()->setGamma(SettingsScope::Profile::Device::GammaDefault);
+	device()->setGamma(SettingsScope::Profile::Device::OutputGammaDefault);
 	device()->setMinimumLuminosityThresholdEnabled(false);
 
 

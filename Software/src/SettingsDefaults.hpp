@@ -172,6 +172,8 @@ namespace Profile
 // [General]
 static const bool IsBacklightEnabledDefault = true;
 static const QString LightpackModeDefault = QStringLiteral("Ambilight");
+// Profile schema version written by migrateCurrentProfile(). Absent → migrate to "2".
+static const QString ProfileVersionCurrent = QStringLiteral("2");
 
 // [Grab]
 namespace Grab
@@ -280,12 +282,21 @@ static const int SmoothDefault = 100;
 static const int SmoothMax = 255;
 
 static const int ColorDepthMin = 32;
+// Device/ColorDepth is the Lightpack PWM timer period value (not bit depth), despite the name.
 static const int ColorDepthDefault = 128;
 static const int ColorDepthMax = 255;
 
 static const double GammaMin = 0.01;
 static const double GammaDefault = 2.0;
 static const double GammaMax = 10.0;
+
+// Unified output transfer (γ_out). Default matches migrated look with temp OFF:
+// 2.2 * 1.0 / 2.0 = 1.10. With temp ON migration yields 1.32.
+static const double OutputGammaMin = 0.2;
+static const double OutputGammaDefault = 1.10;
+static const double OutputGammaMax = 10.0;
+static const double OutputGammaUiMin = 0.5;
+static const double OutputGammaUiMax = 3.0;
 
 static const bool IsDitheringEnabledDefault = false;
 }

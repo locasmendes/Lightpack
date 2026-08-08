@@ -43,7 +43,7 @@ public:
 public slots:
 	void open();
 	void close();
-	void setColors(const QList<QRgb> & /*colors*/);
+	void setColors(const QList<LinearRgbF> & colors) override;
 	void switchOffLeds();
 	void setRefreshDelay(int /*value*/);
 	void setColorDepth(int /*value*/);

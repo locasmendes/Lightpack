@@ -26,6 +26,7 @@
 
 #include "SoundManagerBase.hpp"
 #include "PrismatikMath.hpp"
+#include "ColorOps.hpp"
 #include "Settings.hpp"
 #include <QTime>
 
@@ -187,7 +188,11 @@ void SoundManagerBase::updateColors()
 	updateFft();
 	bool colorsChanged = (m_visualizer ? m_visualizer->visualize(m_fft, fftSize(), m_colors) : false);
 	if (colorsChanged || !m_isSendDataOnlyIfColorsChanged) {
-		emit updateLedsColors(m_colors);
+		QList<LinearRgbF> linear;
+		linear.reserve(m_colors.size());
+		for (QRgb c : m_colors)
+			linear.append(ColorOps::srgbDecode(c));
+		emit updateLedsColors(linear);
 		if (m_elapsedTimer.hasExpired(1000)) { // 1s
 			emit visualizerFrametime(m_elapsedTimer.restart() / m_frames);
 			m_frames = 0;

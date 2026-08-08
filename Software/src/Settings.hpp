@@ -271,6 +271,8 @@ public:
 	static void setDeviceColorDepth(int value);
 	static double getDeviceGamma();
 	static void setDeviceGamma(double gamma);
+	static double getDeviceOutputGamma();
+	static void setDeviceOutputGamma(double gamma);
 	static bool isDeviceDitheringEnabled();
 	static void setDeviceDitheringEnabled(bool isEnabled);
 
@@ -351,6 +353,7 @@ private:
 	static int getValidDeviceSmooth(int value);
 	static int getValidDeviceColorDepth(int value);
 	static double getValidDeviceGamma(double value);
+	static double getValidDeviceOutputGamma(double value);
 	static int getValidGrabSlowdown(int value);
 	static int getValidGrabHostSmoothingDuration(int value);
 	static int getValidMoodLampSpeed(int value);
@@ -374,6 +377,9 @@ private:
 
 
 public:
+	/*! Per-profile migrations (General/ProfileVersion). Called at end of initCurrentProfile. */
+	static void migrateCurrentProfile();
+
 	static void setNewOption(const QString & name, const QVariant & value,
 							bool isForceSetOption = false, QSettings * settings = m_currentProfile);
 	static void setNewOptionMain(const QString & name, const QVariant & value,
@@ -475,6 +481,7 @@ signals:
 	void deviceSmoothChanged(int value);
 	void deviceColorDepthChanged(int value);
 	void deviceGammaChanged(double gamma);
+	void deviceOutputGammaChanged(double gamma);
 	void deviceDitheringEnabledChanged(bool isEnabled);
 	void deviceColorSequenceChanged(QString value);
 	void grabberTypeChanged(const Grab::GrabberType grabMode);

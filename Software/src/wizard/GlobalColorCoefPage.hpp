@@ -75,6 +75,7 @@ private:
 	QMap<int, GrabWidget*> _grabAreas;
 	QTimer _keepAlive;
 	QMap<int, MonitorSettings> _screens;
+	bool _coefTempWarningShown{ false };
 };
 
 #endif // GLOBALCOLORCOEFPAGE_HPP

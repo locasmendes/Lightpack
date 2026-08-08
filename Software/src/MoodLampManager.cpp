@@ -26,6 +26,7 @@
 
 #include "MoodLampManager.hpp"
 #include "PrismatikMath.hpp"
+#include "ColorOps.hpp"
 #include "Settings.hpp"
 #include <QTime>
 #include "MoodLamp.hpp"
@@ -34,6 +35,15 @@ using namespace SettingsScope;
 
 namespace {
 	constexpr int HostSmoothingIntervalMs = 16; // ~62.5 Hz, matches GrabManager::HOST_SMOOTHING_INTERVAL
+
+	QList<LinearRgbF> toLinearList(const QList<QRgb> &colors)
+	{
+		QList<LinearRgbF> out;
+		out.reserve(colors.size());
+		for (QRgb c : colors)
+			out.append(ColorOps::srgbDecode(c));
+		return out;
+	}
 }
 
 MoodLampManager::MoodLampManager(QObject *parent) : QObject(parent)
@@ -205,12 +215,13 @@ void MoodLampManager::updateColors(const bool forceUpdate)
 	}
 
 	if (changed || !m_isSendDataOnlyIfColorsChanged || forceUpdate) {
+		const QList<LinearRgbF> linear = toLinearList(m_colors);
 		if (isHostSmoothingApplicable()) {
-			m_hostSmoothing.retarget(m_colors, m_hostSmoothingClock.elapsed());
+			m_hostSmoothing.retarget(linear, m_hostSmoothingClock.elapsed());
 			if (!m_timerHostSmoothing->isActive())
 				m_timerHostSmoothing->start();
 		} else {
-			m_hostSmoothing.setDisplayedImmediately(m_colors);
+			m_hostSmoothing.setDisplayedImmediately(linear);
 			emit updateLedsColors(m_hostSmoothing.displayedColors());
 		}
 		if (forceUpdate) {
@@ -260,7 +271,7 @@ void MoodLampManager::onConnectedDeviceChanged(const SupportedDevices::DeviceTyp
 	// of the same setting (see GrabManager::onConnectedDeviceChanged).
 	if (device == SupportedDevices::DeviceTypeLightpack) {
 		m_timerHostSmoothing->stop();
-		m_hostSmoothing.setDisplayedImmediately(m_colors);
+		m_hostSmoothing.setDisplayedImmediately(toLinearList(m_colors));
 	}
 }
 
