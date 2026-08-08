@@ -40,6 +40,7 @@
 #include "MacOSAVGrabber.h"
 #include "D3D10Grabber.hpp"
 #include "GrabManager.hpp"
+#include "ScreenTopology.hpp"
 #include "BlueLightReduction.hpp"
 #ifdef Q_OS_WIN
 #include "WinUtils.hpp"
@@ -51,6 +52,8 @@ using namespace std::chrono_literals;
 constexpr const std::chrono::milliseconds FPS_UPDATE_INTERVAL = 500ms;
 constexpr const std::chrono::milliseconds FAKE_GRAB_INTERVAL = 900ms;
 constexpr const std::chrono::milliseconds HOST_SMOOTHING_INTERVAL = 16ms; // ~62.5 Hz
+/*! Phase 1.2: coalesce geometryChanged/screenAdded/Removed bursts before restoring zones. */
+constexpr const std::chrono::milliseconds RESTORE_LED_POSITIONS_DEBOUNCE = 300ms;
 
 #ifdef D3D10_GRAB_SUPPORT
 
@@ -102,6 +105,11 @@ GrabManager::GrabManager(QWidget *parent) : QObject(parent)
 	m_timerHostSmoothing->setInterval(HOST_SMOOTHING_INTERVAL);
 	m_hostSmoothingClock.start();
 
+	m_timerRestoreLedPositions = new QTimer(this);
+	m_timerRestoreLedPositions->setSingleShot(true);
+	m_timerRestoreLedPositions->setInterval(RESTORE_LED_POSITIONS_DEBOUNCE);
+	connect(m_timerRestoreLedPositions, &QTimer::timeout, this, &GrabManager::restoreLedPositionsFromSettings);
+
 	m_isPauseGrabWhileResizeOrMoving = false;
 	m_isGrabWidgetsVisible = false;
 	m_isGrabbingStarted = false;
@@ -109,17 +117,11 @@ GrabManager::GrabManager(QWidget *parent) : QObject(parent)
 	initColorLists(MaximumNumberOfLeds::Default);
 	initLedWidgets(MaximumNumberOfLeds::Default);
 
-	int idx = 0;
-	for (const QScreen* screen : QGuiApplication::screens()) {
-		connect(screen, &QScreen::geometryChanged,
-			[=](const QRect& geometry) { this->scaleLedWidgets(idx, geometry); }
-		);
-		++idx;
-	}
-
 	connect(qGuiApp, &QGuiApplication::screenAdded, this, &GrabManager::onScreenCountChanged);
 	connect(qGuiApp, &QGuiApplication::screenRemoved, this, &GrabManager::onScreenCountChanged);
+	connect(qGuiApp, &QGuiApplication::primaryScreenChanged, this, &GrabManager::onPrimaryScreenChanged);
 
+	syncScreenConnections();
 	updateScreenGeometry();
 
 	settingsProfileChanged(Settings::getCurrentProfileName());
@@ -136,6 +138,7 @@ GrabManager::~GrabManager()
 	delete m_timerFakeGrab;
 	delete m_timerUpdateFPS;
 	delete m_timerHostSmoothing;
+	delete m_timerRestoreLedPositions;
 
 	if (m_blueLightClient)
 		delete m_blueLightClient;
@@ -424,6 +427,7 @@ void GrabManager::settingsProfileChanged(const QString &profileName)
 	m_hostSmoothing.setDurationMs(Settings::getGrabHostSmoothingDuration());
 
 	setNumberOfLeds(Settings::getNumberOfLeds(Settings::getConnectedDevice()));
+	persistZoneScreenIdentity();
 }
 
 void GrabManager::setVisibleLedWidgets(bool state)
@@ -674,91 +678,148 @@ void GrabManager::resumeAfterResizeOrMoving()
 	m_isPauseGrabWhileResizeOrMoving = false;
 }
 
+void GrabManager::syncScreenConnections()
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
+
+	QSet<const QScreen*> alive;
+	const QList<QScreen*> screens = QGuiApplication::screens();
+	for (QScreen* screen : screens) {
+		alive.insert(screen);
+		if (!m_lastScreenGeometry.contains(screen)) {
+			connect(screen, &QScreen::geometryChanged, this,
+				[this, screen](const QRect& geometry) {
+					this->onScreenGeometryChanged(screen, geometry);
+				});
+		}
+		m_lastScreenGeometry.insert(screen, screen->geometry());
+	}
+
+	for (auto it = m_lastScreenGeometry.begin(); it != m_lastScreenGeometry.end(); ) {
+		if (!alive.contains(it.key()))
+			it = m_lastScreenGeometry.erase(it);
+		else
+			++it;
+	}
+}
+
 void GrabManager::updateScreenGeometry()
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
-	m_lastScreenGeometry.clear();
-	QList<QScreen*> screenList = QGuiApplication::screens();
-	foreach(QScreen* screen, screenList) {
-		m_lastScreenGeometry.append(screen->geometry());
-	}
-
+	syncScreenConnections();
 	emit changeScreen();
-	if (m_grabber == NULL)
-	{
-		qCritical() << Q_FUNC_INFO << "m_grabber == NULL";
-		return;
-	}
-
 }
 
 void GrabManager::onScreenCountChanged(QScreen* screen)
 {
 	Q_UNUSED(screen)
-	updateScreenGeometry();
+	syncScreenConnections();
+	scheduleRestoreLedPositions();
+	evaluateZoneScreenAvailability();
+	emit changeScreen();
 }
 
-void GrabManager::scaleLedWidgets(const int screenIndexResized, const QRect& screenGeometry)
+void GrabManager::onPrimaryScreenChanged(QScreen* screen)
 {
-	DEBUG_LOW_LEVEL << Q_FUNC_INFO << "screenIndexResized:" << screenIndexResized;
+	Q_UNUSED(screen)
+	syncScreenConnections();
+	scheduleRestoreLedPositions();
+	emit changeScreen();
+}
 
-	QRect lastScreenGeometry = m_lastScreenGeometry[screenIndexResized];
+void GrabManager::onScreenGeometryChanged(const QScreen* screen, const QRect& geometry)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << screen << geometry;
+	m_lastScreenGeometry.insert(screen, geometry);
+	// Phase 1.2: never translate/scale widgets to chase a new origin — restore from Settings.
+	scheduleRestoreLedPositions();
+}
 
-	DEBUG_LOW_LEVEL << Q_FUNC_INFO << "screen " << screenIndexResized << " is resized to " << screenGeometry;
-	DEBUG_LOW_LEVEL << Q_FUNC_INFO << "was " << lastScreenGeometry;
+void GrabManager::scheduleRestoreLedPositions()
+{
+	if (m_timerRestoreLedPositions)
+		m_timerRestoreLedPositions->start();
+}
 
-	int deltaX = lastScreenGeometry.x() - screenGeometry.x();
-	int deltaY = lastScreenGeometry.y() - screenGeometry.y();
+void GrabManager::restoreLedPositionsFromSettings()
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
+	for (int i = 0; i < m_ledWidgets.size(); i++)
+		m_ledWidgets[i]->settingsProfileChanged();
 
-	double scaleX = (double)screenGeometry.width() / lastScreenGeometry.width();
-	double scaleY = (double)screenGeometry.height() / lastScreenGeometry.height();
+	persistZoneScreenIdentity();
+	evaluateZoneScreenAvailability();
+	emit changeScreen();
+}
 
-	DEBUG_LOW_LEVEL << Q_FUNC_INFO << "deltaX =" << deltaX << "deltaY =" << deltaY;
-	DEBUG_LOW_LEVEL << Q_FUNC_INFO << "scaleX =" << scaleX << "scaleY =" << scaleY;
+QList<QPoint> GrabManager::zoneCenters() const
+{
+	QList<QPoint> centers;
+	centers.reserve(m_ledWidgets.size());
+	for (int i = 0; i < m_ledWidgets.size(); i++)
+		centers.append(m_ledWidgets[i]->geometry().center());
+	return centers;
+}
 
-	if ((deltaX != 0 || deltaY != 0) && (scaleX != 1 || scaleY != 1)) {
-		DEBUG_LOW_LEVEL << Q_FUNC_INFO << "Screen was resized and scaled, trying to restore configured widget positions";
-
-		for (int i = 0; i < m_ledWidgets.size(); i++){
-			m_ledWidgets[i]->settingsProfileChanged();
-		}
-	} else {
-		DEBUG_LOW_LEVEL << Q_FUNC_INFO << "Screen was resized or scaled, temporarily adjusting";
-
-		for (int i = 0; i < m_ledWidgets.size(); i++){
-
-			if (!lastScreenGeometry.contains(m_ledWidgets[i]->geometry().center()))
-				continue;
-
-			int width = PrismatikMath::round(scaleX * m_ledWidgets[i]->width());
-			int height = PrismatikMath::round(scaleY * m_ledWidgets[i]->height());
-
-			int x = m_ledWidgets[i]->x();
-			int y = m_ledWidgets[i]->y();
-
-			x -= screenGeometry.x();
-			y -= screenGeometry.y();
-
-			x = PrismatikMath::round(scaleX * x);
-			y = PrismatikMath::round(scaleY * y);
-
-			x += screenGeometry.x();
-			y += screenGeometry.y();
-
-			x -= deltaX;
-			y -= deltaY;
-
-			m_ledWidgets[i]->move(x, y);
-			m_ledWidgets[i]->resize(width, height);
-
-			// keep the original values in the configuration
-			// m_ledWidgets[i]->saveSizeAndPosition();
-
-			DEBUG_LOW_LEVEL << Q_FUNC_INFO << "new values [" << i << "]" << "x =" << x << "y =" << y << "w =" << width << "h =" << height;
-		}
+void GrabManager::persistZoneScreenIdentity()
+{
+	QHash<QString, ScreenTopology::ScreenEntry> topology;
+	for (auto it = m_lastScreenGeometry.constBegin(); it != m_lastScreenGeometry.constEnd(); ++it) {
+		const QScreen* screen = it.key();
+		if (!screen)
+			continue;
+		ScreenTopology::Identity id{
+			screen->name(),
+			screen->manufacturer(),
+			screen->serialNumber()
+		};
+		topology.insert(screen->name(), { id, it.value() });
 	}
 
-	m_lastScreenGeometry[screenIndexResized] = screenGeometry;
+	const ScreenTopology::Identity primary =
+		ScreenTopology::primaryScreenForZones(zoneCenters(), topology);
+	if (!primary.isEmpty())
+		Settings::setZoneScreenIdentity(primary.toSettingsString());
+}
+
+void GrabManager::evaluateZoneScreenAvailability()
+{
+	QHash<QString, ScreenTopology::ScreenEntry> topology;
+	for (auto it = m_lastScreenGeometry.constBegin(); it != m_lastScreenGeometry.constEnd(); ++it) {
+		const QScreen* screen = it.key();
+		if (!screen)
+			continue;
+		ScreenTopology::Identity id{
+			screen->name(),
+			screen->manufacturer(),
+			screen->serialNumber()
+		};
+		topology.insert(screen->name(), { id, it.value() });
+	}
+
+	const QList<QPoint> centers = zoneCenters();
+	const bool hasScreen = ScreenTopology::anyZoneHasValidScreen(centers, topology);
+	m_consecutiveNoScreenMisses =
+		ScreenTopology::nextConsecutiveMissCount(m_consecutiveNoScreenMisses, hasScreen);
+
+	const ScreenTopology::Identity saved =
+		ScreenTopology::Identity::fromSettingsString(Settings::getZoneScreenIdentity());
+	const bool activeBack = ScreenTopology::activeScreenReturned(saved, topology);
+
+	const bool shouldMissing = ScreenTopology::shouldTurnOffForMissingScreen(m_consecutiveNoScreenMisses);
+	// Clear missing when zones again sit on a screen, or the saved physical screen is back
+	// (positions are restored via the debounce timer; lights may come back on identity alone).
+	const bool shouldPresent = hasScreen || activeBack;
+
+	if (!m_zonesScreenMissing && shouldMissing) {
+		m_zonesScreenMissing = true;
+		emit changeScreen();
+	} else if (m_zonesScreenMissing && shouldPresent) {
+		m_zonesScreenMissing = false;
+		if (activeBack && !hasScreen)
+			scheduleRestoreLedPositions();
+		emit changeScreen();
+	}
 }
 
 void GrabManager::initGrabbers()
@@ -848,7 +909,10 @@ GrabberBase *GrabManager::queryGrabber(Grab::GrabberType grabberType)
 }
 
 void GrabManager::onFrameGrabAttempted(GrabResult grabResult) {
+	evaluateZoneScreenAvailability();
+
 	if (grabResult == GrabResultOk) {
+		persistZoneScreenIdentity();
 		handleGrabbedColors();
 	}
 }
@@ -916,13 +980,7 @@ void GrabManager::initLedWidgets(int numberOfLeds)
 		connect(ledWidget, &GrabWidget::resizeOrMoveStarted, this, &GrabManager::pauseWhileResizeOrMoving);
 		connect(ledWidget, &GrabWidget::resizeOrMoveCompleted, this, &GrabManager::resumeAfterResizeOrMoving);
 
-// TODO: Check out this line!
-//			First LED widget using to determine grabbing-monitor in WinAPI version of Grab
-//		connect(ledWidget, SIGNAL(resizeOrMoveCompleted(int)), this, &GrabManager::firstWidgetPositionChanged);
-
 		m_ledWidgets << ledWidget;
-
-//		firstWidgetPositionChanged();
 	}
 
 	int diff = numberOfLeds - m_ledWidgets.size();

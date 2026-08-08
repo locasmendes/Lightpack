@@ -73,7 +73,15 @@ void GrabConfigWidget::showConfigFor(QRect widgetGeometry, int buttonCenter, con
 	adjustSize();
 
 	#if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
-	QRect screen = QGuiApplication::screenAt(widgetGeometry.center())->geometry();
+	QScreen *screenAtPoint = QGuiApplication::screenAt(widgetGeometry.center());
+	QRect screen;
+	if (screenAtPoint) {
+		screen = screenAtPoint->geometry();
+	} else if (QGuiApplication::primaryScreen()) {
+		screen = QGuiApplication::primaryScreen()->geometry();
+	} else {
+		screen = QRect(0, 0, 1920, 1080);
+	}
 	#else
 	QRect screen = QApplication::desktop()->screenGeometry(widgetGeometry.center());
 	#endif

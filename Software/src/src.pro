@@ -342,6 +342,7 @@ SOURCES += \
     wizard/BulkResize.cpp \
     ZoneLayoutRuntime.cpp \
     LedGroupRuntime.cpp \
+    ScreenTopology.cpp \
     systrayicon/SysTrayIcon.cpp \
     UpdatesProcessor.cpp \
     LightpackCommandLineParser.cpp
@@ -411,6 +412,7 @@ HEADERS += \
     wizard/BulkResize.hpp \
     ZoneLayoutRuntime.hpp \
     LedGroupRuntime.hpp \
+    ScreenTopology.hpp \
     systrayicon/SysTrayIcon.hpp \
     UpdatesProcessor.hpp \
     LightpackCommandLineParser.hpp

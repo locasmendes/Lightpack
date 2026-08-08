@@ -73,3 +73,6 @@ vc*.pdb
 *~
 Software/.qmake.stash
 .DS_Store
+
+# Agent worktrees
+.worktrees/

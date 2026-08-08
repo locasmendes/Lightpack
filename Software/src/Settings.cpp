@@ -73,6 +73,8 @@ static const QString IsKeepLightsOnAfterExit = QStringLiteral("IsKeepLightsOnAft
 static const QString IsKeepLightsOnAfterLock = QStringLiteral("IsKeepLightsOnAfterLock");
 static const QString IsKeepLightsOnAfterSuspend = QStringLiteral("IsKeepLightsOnAfterSuspend");
 static const QString IsKeepLightsOnAfterScreenOff = QStringLiteral("IsKeepLightsOnAfterScreenOff");
+// Phase 1: keep lights on when the monitor that holds LED zones is disconnected.
+static const QString IsKeepLightsOnAfterScreenDisconnect = QStringLiteral("IsKeepLightsOnAfterScreenDisconnect");
 static const QString IsPingDeviceEverySecond = QStringLiteral("IsPingDeviceEverySecond");
 static const QString IsUpdateFirmwareMessageShown = QStringLiteral("IsUpdateFirmwareMessageShown");
 static const QString ConnectedDevice = QStringLiteral("ConnectedDevice");
@@ -207,6 +209,8 @@ static const QString Slowdown = QStringLiteral("Grab/Slowdown");
 static const QString HostSmoothingDuration = QStringLiteral("Grab/HostSmoothingDuration");
 static const QString ContentAspectPreset = QStringLiteral("Grab/ContentAspectPreset");
 static const QString LayoutRecipe = QStringLiteral("Grab/LayoutRecipe");
+// Phase 1: stable identity of the screen that owns LED zones (name|manufacturer|serial).
+static const QString ZoneScreenIdentity = QStringLiteral("Grab/ZoneScreenIdentity");
 static const QString LedGroups = QStringLiteral("Grab/LedGroups");
 static const QString LuminosityThreshold = QStringLiteral("Grab/LuminosityThreshold");
 static const QString OverBrighten = QStringLiteral("Grab/OverBrighten");
@@ -350,6 +354,8 @@ bool Settings::Initialize( const QString & applicationDirPath, bool isDebugLevel
 	setNewOptionMain(Main::Key::IsKeepLightsOnAfterLock, Main::IsKeepLightsOnAfterLock);
 	setNewOptionMain(Main::Key::IsKeepLightsOnAfterSuspend, Main::IsKeepLightsOnAfterSuspend);
 	setNewOptionMain(Main::Key::IsKeepLightsOnAfterScreenOff, Main::IsKeepLightsOnAfterScreenOff);
+	// Phase 1
+	setNewOptionMain(Main::Key::IsKeepLightsOnAfterScreenDisconnect, Main::IsKeepLightsOnAfterScreenDisconnect);
 	setNewOptionMain(Main::Key::IsPingDeviceEverySecond,Main::IsPingDeviceEverySecond);
 	setNewOptionMain(Main::Key::IsUpdateFirmwareMessageShown, Main::IsUpdateFirmwareMessageShown);
 	setNewOptionMain(Main::Key::ConnectedDevice,		Main::ConnectedDeviceDefault);
@@ -789,6 +795,19 @@ void Settings::setKeepLightsOnAfterScreenOff(bool isEnabled)
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
 	setValueMain(Main::Key::IsKeepLightsOnAfterScreenOff, isEnabled);
 	emit m_this->keepLightsOnAfterScreenOffChanged(isEnabled);
+}
+
+// Phase 1
+bool Settings::isKeepLightsOnAfterScreenDisconnect()
+{
+	return valueMain(Main::Key::IsKeepLightsOnAfterScreenDisconnect).toBool();
+}
+
+void Settings::setKeepLightsOnAfterScreenDisconnect(bool isEnabled)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
+	setValueMain(Main::Key::IsKeepLightsOnAfterScreenDisconnect, isEnabled);
+	emit m_this->keepLightsOnAfterScreenDisconnectChanged(isEnabled);
 }
 
 bool Settings::isPingDeviceEverySecond()
@@ -1435,6 +1454,18 @@ void Settings::setLayoutRecipe(const QJsonArray& recipe)
 		: QString::fromUtf8(QJsonDocument(recipe).toJson(QJsonDocument::Compact));
 	setValue(Profile::Key::Grab::LayoutRecipe, raw);
 	emit m_this->layoutRecipeChanged();
+}
+
+// Phase 1
+QString Settings::getZoneScreenIdentity()
+{
+	return value(Profile::Key::Grab::ZoneScreenIdentity).toString();
+}
+
+void Settings::setZoneScreenIdentity(const QString& identity)
+{
+	DEBUG_MID_LEVEL << Q_FUNC_INFO << identity;
+	setValue(Profile::Key::Grab::ZoneScreenIdentity, identity);
 }
 
 QJsonObject LedGroup::toJson() const
@@ -2642,6 +2673,8 @@ void Settings::initCurrentProfile(bool isResetDefault)
 	setNewOption(Profile::Key::Grab::HostSmoothingDuration,			Profile::Grab::HostSmoothingDurationDefault, isResetDefault);
 	setNewOption(Profile::Key::Grab::ContentAspectPreset,			Profile::Grab::ContentAspectPresetDefault, isResetDefault);
 	setNewOption(Profile::Key::Grab::LayoutRecipe,					Profile::Grab::LayoutRecipeDefault, isResetDefault);
+	// Phase 1
+	setNewOption(Profile::Key::Grab::ZoneScreenIdentity,			Profile::Grab::ZoneScreenIdentityDefault, isResetDefault);
 	setNewOption(Profile::Key::Grab::LuminosityThreshold,			Profile::Grab::LuminosityThresholdDefault, isResetDefault);
 	setNewOption(Profile::Key::Grab::IsMinimumLuminosityEnabled,	Profile::Grab::IsMinimumLuminosityEnabledDefault, isResetDefault);
 	setNewOption(Profile::Key::Grab::IsDx1011GrabberEnabled,		Profile::Grab::IsDx1011GrabberEnabledDefault, isResetDefault);

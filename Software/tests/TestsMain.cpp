@@ -1,4 +1,4 @@
-#include <QtTest>
+﻿#include <QtTest>
 #include "LightpackApiTest.hpp"
 #include "GrabCalculationTest.hpp"
 #include "lightpackmathtest.hpp"
@@ -15,6 +15,7 @@
 #include "MoodLampManagerTest.hpp"
 #include "BulkResizeTest.hpp"
 #include "LedGroupRuntimeTest.hpp"
+#include "ScreenTopologyTest.hpp"
 #include "debug.h"
 
 #include <iostream>
@@ -45,6 +46,7 @@ int main(int argc, char *argv[])
 	tests.append(new MoodLampManagerTest());
 	tests.append(new BulkResizeTest());
 	tests.append(new LedGroupRuntimeTest());
+	tests.append(new ScreenTopologyTest());
 
 	// HooksTest does low-level function hooking that is sensitive to the exact
 	// compiler/toolset used to build it; keep it last so a crash there does not
@@ -67,3 +69,4 @@ int main(int argc, char *argv[])
 
 	return 0;
 }
+

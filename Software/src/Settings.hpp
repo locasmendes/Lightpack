@@ -144,6 +144,9 @@ public:
 	static void setKeepLightsOnAfterSuspend(bool isEnabled);
 	static bool isKeepLightsOnAfterScreenOff();
 	static void setKeepLightsOnAfterScreenOff(bool isEnabled);
+	// Phase 1
+	static bool isKeepLightsOnAfterScreenDisconnect();
+	static void setKeepLightsOnAfterScreenDisconnect(bool isEnabled);
 	static bool isPingDeviceEverySecond();
 	static void setPingDeviceEverySecond(bool isEnabled);
 	static bool isUpdateFirmwareMessageShown();
@@ -212,6 +215,9 @@ public:
 	static bool hasLayoutRecipe();
 	static QJsonArray getLayoutRecipe();
 	static void setLayoutRecipe(const QJsonArray& recipe);
+	// Phase 1: persisted QScreen name|manufacturer|serial for the zones' screen.
+	static QString getZoneScreenIdentity();
+	static void setZoneScreenIdentity(const QString& identity);
 	static QList<LedGroup> getLedGroups();
 	static void setLedGroups(const QList<LedGroup>& groups);
 	static bool isBacklightEnabled();
@@ -390,6 +396,8 @@ signals:
 	void keepLightsOnAfterLockChanged(bool isEnabled);
 	void keepLightsOnAfterSuspendChanged(bool isEnabled);
 	void keepLightsOnAfterScreenOffChanged(bool isEnabled);
+	// Phase 1
+	void keepLightsOnAfterScreenDisconnectChanged(bool isEnabled);
 	void pingDeviceEverySecondEnabledChanged(bool);
 
 	void languageChanged(const QString &);

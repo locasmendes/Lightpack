@@ -32,7 +32,7 @@ LIBS += -L../lib -lprismatik-math -lgrab
 
 win32 {
     CONFIG(msvc):DEFINES += _CRT_SECURE_NO_WARNINGS _CRT_NONSTDC_NO_DEPRECATE
-    LIBS += -ladvapi32
+    LIBS += -ladvapi32 -luser32
 }
 
 INCLUDEPATH += . \
@@ -64,6 +64,7 @@ HEADERS += \
     ../src/wizard/DeviceDiscoveryDefault.hpp \
     ../src/wizard/BulkResize.hpp \
     ../src/LedGroupRuntime.hpp \
+    ../src/ScreenTopology.hpp \
     ../src/ZoneLayoutRuntime.hpp \
     ../src/MoodLamp.hpp \
     ../src/LiquidColorGenerator.hpp \
@@ -84,7 +85,8 @@ HEADERS += \
     DeviceDiscoveryDefaultTest.hpp \
     MoodLampManagerTest.hpp \
     BulkResizeTest.hpp \
-    LedGroupRuntimeTest.hpp
+    LedGroupRuntimeTest.hpp \
+    ScreenTopologyTest.hpp
 
 SOURCES += \
     ../src/ApiServerSetColorTask.cpp \
@@ -104,6 +106,7 @@ SOURCES += \
     ../src/wizard/BulkResize.cpp \
     ../src/ZoneLayoutRuntime.cpp \
     ../src/LedGroupRuntime.cpp \
+    ../src/ScreenTopology.cpp \
     ../src/MoodLamp.cpp \
     ../src/LiquidColorGenerator.cpp \
     ../src/MoodLampManager.cpp \
@@ -122,7 +125,8 @@ SOURCES += \
     DeviceDiscoveryDefaultTest.cpp \
     MoodLampManagerTest.cpp \
     BulkResizeTest.cpp \
-    LedGroupRuntimeTest.cpp
+    LedGroupRuntimeTest.cpp \
+    ScreenTopologyTest.cpp
 
 win32{
     HEADERS += \

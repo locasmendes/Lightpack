@@ -479,6 +479,38 @@ void LightpackApplication::onSessionChange(SystemSession::Status change)
 	}
 }
 
+void LightpackApplication::onGrabScreensChanged()
+{
+	// Phase 1.3: reuse GrabManager::changeScreen; mirror DisplayOff/DisplayOn accounting.
+	if (!m_grabManager)
+		return;
+
+	if (m_grabManager->areZoneScreensMissing()) {
+		if (!m_isScreenDisconnected)
+			m_isLightsWereOnBeforeScreenDisconnect = m_backlightStatus && !m_isLightsTurnedOffBySessionChange;
+
+		if (!SettingsScope::Settings::isKeepLightsOnAfterScreenDisconnect()) {
+			if (!m_noGui && m_settingsWindow) {
+				emit m_settingsWindow->switchOffLeds();
+			} else if (m_ledDeviceManager) {
+				QMetaObject::invokeMethod(m_ledDeviceManager, "switchOffLeds", Qt::QueuedConnection);
+			}
+			m_isLightsTurnedOffBySessionChange = true;
+		}
+		m_isScreenDisconnected = true;
+	} else if (m_isScreenDisconnected) {
+		if (!SettingsScope::Settings::isKeepLightsOnAfterScreenDisconnect() && m_isLightsWereOnBeforeScreenDisconnect) {
+			if (!m_noGui && m_settingsWindow) {
+				emit m_settingsWindow->switchOnLeds();
+			} else if (m_ledDeviceManager) {
+				QMetaObject::invokeMethod(m_ledDeviceManager, "switchOnLeds", Qt::QueuedConnection);
+			}
+			m_isLightsTurnedOffBySessionChange = false;
+		}
+		m_isScreenDisconnected = false;
+	}
+}
+
 void LightpackApplication::processCommandLineArguments()
 {
 	g_debugLevel = SettingsScope::Main::DebugLevelDefault;
@@ -865,6 +897,8 @@ void LightpackApplication::initGrabManager()
 	connect(m_grabManager, &GrabManager::ambilightTimeOfUpdatingColors, m_pluginInterface, &LightpackPluginInterface::refreshAmbilightEvaluated);
 
 	connect(m_grabManager, &GrabManager::updateLedsColors,	m_ledDeviceManager, &LedDeviceManager::setColors, Qt::QueuedConnection);
+	// Phase 1: zone-screen disconnect / reconnect via formerly unused changeScreen signal
+	connect(m_grabManager, &GrabManager::changeScreen, this, &LightpackApplication::onGrabScreensChanged);
 	connect(m_moodlampManager, &MoodLampManager::updateLedsColors,	m_ledDeviceManager, &LedDeviceManager::setColors, Qt::QueuedConnection);
 	if (!m_noGui && m_settingsWindow)
 		connect(m_moodlampManager, &MoodLampManager::moodlampFrametime,		m_settingsWindow, &SettingsWindow::refreshAmbilightEvaluated, Qt::QueuedConnection);

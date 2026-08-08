@@ -27,6 +27,7 @@
 
 #include <QtGui>
 #include <QElapsedTimer>
+#include <QHash>
 
 #include "GrabberBase.hpp"
 #include "HostColorSmoothing.hpp"
@@ -50,6 +51,7 @@ public:
 signals:
 	void updateLedsColors(const QList<QRgb> & colors);
 	void ambilightTimeOfUpdatingColors(double ms);
+	/*! Emitted on topology changes and when zone-screen availability flips (Phase 1). */
 	void changeScreen();
 	void onSessionChange(SystemSession::Status change);
 
@@ -60,6 +62,9 @@ public:
 	// Common options
 	void setNumberOfLeds(int numberOfLeds);
 	void reset();
+
+	/*! True after N consecutive ticks with no screen covering any zone (Phase 1.3). */
+	bool areZoneScreensMissing() const { return m_zonesScreenMissing; }
 
 public slots:
 	void onGrabberTypeChanged(const Grab::GrabberType grabberType);
@@ -104,9 +109,16 @@ private slots:
 	void onFrameGrabAttempted(GrabResult result);
 	void updateScreenGeometry();
 	void onScreenCountChanged(QScreen* screen);
+	void onPrimaryScreenChanged(QScreen* screen);
+	void onScreenGeometryChanged(const QScreen* screen, const QRect& geometry);
+	void restoreLedPositionsFromSettings();
 
 private:
-	void scaleLedWidgets(const int screenIndexResized, const QRect& geometry);
+	void syncScreenConnections();
+	void scheduleRestoreLedPositions();
+	void evaluateZoneScreenAvailability();
+	void persistZoneScreenIdentity();
+	QList<QPoint> zoneCenters() const;
 	GrabberBase *queryGrabber(Grab::GrabberType grabber);
 	void initGrabbers();
 	GrabberBase *initGrabber(GrabberBase *grabber);
@@ -122,7 +134,8 @@ private:
 private:
 	QList<GrabberBase*> m_grabbers;
 	GrabberBase *m_grabber;
-	QList<QRect> m_lastScreenGeometry;
+	/*! Phase 1.1: keyed by QScreen* so geometryChanged lambdas never hold a stale index. */
+	QHash<const QScreen*, QRect> m_lastScreenGeometry;
 
 #ifdef D3D10_GRAB_SUPPORT
 	D3D10Grabber *m_d3d10Grabber;
@@ -133,6 +146,7 @@ private:
 	QTimer *m_timerUpdateFPS;
 	QTimer *m_timerFakeGrab;
 	QTimer *m_timerHostSmoothing;
+	QTimer *m_timerRestoreLedPositions;
 	QElapsedTimer m_hostSmoothingClock;
 	HostColorSmoothing m_hostSmoothing;
 	QWidget *m_parentWidget;
@@ -144,8 +158,8 @@ private:
 	QList<QRgb> m_colorsNew;
 	QList<QRgb> m_colorsProcessing;
 
-	QRect m_screenSavedRect;
-	int m_screenSavedIndex;
+	int m_consecutiveNoScreenMisses = 0;
+	bool m_zonesScreenMissing = false;
 
 	bool m_isPauseGrabWhileResizeOrMoving;
 	bool m_isSendDataOnlyIfColorsChanged;
