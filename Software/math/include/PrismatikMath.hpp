@@ -49,7 +49,6 @@ namespace PrismatikMath
 	int getChromaHSV(const QRgb rgb);
 	int max(const QRgb);
 	int min(const QRgb);
-	QRgb withValueHSV(const QRgb, int);
 	QRgb withChromaHSV(const QRgb, int);
 	void applyColorTemperature(QList<QRgb>&, const quint16, double gamma);
 	StructRgb whitePoint(const quint16 colorTemperature);
