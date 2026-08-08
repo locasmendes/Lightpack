@@ -300,6 +300,7 @@ void SettingsWindow::connectSignalsSlots()
 	connect(ui->radioButton_GrabWidgetsDontShow, &QRadioButton::toggled, this, &SettingsWindow:: onDontShowLedWidgets_Toggled);
 	connect(ui->radioButton_Colored, &QRadioButton::toggled, this, &SettingsWindow::onSetColoredLedWidgets);
 	connect(ui->radioButton_White, &QRadioButton::toggled, this, &SettingsWindow::onSetWhiteLedWidgets);
+	connect(ui->radioButton_LiveColors, &QRadioButton::toggled, this, &SettingsWindow::onSetLiveColorsLedWidgets);
 
 	connect(ui->radioButton_ConstantColorMoodLampMode, &QRadioButton::toggled, this, &SettingsWindow::onMoodLampColorMode_toggled);
 	connect(ui->radioButton_BreathingColorMoodLampMode, &QRadioButton::toggled, this, &SettingsWindow::onMoodLampColorMode_toggled);
@@ -508,25 +509,27 @@ void SettingsWindow::updateDeviceTabWidgetsVisibility()
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
 
 	SupportedDevices::DeviceType connectedDevice = Settings::getConnectedDevice();
+	const int ledCount = Settings::getNumberOfLeds(connectedDevice);
+
+	// Phase 4: Stage preview (post-pipeline colors) for every device — not only Virtual.
+	initVirtualLeds(ledCount);
 
 	switch (connectedDevice)
 	{
 	case SupportedDevices::DeviceTypeVirtual:
 		ui->tabDevices->show();
 		ui->tabDevices->setCurrentWidget(ui->tabDeviceVirtual);
-		// Sync Virtual Leds count with NumberOfLeds field
-		initVirtualLeds(Settings::getNumberOfLeds(SupportedDevices::DeviceTypeVirtual));
 		break;
 
 	case SupportedDevices::DeviceTypeLightpack:
 		ui->tabDevices->show();
 		ui->tabDevices->setCurrentWidget(ui->tabDeviceLightpack);
-		// Sync Virtual Leds count with NumberOfLeds field
 		break;
 
 	default:
-		ui->tabDevices->hide();
-//		qCritical() << Q_FUNC_INFO << "Fail. Unknown connectedDevice ==" << connectedDevice;
+		// Serial / UDP / etc.: show Stage on the former Virtual tab.
+		ui->tabDevices->show();
+		ui->tabDevices->setCurrentWidget(ui->tabDeviceVirtual);
 		break;
 	}
 	setDeviceTabWidgetsVisibility(DeviceTab::Lightpack);
@@ -605,6 +608,8 @@ void SettingsWindow::onPostInit() {
 	emit requestSoundVizDevices();
 	emit requestSoundVizVisualizers();
 #endif
+
+	updateColorFeedbackGate();
 
 	if (m_trayIcon) {
 		bool updateJustFailed = false;
@@ -1151,6 +1156,7 @@ void SettingsWindow::showSettings()
 	this->show();
 	raise();
 	this->activateWindow();
+	updateColorFeedbackGate();
 }
 
 void SettingsWindow::hideSettings()
@@ -1160,6 +1166,7 @@ void SettingsWindow::hideSettings()
 	emit showLedWidgets(false);
 
 	this->hide();
+	updateColorFeedbackGate();
 }
 
 void SettingsWindow::toggleSettings()
@@ -1811,21 +1818,56 @@ void SettingsWindow::onSoundVizLiquidSpeed_valueChanged(int value)
 void SettingsWindow::onDontShowLedWidgets_Toggled(bool checked)
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << checked;
+	if (checked)
+		emit setLiveColorsLedWidget(false);
 	emit showLedWidgets(!checked);
+	updateColorFeedbackGate();
 }
 
 void SettingsWindow::onSetColoredLedWidgets(bool checked)
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
-	if (checked)
+	if (checked) {
+		emit setLiveColorsLedWidget(false);
 		emit setColoredLedWidget(true);
+	}
+	updateColorFeedbackGate();
 }
 
 void SettingsWindow::onSetWhiteLedWidgets(bool checked)
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
-	if (checked)
+	if (checked) {
+		emit setLiveColorsLedWidget(false);
 		emit setColoredLedWidget(false);
+	}
+	updateColorFeedbackGate();
+}
+
+void SettingsWindow::onSetLiveColorsLedWidgets(bool checked)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << checked;
+	if (checked) {
+		emit showLedWidgets(true);
+		emit setLiveColorsLedWidget(true);
+	}
+	updateColorFeedbackGate();
+}
+
+void SettingsWindow::setColorFeedbackForced(bool forced)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << forced;
+	m_colorFeedbackForced = forced;
+	updateColorFeedbackGate();
+}
+
+void SettingsWindow::updateColorFeedbackGate()
+{
+	// Watchers: Live colors mode, Stage preview while settings are open, or calibration force.
+	const bool needFeedback = m_colorFeedbackForced
+		|| (ui->radioButton_LiveColors && ui->radioButton_LiveColors->isChecked())
+		|| (isVisible() && !m_labelsGrabbedColors.isEmpty());
+	emit setColorFeedbackEnabled(needFeedback);
 }
 
 void SettingsWindow::onDeviceSendDataOnlyIfColorsChanged_toggled(bool state)

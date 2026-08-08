@@ -80,6 +80,7 @@ private slots:
 //	void numberOfLedsChanged(int);
 	void showLedWidgets(bool visible);
 	void setColoredLedWidget(bool colored);
+	void setLiveColorsLedWidget(bool live);
 //	void handleConnectedDeviceChange(const SupportedDevices::DeviceType);
 	void onFocusChanged(QWidget *, QWidget *);
 	void quitFromWizard(int result);

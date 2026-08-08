@@ -33,6 +33,7 @@
 #include "GrabWidget.hpp"
 #include "ui_GrabWidget.h"
 #include "Settings.hpp"
+#include "PrismatikMath.hpp"
 #include "debug.h"
 
 using namespace SettingsScope;
@@ -734,6 +735,14 @@ void GrabWidget::fillBackgroundColored()
 	DEBUG_MID_LEVEL << Q_FUNC_INFO << m_selfId;
 
 	fillBackground(m_selfId);
+}
+
+void GrabWidget::fillBackgroundLive(const QColor &color)
+{
+	DEBUG_MID_LEVEL << Q_FUNC_INFO << m_selfId << color.rgb();
+
+	setBackgroundColor(color);
+	setTextColor(PrismatikMath::getBrightness(color.rgb()) > 150 ? Qt::black : Qt::white);
 }
 
 bool GrabWidget::isSelectedForGroupEdit() const

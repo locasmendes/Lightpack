@@ -68,6 +68,7 @@ signals:
 	void ledDeviceSetMinimumLuminosityEnabled(bool, bool);
 	void ledDeviceSetDitheringEnabled(bool isEnabled, bool);
 	void ledDeviceSetColorSequence(QString value);
+	void ledDeviceSetColorFeedbackEnabled(bool enabled);
 	void ledDeviceRequestFirmwareVersion();
 	void ledDeviceUpdateWBAdjustments();
 	void ledDeviceUpdateDeviceSettings();
@@ -93,6 +94,7 @@ public slots:
 	void setMinimumLuminosityEnabled(bool value);
 	void setDitheringEnabled(bool isEnabled);
 	void setColorSequence(const QString& value);
+	void setColorFeedbackEnabled(bool enabled);
 	void requestFirmwareVersion();
 	void updateWBAdjustments();
 	void updateDeviceSettings();
@@ -133,6 +135,7 @@ private:
 	bool m_savedIsMinimumLuminosityEnabled;
 	bool m_savedDitheringEnabled;
 	QString m_savedColorSequence;
+	bool m_savedColorFeedbackEnabled;
 
 	QList<AbstractLedDevice *> m_ledDevices;
 	AbstractLedDevice *m_ledDevice;

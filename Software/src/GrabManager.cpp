@@ -115,6 +115,7 @@ GrabManager::GrabManager(QWidget *parent) : QObject(parent)
 
 	m_isPauseGrabWhileResizeOrMoving = false;
 	m_isGrabWidgetsVisible = false;
+	m_isLiveColorsEnabled = false;
 	m_isGrabbingStarted = false;
 
 	initColorLists(MaximumNumberOfLeds::Default);
@@ -461,6 +462,7 @@ void GrabManager::setColoredLedWidgets(bool state)
 	// This slot is directly connected to radioButton toggled(bool) signal
 	if (state)
 	{
+		m_isLiveColorsEnabled = false;
 		for (int i = 0; i < m_ledWidgets.size(); i++)
 			m_ledWidgets[i]->fillBackgroundColored();
 	}
@@ -473,9 +475,26 @@ void GrabManager::setWhiteLedWidgets(bool state)
 	// This slot is directly connected to radioButton toggled(bool) signal
 	if (state)
 	{
+		m_isLiveColorsEnabled = false;
 		for (int i = 0; i < m_ledWidgets.size(); i++)
 			m_ledWidgets[i]->fillBackgroundWhite();
 	}
+}
+
+void GrabManager::setLiveColorsLedWidgets(bool state)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << state;
+	m_isLiveColorsEnabled = state;
+}
+
+void GrabManager::updateLiveLedColors(const QList<QRgb> & colors)
+{
+	if (!m_isLiveColorsEnabled)
+		return;
+
+	const int n = qMin(colors.size(), m_ledWidgets.size());
+	for (int i = 0; i < n; ++i)
+		m_ledWidgets[i]->fillBackgroundLive(QColor(colors[i]));
 }
 
 void GrabManager::handleGrabbedColors()

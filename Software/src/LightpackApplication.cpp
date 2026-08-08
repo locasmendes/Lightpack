@@ -754,6 +754,7 @@ void LightpackApplication::startLedDeviceManager()
 		connect(m_ledDeviceManager, &LedDeviceManager::firmwareVersion,		m_settingsWindow, &SettingsWindow::ledDeviceFirmwareVersionResult,			Qt::QueuedConnection);
 		connect(m_ledDeviceManager, &LedDeviceManager::firmwareVersionUnofficial, m_settingsWindow, &SettingsWindow::ledDeviceFirmwareVersionUnofficialResult,	Qt::QueuedConnection);
 		connect(m_ledDeviceManager, &LedDeviceManager::setColors_VirtualDeviceCallback, m_settingsWindow, &SettingsWindow::updateVirtualLedsColors, Qt::QueuedConnection);
+		connect(m_settingsWindow, &SettingsWindow::setColorFeedbackEnabled, m_ledDeviceManager, &LedDeviceManager::setColorFeedbackEnabled, Qt::QueuedConnection);
 	}
 	m_ledDeviceManager->moveToThread(m_ledDeviceManagerThread);
 	m_ledDeviceManagerThread->start();
@@ -863,6 +864,7 @@ void LightpackApplication::initGrabManager()
 	{
 		connect(m_settingsWindow, &SettingsWindow::showLedWidgets, this, &LightpackApplication::showLedWidgets);
 		connect(m_settingsWindow, &SettingsWindow::setColoredLedWidget, this, &LightpackApplication::setColoredLedWidget);
+		connect(m_settingsWindow, &SettingsWindow::setLiveColorsLedWidget, this, &LightpackApplication::setLiveColorsLedWidget);
 
 		// GrabManager to this
 		connect(m_grabManager, &GrabManager::ambilightTimeOfUpdatingColors, m_settingsWindow, &SettingsWindow::refreshAmbilightEvaluated);
@@ -887,6 +889,7 @@ void LightpackApplication::initGrabManager()
 	const SetColorsLinear setColorsLinear = &LedDeviceManager::setColors;
 
 	connect(m_grabManager, &GrabManager::updateLedsColors,	m_ledDeviceManager, setColorsLinear, Qt::QueuedConnection);
+	connect(m_ledDeviceManager, &LedDeviceManager::setColors_VirtualDeviceCallback, m_grabManager, &GrabManager::updateLiveLedColors, Qt::QueuedConnection);
 	connect(m_moodlampManager, &MoodLampManager::updateLedsColors,	m_ledDeviceManager, setColorsLinear, Qt::QueuedConnection);
 	if (!m_noGui && m_settingsWindow)
 		connect(m_moodlampManager, &MoodLampManager::moodlampFrametime,		m_settingsWindow, &SettingsWindow::refreshAmbilightEvaluated, Qt::QueuedConnection);
@@ -1004,8 +1007,15 @@ void LightpackApplication::showLedWidgets(bool visible)
 void LightpackApplication::setColoredLedWidget(bool colored)
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << colored;
+	m_grabManager->setLiveColorsLedWidgets(false);
 	m_grabManager->setColoredLedWidgets(colored);
 	m_grabManager->setWhiteLedWidgets(!colored);
+}
+
+void LightpackApplication::setLiveColorsLedWidget(bool live)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << live;
+	m_grabManager->setLiveColorsLedWidgets(live);
 }
 
 void LightpackApplication::requestBacklightStatus()

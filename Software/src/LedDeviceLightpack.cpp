@@ -92,6 +92,7 @@ void LedDeviceLightpack::setColors(const QList<LinearRgbF> & colors)
 	// Phase 2: keep Lightpack on plain 12-bit quantize (no dither). With float input,
 	// dither would become effective for the first time; enable in a follow-up after HW QA.
 	Q_UNUSED(m_isDitheringEnabled);
+	emitColorsUpdatedIfEnabled(m_colorsBuffer, 12);
 
 	// First write_buffer[0] == 0x00 - ReportID, i have problems with using it
 	// Second byte of usb buffer is command (write_buffer[1] == CMD_UPDATE_LEDS, see below)
@@ -161,6 +162,7 @@ void LedDeviceLightpack::switchOffLeds()
 
 	bool ok = writeBufferToAllDevicesWithCheck(CMD_UPDATE_LEDS);
 
+	emitBlackColorsUpdatedIfEnabled(m_colorsSaved.count());
 	emit commandCompleted(ok);
 	// Stop ping device if switchOffLeds() signal comes
 }

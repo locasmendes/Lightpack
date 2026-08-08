@@ -1,6 +1,10 @@
 /*
  * SmoothingDriver.hpp — shared QTimer + QElapsedTimer + HostColorSmoothing orchestration.
  *
+ * TODO(Phase 2 follow-up): class is built and linked (src.pro) but GrabManager /
+ * MoodLampManager still use their own timer triplets. Wire them (and SoundManagerBase)
+ * here in a dedicated pass — see GrabManager.hpp note on isHostSmoothingApplicable risk.
+ *
  *	Created on: 08.08.2026
  *		Project: Lightpack
  */

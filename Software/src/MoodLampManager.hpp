@@ -116,6 +116,8 @@ private:
 	QElapsedTimer m_elapsedTimer;
 	size_t m_frames{ 1 };
 
+	// TODO(Phase 2 follow-up): migrate host-smoothing orchestration to SmoothingDriver
+	// (see GrabManager.hpp / SmoothingDriver.hpp). Local QTimer triplet kept for now.
 	QTimer *m_timerHostSmoothing;
 	QElapsedTimer m_hostSmoothingClock;
 	HostColorSmoothing m_hostSmoothing;

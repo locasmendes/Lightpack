@@ -166,6 +166,38 @@ void AbstractLedDevice::applyColorModifications(const QList<LinearRgbF> &inColor
 	ColorOps::applyDeviceStage(inColors, outColors, deviceStageParams());
 }
 
+void AbstractLedDevice::setColorFeedbackEnabled(bool enabled)
+{
+	m_colorFeedbackEnabled = enabled;
+}
+
+void AbstractLedDevice::emitColorsUpdatedIfEnabled(const QList<StructRgb> &colors, int colorDepth)
+{
+	if (!m_colorFeedbackEnabled)
+		return;
+
+	const int maxCode = (1 << colorDepth) - 1;
+	if (maxCode <= 0)
+		return;
+
+	QList<QRgb> display;
+	display.reserve(colors.size());
+	for (const StructRgb &c : colors) {
+		const int r = static_cast<int>((static_cast<int>(c.r) * 255 + maxCode / 2) / maxCode);
+		const int g = static_cast<int>((static_cast<int>(c.g) * 255 + maxCode / 2) / maxCode);
+		const int b = static_cast<int>((static_cast<int>(c.b) * 255 + maxCode / 2) / maxCode);
+		display.append(qRgb(qBound(0, r, 255), qBound(0, g, 255), qBound(0, b, 255)));
+	}
+	emit colorsUpdated(display);
+}
+
+void AbstractLedDevice::emitBlackColorsUpdatedIfEnabled(int count)
+{
+	if (!m_colorFeedbackEnabled || count <= 0)
+		return;
+	emit colorsUpdated(QList<QRgb>(count, qRgb(0, 0, 0)));
+}
+
 void AbstractLedDevice::applyDithering(QList<StructRgb>& colors, int colorDepth)
 {
 	// Convert 12-bit buffer → wire → quantize / dither at target depth (R7).
@@ -185,4 +217,7 @@ void AbstractLedDevice::applyDithering(QList<StructRgb>& colors, int colorDepth)
 		for (int i = 0; i < wire.size(); ++i)
 			ColorOps::quantize(wire[i], colorDepth, colors[i]);
 	}
+
+	// Phase 4: post-pipeline display feedback for all devices that quantize here.
+	emitColorsUpdatedIfEnabled(colors, colorDepth);
 }
