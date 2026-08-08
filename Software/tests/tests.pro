@@ -74,6 +74,8 @@ HEADERS += \
     ../math/include/PrismatikMath.hpp \
     ../math/include/ColorF.h \
     ../math/include/ColorOps.hpp \
+    ../math/include/CalibrationPatterns.hpp \
+    ../math/include/CalibrationSolver.hpp \
     SettingsWindowMockup.hpp \
     GrabCalculationTest.hpp \
     LightpackApiTest.hpp \
@@ -91,7 +93,8 @@ HEADERS += \
     LedGroupRuntimeTest.hpp \
     ColorOpsTest.hpp \
     ColorPipelineGoldenTest.hpp \
-    SettingsMigrationTest.hpp
+    SettingsMigrationTest.hpp \
+    CalibrationTest.hpp
 
 SOURCES += \
     ../src/ApiServerSetColorTask.cpp \
@@ -134,7 +137,8 @@ SOURCES += \
     LedGroupRuntimeTest.cpp \
     ColorOpsTest.cpp \
     ColorPipelineGoldenTest.cpp \
-    SettingsMigrationTest.cpp
+    SettingsMigrationTest.cpp \
+    CalibrationTest.cpp
 
 win32{
     HEADERS += \

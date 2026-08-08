@@ -309,6 +309,7 @@ SOURCES += \
     HostColorSmoothing.cpp \
     ColorPipeline.cpp \
     SmoothingDriver.cpp \
+    CalibrationPage.cpp \
     ColorButton.cpp \
     ColorWheelWidget.cpp \
     ColorWheelDialog.cpp \
@@ -374,6 +375,7 @@ HEADERS += \
     HostColorSmoothing.hpp \
     ColorPipeline.hpp \
     SmoothingDriver.hpp \
+    CalibrationPage.hpp \
     LedDeviceVirtual.hpp \
     ColorButton.hpp \
     ColorWheelWidget.hpp \

@@ -308,7 +308,8 @@ void LightpackApplication::setDeviceLockViaAPI(const DeviceLocked::DeviceLockSta
 void LightpackApplication::startBacklight()
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << "m_backlightStatus =" << m_backlightStatus
-					<< "m_deviceLockStatus =" << m_deviceLockStatus;
+					<< "m_deviceLockStatus =" << m_deviceLockStatus
+					<< "calibration =" << m_calibrationSessionActive;
 
 	bool isBacklightEnabled = (m_backlightStatus == Backlight::StatusOn || m_backlightStatus == Backlight::StatusDeviceError);
 	bool isCanStart = (isBacklightEnabled && m_deviceLockStatus == DeviceLocked::Unlocked);
@@ -317,6 +318,15 @@ void LightpackApplication::startBacklight()
 
 	Settings::setIsBacklightEnabled(isBacklightEnabled);
 
+	// Phase 3: calibration owns the LED stream (Mood Lamp path via SettingsWindow::updateLedsColors).
+	if (m_calibrationSessionActive) {
+		m_grabManager->start(false);
+		m_moodlampManager->start(false);
+#ifdef SOUNDVIZ_SUPPORT
+		if (m_soundManager)
+			m_soundManager->start(false);
+#endif
+	} else {
 	const Lightpack::Mode lightpackMode = Settings::getLightpackMode();
 	switch (lightpackMode)
 	{
@@ -351,6 +361,7 @@ void LightpackApplication::startBacklight()
 		qWarning() << Q_FUNC_INFO << "lightpackMode unsupported value =" << lightpackMode;
 		break;
 	}
+	} // !calibration
 
 	if (m_backlightStatus == Backlight::StatusOff)
 		QMetaObject::invokeMethod(m_ledDeviceManager, "switchOffLeds", Qt::QueuedConnection);
@@ -371,6 +382,13 @@ void LightpackApplication::startBacklight()
 		qWarning() << Q_FUNC_INFO << "status contains crap =" << m_backlightStatus;
 		break;
 	}
+}
+
+void LightpackApplication::setCalibrationSessionActive(bool active)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << active;
+	m_calibrationSessionActive = active;
+	startBacklight();
 }
 void LightpackApplication::onFocusChanged(QWidget *old, QWidget *now)
 {
@@ -699,6 +717,16 @@ void LightpackApplication::startLedDeviceManager()
 //	connect(settings(), &Settings::adalightSerialPortNameChanged,				m_ledDeviceManager, &LedDeviceManager::recreateLedDevice, Qt::DirectConnection);
 //	connect(settings(), &Settings::adalightSerialPortBaudRateChanged,			m_ledDeviceManager, &LedDeviceManager::recreateLedDevice, Qt::DirectConnection);
 //	connect(m_settingsWindow, &SettingsWindow::updateLedsColors,			m_ledDeviceManager, &LedDeviceManager::setColors, Qt::QueuedConnection);
+	{
+		using SetColorsQRgb = void (LedDeviceManager::*)(const QList<QRgb> &);
+		// Phase 3 calibration patterns (and any other SettingsWindow emitters) → device.
+		if (!m_noGui && m_settingsWindow) {
+			connect(m_settingsWindow, &SettingsWindow::updateLedsColors, m_ledDeviceManager,
+				static_cast<SetColorsQRgb>(&LedDeviceManager::setColors), Qt::QueuedConnection);
+			connect(m_settingsWindow, &SettingsWindow::calibrationSessionActive,
+				this, &LightpackApplication::setCalibrationSessionActive);
+		}
+	}
 	m_pluginInterface = new LightpackPluginInterface(NULL);
 
 	connect(m_pluginInterface, &LightpackPluginInterface::updateDeviceLockStatus, this, &LightpackApplication::setDeviceLockViaAPI);
@@ -958,7 +986,14 @@ void LightpackApplication::settingsChanged()
 		m_soundManager->setSendDataOnlyIfColorsChanged(Settings::isSendDataOnlyIfColorsChanges());
 #endif
 
-	switch (Settings::getLightpackMode())
+	if (m_calibrationSessionActive) {
+		m_grabManager->start(false);
+		m_moodlampManager->start(false);
+#ifdef SOUNDVIZ_SUPPORT
+		if (m_soundManager)
+			m_soundManager->start(false);
+#endif
+	} else switch (Settings::getLightpackMode())
 	{
 	case Lightpack::AmbilightMode:
 		m_grabManager->start(isCanStart);

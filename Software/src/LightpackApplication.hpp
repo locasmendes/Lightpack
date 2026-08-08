@@ -96,6 +96,7 @@ private:
 	void initGrabManager();
 	void startPluginManager();
 	void startBacklight();
+	void setCalibrationSessionActive(bool active);
 
 	void runWizardLoop(bool isInitFromSettings);
 
@@ -140,4 +141,5 @@ private:
 	bool m_isLightsWereOnBeforeLock = false;
 	bool m_isLightsWereOnBeforeDisplaySleep = false;
 	bool m_isLightsWereOnBeforeSuspend = false;
+	bool m_calibrationSessionActive = false;
 };

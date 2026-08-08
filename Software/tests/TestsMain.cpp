@@ -1,3 +1,7 @@
+/*
+ * TestsMain.cpp
+ */
+
 #include <QtTest>
 #include "ColorF.h"
 #include "LightpackApiTest.hpp"
@@ -19,6 +23,7 @@
 #include "ColorOpsTest.hpp"
 #include "ColorPipelineGoldenTest.hpp"
 #include "SettingsMigrationTest.hpp"
+#include "CalibrationTest.hpp"
 #include "debug.h"
 
 #include <iostream>
@@ -53,6 +58,7 @@ int main(int argc, char *argv[])
 	tests.append(new MoodLampManagerTest());
 	tests.append(new BulkResizeTest());
 	tests.append(new LedGroupRuntimeTest());
+	tests.append(new CalibrationTest());
 	// HooksTest is toolset-sensitive and known flaky on VS 2026; skip in Phase 2 CI local runs.
 	Q_UNUSED(argc); Q_UNUSED(argv);
 
