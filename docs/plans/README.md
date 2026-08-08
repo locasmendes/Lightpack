@@ -10,6 +10,7 @@ Planos acionáveis, cada um transformando um achado já documentado em `docs/*.m
 | [presets-aspect-ratio.md](./presets-aspect-ratio.md) | Presets de AR (`Fill`/`16:9`/`4:3`) sobre o mesmo layout físico de LEDs, sem duplicar perfil inteiro (item Q1) | [`pesquisa-zonas-led-content-aware.md`](../pesquisa-zonas-led-content-aware.md) §5.1 | 39 | ✅ | Implementado (`master`) |
 | [suporte-protocolo-ddp.md](./suporte-protocolo-ddp.md) | Novo `LedDeviceDdp`, seguindo o padrão de WARLS/DRGB/DNRGB | [`firmware-hardware-datados.md`](../firmware-hardware-datados.md) §3.3 | 22 | ✅ | Implementado (`master`) |
 | [grupos-e-resize-global-leds.md](./grupos-e-resize-global-leds.md) | Resize em lote de todas as caixinhas + grupos nomeados de LEDs (`top`/`bottom`/custom) com overrides próprios, sem arrastar caixa por caixa | [`redesign-ui-prismatik.md`](../redesign-ui-prismatik.md) §4.2/§6 | 20 | — | Não implementado |
+| Plano 5.17 (externo: `~/.claude/plans/adicione-um-modo-de-silly-hippo.md`) | Multi-tela, pipeline float + `OutputGamma`, calibração, live colors, UI revisada (QSS/`QPalette`), doc de efeitos | [`pipeline-captura-processamento-leds.md`](../pipeline-captura-processamento-leds.md), [`captacao-cor-ainda-moderna.md`](../captacao-cor-ainda-moderna.md), [`efeitos-dinamicos-propostos.md`](../efeitos-dinamicos-propostos.md); redesign: [`redesign-ui-prismatik.md`](../redesign-ui-prismatik.md) superseded; pendências: [`5.17.0.0-pendencias.md`](./5.17.0.0-pendencias.md) | Fases 1–6 | ✅ | Release **5.17.0.0** (integrate→master); ver pendências|
 
 ## Como usar
 

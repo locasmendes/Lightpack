@@ -56,7 +56,7 @@ public:
 public slots:
 	virtual void open();
 	virtual void close();
-	virtual void setColors(const QList<QRgb> & colors);
+	void setColors(const QList<LinearRgbF> & colors) override;
 	virtual void switchOffLeds();
 	virtual void setUsbPowerLedDisabled(bool isDisabled);
 	virtual void setRefreshDelay(int value);

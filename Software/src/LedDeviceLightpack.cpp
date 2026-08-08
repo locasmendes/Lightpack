@@ -63,13 +63,9 @@ LedDeviceLightpack::~LedDeviceLightpack()
 	closeDevices();
 }
 
-void LedDeviceLightpack::setColors(const QList<QRgb> & colors)
+void LedDeviceLightpack::setColors(const QList<LinearRgbF> & colors)
 {
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-	DEBUG_MID_LEVEL << Q_FUNC_INFO << Qt::hex << (colors.isEmpty() ? -1 : colors.first());
-#else
-	DEBUG_MID_LEVEL << Q_FUNC_INFO << hex << (colors.isEmpty() ? -1 : colors.first());
-#endif
+	DEBUG_MID_LEVEL << Q_FUNC_INFO << (colors.isEmpty() ? -1 : colors.size());
 
 #if 0
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << "thread id: " << this->thread()->currentThreadId();
@@ -93,7 +89,10 @@ void LedDeviceLightpack::setColors(const QList<QRgb> & colors)
 	m_colorsSaved = colors;
 
 	applyColorModifications(colors, m_colorsBuffer);
-	applyDithering(m_colorsBuffer, 12);
+	// Phase 2: keep Lightpack on plain 12-bit quantize (no dither). With float input,
+	// dither would become effective for the first time; enable in a follow-up after HW QA.
+	Q_UNUSED(m_isDitheringEnabled);
+	emitColorsUpdatedIfEnabled(m_colorsBuffer, 12);
 
 	// First write_buffer[0] == 0x00 - ReportID, i have problems with using it
 	// Second byte of usb buffer is command (write_buffer[1] == CMD_UPDATE_LEDS, see below)
@@ -151,10 +150,10 @@ void LedDeviceLightpack::switchOffLeds()
 	if (m_colorsSaved.empty())
 	{
 		for (int i = 0; i < maxLedsCount(); ++i)
-			m_colorsSaved << 0;
+			m_colorsSaved << LinearRgbF{};
 	} else {
 		for (int i = 0; i < m_colorsSaved.count(); i++)
-			m_colorsSaved[i] = 0;
+			m_colorsSaved[i] = LinearRgbF{};
 	}
 
 	m_timerPingDevice->stop();
@@ -163,6 +162,7 @@ void LedDeviceLightpack::switchOffLeds()
 
 	bool ok = writeBufferToAllDevicesWithCheck(CMD_UPDATE_LEDS);
 
+	emitBlackColorsUpdatedIfEnabled(m_colorsSaved.count());
 	emit commandCompleted(ok);
 	// Stop ping device if switchOffLeds() signal comes
 }

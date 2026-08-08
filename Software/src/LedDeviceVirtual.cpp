@@ -38,24 +38,17 @@ LedDeviceVirtual::LedDeviceVirtual(QObject * parent) : AbstractLedDevice(parent)
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
 }
 
-void LedDeviceVirtual::setColors(const QList<QRgb> & colors)
+void LedDeviceVirtual::setColors(const QList<LinearRgbF> & colors)
 {
 	if (!colors.isEmpty())
 	{
 		m_colorsSaved = colors;
 
-		QList<QRgb> callbackColors;
-		callbackColors.reserve(colors.size());
-
 		resizeColorsBuffer(colors.count());
 
 		applyColorModifications(colors, m_colorsBuffer);
+		// applyDithering emits colorsUpdated when color feedback is enabled (Phase 4).
 		applyDithering(m_colorsBuffer, 8);
-
-		for (const StructRgb& color : m_colorsBuffer)
-			callbackColors.append(qRgb(color.r, color.g, color.b));
-
-		emit colorsUpdated(callbackColors);
 	}
 	emit commandCompleted(true);
 }
@@ -67,13 +60,9 @@ int LedDeviceVirtual::maxLedsCount()
 
 void LedDeviceVirtual::switchOffLeds()
 {
-	int count = m_colorsSaved.count();
-	m_colorsSaved.clear();
-
-	for (int i = 0; i < count; i++) {
-		m_colorsSaved << 0;
-	}
-	emit colorsUpdated(m_colorsSaved);
+	const int count = m_colorsSaved.count();
+	m_colorsSaved = QList<LinearRgbF>(count);
+	emitBlackColorsUpdatedIfEnabled(count);
 	emit commandCompleted(true);
 }
 

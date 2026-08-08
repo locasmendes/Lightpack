@@ -73,6 +73,8 @@ static const QString IsKeepLightsOnAfterExit = QStringLiteral("IsKeepLightsOnAft
 static const QString IsKeepLightsOnAfterLock = QStringLiteral("IsKeepLightsOnAfterLock");
 static const QString IsKeepLightsOnAfterSuspend = QStringLiteral("IsKeepLightsOnAfterSuspend");
 static const QString IsKeepLightsOnAfterScreenOff = QStringLiteral("IsKeepLightsOnAfterScreenOff");
+// Phase 1: keep lights on when the monitor that holds LED zones is disconnected.
+static const QString IsKeepLightsOnAfterScreenDisconnect = QStringLiteral("IsKeepLightsOnAfterScreenDisconnect");
 static const QString IsPingDeviceEverySecond = QStringLiteral("IsPingDeviceEverySecond");
 static const QString IsUpdateFirmwareMessageShown = QStringLiteral("IsUpdateFirmwareMessageShown");
 static const QString ConnectedDevice = QStringLiteral("ConnectedDevice");
@@ -197,6 +199,7 @@ namespace Key
 // [General]
 static const QString LightpackMode = QStringLiteral("LightpackMode");
 static const QString IsBacklightEnabled = QStringLiteral("IsBacklightEnabled");
+static const QString ProfileVersion = QStringLiteral("General/ProfileVersion");
 // [Grab]
 namespace Grab
 {
@@ -207,6 +210,8 @@ static const QString Slowdown = QStringLiteral("Grab/Slowdown");
 static const QString HostSmoothingDuration = QStringLiteral("Grab/HostSmoothingDuration");
 static const QString ContentAspectPreset = QStringLiteral("Grab/ContentAspectPreset");
 static const QString LayoutRecipe = QStringLiteral("Grab/LayoutRecipe");
+// Phase 1: stable identity of the screen that owns LED zones (name|manufacturer|serial).
+static const QString ZoneScreenIdentity = QStringLiteral("Grab/ZoneScreenIdentity");
 static const QString LedGroups = QStringLiteral("Grab/LedGroups");
 static const QString LuminosityThreshold = QStringLiteral("Grab/LuminosityThreshold");
 static const QString OverBrighten = QStringLiteral("Grab/OverBrighten");
@@ -256,6 +261,7 @@ static const QString Brightness = QStringLiteral("Device/Brightness");
 static const QString BrightnessCap = QStringLiteral("Device/BrightnessCap");
 static const QString ColorDepth = QStringLiteral("Device/ColorDepth");
 static const QString Gamma = QStringLiteral("Device/Gamma");
+static const QString OutputGamma = QStringLiteral("Device/OutputGamma");
 static const QString IsDitheringEnabled = QStringLiteral("Device/IsDitheringEnabled");
 }
 // [LED_i]
@@ -350,6 +356,8 @@ bool Settings::Initialize( const QString & applicationDirPath, bool isDebugLevel
 	setNewOptionMain(Main::Key::IsKeepLightsOnAfterLock, Main::IsKeepLightsOnAfterLock);
 	setNewOptionMain(Main::Key::IsKeepLightsOnAfterSuspend, Main::IsKeepLightsOnAfterSuspend);
 	setNewOptionMain(Main::Key::IsKeepLightsOnAfterScreenOff, Main::IsKeepLightsOnAfterScreenOff);
+	// Phase 1
+	setNewOptionMain(Main::Key::IsKeepLightsOnAfterScreenDisconnect, Main::IsKeepLightsOnAfterScreenDisconnect);
 	setNewOptionMain(Main::Key::IsPingDeviceEverySecond,Main::IsPingDeviceEverySecond);
 	setNewOptionMain(Main::Key::IsUpdateFirmwareMessageShown, Main::IsUpdateFirmwareMessageShown);
 	setNewOptionMain(Main::Key::ConnectedDevice,		Main::ConnectedDeviceDefault);
@@ -789,6 +797,19 @@ void Settings::setKeepLightsOnAfterScreenOff(bool isEnabled)
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
 	setValueMain(Main::Key::IsKeepLightsOnAfterScreenOff, isEnabled);
 	emit m_this->keepLightsOnAfterScreenOffChanged(isEnabled);
+}
+
+// Phase 1
+bool Settings::isKeepLightsOnAfterScreenDisconnect()
+{
+	return valueMain(Main::Key::IsKeepLightsOnAfterScreenDisconnect).toBool();
+}
+
+void Settings::setKeepLightsOnAfterScreenDisconnect(bool isEnabled)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
+	setValueMain(Main::Key::IsKeepLightsOnAfterScreenDisconnect, isEnabled);
+	emit m_this->keepLightsOnAfterScreenDisconnectChanged(isEnabled);
 }
 
 bool Settings::isPingDeviceEverySecond()
@@ -1437,6 +1458,18 @@ void Settings::setLayoutRecipe(const QJsonArray& recipe)
 	emit m_this->layoutRecipeChanged();
 }
 
+// Phase 1
+QString Settings::getZoneScreenIdentity()
+{
+	return value(Profile::Key::Grab::ZoneScreenIdentity).toString();
+}
+
+void Settings::setZoneScreenIdentity(const QString& identity)
+{
+	DEBUG_MID_LEVEL << Q_FUNC_INFO << identity;
+	setValue(Profile::Key::Grab::ZoneScreenIdentity, identity);
+}
+
 QJsonObject LedGroup::toJson() const
 {
 	QJsonObject json;
@@ -1815,6 +1848,18 @@ void Settings::setDeviceGamma(double gamma)
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
 	setValue(Profile::Key::Device::Gamma, getValidDeviceGamma(gamma));
 	emit m_this->deviceGammaChanged(gamma);
+}
+
+double Settings::getDeviceOutputGamma()
+{
+	return getValidDeviceOutputGamma(value(Profile::Key::Device::OutputGamma).toDouble());
+}
+
+void Settings::setDeviceOutputGamma(double gamma)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
+	setValue(Profile::Key::Device::OutputGamma, getValidDeviceOutputGamma(gamma));
+	emit m_this->deviceOutputGammaChanged(gamma);
 }
 
 bool Settings::isDeviceDitheringEnabled()
@@ -2418,6 +2463,15 @@ double Settings::getValidDeviceGamma(double value)
 	return value;
 }
 
+double Settings::getValidDeviceOutputGamma(double value)
+{
+	if (value < Profile::Device::OutputGammaMin)
+		value = Profile::Device::OutputGammaMin;
+	else if (value > Profile::Device::OutputGammaMax)
+		value = Profile::Device::OutputGammaMax;
+	return value;
+}
+
 int Settings::getValidGrabSlowdown(int value)
 {
 	if (value < Profile::Grab::SlowdownMin)
@@ -2642,6 +2696,8 @@ void Settings::initCurrentProfile(bool isResetDefault)
 	setNewOption(Profile::Key::Grab::HostSmoothingDuration,			Profile::Grab::HostSmoothingDurationDefault, isResetDefault);
 	setNewOption(Profile::Key::Grab::ContentAspectPreset,			Profile::Grab::ContentAspectPresetDefault, isResetDefault);
 	setNewOption(Profile::Key::Grab::LayoutRecipe,					Profile::Grab::LayoutRecipeDefault, isResetDefault);
+	// Phase 1
+	setNewOption(Profile::Key::Grab::ZoneScreenIdentity,			Profile::Grab::ZoneScreenIdentityDefault, isResetDefault);
 	setNewOption(Profile::Key::Grab::LuminosityThreshold,			Profile::Grab::LuminosityThresholdDefault, isResetDefault);
 	setNewOption(Profile::Key::Grab::IsMinimumLuminosityEnabled,	Profile::Grab::IsMinimumLuminosityEnabledDefault, isResetDefault);
 	setNewOption(Profile::Key::Grab::IsDx1011GrabberEnabled,		Profile::Grab::IsDx1011GrabberEnabledDefault, isResetDefault);
@@ -2671,6 +2727,7 @@ void Settings::initCurrentProfile(bool isResetDefault)
 	setNewOption(Profile::Key::Device::BrightnessCap,				Profile::Device::BrightnessCapDefault, isResetDefault);
 	setNewOption(Profile::Key::Device::Smooth,						Profile::Device::SmoothDefault, isResetDefault);
 	setNewOption(Profile::Key::Device::Gamma,						Profile::Device::GammaDefault, isResetDefault);
+	setNewOption(Profile::Key::Device::OutputGamma,					Profile::Device::OutputGammaDefault, isResetDefault);
 	setNewOption(Profile::Key::Device::ColorDepth,					Profile::Device::ColorDepthDefault, isResetDefault);
 	setNewOption(Profile::Key::Device::IsDitheringEnabled,			Profile::Device::IsDitheringEnabledDefault, isResetDefault);
 
@@ -2701,6 +2758,9 @@ void Settings::initCurrentProfile(bool isResetDefault)
 	QMutexLocker locker(&m_mutex);
 	m_currentProfile->sync();
 	locker.unlock();
+
+	migrateCurrentProfile();
+
 	emit m_this->currentProfileInited(getCurrentProfileName());
 }
 
@@ -2907,4 +2967,34 @@ void Settings::migrateSettings()
 		setValueMain(Main::Key::MainConfigVersion, QStringLiteral("4.0"));
 	}
 }
+
+void Settings::migrateCurrentProfile()
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
+
+	if (m_currentProfile == NULL)
+		return;
+
+	const QString ver = value(Profile::Key::ProfileVersion).toString();
+	if (ver == Profile::ProfileVersionCurrent)
+		return;
+
+	// ProfileVersion absent or older than "2":
+	// OutputGamma = clamp(2.2 * effGrab / gDevice, 0.2, 10.0)
+	// where effGrab = tempOn ? Grab/Gamma : 1.0 (Grab gamma only applied inside applyColorTemperature).
+	const double gGrab = value(Profile::Key::Grab::Gamma).toDouble();
+	const double gDevice = value(Profile::Key::Device::Gamma).toDouble();
+	const bool tempOn = value(Profile::Key::Grab::IsApplyColorTemperatureEnabled).toBool();
+	const double effGrab = tempOn ? gGrab : 1.0;
+	const double safeDevice = (gDevice == 0.0) ? Profile::Device::GammaDefault : gDevice;
+	const double outputGamma = getValidDeviceOutputGamma(2.2 * effGrab / safeDevice);
+
+	setValue(Profile::Key::Device::OutputGamma, outputGamma);
+	setValue(Profile::Key::ProfileVersion, Profile::ProfileVersionCurrent);
+	// Grab/Gamma and Device/Gamma remain on disk for downgrade compatibility.
+
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << "migrated OutputGamma to" << outputGamma
+		<< "tempOn=" << tempOn << "gGrab=" << gGrab << "gDevice=" << gDevice;
+}
+
 } /*SettingsScope*/

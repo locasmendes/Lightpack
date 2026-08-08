@@ -30,6 +30,8 @@
 #include "colorspace_types.h"
 #include "types.h"
 #include "SettingsDefaults.hpp"
+#include "ColorF.h"
+#include "ColorOps.hpp"
 /*!
 	Abstract class representing any LED device.
 	\a LedDeviceManager
@@ -61,7 +63,9 @@ signals:
 public slots:
 	virtual void open() = 0;
 	virtual void close() = 0;
-	virtual void setColors(const QList<QRgb> & colors) = 0;
+	virtual void setColors(const QList<LinearRgbF> & colors) = 0;
+	/*! Compatibility overload for API / plugins / wizard (decodes then forwards). */
+	void setColors(const QList<QRgb> & colors);
 	virtual void switchOffLeds() = 0;
 
 	/*!
@@ -95,13 +99,24 @@ public slots:
 
 	virtual void setUsbPowerLedDisabled(bool isDisabled);
 
+	/*! Phase 4: emit colorsUpdated only while a UI watcher is active (Live colors / Stage / calibration). */
+	void setColorFeedbackEnabled(bool enabled);
+	bool isColorFeedbackEnabled() const { return m_colorFeedbackEnabled; }
+
 protected:
 	virtual void applyColorModifications(const QList<QRgb> & inColors, QList<StructRgb> & outColors, const bool rawColors = false);
+	/*! Float-transport entry (step 7); same D1–D5 path without sRGB decode. */
+	void applyColorModifications(const QList<LinearRgbF> & inColors, QList<StructRgb> & outColors);
 	virtual void applyDithering(QList<StructRgb>& colors, int colorDepth);
+	ColorOps::DeviceStageParams deviceStageParams() const;
+	/*! Convert post-pipeline StructRgb (N-bit) to display QRgb and emit if feedback is enabled. */
+	void emitColorsUpdatedIfEnabled(const QList<StructRgb> & colors, int colorDepth);
+	void emitBlackColorsUpdatedIfEnabled(int count);
 
 protected:
 	QString m_colorSequence;
-	double m_gamma{ SettingsScope::Profile::Device::GammaDefault };
+	/*! Holds Device/OutputGamma (unified render transform γ_out). */
+	double m_gamma{ SettingsScope::Profile::Device::OutputGammaDefault };
 	int m_brightness{ SettingsScope::Profile::Device::BrightnessDefault };
 	int m_brightnessCap{ SettingsScope::Profile::Device::BrightnessCapDefault };
 	int m_ledMilliAmps{ SettingsScope::Main::Device::LedMilliAmpsDefault };
@@ -112,6 +127,7 @@ protected:
 
 	QList<WBAdjustment> m_wbAdjustments;
 
-	QList<QRgb> m_colorsSaved;
+	QList<LinearRgbF> m_colorsSaved;
 	QList<StructRgb> m_colorsBuffer;
+	bool m_colorFeedbackEnabled{ false };
 };

@@ -80,10 +80,13 @@ private slots:
 //	void numberOfLedsChanged(int);
 	void showLedWidgets(bool visible);
 	void setColoredLedWidget(bool colored);
+	void setLiveColorsLedWidget(bool live);
 //	void handleConnectedDeviceChange(const SupportedDevices::DeviceType);
 	void onFocusChanged(QWidget *, QWidget *);
 	void quitFromWizard(int result);
 	void onSessionChange(SystemSession::Status change);
+	// Phase 1: GrabManager::changeScreen — zone screen lost/restored
+	void onGrabScreensChanged();
 
 private:
 	void processCommandLineArguments();
@@ -95,6 +98,7 @@ private:
 	void initGrabManager();
 	void startPluginManager();
 	void startBacklight();
+	void setCalibrationSessionActive(bool active);
 
 	void runWizardLoop(bool isInitFromSettings);
 
@@ -139,4 +143,8 @@ private:
 	bool m_isLightsWereOnBeforeLock = false;
 	bool m_isLightsWereOnBeforeDisplaySleep = false;
 	bool m_isLightsWereOnBeforeSuspend = false;
+	// Phase 1: mirror display-sleep accounting for zone-screen disconnect
+	bool m_isScreenDisconnected = false;
+	bool m_isLightsWereOnBeforeScreenDisconnect = false;
+	bool m_calibrationSessionActive = false;
 };

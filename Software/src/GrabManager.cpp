@@ -29,6 +29,8 @@
 
 #include "debug.h"
 #include "PrismatikMath.hpp"
+#include "ColorOps.hpp"
+#include "ColorPipeline.hpp"
 #include "Settings.hpp"
 #include "GrabWidget.hpp"
 #include "GrabberContext.hpp"
@@ -40,6 +42,7 @@
 #include "MacOSAVGrabber.h"
 #include "D3D10Grabber.hpp"
 #include "GrabManager.hpp"
+#include "ScreenTopology.hpp"
 #include "BlueLightReduction.hpp"
 #ifdef Q_OS_WIN
 #include "WinUtils.hpp"
@@ -48,9 +51,19 @@
 using namespace SettingsScope;
 
 using namespace std::chrono_literals;
+
+namespace {
+
+EncodedRgbF encodedFromLinear(const LinearRgbF &L)
+{
+	return ColorOps::srgbEncode(L);
+}
+
+} // namespace
 constexpr const std::chrono::milliseconds FPS_UPDATE_INTERVAL = 500ms;
 constexpr const std::chrono::milliseconds FAKE_GRAB_INTERVAL = 900ms;
-constexpr const std::chrono::milliseconds HOST_SMOOTHING_INTERVAL = 16ms; // ~62.5 Hz
+/*! Phase 1.2: coalesce geometryChanged/screenAdded/Removed bursts before restoring zones. */
+constexpr const std::chrono::milliseconds RESTORE_LED_POSITIONS_DEBOUNCE = 300ms;
 
 #ifdef D3D10_GRAB_SUPPORT
 
@@ -95,31 +108,31 @@ GrabManager::GrabManager(QWidget *parent) : QObject(parent)
 	m_timerFakeGrab->setSingleShot(false);
 	m_timerFakeGrab->setInterval(FAKE_GRAB_INTERVAL);
 
-	m_timerHostSmoothing = new QTimer(this);
-	m_timerHostSmoothing->setTimerType(Qt::PreciseTimer);
-	connect(m_timerHostSmoothing, &QTimer::timeout, this, &GrabManager::advanceHostTransition);
-	m_timerHostSmoothing->setSingleShot(false);
-	m_timerHostSmoothing->setInterval(HOST_SMOOTHING_INTERVAL);
-	m_hostSmoothingClock.start();
+	m_smoothingDriver = new SmoothingDriver(this);
+	connect(m_smoothingDriver, &SmoothingDriver::colorsUpdated,
+		this, &GrabManager::updateLedsColors);
+	m_smoothingDriver->setDurationMs(Settings::getGrabHostSmoothingDuration());
+	m_smoothingDriver->setSendAlways(!m_isSendDataOnlyIfColorsChanged);
+	syncHostSmoothingEnabled();
+
+	m_timerRestoreLedPositions = new QTimer(this);
+	m_timerRestoreLedPositions->setSingleShot(true);
+	m_timerRestoreLedPositions->setInterval(RESTORE_LED_POSITIONS_DEBOUNCE);
+	connect(m_timerRestoreLedPositions, &QTimer::timeout, this, &GrabManager::restoreLedPositionsFromSettings);
 
 	m_isPauseGrabWhileResizeOrMoving = false;
 	m_isGrabWidgetsVisible = false;
+	m_isLiveColorsEnabled = false;
 	m_isGrabbingStarted = false;
 
 	initColorLists(MaximumNumberOfLeds::Default);
 	initLedWidgets(MaximumNumberOfLeds::Default);
 
-	int idx = 0;
-	for (const QScreen* screen : QGuiApplication::screens()) {
-		connect(screen, &QScreen::geometryChanged,
-			[=](const QRect& geometry) { this->scaleLedWidgets(idx, geometry); }
-		);
-		++idx;
-	}
-
 	connect(qGuiApp, &QGuiApplication::screenAdded, this, &GrabManager::onScreenCountChanged);
 	connect(qGuiApp, &QGuiApplication::screenRemoved, this, &GrabManager::onScreenCountChanged);
+	connect(qGuiApp, &QGuiApplication::primaryScreenChanged, this, &GrabManager::onPrimaryScreenChanged);
 
+	syncScreenConnections();
 	updateScreenGeometry();
 
 	settingsProfileChanged(Settings::getCurrentProfileName());
@@ -135,7 +148,7 @@ GrabManager::~GrabManager()
 	m_grabber = NULL;
 	delete m_timerFakeGrab;
 	delete m_timerUpdateFPS;
-	delete m_timerHostSmoothing;
+	delete m_timerRestoreLedPositions;
 
 	if (m_blueLightClient)
 		delete m_blueLightClient;
@@ -356,16 +369,11 @@ void GrabManager::onGrabColorTemperatureChanged(int value)
 	m_colorTemperature = value;
 }
 
-void GrabManager::onGrabGammaChanged(double gamma)
-{
-	DEBUG_LOW_LEVEL << Q_FUNC_INFO << gamma;
-	m_gamma = gamma;
-}
-
 void GrabManager::onSendDataOnlyIfColorsEnabledChanged(bool state)
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << state;
 	m_isSendDataOnlyIfColorsChanged = state;
+	m_smoothingDriver->setSendAlways(!state);
 }
 
 #ifdef D3D10_GRAB_SUPPORT
@@ -420,10 +428,12 @@ void GrabManager::settingsProfileChanged(const QString &profileName)
 	m_isApplyBlueLightReduction = Settings::isGrabApplyBlueLightReductionEnabled();
 	m_isApplyColorTemperature = Settings::isGrabApplyColorTemperatureEnabled();
 	m_colorTemperature = Settings::getGrabColorTemperature();
-	m_gamma = Settings::getGrabGamma();
-	m_hostSmoothing.setDurationMs(Settings::getGrabHostSmoothingDuration());
+	m_smoothingDriver->setDurationMs(Settings::getGrabHostSmoothingDuration());
+	m_smoothingDriver->setSendAlways(!m_isSendDataOnlyIfColorsChanged);
+	syncHostSmoothingEnabled();
 
 	setNumberOfLeds(Settings::getNumberOfLeds(Settings::getConnectedDevice()));
+	persistZoneScreenIdentity();
 }
 
 void GrabManager::setVisibleLedWidgets(bool state)
@@ -450,6 +460,7 @@ void GrabManager::setColoredLedWidgets(bool state)
 	// This slot is directly connected to radioButton toggled(bool) signal
 	if (state)
 	{
+		m_isLiveColorsEnabled = false;
 		for (int i = 0; i < m_ledWidgets.size(); i++)
 			m_ledWidgets[i]->fillBackgroundColored();
 	}
@@ -462,9 +473,26 @@ void GrabManager::setWhiteLedWidgets(bool state)
 	// This slot is directly connected to radioButton toggled(bool) signal
 	if (state)
 	{
+		m_isLiveColorsEnabled = false;
 		for (int i = 0; i < m_ledWidgets.size(); i++)
 			m_ledWidgets[i]->fillBackgroundWhite();
 	}
+}
+
+void GrabManager::setLiveColorsLedWidgets(bool state)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << state;
+	m_isLiveColorsEnabled = state;
+}
+
+void GrabManager::updateLiveLedColors(const QList<QRgb> & colors)
+{
+	if (!m_isLiveColorsEnabled)
+		return;
+
+	const int n = qMin(colors.size(), m_ledWidgets.size());
+	for (int i = 0; i < n; ++i)
+		m_ledWidgets[i]->fillBackgroundLive(QColor(colors[i]));
 }
 
 void GrabManager::handleGrabbedColors()
@@ -484,100 +512,78 @@ void GrabManager::handleGrabbedColors()
 		return;
 	}
 
-	// Work on a copy
 	m_colorsProcessing = m_colorsNew;
 
+	ColorPipeline::ContentParams params;
+	params.avgColorsOnAllLeds = m_avgColorsOnAllLeds;
+	params.saturation = m_saturation;
+	params.contrast = m_contrast;
+	params.vibrance = m_vibrance;
+	params.contrastPivot = m_contrastPivot;
+	params.vibranceProtection = m_vibranceProtection;
+	params.bloomEnabled = m_bloomEnabled;
+	params.bloomIntensity = m_bloomIntensity;
+	params.bloomThreshold = m_bloomThreshold;
+	params.overBrighten = m_overBrighten;
+
+	params.areaEnabled.reserve(m_ledWidgets.size());
+	for (GrabWidget *w : m_ledWidgets)
+		params.areaEnabled.append(w->isAreaEnabled());
+
+	if (m_isApplyColorTemperature) {
+		params.applyColorTemperature = true;
+		params.colorTemperatureK = static_cast<quint16>(m_colorTemperature);
+	} else if (m_isApplyBlueLightReduction && m_blueLightClient) {
+		const quint16 kelvin = m_blueLightClient->colorTemperatureKelvin();
+		if (kelvin > 0) {
+			params.applyBlueLightReduction = true;
+			params.blueLightKelvin = kelvin;
+		} else {
+			// GammaRamp (or other LUT) path: apply on encoded bytes before decode.
+			m_blueLightClient->apply(m_colorsProcessing);
+		}
+	}
+
+	const QList<LinearRgbF> linearOut = ColorPipeline::processContent(m_colorsProcessing, params);
+
 	bool isColorsChanged = false;
+	if (m_changeLatch.size() != linearOut.size())
+		m_changeLatch = QList<bool>(linearOut.size(), false);
 
-	int avgR = 0, avgG = 0, avgB = 0;
-	int countGrabEnabled = 0;
-
-	if (m_isApplyColorTemperature)
+	for (int i = 0; i < linearOut.size(); i++)
 	{
-		PrismatikMath::applyColorTemperature(m_colorsProcessing, m_colorTemperature, m_gamma);
-	}
-	else if (m_isApplyBlueLightReduction && m_blueLightClient)
-		m_blueLightClient->apply(m_colorsProcessing, SettingsScope::Profile::Grab::GammaDefault);
+		const EncodedRgbF nextEnc = encodedFromLinear(linearOut[i]);
+		const EncodedRgbF prevEnc = encodedFromLinear(m_colorsCurrent[i]);
+		const float d = std::max({
+			std::fabs(nextEnc.r - prevEnc.r),
+			std::fabs(nextEnc.g - prevEnc.g),
+			std::fabs(nextEnc.b - prevEnc.b)});
 
-	if (m_avgColorsOnAllLeds)
-	{
-		for (int i = 0; i < m_ledWidgets.size(); i++)
-		{
-			if (m_ledWidgets[i]->isAreaEnabled())
-			{
-				avgR += qRed(m_colorsProcessing[i]);
-				avgG += qGreen(m_colorsProcessing[i]);
-				avgB += qBlue(m_colorsProcessing[i]);
-				countGrabEnabled++;
+		if (!m_changeLatch[i]) {
+			if (d >= ColorPipeline::kChangeEnterEncoded) {
+				m_changeLatch[i] = true;
+				m_colorsCurrent[i] = linearOut[i];
+				isColorsChanged = true;
 			}
-		}
-		if (countGrabEnabled != 0)
-		{
-			avgR /= countGrabEnabled;
-			avgG /= countGrabEnabled;
-			avgB /= countGrabEnabled;
-		}
-		// Set one AVG color to all LEDs
-		for (int ledIndex = 0; ledIndex < m_ledWidgets.size(); ledIndex++)
-		{
-			if (m_ledWidgets[ledIndex]->isAreaEnabled())
-			{
-				m_colorsProcessing[ledIndex] = qRgb(avgR, avgG, avgB);
+		} else {
+			if (d >= ColorPipeline::kChangeExitEncoded) {
+				m_colorsCurrent[i] = linearOut[i];
+				isColorsChanged = true;
+			} else {
+				m_changeLatch[i] = false;
 			}
-		}
-	}
-
-	for (int i = 0; i < m_ledWidgets.size(); i++)
-	{
-		QRgb newColor = m_colorsProcessing[i];
-
-		if (m_saturation != 50)
-			newColor = PrismatikMath::adjustSaturation(newColor, m_saturation / 50.0);
-
-		if (m_contrast != 50)
-			newColor = PrismatikMath::adjustContrast(newColor, m_contrast / 50.0, m_contrastPivot);
-
-		if (m_vibrance != 50)
-			newColor = PrismatikMath::adjustVibrance(newColor, m_vibrance / 50.0, m_vibranceProtection / 100.0);
-
-		if (m_bloomEnabled)
-			newColor = PrismatikMath::applyBloom(newColor, m_bloomIntensity, m_bloomThreshold);
-
-		if (m_overBrighten) {
-			int dRed = qRed(newColor);
-			int dGreen = qGreen(newColor);
-			int dBlue = qBlue(newColor);
-			int highest = qMax(dRed, qMax(dGreen, dBlue));
-			double scaleFactor = qMin((100 + 5 * m_overBrighten) / 100.0, 255.0 / highest);
-			newColor = qRgb(dRed * scaleFactor, dGreen * scaleFactor, dBlue * scaleFactor);
-		}
-
-		if (m_colorsCurrent[i] != newColor)
-		{
-			m_colorsCurrent[i] = newColor;
-			isColorsChanged = true;
 		}
 	}
 
 	if (isColorsChanged)
 	{
-		if (isHostSmoothingApplicable())
-		{
-			m_hostSmoothing.retarget(m_colorsCurrent, m_hostSmoothingClock.elapsed());
-			if (!m_timerHostSmoothing->isActive())
-				m_timerHostSmoothing->start();
-		}
-		else
-		{
-			m_hostSmoothing.setDisplayedImmediately(m_colorsCurrent);
-			emit updateLedsColors(m_hostSmoothing.displayedColors());
-		}
+		m_smoothingDriver->onColors(m_colorsCurrent);
 	}
-	else if (m_isSendDataOnlyIfColorsChanged == false && !m_timerHostSmoothing->isActive())
+	else if (m_isSendDataOnlyIfColorsChanged == false && !m_smoothingDriver->isActive())
 	{
 		// Resend path for devices that want a steady stream even without changes; while
 		// a host transition is active, its own ticks are the sole source of frames.
-		emit updateLedsColors(m_hostSmoothing.displayedColors());
+		emit updateLedsColors(m_smoothingDriver->displayedColors());
 	}
 
 	m_grabCountThisInterval++;
@@ -588,33 +594,10 @@ void GrabManager::handleGrabbedColors()
 	}
 }
 
-void GrabManager::advanceHostTransition()
-{
-	const bool changed = m_hostSmoothing.advance(m_hostSmoothingClock.elapsed());
-
-	if (changed || m_isSendDataOnlyIfColorsChanged == false)
-		emit updateLedsColors(m_hostSmoothing.displayedColors());
-
-	if (!m_hostSmoothing.isActive())
-		m_timerHostSmoothing->stop();
-}
-
 void GrabManager::onGrabHostSmoothingDurationChanged(int ms)
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << ms;
-
-	m_hostSmoothing.changeDurationAndRetarget(ms, m_hostSmoothingClock.elapsed());
-
-	if (m_hostSmoothing.isActive())
-	{
-		if (!m_timerHostSmoothing->isActive())
-			m_timerHostSmoothing->start();
-	}
-	else
-	{
-		m_timerHostSmoothing->stop();
-		emit updateLedsColors(m_hostSmoothing.displayedColors());
-	}
+	m_smoothingDriver->setDurationMs(ms);
 }
 
 void GrabManager::onConnectedDeviceChanged(const SupportedDevices::DeviceType device)
@@ -624,28 +607,25 @@ void GrabManager::onConnectedDeviceChanged(const SupportedDevices::DeviceType de
 	// The Lightpack device owns its own firmware smoothing (Device/Smooth); cancel any
 	// in-flight host transition immediately rather than waiting for the next grab tick,
 	// so frames start going straight through as soon as the switch happens. Switching
-	// away from Lightpack needs no extra action: while it was selected, the engine was
-	// always kept in the immediate/bypass state, so there is no partial transition to
-	// inherit.
+	// away from Lightpack needs no extra action beyond re-enabling the driver: while it
+	// was selected, the engine was always kept in the immediate/bypass state.
 	if (device == SupportedDevices::DeviceTypeLightpack)
-	{
-		m_timerHostSmoothing->stop();
-		m_hostSmoothing.setDisplayedImmediately(m_colorsCurrent);
-	}
+		m_smoothingDriver->setDisplayedImmediately(m_colorsCurrent);
+	syncHostSmoothingEnabled();
 }
 
-bool GrabManager::isHostSmoothingApplicable() const
+void GrabManager::syncHostSmoothingEnabled()
 {
-	return m_hostSmoothing.durationMs() > 0
-		&& Settings::getConnectedDevice() != SupportedDevices::DeviceTypeLightpack;
+	m_smoothingDriver->setEnabled(
+		Settings::getConnectedDevice() != SupportedDevices::DeviceTypeLightpack);
 }
 
 void GrabManager::timeoutFakeGrab()
 {
 	if (m_isSendDataOnlyIfColorsChanged == false && m_isGrabbingStarted)
 	{
-		if (!m_timerHostSmoothing->isActive())
-			emit updateLedsColors(m_hostSmoothing.displayedColors());
+		if (!m_smoothingDriver->isActive())
+			emit updateLedsColors(m_smoothingDriver->displayedColors());
 	}
 	else
 	{
@@ -674,91 +654,148 @@ void GrabManager::resumeAfterResizeOrMoving()
 	m_isPauseGrabWhileResizeOrMoving = false;
 }
 
+void GrabManager::syncScreenConnections()
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
+
+	QSet<const QScreen*> alive;
+	const QList<QScreen*> screens = QGuiApplication::screens();
+	for (QScreen* screen : screens) {
+		alive.insert(screen);
+		if (!m_lastScreenGeometry.contains(screen)) {
+			connect(screen, &QScreen::geometryChanged, this,
+				[this, screen](const QRect& geometry) {
+					this->onScreenGeometryChanged(screen, geometry);
+				});
+		}
+		m_lastScreenGeometry.insert(screen, screen->geometry());
+	}
+
+	for (auto it = m_lastScreenGeometry.begin(); it != m_lastScreenGeometry.end(); ) {
+		if (!alive.contains(it.key()))
+			it = m_lastScreenGeometry.erase(it);
+		else
+			++it;
+	}
+}
+
 void GrabManager::updateScreenGeometry()
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
-	m_lastScreenGeometry.clear();
-	QList<QScreen*> screenList = QGuiApplication::screens();
-	foreach(QScreen* screen, screenList) {
-		m_lastScreenGeometry.append(screen->geometry());
-	}
-
+	syncScreenConnections();
 	emit changeScreen();
-	if (m_grabber == NULL)
-	{
-		qCritical() << Q_FUNC_INFO << "m_grabber == NULL";
-		return;
-	}
-
 }
 
 void GrabManager::onScreenCountChanged(QScreen* screen)
 {
 	Q_UNUSED(screen)
-	updateScreenGeometry();
+	syncScreenConnections();
+	scheduleRestoreLedPositions();
+	evaluateZoneScreenAvailability();
+	emit changeScreen();
 }
 
-void GrabManager::scaleLedWidgets(const int screenIndexResized, const QRect& screenGeometry)
+void GrabManager::onPrimaryScreenChanged(QScreen* screen)
 {
-	DEBUG_LOW_LEVEL << Q_FUNC_INFO << "screenIndexResized:" << screenIndexResized;
+	Q_UNUSED(screen)
+	syncScreenConnections();
+	scheduleRestoreLedPositions();
+	emit changeScreen();
+}
 
-	QRect lastScreenGeometry = m_lastScreenGeometry[screenIndexResized];
+void GrabManager::onScreenGeometryChanged(const QScreen* screen, const QRect& geometry)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << screen << geometry;
+	m_lastScreenGeometry.insert(screen, geometry);
+	// Phase 1.2: never translate/scale widgets to chase a new origin — restore from Settings.
+	scheduleRestoreLedPositions();
+}
 
-	DEBUG_LOW_LEVEL << Q_FUNC_INFO << "screen " << screenIndexResized << " is resized to " << screenGeometry;
-	DEBUG_LOW_LEVEL << Q_FUNC_INFO << "was " << lastScreenGeometry;
+void GrabManager::scheduleRestoreLedPositions()
+{
+	if (m_timerRestoreLedPositions)
+		m_timerRestoreLedPositions->start();
+}
 
-	int deltaX = lastScreenGeometry.x() - screenGeometry.x();
-	int deltaY = lastScreenGeometry.y() - screenGeometry.y();
+void GrabManager::restoreLedPositionsFromSettings()
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
+	for (int i = 0; i < m_ledWidgets.size(); i++)
+		m_ledWidgets[i]->settingsProfileChanged();
 
-	double scaleX = (double)screenGeometry.width() / lastScreenGeometry.width();
-	double scaleY = (double)screenGeometry.height() / lastScreenGeometry.height();
+	persistZoneScreenIdentity();
+	evaluateZoneScreenAvailability();
+	emit changeScreen();
+}
 
-	DEBUG_LOW_LEVEL << Q_FUNC_INFO << "deltaX =" << deltaX << "deltaY =" << deltaY;
-	DEBUG_LOW_LEVEL << Q_FUNC_INFO << "scaleX =" << scaleX << "scaleY =" << scaleY;
+QList<QPoint> GrabManager::zoneCenters() const
+{
+	QList<QPoint> centers;
+	centers.reserve(m_ledWidgets.size());
+	for (int i = 0; i < m_ledWidgets.size(); i++)
+		centers.append(m_ledWidgets[i]->geometry().center());
+	return centers;
+}
 
-	if ((deltaX != 0 || deltaY != 0) && (scaleX != 1 || scaleY != 1)) {
-		DEBUG_LOW_LEVEL << Q_FUNC_INFO << "Screen was resized and scaled, trying to restore configured widget positions";
-
-		for (int i = 0; i < m_ledWidgets.size(); i++){
-			m_ledWidgets[i]->settingsProfileChanged();
-		}
-	} else {
-		DEBUG_LOW_LEVEL << Q_FUNC_INFO << "Screen was resized or scaled, temporarily adjusting";
-
-		for (int i = 0; i < m_ledWidgets.size(); i++){
-
-			if (!lastScreenGeometry.contains(m_ledWidgets[i]->geometry().center()))
-				continue;
-
-			int width = PrismatikMath::round(scaleX * m_ledWidgets[i]->width());
-			int height = PrismatikMath::round(scaleY * m_ledWidgets[i]->height());
-
-			int x = m_ledWidgets[i]->x();
-			int y = m_ledWidgets[i]->y();
-
-			x -= screenGeometry.x();
-			y -= screenGeometry.y();
-
-			x = PrismatikMath::round(scaleX * x);
-			y = PrismatikMath::round(scaleY * y);
-
-			x += screenGeometry.x();
-			y += screenGeometry.y();
-
-			x -= deltaX;
-			y -= deltaY;
-
-			m_ledWidgets[i]->move(x, y);
-			m_ledWidgets[i]->resize(width, height);
-
-			// keep the original values in the configuration
-			// m_ledWidgets[i]->saveSizeAndPosition();
-
-			DEBUG_LOW_LEVEL << Q_FUNC_INFO << "new values [" << i << "]" << "x =" << x << "y =" << y << "w =" << width << "h =" << height;
-		}
+void GrabManager::persistZoneScreenIdentity()
+{
+	QHash<QString, ScreenTopology::ScreenEntry> topology;
+	for (auto it = m_lastScreenGeometry.constBegin(); it != m_lastScreenGeometry.constEnd(); ++it) {
+		const QScreen* screen = it.key();
+		if (!screen)
+			continue;
+		ScreenTopology::Identity id{
+			screen->name(),
+			screen->manufacturer(),
+			screen->serialNumber()
+		};
+		topology.insert(screen->name(), { id, it.value() });
 	}
 
-	m_lastScreenGeometry[screenIndexResized] = screenGeometry;
+	const ScreenTopology::Identity primary =
+		ScreenTopology::primaryScreenForZones(zoneCenters(), topology);
+	if (!primary.isEmpty())
+		Settings::setZoneScreenIdentity(primary.toSettingsString());
+}
+
+void GrabManager::evaluateZoneScreenAvailability()
+{
+	QHash<QString, ScreenTopology::ScreenEntry> topology;
+	for (auto it = m_lastScreenGeometry.constBegin(); it != m_lastScreenGeometry.constEnd(); ++it) {
+		const QScreen* screen = it.key();
+		if (!screen)
+			continue;
+		ScreenTopology::Identity id{
+			screen->name(),
+			screen->manufacturer(),
+			screen->serialNumber()
+		};
+		topology.insert(screen->name(), { id, it.value() });
+	}
+
+	const QList<QPoint> centers = zoneCenters();
+	const bool hasScreen = ScreenTopology::anyZoneHasValidScreen(centers, topology);
+	m_consecutiveNoScreenMisses =
+		ScreenTopology::nextConsecutiveMissCount(m_consecutiveNoScreenMisses, hasScreen);
+
+	const ScreenTopology::Identity saved =
+		ScreenTopology::Identity::fromSettingsString(Settings::getZoneScreenIdentity());
+	const bool activeBack = ScreenTopology::activeScreenReturned(saved, topology);
+
+	const bool shouldMissing = ScreenTopology::shouldTurnOffForMissingScreen(m_consecutiveNoScreenMisses);
+	// Clear missing when zones again sit on a screen, or the saved physical screen is back
+	// (positions are restored via the debounce timer; lights may come back on identity alone).
+	const bool shouldPresent = hasScreen || activeBack;
+
+	if (!m_zonesScreenMissing && shouldMissing) {
+		m_zonesScreenMissing = true;
+		emit changeScreen();
+	} else if (m_zonesScreenMissing && shouldPresent) {
+		m_zonesScreenMissing = false;
+		if (activeBack && !hasScreen)
+			scheduleRestoreLedPositions();
+		emit changeScreen();
+	}
 }
 
 void GrabManager::initGrabbers()
@@ -848,7 +885,10 @@ GrabberBase *GrabManager::queryGrabber(Grab::GrabberType grabberType)
 }
 
 void GrabManager::onFrameGrabAttempted(GrabResult grabResult) {
+	evaluateZoneScreenAvailability();
+
 	if (grabResult == GrabResultOk) {
+		persistZoneScreenIdentity();
 		handleGrabbedColors();
 	}
 }
@@ -862,15 +902,15 @@ void GrabManager::initColorLists(int numberOfLeds)
 
 	for (int i = 0; i < numberOfLeds; i++)
 	{
-		m_colorsCurrent << 0;
+		m_colorsCurrent << LinearRgbF{};
 		m_colorsNew		<< 0;
 	}
+	m_changeLatch = QList<bool>(numberOfLeds, false);
 
 	// Resize/clear the smoothing engine's arrays to match, and cancel any in-flight
 	// transition: a resize/profile switch must never let a tick interpolate between
 	// arrays of mismatched sizes.
-	m_timerHostSmoothing->stop();
-	m_hostSmoothing.reset(numberOfLeds);
+	m_smoothingDriver->reset(numberOfLeds);
 }
 
 void GrabManager::clearColorsNew()
@@ -889,13 +929,13 @@ void GrabManager::clearColorsCurrent()
 
 	for (int i = 0; i < m_colorsCurrent.size(); i++)
 	{
-		m_colorsCurrent[i] = 0;
+		m_colorsCurrent[i] = LinearRgbF{};
 	}
+	m_changeLatch.fill(false);
 
 	// Cancel any in-flight transition and sync the engine to black so a pending
 	// transition can never keep emitting stale colors after grabbing stops.
-	m_timerHostSmoothing->stop();
-	m_hostSmoothing.setDisplayedImmediately(m_colorsCurrent);
+	m_smoothingDriver->setDisplayedImmediately(m_colorsCurrent);
 }
 
 void GrabManager::initLedWidgets(int numberOfLeds)
@@ -916,13 +956,7 @@ void GrabManager::initLedWidgets(int numberOfLeds)
 		connect(ledWidget, &GrabWidget::resizeOrMoveStarted, this, &GrabManager::pauseWhileResizeOrMoving);
 		connect(ledWidget, &GrabWidget::resizeOrMoveCompleted, this, &GrabManager::resumeAfterResizeOrMoving);
 
-// TODO: Check out this line!
-//			First LED widget using to determine grabbing-monitor in WinAPI version of Grab
-//		connect(ledWidget, SIGNAL(resizeOrMoveCompleted(int)), this, &GrabManager::firstWidgetPositionChanged);
-
 		m_ledWidgets << ledWidget;
-
-//		firstWidgetPositionChanged();
 	}
 
 	int diff = numberOfLeds - m_ledWidgets.size();

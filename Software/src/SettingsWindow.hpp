@@ -31,6 +31,7 @@
 #include <QMainWindow>
 #include <QSystemTrayIcon>
 #include <QLabel>
+#include <QScrollArea>
 #include "Settings.hpp"
 #include "GrabManager.hpp"
 #include "MoodLampManager.hpp"
@@ -40,6 +41,7 @@
 #include "ColorButton.hpp"
 #include "enums.hpp"
 #include "Plugin.hpp"
+#include "CalibrationPage.hpp"
 
 namespace Ui {
 	class SettingsWindow;
@@ -66,6 +68,8 @@ signals:
 	void switchOnLeds();
 	void showLedWidgets(bool visible);
 	void setColoredLedWidget(bool colored);
+	void setLiveColorsLedWidget(bool live);
+	void setColorFeedbackEnabled(bool enabled);
 	void updateLedsColors(const QList<QRgb> &);
 	void updateRefreshDelay(int value);
 	void updateColorDepth(int value);
@@ -88,6 +92,8 @@ signals:
 	void updateApiKey(QString key);
 	void updateApiDeviceNumberOfLeds(int value);
 	void reloadPlugins();
+	/*! Emitted when the temporary Calibration tab session starts/stops (Phase 3). */
+	void calibrationSessionActive(bool active);
 
 public slots:
 	void ledDeviceOpenSuccess(bool isSuccess);
@@ -108,6 +114,8 @@ public slots:
 	void profileSwitchCombobox(const QString& profile);
 	void updateVirtualLedsColors(const QList<QRgb> & colors);
 	void requestBacklightStatus();
+	/*! Phase 4 / Phase 3 prep: force post-pipeline color feedback on (calibration will use this). */
+	void setColorFeedbackForced(bool forced);
 	void onApiServer_ErrorOnStartListening(const QString& errorMessage);
 	void onPingDeviceEverySecond_Toggled(bool state);
 	void processMessage(const QString &message);
@@ -159,6 +167,8 @@ private slots:
 
 	void changePage(int page);
 
+	void onCalibrationSessionActive(bool active);
+
 	void toggleBacklight();
 	void nextProfile();
 	void prevProfile();
@@ -183,8 +193,6 @@ private slots:
 	void onGrabApplyBlueLightReduction_toggled(bool state);
 	void onGrabApplyColorTemperature_toggled(bool state);
 	void onGrabColorTemperature_valueChanged(int value);
-	void onGrabGamma_valueChanged(double value);
-	void onSliderGrabGamma_valueChanged(int value);
 	void onLuminosityThreshold_valueChanged(int value);
 	void onMinimumLumosity_toggled(bool value);
 
@@ -194,8 +202,8 @@ private slots:
 	void onDeviceBrightness_valueChanged(int value);
 	void onDeviceBrightnessCap_valueChanged(int value);
 	void onDeviceColorDepth_valueChanged(int value);
-	void onDeviceGammaCorrection_valueChanged(double value);
-	void onSliderDeviceGammaCorrection_valueChanged(int value);
+	void onDeviceOutputGamma_valueChanged(double value);
+	void onSliderDeviceOutputGamma_valueChanged(int value);
 	void onDeviceDitheringEnabled_toggled(bool state);
 	void onDeviceSendDataOnlyIfColorsChanged_toggled(bool state);
 	void onDx1011CaptureEnabledChanged(bool isEnabled);
@@ -204,6 +212,7 @@ private slots:
 	void onDontShowLedWidgets_Toggled(bool checked);
 	void onSetColoredLedWidgets(bool checked);
 	void onSetWhiteLedWidgets(bool checked);
+	void onSetLiveColorsLedWidgets(bool checked);
 
 	void openCurrentProfile();
 
@@ -235,7 +244,6 @@ private slots:
 	void on_pushButton_lumosityThresholdHelp_clicked();
 
 	void on_pushButton_grabApplyColorTemperatureHelp_clicked();
-	void on_pushButton_grabGammaHelp_clicked();
 
 	void on_pushButton_grabOverBrightenHelp_clicked();
 	void on_pushButton_grabHostSmoothingHelp_clicked();
@@ -265,12 +273,21 @@ private slots:
 	void onCheckBox_installUpdates_Toggled(bool isEnabled);
 
 	void clearBaudrateWarning();
+	void onScreenGeometryOrDpiChanged();
 
 private:
+	void applyPhase5Ui();
+	void applyPaletteDerivedTheme();
+	void applyResponsiveShell();
+	void rebuildInformationArchitecture();
+	void connectScreenGeometryHooks();
+	QString paletteDerivedStyleSheet() const;
+
 	void updateDeviceTabWidgetsVisibility();
 	void setDeviceTabWidgetsVisibility(DeviceTab::Options options);
 	void syncLedDeviceWithSettingsWindow();
 	int getLigtpackFirmwareVersionMajor();
+	void updateColorFeedbackGate();
 
 	void updateStatusBar();
 
@@ -329,6 +346,15 @@ private:
 
 	QList<QLabel *> m_labelsGrabbedColors;
 
+	/*! When true (calibration mode), color feedback stays on regardless of UI watchers. */
+	bool m_colorFeedbackForced{ false };
+
+	CalibrationPage *m_calibrationPage{ nullptr };
+	int m_calibrationNavIndex{ -1 };
+	QWidget *m_tabGeometry{ nullptr };
+	QWidget *m_tabColor{ nullptr };
+	QScrollArea *m_scrollAreaGeometry{ nullptr };
+	QScrollArea *m_scrollAreaColor{ nullptr };
 
 	bool m_isHotkeySelectionChanging;
 	SysTrayIcon *m_trayIcon;

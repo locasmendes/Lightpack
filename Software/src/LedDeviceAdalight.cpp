@@ -40,9 +40,6 @@ LedDeviceAdalight::LedDeviceAdalight(const QString &portName, const int baudRate
 	m_portName = portName;
 	m_baudRate = baudRate;
 
-//	m_gamma = Settings::getDeviceGamma();
-//	m_brightness = Settings::getDeviceBrightness();
-//	m_colorSequence =Settings::getColorSequence(SupportedDevices::DeviceTypeAdalight);
 	m_AdalightDevice = NULL;
 	m_lastWillTimer = new QTimer(this);
 	m_lastWillTimer->setTimerType(Qt::PreciseTimer);
@@ -78,7 +75,7 @@ void LedDeviceAdalight::close()
 	m_AdalightDevice = NULL;
 }
 
-void LedDeviceAdalight::setColors(const QList<QRgb> & colors)
+void LedDeviceAdalight::setColors(const QList<LinearRgbF> & colors)
 {
 	// Save colors for showing changes of the brightness
 	m_colorsSaved = colors;
@@ -144,7 +141,7 @@ void LedDeviceAdalight::switchOffLeds()
 	m_colorsSaved.clear();
 
 	for (int i = 0; i < count; i++)
-		m_colorsSaved << 0;
+		m_colorsSaved << LinearRgbF{};
 
 	m_writeBuffer.clear();
 	m_writeBuffer.append(m_writeBufferHeader);
@@ -156,6 +153,7 @@ void LedDeviceAdalight::switchOffLeds()
 	}
 
 	bool ok = writeBuffer(m_writeBuffer);
+	emitBlackColorsUpdatedIfEnabled(count);
 	emit commandCompleted(ok);
 }
 
@@ -200,8 +198,6 @@ void LedDeviceAdalight::open()
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << sender();
 
-//	m_gamma = Settings::getDeviceGamma();
-//	m_brightness = Settings::getDeviceBrightness();
 
 	if (m_AdalightDevice != NULL)
 		m_AdalightDevice->close();

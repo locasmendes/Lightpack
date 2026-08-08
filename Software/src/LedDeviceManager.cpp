@@ -27,6 +27,7 @@
 #include <qglobal.h>
 
 #include "LedDeviceManager.hpp"
+#include "ColorOps.hpp"
 #include "LedDeviceLightpack.hpp"
 
 #ifdef Q_OS_WIN
@@ -65,6 +66,8 @@ LedDeviceManager::LedDeviceManager(QObject *parent)
 	m_savedBrightness = SettingsScope::Profile::Device::BrightnessDefault;
 
 	m_savedBrightnessCap = SettingsScope::Profile::Device::BrightnessCapDefault;
+
+	m_savedColorFeedbackEnabled = false;
 
 	m_ledDevices.reserve(SupportedDevices::DeviceTypesCount);
 	for (int i = 0; i < SupportedDevices::DeviceTypesCount; i++)
@@ -134,7 +137,7 @@ void LedDeviceManager::switchOnLeds()
 		emit ledDeviceSetColors(m_savedColors);
 }
 
-void LedDeviceManager::setColors(const QList<QRgb> & colors)
+void LedDeviceManager::setColors(const QList<LinearRgbF> & colors)
 {
 	DEBUG_HIGH_LEVEL << Q_FUNC_INFO << "Is last command completed:" << m_isLastCommandCompleted
 					<< " m_backlightStatus = " << m_backlightStatus;
@@ -152,6 +155,15 @@ void LedDeviceManager::setColors(const QList<QRgb> & colors)
 			cmdQueueAppend(LedDeviceCommands::SetColors);
 		}
 	}
+}
+
+void LedDeviceManager::setColors(const QList<QRgb> & colors)
+{
+	QList<LinearRgbF> linear;
+	linear.reserve(colors.size());
+	for (QRgb c : colors)
+		linear.append(ColorOps::srgbDecode(c));
+	setColors(linear);
 }
 
 void LedDeviceManager::switchOffLeds()
@@ -341,6 +353,14 @@ void LedDeviceManager::setColorSequence(const QString& value)
 	}
 }
 
+void LedDeviceManager::setColorFeedbackEnabled(bool enabled)
+{
+	DEBUG_MID_LEVEL << Q_FUNC_INFO << enabled;
+	m_savedColorFeedbackEnabled = enabled;
+	// Not a device I/O command — bypass the cmd queue; only a bool on the device thread.
+	emit ledDeviceSetColorFeedbackEnabled(enabled);
+}
+
 void LedDeviceManager::requestFirmwareVersion()
 {
 	DEBUG_MID_LEVEL << Q_FUNC_INFO << "Is last command completed:" << m_isLastCommandCompleted;
@@ -467,6 +487,7 @@ void LedDeviceManager::initLedDevice()
 
 		connectSignalSlotsLedDevice();
 	}
+	emit ledDeviceSetColorFeedbackEnabled(m_savedColorFeedbackEnabled);
 	emit ledDeviceOpen();
 }
 
@@ -568,7 +589,9 @@ void LedDeviceManager::connectSignalSlotsLedDevice()
 	connect(m_ledDevice, &AbstractLedDevice::colorsUpdated,		this, &LedDeviceManager::setColors_VirtualDeviceCallback,	Qt::QueuedConnection);
 
 	connect(this, &LedDeviceManager::ledDeviceOpen,								m_ledDevice, &AbstractLedDevice::open,										Qt::QueuedConnection);
-	connect(this, &LedDeviceManager::ledDeviceSetColors,				m_ledDevice, &AbstractLedDevice::setColors,						Qt::QueuedConnection);
+	connect(this, &LedDeviceManager::ledDeviceSetColors, m_ledDevice,
+		static_cast<void (AbstractLedDevice::*)(const QList<LinearRgbF> &)>(&AbstractLedDevice::setColors),
+		Qt::QueuedConnection);
 	connect(this, &LedDeviceManager::ledDeviceOffLeds,							m_ledDevice, &AbstractLedDevice::switchOffLeds,								Qt::QueuedConnection);
 	connect(this, &LedDeviceManager::ledDeviceSetUsbPowerLedDisabled,		m_ledDevice, &AbstractLedDevice::setUsbPowerLedDisabled,				Qt::QueuedConnection);
 	connect(this, &LedDeviceManager::ledDeviceSetRefreshDelay,				m_ledDevice, &AbstractLedDevice::setRefreshDelay,						Qt::QueuedConnection);
@@ -581,6 +604,7 @@ void LedDeviceManager::connectSignalSlotsLedDevice()
 	connect(this, &LedDeviceManager::ledDeviceSetLuminosityThreshold,	m_ledDevice, &AbstractLedDevice::setLuminosityThreshold,			Qt::QueuedConnection);
 	connect(this, &LedDeviceManager::ledDeviceSetMinimumLuminosityEnabled,	m_ledDevice, &AbstractLedDevice::setMinimumLuminosityThresholdEnabled,	Qt::QueuedConnection);
 	connect(this, &LedDeviceManager::ledDeviceSetDitheringEnabled,			m_ledDevice, &AbstractLedDevice::setDitheringEnabled,					Qt::QueuedConnection);
+	connect(this, &LedDeviceManager::ledDeviceSetColorFeedbackEnabled,		m_ledDevice, &AbstractLedDevice::setColorFeedbackEnabled,				Qt::QueuedConnection);
 	connect(this, &LedDeviceManager::ledDeviceRequestFirmwareVersion,			m_ledDevice, &AbstractLedDevice::requestFirmwareVersion,					Qt::QueuedConnection);
 	connect(this, &LedDeviceManager::ledDeviceUpdateWBAdjustments,				m_ledDevice, qOverload<>(&AbstractLedDevice::updateWBAdjustments),						Qt::QueuedConnection);
 	connect(this, &LedDeviceManager::ledDeviceUpdateDeviceSettings,				m_ledDevice, &AbstractLedDevice::updateDeviceSettings,						Qt::QueuedConnection);

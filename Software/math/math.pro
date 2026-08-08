@@ -14,8 +14,15 @@ include(../build-config.prf)
 INCLUDEPATH += ./include
 
 SOURCES += \
-    PrismatikMath.cpp
+    PrismatikMath.cpp \
+    ColorOps.cpp \
+    CalibrationPatterns.cpp \
+    CalibrationSolver.cpp
 
 HEADERS += \
     include/colorspace_types.h \
-    include/PrismatikMath.hpp
+    include/PrismatikMath.hpp \
+    include/ColorF.h \
+    include/ColorOps.hpp \
+    include/CalibrationPatterns.hpp \
+    include/CalibrationSolver.hpp

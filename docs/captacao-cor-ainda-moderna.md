@@ -25,6 +25,8 @@ Para Ambilight “bom o suficiente”, ainda serve.
 Para parecer atual frente a HyperHDR / Hue / Govee em HDR, ultrawide e cenas escuras, precisa evoluir.
 
 > **Correção (2026-07-26):** a linha original desta tabela dizia "Pipeline sem HDR / float / linear". Isso é impreciso: `Software/math/PrismatikMath.cpp` faz conversão real gamma→linear (EOTF sRGB) e opera em CIE Lab usando `double` — usado pelo "Lab threshold" e pela correção de gamma em `AbstractLedDevice::applyColorModifications`. Ou seja, **há** ponto flutuante e espaço linear real no pipeline de cor do host. O gap real é mais estreito do que a formulação original sugeria: (a) não há HDR/wide-gamut/tone-mapping em nenhum ponto, e (b) especificamente a **média espacial** (`calculateAvgColor`, que reduz pixels de uma zona a uma cor) é inteira e em espaço gamma 8-bit — é aí, e não no pipeline de cor como um todo, que a "precisão perdida cedo" citada na seção 4.2 realmente acontece. Ver detalhamento na seção 4.1 abaixo.
+>
+> **Atualização (5.17.0.0):** a fase B do roadmap (§7) — trabalhar em float linear — está **feita do pós-grab em diante** (`ColorPipeline` + `ColorOps`, transporte `QList<LinearRgbF>`, `Device/OutputGamma`). A média por zona **continua** em sRGB 8-bit (deliberado: SIMD intocado; ver §4.1). Smooth no host (fase E) já existia antes desta release.
 
 ---
 
@@ -100,16 +102,19 @@ Usar AVX/SIMD para acumular pixels é adequado. Em 2026 o custo da média nem é
 
 ### 4.1 Média aritmética em espaço gamma (8-bit)
 
-Problemas conhecidos:
+**Estado em 5.17:** o pipeline **após** a média por zona é float linear (`LinearRgbF`). O que **não** mudou — de propósito — é `Grab::Calculations::calculateAvgColor`: ainda acumula bytes sRGB-codificados e devolve `QRgb`. Linearizar por pixel não paga o custo em ~2M px/frame; o decode LUT roda uma vez por LED (~100×/frame).
 
-- pixels claros **dominam** a média (espaço não-linear)
-- UI chrome / legendas brancas “puxam” a cor da zona
-- cenas escuras sofrem quantização cedo
-- banding / posterização quando se reexpande para 12-bit depois
+Problemas que **permanecem** na média espacial:
+
+- pela desigualdade de **Jensen** (EOTF sRGB é convexa), `mean(EOTF(x)) ≥ EOTF(mean(x))` — a média dos bytes é **mais escura** que a média linear-correta
+- pixels claros / UI chrome / legendas brancas ainda **dominam** a média em espaço não-linear
+- cenas escuras ainda sofrem quantização cedo *na redução espacial* (não mais nas 5 requantizações 8-bit do pós-processamento antigo)
+
+Follow-up explícito no código: `// TODO(linear-average):` em `calculations.cpp` (soma de quadrados SIMD ou LUT 16-bit + gather). **Fora de escopo da 5.17.**
 
 **Estado da arte (HyperHDR Infinite Color Engine, v22):**
 
-- aritmética **floating-point** de ponta a ponta
+- aritmética **floating-point** de ponta a ponta (incluindo a redução espacial)
 - transformações em **sRGB linear**
 - smoothing perceptual (YUV/RGB, histerese, interpoladores modernos)
 - deep-color para sinks que suportam (>24-bit efetivo)
@@ -120,7 +125,9 @@ Fontes:
 
 ### 4.2 Truncamento precoce para `QRgb`
 
-Mesmo com device 12-bit e dither, a informação já foi perdida na média 8-bit. HyperHDR enfatiza exatamente o oposto: a média teórica já tinha precisão; truncar a 24-bit cedo era o erro.
+A média espacial ainda **fecha** em `QRgb` 8-bit — aí a informação dos pixels da zona já foi perdida / enviesada. A partir desse ponto, porém, a 5.17 **não** requantiza de novo em cada ajuste (sat/contraste/vibrance/bloom/overbrighten): decode uma vez → float → `OutputGamma` → quantize no fim do device stage.
+
+Resumo preciso: o truncamento precoce **ainda existe na fronteira grab→pipeline**; o truncamento *repetido* no pós-processamento 8-bit foi removido. HyperHDR enfatiza linearização também na redução espacial — o próximo degrau se o TODO de §4.1 for atacado.
 
 ### 4.3 Sem HDR (mas com mais ponto flutuante do que este documento afirmava)
 
@@ -183,14 +190,15 @@ Ver [`gargalos-sistema-moderno-2026.md`](./gargalos-sistema-moderno-2026.md).
 
 ## 5. Comparativo rápido
 
-| Aspecto | Prismatik (hoje) | Prática moderna 2026 |
+| Aspecto | Prismatik (5.17) | Prática moderna 2026 |
 |---------|------------------|----------------------|
 | Fonte | Desktop blit (DDupl/GDI/X11) | DDupl **ou** WGC / window capture / HDMI grabber |
 | Bit depth captura | 8-bit | FP16 HDR + tone-map → working space |
-| Espaço da média | RGB gamma 8-bit | Linear / float (às vezes YUV perceptual) |
+| Espaço da média espacial | RGB gamma 8-bit (Jensen) | Linear / float (às vezes YUV perceptual) |
+| Pós-média / device | Float linear + `OutputGamma` | Linear / float ponta a ponta |
 | Redução espacial | Mean | Mean (ainda comum); às vezes pesos / ignore-black |
 | Content rect | Fixo (boxes) | Blackbar + histerese + políticas |
-| Smooth | Firmware / simples | Host float, multi-algoritmo |
+| Smooth | Host float + firmware (Lightpack) | Host float, multi-algoritmo |
 | Destino | 12-bit packed / 8-bit serial | 8–16 bit + deep-color onde existe |
 
 ---
@@ -210,26 +218,29 @@ O upgrade é **pipeline de cor e de conteúdo**, não trocar Ambilight por outra
 
 ## 7. Evolução sugerida (só captação/cor)
 
-Ordem de alavancagem:
+Ordem de alavancagem (status após **5.17.0.0**):
 
 ```mermaid
 flowchart TB
-    A[1. Content rect / blackbar<br/>para não amostrar preto] --> B[2. Trabalhar em float linear<br/>após captura]
-    B --> C[3. HDR path FP16 + tone-map]
+    A[1. Content rect / blackbar<br/>para não amostrar preto] --> Bdone[2. Float linear pós-grab<br/>✅ feito na 5.17]
+    Bdone --> Brem[2b. Média por zona linear<br/>TODO — ainda sRGB 8-bit]
+    Brem --> C[3. HDR path FP16 + tone-map]
     C --> D[4. WGC / captura por janela]
-    D --> E[5. Smooth perceptual no host]
+    Bdone -.-> Edone[5. Smooth perceptual no host<br/>✅ já existia pré-5.17]
 ```
 
-| Fase | Mudança | Ganho |
-|------|---------|-------|
-| A | Blackbar + clamp | Cor “certa” em UW/cinema |
-| B | Média/processamento em float linear; quantizar só no fim | Cenas escuras, menos banding, WB/gamma corretos |
-| C | Captura HDR-aware | Jogos/desktop HDR utilizáveis |
-| D | WGC / window capture | Cross-GPU + player em janela |
-| E | Smooth no host | Feeling moderno sem gelatina do AVR |
+| Fase | Mudança | Status |
+|------|---------|--------|
+| A | Blackbar + clamp | Aberto (ver content-aware) |
+| B | Processamento pós-grab em float linear; quantizar no device | **Feito** — `ColorPipeline` + `OutputGamma` |
+| B′ | Média por zona em espaço linear (corrigir Jensen) | **Aberto** — `TODO(linear-average)` |
+| C | Captura HDR-aware | Aberto (fora de escopo 5.17) |
+| D | WGC / window capture | Aberto |
+| E | Smooth no host | **Feito** antes desta release (`HostColorSmoothing` / devices sem smooth nativo) |
 
 Detalhes de zonas/AR: doc de content-aware.  
-Detalhes de FPS/latência: doc de gargalos.
+Detalhes de FPS/latência: doc de gargalos.  
+Pipeline unificado 5.17: [`pipeline-captura-processamento-leds.md`](./pipeline-captura-processamento-leds.md) §3.3/§3.4/§6.
 
 ---
 
@@ -238,9 +249,9 @@ Detalhes de FPS/latência: doc de gargalos.
 > Esse método de captação de cor ainda é moderno?
 
 - **Sim**, na concepção (bordas → média → LEDs) e no uso de DDupl+downscale.  
-- **Não**, na qualidade do pipeline de cor (8-bit gamma, sem HDR, sem float/linear, sem content-aware, smooth legado).
+- **Parcial na cor:** pós-grab em float linear (5.17), mas média espacial ainda em sRGB 8-bit; sem HDR, sem content-aware.
 
-É um método **clássico e ainda válido**, não o estado da arte de 2026.
+É um método **clássico e ainda válido**, com pipeline de conteúdo modernizado na 5.17 — não o estado da arte completo de 2026 na captura.
 
 ---
 

@@ -10,6 +10,285 @@
     </message>
 </context>
 <context>
+    <name>CalibrationPage</name>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="37"/>
+        <source>White 100%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="38"/>
+        <source>White 75%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="39"/>
+        <source>White 50%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="40"/>
+        <source>White 25%</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="41"/>
+        <source>Red</source>
+        <translation type="unfinished">Красный</translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="42"/>
+        <source>Green</source>
+        <translation type="unfinished">Зеленый</translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="43"/>
+        <source>Blue</source>
+        <translation type="unfinished">Синий</translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="44"/>
+        <source>Cyan</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="45"/>
+        <source>Magenta</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="46"/>
+        <source>Yellow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="47"/>
+        <source>Gray ramp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="48"/>
+        <source>Color bars (per LED)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="49"/>
+        <source>Identify LED (chase)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="67"/>
+        <source>&lt;b&gt;Calibration&lt;/b&gt; — patterns go host→device (grabber bypass). Live zone colors stay forced on while this page is active.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="74"/>
+        <source>Test patterns</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="82"/>
+        <source>LED </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="84"/>
+        <source>Apply pattern</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="91"/>
+        <source>Controls</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="95"/>
+        <source>D65 (6500 K)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="96"/>
+        <source>D93 (9300 K)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="97"/>
+        <source>Warm (4000 K)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="98"/>
+        <source>Cool (7500 K)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="99"/>
+        <source>Manual Kelvin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="109"/>
+        <source>1.00 = Linear (physical). 1.32 = Classic (migrated default).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="111"/>
+        <source>A/B: bypass per-LED coefficients (neutral 1.0)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="112"/>
+        <source>Reset calibration defaults</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="117"/>
+        <source>White point</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="118"/>
+        <source>Kelvin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="119"/>
+        <source>Output gamma</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="126"/>
+        <source>Assisted measurement</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="129"/>
+        <source>CIE xy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="130"/>
+        <source>Measured RGB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="148"/>
+        <source>x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="150"/>
+        <source>y</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="162"/>
+        <source>R</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="164"/>
+        <source>G</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="166"/>
+        <source>B</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="170"/>
+        <source>ΔE before/after: —</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="172"/>
+        <source>Solve gains</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="173"/>
+        <source>Apply solved gains to all LEDs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="181"/>
+        <source>Named calibration snapshot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="185"/>
+        <source>Name (stored under CalibrationProfiles/…)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="186"/>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="187"/>
+        <source>Load</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="191"/>
+        <source>TODO(Phase 5): split calibration profiles from layout profiles completely. Snapshots currently live in the application settings file, not the LED layout profile.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="400"/>
+        <source>Per-LED white-balance coefficients already deviate more than 5%% from neutral. Temperature is applied separately and will not overwrite those coefficients.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="404"/>
+        <source>Color temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="420"/>
+        <source>ΔE before: %1   after: %2   gains R=%3 G=%4 B=%5</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="431"/>
+        <location filename="../../src/CalibrationPage.cpp" line="443"/>
+        <location filename="../../src/CalibrationPage.cpp" line="460"/>
+        <location filename="../../src/CalibrationPage.cpp" line="467"/>
+        <location filename="../../src/CalibrationPage.cpp" line="474"/>
+        <location filename="../../src/CalibrationPage.cpp" line="493"/>
+        <source>Calibration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="431"/>
+        <source>Solve gains first.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="443"/>
+        <location filename="../../src/CalibrationPage.cpp" line="467"/>
+        <source>Enter a profile name.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="460"/>
+        <source>Saved snapshot &quot;%1&quot;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="474"/>
+        <source>Snapshot &quot;%1&quot; not found.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/CalibrationPage.cpp" line="493"/>
+        <source>Loaded snapshot &quot;%1&quot;.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ColorWheelDialog</name>
     <message>
         <location filename="../../src/ColorWheelDialog.cpp" line="20"/>
@@ -20,67 +299,67 @@
 <context>
     <name>ConfigureDevicePage</name>
     <message>
-        <location filename="../../src/wizard/ConfigureDevicePage.ui" line="14"/>
+        <location filename="../../src/wizard/ConfigureDevicePage.ui" line="7"/>
         <source>WizardPage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ConfigureDevicePage.ui" line="99"/>
+        <location filename="../../src/wizard/ConfigureDevicePage.ui" line="92"/>
         <source>Serial port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ConfigureDevicePage.ui" line="27"/>
+        <location filename="../../src/wizard/ConfigureDevicePage.ui" line="20"/>
         <source>Baud rate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ConfigureDevicePage.ui" line="17"/>
+        <location filename="../../src/wizard/ConfigureDevicePage.ui" line="10"/>
         <source>Device configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ConfigureDevicePage.ui" line="79"/>
+        <location filename="../../src/wizard/ConfigureDevicePage.ui" line="72"/>
         <source>Auto-detected serial ports - pick one, or type a port name manually (e.g. for a port not currently plugged in).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ConfigureDevicePage.ui" line="107"/>
+        <location filename="../../src/wizard/ConfigureDevicePage.ui" line="100"/>
         <source>RGB</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ConfigureDevicePage.ui" line="112"/>
+        <location filename="../../src/wizard/ConfigureDevicePage.ui" line="105"/>
         <source>RBG</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ConfigureDevicePage.ui" line="117"/>
+        <location filename="../../src/wizard/ConfigureDevicePage.ui" line="110"/>
         <source>BGR</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ConfigureDevicePage.ui" line="122"/>
+        <location filename="../../src/wizard/ConfigureDevicePage.ui" line="115"/>
         <source>BRG</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ConfigureDevicePage.ui" line="127"/>
+        <location filename="../../src/wizard/ConfigureDevicePage.ui" line="120"/>
         <source>GRB</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ConfigureDevicePage.ui" line="132"/>
+        <location filename="../../src/wizard/ConfigureDevicePage.ui" line="125"/>
         <source>GBR</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ConfigureDevicePage.ui" line="140"/>
+        <location filename="../../src/wizard/ConfigureDevicePage.ui" line="133"/>
         <source>Color format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ConfigureDevicePage.ui" line="153"/>
+        <location filename="../../src/wizard/ConfigureDevicePage.ui" line="146"/>
         <source>Make sure to match your device&apos;s baud rate!
 Warning: Values larger than 115200 are entirely untested. Use at your own risk.</source>
         <translation type="unfinished"></translation>
@@ -89,37 +368,37 @@ Warning: Values larger than 115200 are entirely untested. Use at your own risk.<
 <context>
     <name>ConfigureDevicePowerPage</name>
     <message>
-        <location filename="../../src/wizard/ConfigureDevicePowerPage.ui" line="14"/>
+        <location filename="../../src/wizard/ConfigureDevicePowerPage.ui" line="7"/>
         <source>WizardPage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ConfigureDevicePowerPage.ui" line="17"/>
+        <location filename="../../src/wizard/ConfigureDevicePowerPage.ui" line="10"/>
         <source>Device configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ConfigureDevicePowerPage.ui" line="40"/>
+        <location filename="../../src/wizard/ConfigureDevicePowerPage.ui" line="33"/>
         <source>mAmps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ConfigureDevicePowerPage.ui" line="47"/>
+        <location filename="../../src/wizard/ConfigureDevicePowerPage.ui" line="40"/>
         <source>Amps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ConfigureDevicePowerPage.ui" line="74"/>
+        <location filename="../../src/wizard/ConfigureDevicePowerPage.ui" line="67"/>
         <source>Power Supply current limit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ConfigureDevicePowerPage.ui" line="81"/>
+        <location filename="../../src/wizard/ConfigureDevicePowerPage.ui" line="74"/>
         <source>Single LED current</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ConfigureDevicePowerPage.ui" line="133"/>
+        <location filename="../../src/wizard/ConfigureDevicePowerPage.ui" line="126"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;If your LED power supply cannot provide enough current AND you know your LED&apos;s current requirements (check datasheet if needed) you can limit the current here. This will reduce the overall brightness on current hungry scenes. &lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;Leave Power Supply current limit at &amp;quot;0&amp;quot; to disable limiting.&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Warning&lt;/span&gt;: Power Supply current limit value might not match exactly your power supply so adjust as necessary.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -127,32 +406,32 @@ Warning: Values larger than 115200 are entirely untested. Use at your own risk.<
 <context>
     <name>ConfigureUdpDevicePage</name>
     <message>
-        <location filename="../../src/wizard/ConfigureUdpDevicePage.ui" line="14"/>
+        <location filename="../../src/wizard/ConfigureUdpDevicePage.ui" line="7"/>
         <source>WizardPage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ConfigureUdpDevicePage.ui" line="17"/>
+        <location filename="../../src/wizard/ConfigureUdpDevicePage.ui" line="10"/>
         <source>Device configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ConfigureUdpDevicePage.ui" line="27"/>
+        <location filename="../../src/wizard/ConfigureUdpDevicePage.ui" line="20"/>
         <source>Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ConfigureUdpDevicePage.ui" line="50"/>
+        <location filename="../../src/wizard/ConfigureUdpDevicePage.ui" line="43"/>
         <source>Timeout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ConfigureUdpDevicePage.ui" line="99"/>
+        <location filename="../../src/wizard/ConfigureUdpDevicePage.ui" line="92"/>
         <source>Port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ConfigureUdpDevicePage.ui" line="106"/>
+        <location filename="../../src/wizard/ConfigureUdpDevicePage.ui" line="99"/>
         <source>Timeout in seconds after which the device returns to normal mode if no data is sent by Prismatik.
 Setting this to 255 disables the timeout and the device will keep the last received colors if no more data is sent.
 It&apos;s recommended to not use &quot;Send data only if colors changed&quot; setting with a short timeout value.</source>
@@ -162,17 +441,17 @@ It&apos;s recommended to not use &quot;Send data only if colors changed&quot; se
 <context>
     <name>GlobalColorCoefPage</name>
     <message>
-        <location filename="../../src/wizard/GlobalColorCoefPage.ui" line="14"/>
+        <location filename="../../src/wizard/GlobalColorCoefPage.ui" line="7"/>
         <source>WizardPage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/GlobalColorCoefPage.ui" line="17"/>
+        <location filename="../../src/wizard/GlobalColorCoefPage.ui" line="10"/>
         <source>White balance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/GlobalColorCoefPage.ui" line="52"/>
+        <location filename="../../src/wizard/GlobalColorCoefPage.ui" line="45"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Adjust the color channels until your wall has the same color as your screen.&lt;br/&gt;
 You can do it either via the gear icon of the each zone OR via the global color sliders / Color Temperature (CT) slider that adjusts all 3 channels at once.&lt;br/&gt;
 &lt;b&gt;Warning:&lt;/b&gt; the global sliders will override manually set values for individual zones! So do global first, then adjust each zone if needed.
@@ -182,16 +461,26 @@ You can do it either via the gear icon of the each zone OR via the global color 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/GlobalColorCoefPage.ui" line="654"/>
-        <location filename="../../src/wizard/GlobalColorCoefPage.ui" line="853"/>
+        <location filename="../../src/wizard/GlobalColorCoefPage.ui" line="647"/>
+        <location filename="../../src/wizard/GlobalColorCoefPage.ui" line="846"/>
         <source>&lt;b&gt;Color Temperature&lt;/b&gt;
 &lt;br&gt;
 3-in-1 helper slider to adjust white point</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/GlobalColorCoefPage.ui" line="858"/>
+        <location filename="../../src/wizard/GlobalColorCoefPage.ui" line="851"/>
         <source>CT</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/wizard/GlobalColorCoefPage.cpp" line="253"/>
+        <source>Color temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/wizard/GlobalColorCoefPage.cpp" line="254"/>
+        <source>Per-LED white-balance coefficients already deviate from neutral. Temperature is applied separately and will not overwrite those coefficients.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -234,27 +523,7 @@ You can do it either via the gear icon of the each zone OR via the global color 
     </message>
 </context>
 <context>
-    <name>LightpackApplication</name>
-    <message>
-        <source>Plugin console</source>
-        <translation type="obsolete">консоль Python</translation>
-    </message>
-</context>
-<context>
     <name>LightpackDiscoveryPage</name>
-    <message>
-        <source>1 Lightpack found</source>
-        <translation type="vanished">Обнаружен 1 Lightpack</translation>
-    </message>
-    <message>
-        <source>%0 Lightpacks found</source>
-        <translatorcomment>if 1&lt;X&lt;5</translatorcomment>
-        <translation type="vanished">Обнаружены %0 Lightpack</translation>
-    </message>
-    <message>
-        <source>%0 zones are available</source>
-        <translation type="vanished">Доступно %0 зон</translation>
-    </message>
     <message numerus="yes">
         <location filename="../../src/wizard/LightpackDiscoveryPage.cpp" line="64"/>
         <source>%n Lightpack(s) found</source>
@@ -277,32 +546,32 @@ You can do it either via the gear icon of the each zone OR via the global color 
 <context>
     <name>LightpacksDiscoveryPage</name>
     <message>
-        <location filename="../../src/wizard/LightpackDiscoveryPage.ui" line="14"/>
+        <location filename="../../src/wizard/LightpackDiscoveryPage.ui" line="7"/>
         <source>WizardPage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/LightpackDiscoveryPage.ui" line="17"/>
+        <location filename="../../src/wizard/LightpackDiscoveryPage.ui" line="10"/>
         <source>Lightpacks discovery</source>
         <translation>Поиск  Lightpack</translation>
     </message>
     <message>
-        <location filename="../../src/wizard/LightpackDiscoveryPage.ui" line="32"/>
+        <location filename="../../src/wizard/LightpackDiscoveryPage.ui" line="25"/>
         <source>please connect Lightpack or setup another device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/LightpackDiscoveryPage.ui" line="45"/>
+        <location filename="../../src/wizard/LightpackDiscoveryPage.ui" line="38"/>
         <source>Continue setting up the Lightpacks</source>
         <translation>Продолжить настройку Lightpack</translation>
     </message>
     <message>
-        <location filename="../../src/wizard/LightpackDiscoveryPage.ui" line="100"/>
+        <location filename="../../src/wizard/LightpackDiscoveryPage.ui" line="93"/>
         <source>No Lightpacks connected</source>
         <translation>Ни один Lightpack не подключен</translation>
     </message>
     <message>
-        <location filename="../../src/wizard/LightpackDiscoveryPage.ui" line="110"/>
+        <location filename="../../src/wizard/LightpackDiscoveryPage.ui" line="103"/>
         <source>Setup another device</source>
         <translation>Настроить другое устройство</translation>
     </message>
@@ -318,80 +587,60 @@ You can do it either via the gear icon of the each zone OR via the global color 
 <context>
     <name>MonitorIdForm</name>
     <message>
-        <location filename="../../src/wizard/MonitorIdForm.ui" line="20"/>
+        <location filename="../../src/wizard/MonitorIdForm.ui" line="13"/>
         <source>MonitorIdForm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/MonitorIdForm.ui" line="55"/>
+        <location filename="../../src/wizard/MonitorIdForm.ui" line="48"/>
         <source>1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>MonitorsConfigurationPage</name>
-    <message>
-        <source>Choose monitor</source>
-        <translation type="vanished">Выберите монитор</translation>
-    </message>
-    <message>
-        <source>Choose monitor to illuminate.
-You still will be able to place capturing zones manually.</source>
-        <translation type="vanished">Выберите монитор для подсветки.
-Зоны подсветки можно будет настроить вручную.</translation>
-    </message>
-</context>
-<context>
-    <name>QApplication</name>
-    <message>
-        <source>read device fail</source>
-        <translation type="obsolete">устройство не отвечает</translation>
-    </message>
-</context>
-<context>
     <name>SelectDevicePage</name>
     <message>
-        <location filename="../../src/wizard/SelectDevicePage.ui" line="14"/>
+        <location filename="../../src/wizard/SelectDevicePage.ui" line="7"/>
         <source>WizardPage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/SelectDevicePage.ui" line="17"/>
+        <location filename="../../src/wizard/SelectDevicePage.ui" line="10"/>
         <source>Select connected device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/SelectDevicePage.ui" line="36"/>
+        <location filename="../../src/wizard/SelectDevicePage.ui" line="29"/>
         <source>Ardulight (Serial, 255 LEDs)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/SelectDevicePage.ui" line="43"/>
+        <location filename="../../src/wizard/SelectDevicePage.ui" line="36"/>
         <source>Adalight (Serial, 511 LEDs)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/SelectDevicePage.ui" line="79"/>
+        <location filename="../../src/wizard/SelectDevicePage.ui" line="72"/>
         <source>DDP (UDP, 1500 LEDs)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/SelectDevicePage.ui" line="86"/>
+        <location filename="../../src/wizard/SelectDevicePage.ui" line="79"/>
         <source>DRGB (UDP, 490 LEDs)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/SelectDevicePage.ui" line="113"/>
+        <location filename="../../src/wizard/SelectDevicePage.ui" line="106"/>
         <source>DNRGB (UDP, 1500 LEDs)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/SelectDevicePage.ui" line="120"/>
+        <location filename="../../src/wizard/SelectDevicePage.ui" line="113"/>
         <source>WARLS (UDP, 255 LEDs)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/SelectDevicePage.ui" line="93"/>
+        <location filename="../../src/wizard/SelectDevicePage.ui" line="86"/>
         <source>Virtual LED device</source>
         <translation type="unfinished"></translation>
     </message>
@@ -399,17 +648,17 @@ You still will be able to place capturing zones manually.</source>
 <context>
     <name>SelectProfilePage</name>
     <message>
-        <location filename="../../src/wizard/SelectProfilePage.ui" line="14"/>
+        <location filename="../../src/wizard/SelectProfilePage.ui" line="7"/>
         <source>WizardPage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/SelectProfilePage.ui" line="17"/>
+        <location filename="../../src/wizard/SelectProfilePage.ui" line="10"/>
         <source>Choose profile</source>
         <translation>Выберите профиль</translation>
     </message>
     <message>
-        <location filename="../../src/wizard/SelectProfilePage.ui" line="82"/>
+        <location filename="../../src/wizard/SelectProfilePage.ui" line="75"/>
         <source>Profile to modify:</source>
         <translation>Изменить профиль:</translation>
     </message>
@@ -422,785 +671,688 @@ You still will be able to place capturing zones manually.</source>
 <context>
     <name>SettingsWindow</name>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="120"/>
-        <location filename="../../src/SettingsWindow.ui" line="256"/>
+        <location filename="../../src/SettingsWindow.ui" line="138"/>
+        <location filename="../../src/SettingsWindow.ui" line="274"/>
         <source>Mode</source>
         <translation>Режимы</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="402"/>
+        <location filename="../../src/SettingsWindow.ui" line="420"/>
         <source>Grab frequency:</source>
         <translation>Частота захвата:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="495"/>
+        <location filename="../../src/SettingsWindow.ui" line="513"/>
         <source>ms</source>
         <translation>мс</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="846"/>
+        <location filename="../../src/SettingsWindow.ui" line="788"/>
         <source>Colored</source>
         <translation>Разноцветные</translation>
     </message>
     <message>
-        <source>White</source>
-        <translation type="vanished">Белые</translation>
-    </message>
-    <message>
-        <location filename="../../src/SettingsWindow.ui" line="144"/>
-        <location filename="../../src/SettingsWindow.ui" line="1932"/>
+        <location filename="../../src/SettingsWindow.ui" line="162"/>
+        <location filename="../../src/SettingsWindow.ui" line="1884"/>
+        <location filename="../../src/SettingsWindowPhase5.cpp" line="498"/>
+        <location filename="../../src/SettingsWindowPhase5.cpp" line="515"/>
         <source>Device</source>
         <translation>Устройство</translation>
     </message>
     <message>
-        <source>Number of LEDs:</source>
-        <translation type="obsolete">Количество зон:</translation>
-    </message>
-    <message>
-        <source>Serial port:</source>
-        <translation type="obsolete">COM порт:</translation>
-    </message>
-    <message>
-        <source>Example for Windows: COM1, COM2 .. COMn, for Linux: /dev/ttyS0, /dev/ttyS1, /dev/ttyUSB0</source>
-        <translation type="obsolete">Например для Windows: COM1,COM2 .. COMn, для Linux: /dev/ttyS0, /dev/ttyS1, /dev/ttyUSB0</translation>
-    </message>
-    <message>
-        <source>Baud rate:</source>
-        <translation type="obsolete">Скорость порта:</translation>
-    </message>
-    <message>
-        <location filename="../../src/SettingsWindow.ui" line="2153"/>
-        <source>Gamma correction:</source>
-        <translation>Гамма-коррекция:</translation>
-    </message>
-    <message>
-        <location filename="../../src/SettingsWindow.ui" line="2487"/>
+        <location filename="../../src/SettingsWindow.ui" line="2439"/>
         <source>Smoothness:</source>
         <translation>Плавность переходов:</translation>
     </message>
     <message>
-        <source>Color sequence:</source>
-        <translation type="obsolete">Формат принимаемых данных:</translation>
-    </message>
-    <message>
-        <location filename="../../src/SettingsWindow.ui" line="2762"/>
-        <source>Virtual</source>
-        <translation>Виртуальное устройство</translation>
-    </message>
-    <message>
-        <location filename="../../src/SettingsWindow.ui" line="159"/>
-        <location filename="../../src/SettingsWindow.ui" line="2805"/>
+        <location filename="../../src/SettingsWindow.ui" line="177"/>
+        <location filename="../../src/SettingsWindow.ui" line="2757"/>
         <source>Profiles</source>
         <translation>Профили</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="294"/>
+        <location filename="../../src/SettingsWindow.ui" line="312"/>
         <source>Sound visualization</source>
         <translation>Визуализация звука</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="580"/>
+        <location filename="../../src/SettingsWindow.ui" line="598"/>
         <source>Over-brightening:</source>
         <translation>Сверхподсветка:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="466"/>
+        <location filename="../../src/SettingsWindow.ui" line="484"/>
         <source>Grab interval:</source>
         <translation>Интервал захвата видео:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="441"/>
+        <location filename="../../src/SettingsWindow.ui" line="459"/>
         <source>&lt;h4&gt;Over-brightening&lt;/h4&gt; To achieve a higher overall brightness, Prismatik will set the LEDs to maximum even if the grabbed color is not at full brightness.</source>
         <translation>&lt;h4&gt;Сверхподсветка&lt;/h4&gt; чтобы общая яркость была выше, Prismatik будет устанавливать яркость светодиодов на максимум, даже если яркость захваченного цвета не максимальна.</translation>
     </message>
     <message>
-        <source>Do not show</source>
-        <translation type="vanished">Не показывать области захвата</translation>
-    </message>
-    <message>
-        <location filename="../../src/SettingsWindow.ui" line="1226"/>
+        <location filename="../../src/SettingsWindow.ui" line="1178"/>
         <source>Constant color:</source>
         <translation>Постоянный цвет:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1297"/>
-        <location filename="../../src/SettingsWindow.ui" line="1620"/>
+        <location filename="../../src/SettingsWindow.ui" line="1249"/>
+        <location filename="../../src/SettingsWindow.ui" line="1572"/>
         <source>Slow</source>
         <translation>Низкая</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1331"/>
-        <location filename="../../src/SettingsWindow.ui" line="1654"/>
+        <location filename="../../src/SettingsWindow.ui" line="1283"/>
+        <location filename="../../src/SettingsWindow.ui" line="1606"/>
         <source>Fast</source>
         <translation>Высокая</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1491"/>
+        <location filename="../../src/SettingsWindow.ui" line="1443"/>
         <source>Sound device:</source>
         <translation>Устройство воспроизведения звука:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1536"/>
+        <location filename="../../src/SettingsWindow.ui" line="1488"/>
         <source>Animate colors from</source>
         <translation>Анимировать цвета с</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1562"/>
+        <location filename="../../src/SettingsWindow.ui" line="1514"/>
         <source>to</source>
         <translation>по</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1666"/>
+        <location filename="../../src/SettingsWindow.ui" line="1618"/>
         <source>Please note: The sound visualizer works best with low smoothness settings (20 and below, 10 recommended)</source>
         <translation>Обратите внимание: визуацизация звука лучше всего работает с низким уровнем плавности (20 и ниже, мы рекомендуем установить уровень на 10)</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1790"/>
+        <location filename="../../src/SettingsWindow.ui" line="1742"/>
         <source>Eye care settings</source>
         <translation>Настройки заботы о зрении</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1893"/>
+        <location filename="../../src/SettingsWindow.ui" line="1845"/>
         <source>&lt;h4&gt;Scene luminosity threshold&lt;/h4&gt; It works in two ways: You can either use &lt;b&gt;minimum luminosity level&lt;/b&gt; for soft and gentle light in dark scenes or you can use &lt;b&gt;dead-zone&lt;/b&gt; luminosity grabbing which ignores small non-black objects on black backgrounds and turns lights OFF in dark scenes. This is eye-saving vs. eye-killing options which works mutually. We &lt;b&gt;recommend&lt;/b&gt; to use threshold for minimum luminosity level.</source>
         <translation>&lt;h4&gt;Уровень освещенности сцены&lt;/h4&gt; Имеет два режима: Если вы будете использовать &lt;b&gt;минимальный уровень освещенности&lt;/b&gt; для мягкого и спокойного света в темных сценах. Другой способ - &lt;b&gt;мертвая зона&lt;/b&gt; захвата освещенности, игнорирующая мелкие отличные от черного объекты на черном фоне и отключающая подсветку в темных сценах. Это выбор между снижением нагрузки на глаза и усилением эффекта Lightpack. Мы &lt;b&gt;рекомендуем&lt;/b&gt; использовать режим минимального уровня освещенности.</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2605"/>
+        <location filename="../../src/SettingsWindow.ui" line="2557"/>
         <source>Disable USB Power LED</source>
         <translation>Отключить</translation>
     </message>
     <message>
-        <source>Keep lights ON after suspend</source>
-        <translation type="vanished">Оставить подсветку включённой после  потери сигнала</translation>
-    </message>
-    <message>
-        <location filename="../../src/SettingsWindow.ui" line="2814"/>
+        <location filename="../../src/SettingsWindow.ui" line="2766"/>
         <source>Profile</source>
         <translation>Профиль</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2841"/>
+        <location filename="../../src/SettingsWindow.ui" line="2793"/>
         <source>Add new profile</source>
         <translation>Добавить новый профиль</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2867"/>
+        <location filename="../../src/SettingsWindow.ui" line="2819"/>
         <source>Reset current profile to defaults</source>
         <translation>Сбросить настройки текущего профиля</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2893"/>
+        <location filename="../../src/SettingsWindow.ui" line="2845"/>
         <source>Delete profile</source>
         <translation>Удалить профиль</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2918"/>
+        <location filename="../../src/SettingsWindow.ui" line="2870"/>
         <source>Open in text editor</source>
         <translation>Открыть в текстовом редакторе</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3328"/>
+        <location filename="../../src/SettingsWindow.ui" line="3280"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This tab is used for experimental and unstable features. Any tuning with these controls may cause inevitable plane crash, miscarriage or nuclear disaster. Use it at your own risk.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Эта вкладка используется для экспериментальных и нестабильных настроек. Любые изменения в ней могут привести к катастрофе, прекращению работы или ядерному взрыву. Используйте эту владку на свой страх и риск.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3384"/>
-        <location filename="../../src/SettingsWindow.ui" line="3391"/>
+        <location filename="../../src/SettingsWindow.ui" line="3336"/>
+        <location filename="../../src/SettingsWindow.ui" line="3343"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;TCP port to listen.&lt;/p&gt;&lt;p&gt;Default: %1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3407"/>
+        <location filename="../../src/SettingsWindow.ui" line="3359"/>
         <source>Generate a random one</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3429"/>
-        <location filename="../../src/SettingsWindow.ui" line="3445"/>
+        <location filename="../../src/SettingsWindow.ui" line="3381"/>
+        <location filename="../../src/SettingsWindow.ui" line="3397"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The API Key all the clients should provide to authenticate. Could be any custom string (%1 character limit). &lt;/p&gt;&lt;p&gt;Default: %2&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3494"/>
+        <location filename="../../src/SettingsWindow.ui" line="3446"/>
         <source>Mac AV (Full screen)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3605"/>
+        <location filename="../../src/SettingsWindow.ui" line="3557"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Log verbosity: %1-%2 where %1 = no logs.&lt;/p&gt;&lt;p&gt;After enabling logs you need to restart the program.&lt;/p&gt;&lt;p&gt;When enabled you can use the &lt;img src=&quot;:/buttons/arrow_right_dark_24px.png&quot; width=&quot;12&quot;&gt; button to open the log directory.&lt;/p&gt;&lt;p&gt;Default: %3&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3615"/>
-        <location filename="../../src/SettingsWindow.ui" line="3618"/>
+        <location filename="../../src/SettingsWindow.ui" line="3567"/>
+        <location filename="../../src/SettingsWindow.ui" line="3570"/>
         <source>open Log folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3621"/>
+        <location filename="../../src/SettingsWindow.ui" line="3573"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3654"/>
+        <location filename="../../src/SettingsWindow.ui" line="3606"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When disabled every frame will be sent to the device. This is recommended for devices with inactivity timers built into firmwares (some custom Adalight sketches for example) or configured via Prismatik (UDP devices with a &amp;lt; 255 timeout value).&lt;/p&gt;&lt;p&gt;When enabled every new frame will be compared with the previous one, and will be sent only if differences are detected (can be useful in low bandwidth situations).&lt;/p&gt;&lt;p&gt;Default: %1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3657"/>
+        <location filename="../../src/SettingsWindow.ui" line="3609"/>
         <source>Send data only if colors changed</source>
         <translation>Отправлять информацию только при смене цветов</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The &lt;span style=&quot; font-weight:600;&quot;&gt;Woodenshark&lt;/span&gt; team created this software with &lt;span style=&quot; font-weight:600;&quot;&gt;Lightpack&lt;/span&gt; — content-appropriate ambient lighting system with USB interface&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="vanished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Эта программа создана командой &lt;span style=&quot; font-weight:600;&quot;&gt;Woodenshark&lt;/span&gt; для &lt;span style=&quot; font-weight:600;&quot;&gt;Lightpack&lt;/span&gt; — системы подсветки, синхронизирующейся с экраном&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <location filename="../../src/SettingsWindow.ui" line="3990"/>
+        <location filename="../../src/SettingsWindow.ui" line="3942"/>
         <source>Check for updates on startup</source>
         <translation>Проверять обновления при включении</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="4000"/>
+        <location filename="../../src/SettingsWindow.ui" line="3952"/>
         <source>Install updates automatically</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="4043"/>
+        <location filename="../../src/SettingsWindow.ui" line="3995"/>
         <source>This program is distributed «as is». Its source code is under the &lt;a href=&quot;http://www.gnu.org/licenses/gpl.html&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;GPL license&lt;/span&gt;&lt;/a&gt;. No warranty of any kind is expressed or implied. The authors will not be liable for data loss, damages, loss of profits or any other kind of loss while using or misusing this software. All content, such as icons, plugins, bitmaps etc. is under &lt;a href=&quot;http://creativecommons.org/licenses/by-sa/3.0/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;CC-BY-SA&lt;/span&gt;&lt;/a&gt; if otherwise is not noticed. &lt;br/&gt;&lt;br/&gt;This software build with the &lt;a href=&quot;http://qt-project.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Qt&lt;/span&gt;&lt;/a&gt; cross-platform framework, the &lt;a href=&quot;http://www.openssl.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;OpenSSL Toolkit&lt;/span&gt;&lt;/a&gt; and &lt;a href=&quot;http://somerandomdude.com/work/iconic/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;«Iconic»&lt;/span&gt;&lt;/a&gt; icon set by P.J. Onori as third-party licensed products.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Hot keys</source>
-        <translation type="obsolete">Горячие клавиши</translation>
-    </message>
-    <message>
-        <location filename="../../src/SettingsWindow.ui" line="2943"/>
+        <location filename="../../src/SettingsWindow.ui" line="2895"/>
         <source>User interface</source>
         <translation>Интерфейс пользователя</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2960"/>
+        <location filename="../../src/SettingsWindow.ui" line="2912"/>
         <source>Language:</source>
         <translation>Язык:</translation>
     </message>
     <message>
-        <source>Expert mode</source>
-        <translation type="vanished">Показывать дополнительные настройки</translation>
-    </message>
-    <message>
-        <location filename="../../src/SettingsWindow.ui" line="3525"/>
+        <location filename="../../src/SettingsWindow.ui" line="3477"/>
         <source>Win8 Desktop Duplication</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3549"/>
+        <location filename="../../src/SettingsWindow.ui" line="3501"/>
         <source>Enable DX hooking</source>
         <translatorcomment>Включить перехват DX API</translatorcomment>
         <translation>Включить перехват DX API</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3581"/>
+        <location filename="../../src/SettingsWindow.ui" line="3533"/>
         <source>also hook D3D9 (high performance impact)</source>
         <translation>Также захватывать D3D9 (сильно влияет на производительность)</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3595"/>
+        <location filename="../../src/SettingsWindow.ui" line="3547"/>
         <source>Logging level:</source>
         <translation>Детализация логирования:</translation>
     </message>
     <message>
-        <source>&lt;h2&gt;Prismatik&lt;/h2&gt;</source>
-        <translation type="vanished">&lt;h2&gt;Призматик&lt;/h2&gt;</translation>
-    </message>
-    <message>
-        <source>Open-source software from team made &lt;b&gt;Lightpack&lt;/b&gt; &amp;mdash; content-appropriate ambient lighting system with USB interface</source>
-        <translation type="obsolete">Открытый софт от команды создавшей &lt;b&gt;Лайтпак&lt;/b&gt; &amp;mdash; USB-подсветку монитора для усиления эффекта присутствия</translation>
-    </message>
-    <message>
-        <source>This program is distributed &amp;laquo;as is&amp;raquo;. It source code is under &lt;a href=&quot;http://www.gnu.org/licenses/gpl.html&quot;&gt;GPL license&lt;/a&gt;. No warranty of any kind is expressed or implied. The authors will not be liable for data loss, damages, loss of profits or any other kind of loss while using or misusing this software. All content, such as icons, plugins, bitmaps etc. is under &lt;a href=&quot;http://creativecommons.org/licenses/by-sa/3.0/&quot;&gt;CC-BY-SA&lt;/a&gt; if otherwise is not noticed. &lt;br /&gt;&lt;br /&gt;This software build with &lt;a href=&quot;http://qt-project.org/&quot;&gt;Qt&lt;/a&gt; cross-platform framework, use &lt;a href=&quot;http://python.org/&quot;&gt;Python 2.7&lt;/a&gt;, &lt;a href=&quot;http://pythonqt.sourceforge.net/&quot;&gt;PythonQt&lt;/a&gt; and &lt;a href=&quot;http://somerandomdude.com/work/iconic/&quot;&gt;&amp;laquo;Iconic&amp;raquo;&lt;/a&gt; icon set by P.J. Onori as a third-party licensed products.</source>
-        <translation type="obsolete">Это программное обеспечение распространяется &amp;laquo;как есть&amp;raquo; под открытой лицензией &lt;a href=&quot;http://www.gnu.org/licenses/gpl.html&quot;&gt;GPL&lt;/a&gt;. Авторы не несут отвественности за утерянные вами данные, нанесённый ущёрб или недополученную выгоду в результате использования этого ПО. Весь контент не являющийся частью исходного кода (иконки, битмапы, плагины и т.д.) покрываются лицензией &lt;a href=&quot;http://creativecommons.org/licenses/by-sa/3.0/deed.ru&quot;&gt;CC-BY-SA&lt;/a&gt;, если не указано иного.&lt;br /&gt;&lt;br /&gt;Это ПО построено на базе фреймворка &lt;a href=&quot;http://qt-project.org/&quot;&gt;Qt&lt;/a&gt; и использует &lt;a href=&quot;http://python.org/&quot;&gt;Python 2.7&lt;/a&gt;, &lt;a href=&quot;http://pythonqt.sourceforge.net/&quot;&gt;PythonQt&lt;/a&gt;, набор иконок &lt;a href=&quot;http://somerandomdude.com/work/iconic/&quot;&gt;&amp;laquo;Iconic&amp;raquo;&lt;/a&gt; в качестве лицензируемых продуктов третих лиц.</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;We put lights in right order:&lt;/b&gt;&lt;br&gt;Timur Sattarov, Mikhail Shatohin, Andrey Isupov&lt;br&gt;&lt;br&gt;&lt;b&gt;Special thanks to:&lt;/b&gt;&lt;br&gt; Andrey Burkov, Vasiliy Fomin, Daria Orton, Nikolay Kudashev, Alexey Yakovlev, Mikhail Karpelyanskiy, Phillip Burgess, Dirk Heinke, Mikhail Sannikov</source>
-        <translation type="obsolete">&lt;b&gt;Цвета на свои места расставляли:&lt;/b&gt;&lt;br&gt;Тимур Саттаров, Михаил Шатохин, Андрей Исупов&lt;br&gt;&lt;br&gt;&lt;b&gt;Особые благодарности:&lt;/b&gt;&lt;br&gt;Андрей Бурков, Василий Фомин, Даша Ортон, Николай Кудашев, Алексей Яковлев, Михаил Карпелянский, Филипп Бёрджес, Дирк Хейнеке, Михаил Санников</translation>
-    </message>
-    <message>
-        <location filename="../../src/SettingsWindow.ui" line="174"/>
-        <location filename="../../src/SettingsWindow.ui" line="3015"/>
+        <location filename="../../src/SettingsWindow.ui" line="192"/>
+        <location filename="../../src/SettingsWindow.ui" line="2967"/>
+        <location filename="../../src/SettingsWindowPhase5.cpp" line="457"/>
         <source>Plugins</source>
         <translation>Плагины</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1806"/>
+        <location filename="../../src/SettingsWindow.ui" line="1758"/>
         <source>Scene luminosity threshold:</source>
         <translation>Порог освещённости сцены:</translation>
     </message>
     <message>
-        <source>&lt;h4&gt;Scene luminosity threshold&lt;/h4&gt; It works in two ways: You can adjust &lt;b&gt;minimum luminosity level&lt;/b&gt; for soft and gentle light in the dark scenes or you can adjust &lt;b&gt;dead-zone&lt;/b&gt; luminosity grabbing which ignores small non-black objects on black backgrounds and turning lights OFF in the dark scenes. This is eye-saving vs. eye-killing options which works mutually. We &lt;b&gt;recommend&lt;/b&gt; to use threshold for minimum luminosity level.</source>
-        <translation type="vanished">&lt;h4&gt;Порг освещённости сцены&lt;/h4&gt; Регулирует две взаимоисключающие настройки: В качестве &lt;b&gt;минимального уровня освещённости&lt;/b&gt;  обеспечивает мягкую подсветку даже в самых тёмных сценах, либо позволяет установить &lt;b&gt;мёртвую зону&lt;/b&gt; освещённости ниже которой мелкие нечёрные объекты будут игнорироваться во время анализа и сцена будет считаться абсолютно чёрной, а светодиоды отключаться. В первом случае порог освещённости будет беречь ваши глаза, во втором мёртвая зона будет их насиловать. Мы строго советуем первый вариант.</translation>
-    </message>
-    <message>
-        <location filename="../../src/SettingsWindow.ui" line="2008"/>
-        <source>&lt;h4&gt;Gamma correction&lt;/h4&gt; It controls the level of saturation. The effect is clearly detectable in a video in screen grabbing mode&lt;br/&gt;Recommended value: 2.00</source>
-        <translation>&lt;h4&gt;Гамма-коррекция&lt;/h4&gt; Регулирует степень насыщения каждого цвета после его анализа. Эффект хорошо заметен в фильмах.&lt;br/&gt;Рекомендованное занчение: 2.00</translation>
-    </message>
-    <message>
-        <location filename="../../src/SettingsWindow.ui" line="2612"/>
+        <location filename="../../src/SettingsWindow.ui" line="2564"/>
         <source>&lt;h4&gt;Refresh delay&lt;/h4&gt; This setting’s values are inversely proportional to the PWM’s frequency. It&apos;s affects to performance.</source>
         <translation>&lt;h4&gt;Период обновления ШИМ&lt;/4&gt; Значение настройки обратно пропорционально частоте широтно-импульсной модуляции (ШИМ). Влияет на производительность.</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2494"/>
+        <location filename="../../src/SettingsWindow.ui" line="2446"/>
         <source>&lt;h4&gt;Color depth&lt;/h4&gt; Number of colors per channel, one RGB LED uses 3 channels (value in power of 3).</source>
         <translation>&lt;h4&gt;Глубина цвета&lt;/h4&gt;Число цветов на каждый канал. Один RGB-светодиод использует 3 канала, поэтому общее кол-во цветов равно значению настройки в степени 3.</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2529"/>
+        <location filename="../../src/SettingsWindow.ui" line="2481"/>
         <source>&lt;h4&gt;Smoothness&lt;/h4&gt; It defines how many steps will be color changed in</source>
         <translation>&lt;h4&gt;Плавность&lt;/h4&gt; Настройка определяет количество цветов, необходимое для перехода между исходным и результирующим</translation>
     </message>
     <message>
-        <source>
-&lt;h4&gt;Plugins&lt;/h4&gt; Here you can manage your plugins which stores in you profile folder. Plugins work in priority of order &amp;mdash; first plugin in the list has the highest priority. You can increase or decrease priority of any plugin in list.</source>
-        <translation type="vanished">&lt;h4&gt;Плагины&lt;/h4&gt; В этом разделе вы можете управлять всеми установленными плагинами, которые хранятся в папке профиля. Несколько включенных плагинов работают согласно их приоритету, который вы можете увеличивать и понижать.</translation>
-    </message>
-    <message>
-        <source>Plugin settings</source>
-        <translation type="obsolete">Настройки плагина</translation>
-    </message>
-    <message>
-        <location filename="../../src/SettingsWindow.ui" line="3180"/>
+        <location filename="../../src/SettingsWindow.ui" line="3132"/>
         <source>Info</source>
         <translation>О плагине</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3288"/>
+        <location filename="../../src/SettingsWindow.ui" line="3240"/>
         <source>Version:</source>
         <translation>Версия:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3246"/>
+        <location filename="../../src/SettingsWindow.ui" line="3198"/>
         <source>Name:</source>
         <translation>Имя:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3204"/>
+        <location filename="../../src/SettingsWindow.ui" line="3156"/>
         <source>Author:</source>
         <translation>Автор:</translation>
     </message>
     <message>
-        <source>Dev tab</source>
-        <translation type="obsolete">Отладка</translation>
-    </message>
-    <message>
-        <location filename="../../src/SettingsWindow.ui" line="219"/>
-        <location filename="../../src/SettingsWindow.ui" line="3819"/>
+        <location filename="../../src/SettingsWindow.ui" line="237"/>
+        <location filename="../../src/SettingsWindow.ui" line="3771"/>
+        <location filename="../../src/SettingsWindowPhase5.cpp" line="500"/>
+        <location filename="../../src/SettingsWindowPhase5.cpp" line="517"/>
         <source>About</source>
         <translation>О программе</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="204"/>
-        <location filename="../../src/SettingsWindow.ui" line="3690"/>
+        <location filename="../../src/SettingsWindow.ui" line="222"/>
+        <location filename="../../src/SettingsWindow.ui" line="3642"/>
+        <location filename="../../src/SettingsWindowPhase5.cpp" line="475"/>
         <source>Help</source>
         <translation>Справка</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3451"/>
+        <location filename="../../src/SettingsWindow.ui" line="3403"/>
         <source>Key (authorization disabled if empty):</source>
         <translation>Ключ авторизации (авторизация отключена если в поле пусто):</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="189"/>
-        <location filename="../../src/SettingsWindow.ui" line="3319"/>
+        <location filename="../../src/SettingsWindow.ui" line="207"/>
+        <location filename="../../src/SettingsWindow.ui" line="3271"/>
         <source>Expert</source>
         <translation>Эксперт</translation>
     </message>
     <message>
-        <source>Copy and paste this key into the application using the API, for authorization on the server</source>
-        <translation type="vanished">Скопируйте и вставьте этот ключ в приложение, использующее API, для авторизации на сервере</translation>
-    </message>
-    <message>
-        <location filename="../../src/SettingsWindow.ui" line="3410"/>
+        <location filename="../../src/SettingsWindow.ui" line="3362"/>
         <source>Generate</source>
         <translation>Сгенерировать</translation>
     </message>
     <message>
-        <source>Grab delay:</source>
-        <translation type="vanished">Захватывать каждые:</translation>
-    </message>
-    <message>
-        <location filename="../../src/SettingsWindow.ui" line="511"/>
+        <location filename="../../src/SettingsWindow.ui" line="529"/>
         <source>Average color on all LEDs</source>
         <translation>Средний цвет на все светодиоды</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="349"/>
+        <location filename="../../src/SettingsWindow.ui" line="367"/>
         <source>FPS</source>
         <translation>к/с</translation>
     </message>
     <message>
-        <source>Eyes care settings</source>
-        <translation type="vanished">Забота о глазах</translation>
-    </message>
-    <message>
-        <location filename="../../src/SettingsWindow.ui" line="1796"/>
+        <location filename="../../src/SettingsWindow.ui" line="1748"/>
         <source>Dead-zone</source>
         <translation>&quot;Мёртвая&quot; зона</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1816"/>
+        <location filename="../../src/SettingsWindow.ui" line="1768"/>
         <source>Luminosity threshold is used for:</source>
         <translation>Порог освещённости используется как:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1826"/>
+        <location filename="../../src/SettingsWindow.ui" line="1778"/>
         <source>Minimum luminosity level</source>
         <translation>Минимальный уровень освещённости</translation>
     </message>
     <message>
-        <source>Appearance of grab widgets</source>
-        <translation type="vanished">Внешний вид виджетов</translation>
-    </message>
-    <message>
-        <location filename="../../src/SettingsWindow.ui" line="1282"/>
-        <location filename="../../src/SettingsWindow.ui" line="1605"/>
+        <location filename="../../src/SettingsWindow.ui" line="1234"/>
+        <location filename="../../src/SettingsWindow.ui" line="1557"/>
         <source>Change color with rate:</source>
         <translation>Скорость изменения цвета:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="284"/>
+        <location filename="../../src/SettingsWindow.ui" line="302"/>
         <source>Screen grabbing</source>
         <translation>Захват экрана</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="41"/>
+        <location filename="../../src/SettingsWindow.ui" line="53"/>
         <source>&lt;h4&gt;Advanced mode&lt;/h4&gt;
 
 Reveals extra fine-grained controls across the color/effect sections: bloom threshold, contrast pivot, vibrance protection, and per-effect speed/density/direction for the Rainbow/Comet/Theater Chase/Twinkle mood lamp effects.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="46"/>
+        <location filename="../../src/SettingsWindow.ui" line="58"/>
         <source>Advanced mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="289"/>
+        <location filename="../../src/SettingsWindow.ui" line="307"/>
         <source>Mood lamp</source>
         <translation>Простая подсветка</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="339"/>
+        <location filename="../../src/SettingsWindow.ui" line="357"/>
         <source>Apply screen color modifications (F.lux, redshift)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="618"/>
-        <source>&lt;h4&gt;Color encoding gamma&lt;/h4&gt;
-
-This is the gamma used for encoding the color with the desired &lt;b&gt;color temperature&lt;/b&gt;. Setting to &lt;b&gt;1.0&lt;/b&gt; cancels the effect.
-This is the reciprocal of the &lt;b&gt;device gamma&lt;/b&gt; which is the decoding gamma. They cancel each other if set to same value.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/SettingsWindow.ui" line="668"/>
-        <source>&lt;h4&gt;Color temperature &amp;amp; gamma&lt;/h4&gt;
-
-Internally emulates the effects of f.lux, redshift, Night Light, Night Shift...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/SettingsWindow.ui" line="673"/>
-        <source>Apply color temperature and gamma</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/SettingsWindow.ui" line="726"/>
         <source>Host smoothing:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="739"/>
+        <location filename="../../src/SettingsWindow.ui" line="681"/>
         <source>&lt;h4&gt;Host smoothing&lt;/h4&gt; Linear transition, on the host, from the last displayed color to the most recently captured one. &lt;b&gt;Off&lt;/b&gt; (0) keeps the current instant cut. For devices without their own smoothing (Adalight, Ardulight, WARLS/DRGB/DNRGB/DDP). Not used by the native Lightpack device, which has its own firmware smoothing (see Device Smooth on its tab).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="776"/>
+        <location filename="../../src/SettingsWindow.ui" line="718"/>
         <source>Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="818"/>
+        <location filename="../../src/SettingsWindow.ui" line="760"/>
         <source>The Lightpack device uses its own firmware Device Smooth instead.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="830"/>
+        <location filename="../../src/SettingsWindow.ui" line="772"/>
         <source>Grab widget adjustment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="836"/>
+        <location filename="../../src/SettingsWindow.ui" line="778"/>
         <source>Hidden</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="856"/>
+        <location filename="../../src/SettingsWindow.ui" line="798"/>
         <source>All white</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="866"/>
+        <location filename="../../src/SettingsWindow.ui" line="805"/>
+        <source>Paint each grab zone with the color actually sent to the LED after the full device pipeline.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindow.ui" line="808"/>
+        <source>Live colors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindow.ui" line="818"/>
         <source>Color Adjustments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="872"/>
+        <location filename="../../src/SettingsWindow.ui" line="824"/>
         <source>&lt;h4&gt;Bloom&lt;/h4&gt;
 
 Boosts near-white, low-saturation pixels (lens flares, bright highlights) to make them stand out more.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="877"/>
+        <location filename="../../src/SettingsWindow.ui" line="829"/>
         <source>Bloom (boost near-white highlights)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="925"/>
+        <location filename="../../src/SettingsWindow.ui" line="877"/>
         <source>50 = unchanged. Below 50 mutes colors toward grayscale, above 50 makes them more vivid.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="928"/>
+        <location filename="../../src/SettingsWindow.ui" line="880"/>
         <source>Saturation:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="967"/>
+        <location filename="../../src/SettingsWindow.ui" line="919"/>
         <source>50 = unchanged. Below 50 flattens the difference between light and dark, above 50 exaggerates it.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="970"/>
+        <location filename="../../src/SettingsWindow.ui" line="922"/>
         <source>Contrast:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1009"/>
+        <location filename="../../src/SettingsWindow.ui" line="961"/>
         <source>Like Saturation, but eases off on colors that are already vivid - boosts dull colors without oversaturating skin tones or colors that are already vibrant. 50 = unchanged.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1012"/>
+        <location filename="../../src/SettingsWindow.ui" line="964"/>
         <source>Vibrance:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1054"/>
+        <location filename="../../src/SettingsWindow.ui" line="1006"/>
         <source>How close to pure white/gray a pixel&apos;s color must be before Bloom boosts it at all. Higher = stricter (only near-pure-white qualifies); lower = more colors get treated as bloom-worthy.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1057"/>
+        <location filename="../../src/SettingsWindow.ui" line="1009"/>
         <source>Bloom threshold:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1105"/>
+        <location filename="../../src/SettingsWindow.ui" line="1057"/>
         <source>The brightness level (0-255) that Contrast pivots around - values above it get brighter and values below it get darker as Contrast increases. 128 (middle gray) is the default.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1108"/>
+        <location filename="../../src/SettingsWindow.ui" line="1060"/>
         <source>Contrast pivot:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1156"/>
+        <location filename="../../src/SettingsWindow.ui" line="1108"/>
         <source>How strongly Vibrance backs off on colors that are already saturated. 0 = behaves exactly like Saturation (no protection); 100 = fully-saturated colors are left completely untouched.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1159"/>
+        <location filename="../../src/SettingsWindow.ui" line="1111"/>
         <source>Vibrance protection:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1217"/>
+        <location filename="../../src/SettingsWindow.ui" line="1169"/>
         <source>Lamp effects only apply in Liquid color mode - Constant color always uses Static so the output truly stops changing.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1239"/>
+        <location filename="../../src/SettingsWindow.ui" line="1191"/>
         <source>Breathing:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1242"/>
+        <location filename="../../src/SettingsWindow.ui" line="1194"/>
         <source>Same fixed color as Constant, with a smooth brightness pulse.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1348"/>
+        <location filename="../../src/SettingsWindow.ui" line="1300"/>
         <source>100% = the effect&apos;s normal speed. Only affects the currently selected effect (Rainbow/Comet/Theater Chase/Twinkle).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1351"/>
+        <location filename="../../src/SettingsWindow.ui" line="1303"/>
         <source>Effect speed:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1402"/>
+        <location filename="../../src/SettingsWindow.ui" line="1354"/>
         <source>Only shown for Twinkle: 100% = normal amount of simultaneous sparkles. Higher shows more at once, lower makes them sparser.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1405"/>
+        <location filename="../../src/SettingsWindow.ui" line="1357"/>
         <source>Effect density:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1456"/>
+        <location filename="../../src/SettingsWindow.ui" line="1408"/>
         <source>Not shown for Twinkle (it has no direction). Reverses which way the effect travels along the strip.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1459"/>
+        <location filename="../../src/SettingsWindow.ui" line="1411"/>
         <source>Reverse effect direction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1509"/>
+        <location filename="../../src/SettingsWindow.ui" line="1461"/>
         <source>By default, on macOS this feature is limited to input devices (mic, line-in...), a third party software (such as Soundflower etc) is needed to redirect desktop sound into a virtual input that can be used here. The device has to support Linear PCM, 44100Hz (or 32000, 48000) sample rate and 16 (or 24, 32) bits per channel.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1783"/>
+        <location filename="../../src/SettingsWindow.ui" line="1735"/>
         <source>Mode:</source>
         <translation>Режим:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="1995"/>
+        <location filename="../../src/SettingsWindow.ui" line="1947"/>
         <source>Brightness cap:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2039"/>
+        <location filename="../../src/SettingsWindow.ui" line="1960"/>
+        <source>&lt;h4&gt;Output gamma&lt;/h4&gt; Single transfer function from linear scene light to LED PWM duty: w = L^(1/γ). &lt;b&gt;1.00&lt;/b&gt; = Linear (physically correct). &lt;b&gt;1.32&lt;/b&gt; = Classic (pre-5.17 look with temperature on). UI range 0.5–3.0.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindow.ui" line="1991"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Brightness Cap&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Lowers the brightness limit of LEDs (as opposed to overall brightness). Can be used to limit the power draw and the heat output. Defaults to 100% (no limit).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2133"/>
+        <location filename="../../src/SettingsWindow.ui" line="2085"/>
         <source>Keep lights ON after display sleep</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2165"/>
+        <location filename="../../src/SettingsWindow.ui" line="2105"/>
+        <source>Output gamma:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindow.ui" line="2117"/>
         <source>Run configuration wizard</source>
         <translation>Запустить мастер настройки</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2172"/>
+        <location filename="../../src/SettingsWindow.ui" line="2124"/>
         <source>Reapplies every enabled LED group&apos;s width/height override, without reopening the wizard.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2175"/>
+        <location filename="../../src/SettingsWindow.ui" line="2127"/>
         <source>&lt;h4&gt;Reapply LED groups&lt;/h4&gt;
 
 LED groups (created in the configuration wizard&apos;s zone placement step) let you resize several LEDs at once by a shared width/height override, instead of a fixed value per LED. If you&apos;ve manually resized individual LEDs afterwards and want to snap them back to their group&apos;s override without redoing the whole wizard, click this.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2180"/>
+        <location filename="../../src/SettingsWindow.ui" line="2132"/>
         <source>Reapply LED groups</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2269"/>
+        <location filename="../../src/SettingsWindow.ui" line="2221"/>
         <source>Keep lights ON after exit</source>
         <translation>Оставить подсветку включённой после выхода</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2276"/>
+        <location filename="../../src/SettingsWindow.ui" line="2228"/>
         <source>Keep lights ON after system suspend</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2283"/>
+        <location filename="../../src/SettingsWindow.ui" line="2235"/>
         <source>These buttons redistribute the LED zones within the same profile to match the chosen content aspect ratio. They do not switch profiles and do not change brightness, gamma, smoothing, device settings, or per-LED color coefficients - only the Position and Size of each zone are recalculated. Warning: any manual position/size adjustments you made to individual zones will be replaced by the canonical layout recomputed from the recipe. Profiles without a recorded layout recipe are unaffected - run the setup wizard first.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2286"/>
+        <location filename="../../src/SettingsWindow.ui" line="2238"/>
         <source>Content aspect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2292"/>
+        <location filename="../../src/SettingsWindow.ui" line="2244"/>
         <source>Fill</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2299"/>
+        <location filename="../../src/SettingsWindow.ui" line="2251"/>
         <source>16:9</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2306"/>
+        <location filename="../../src/SettingsWindow.ui" line="2258"/>
         <source>4:3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2388"/>
+        <location filename="../../src/SettingsWindow.ui" line="2340"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;h4 style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:medium; font-weight:600;&quot;&gt;Dithering&lt;/span&gt;&lt;/h4&gt;&lt;p&gt;Increases color accuracy with some devices, but may introduce flickering.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2391"/>
+        <location filename="../../src/SettingsWindow.ui" line="2343"/>
         <source>Enable Dithering</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3047"/>
+        <location filename="../../src/SettingsWindow.ui" line="2714"/>
+        <source>Stage</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindow.ui" line="2999"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:medium; font-weight:600;&quot;&gt;Plugins&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Here you can manage your plugins which are stored in you profile folder. Check each plugin&apos;s documentation for requirements and settings. Plugins work in priority of order — first plugin in the list has the highest priority.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:medium; font-weight:600;&quot;&gt;Плагины&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Здесь вы можете управлять плагинов, которые хранятся в папке профиля вас. Проверьте документацию каждого подключаемого модуля для требований и настроек. Плагины работают в приоритете порядке — сначала плагин в списке имеет самый высокий приоритет.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3350"/>
+        <location filename="../../src/SettingsWindow.ui" line="3302"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enables TCP socket server.&lt;/p&gt;&lt;p&gt;You can connect via &amp;quot;telnet &amp;lt;ip&amp;gt; &amp;lt;port&amp;gt;&amp;quot; for example and manually execute available commands.&lt;/p&gt;&lt;p&gt;Default: %1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3368"/>
+        <location filename="../../src/SettingsWindow.ui" line="3320"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When enabled, you can connect ONLY from the same computer through 127.0.0.1/localhost address.&lt;/p&gt;&lt;p&gt;Disable this if you want to connect from anywhere else.&lt;/p&gt;&lt;p&gt;Default: %1&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3371"/>
+        <location filename="../../src/SettingsWindow.ui" line="3323"/>
         <source>Listen only on local interface (127.0.0.1)</source>
         <translation>Использовать только локальный интерфейс (127.0.0.1)</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3480"/>
+        <location filename="../../src/SettingsWindow.ui" line="3432"/>
         <source>X11 (Full screen)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3487"/>
+        <location filename="../../src/SettingsWindow.ui" line="3439"/>
         <source>Mac CG (Full screen)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3518"/>
+        <location filename="../../src/SettingsWindow.ui" line="3470"/>
         <source>WinAPI (Full screen)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3711"/>
+        <location filename="../../src/SettingsWindow.ui" line="3663"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;
 &lt;head&gt;
@@ -1257,7 +1409,7 @@ LED groups (created in the configuration wizard&apos;s zone placement step) let 
 &lt;h3&gt;4. Image &amp;amp; Color Post-Processing&lt;/h3&gt;
 &lt;ul&gt;
   &lt;li&gt;&lt;b&gt;Color Temperature &amp;amp; Night Light:&lt;/b&gt; Adjust color temperature (Kelvin) or reduce blue light during evening hours.&lt;/li&gt;
-  &lt;li&gt;&lt;b&gt;Gamma Correction:&lt;/b&gt; Fine-tune non-linear color luminosity curve for vibrant LED representation.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Output gamma:&lt;/b&gt; Single transfer from linear light to LED duty. 1.00 = Linear; 1.32 = Classic.&lt;/li&gt;
   &lt;li&gt;&lt;b&gt;Overbrighten:&lt;/b&gt; Boosts lower color intensity levels to maintain vivid backlight illumination even in dark scenes.&lt;/li&gt;
   &lt;li&gt;&lt;b&gt;Bloom:&lt;/b&gt; Boosts near-white, low-saturation pixels - lens flares, bright highlights - so they stand out more instead of blending into the rest of the frame.&lt;/li&gt;
   &lt;li&gt;&lt;b&gt;Saturation / Contrast / Vibrance:&lt;/b&gt; Three sliders, all on a 0-100 scale where 50 = unchanged, applied to every captured pixel (in that order, before Bloom). Vibrance is like Saturation but eases off on colors that are already vivid, to avoid oversaturating skin tones.&lt;/li&gt;
@@ -1299,364 +1451,308 @@ LED groups (created in the configuration wizard&apos;s zone placement step) let 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3887"/>
+        <location filename="../../src/SettingsWindow.ui" line="3839"/>
         <source>&lt;h2&gt;Prismatik (unofficial fork)&lt;/h2&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3921"/>
+        <location filename="../../src/SettingsWindow.ui" line="3873"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The &lt;span style=&quot; font-weight:600;&quot;&gt;Woodenshark&lt;/span&gt; team created this software with &lt;span style=&quot; font-weight:600;&quot;&gt;Lightpack&lt;/span&gt; — content-appropriate ambient lighting system with USB interface&lt;br/&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This is an unofficial fork of the open source project that is not affiliated with Woodenshark or Lightpack&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>This program is distributed &amp;laquo;as is&amp;raquo;. It source code is under &lt;a href=&quot;http://www.gnu.org/licenses/gpl.html&quot;&gt;GPL license&lt;/a&gt;. No warranty of any kind is expressed or implied. The authors will not be liable for data loss, damages, loss of profits or any other kind of loss while using or misusing this software. All content, such as icons, plugins, bitmaps etc. is under &lt;a href=&quot;http://creativecommons.org/licenses/by-sa/3.0/&quot;&gt;CC-BY-SA&lt;/a&gt; if otherwise is not noticed. &lt;br /&gt;&lt;br /&gt;This software build with &lt;a href=&quot;http://qt-project.org/&quot;&gt;Qt&lt;/a&gt; cross-platform framework and &lt;a href=&quot;http://somerandomdude.com/work/iconic/&quot;&gt;&amp;laquo;Iconic&amp;raquo;&lt;/a&gt; icon set by P.J. Onori as a third-party licensed products.</source>
-        <translation type="obsolete">Это программное обеспечение распространяется &amp;laquo;как есть&amp;raquo; под открытой лицензией &lt;a href=&quot;http://www.gnu.org/licenses/gpl.html&quot;&gt;GPL&lt;/a&gt;. Авторы не несут отвественности за утерянные вами данные, нанесённый ущёрб или недополученную выгоду в результате использования этого ПО. Весь контент не являющийся частью исходного кода (иконки, битмапы, плагины и т.д.) покрываются лицензией &lt;a href=&quot;http://creativecommons.org/licenses/by-sa/3.0/deed.ru&quot;&gt;CC-BY-SA&lt;/a&gt;, если не указано иного.&lt;br /&gt;&lt;br /&gt;Это ПО построено на базе фреймворка &lt;a href=&quot;http://qt-project.org/&quot;&gt;Qt&lt;/a&gt; и использует, набор иконок &lt;a href=&quot;http://somerandomdude.com/work/iconic/&quot;&gt;&amp;laquo;Iconic&amp;raquo;&lt;/a&gt; в качестве лицензируемых продуктов третих лиц.</translation>
-    </message>
-    <message>
-        <location filename="../../src/SettingsWindow.ui" line="4075"/>
+        <location filename="../../src/SettingsWindow.ui" line="4027"/>
         <source>qrc:/text/cast.html</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2381"/>
+        <location filename="../../src/SettingsWindow.ui" line="2333"/>
         <source>Overall brightness:</source>
         <translation>Общая яркость:</translation>
     </message>
     <message>
-        <source>Device-specific settings</source>
-        <translation type="obsolete">Настройки устройства</translation>
-    </message>
-    <message>
-        <location filename="../../src/SettingsWindow.ui" line="2748"/>
+        <location filename="../../src/SettingsWindow.ui" line="2700"/>
         <source>Refresh delay (Lightpack 5 and below):</source>
         <translation>Период обновления ШИМ (Лайтпак 5 и ниже):</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2522"/>
+        <location filename="../../src/SettingsWindow.ui" line="2474"/>
         <source>Color depth (Lightpack 5 and below):</source>
         <translation>Глубина цвета (Лайтпак 5 и ниже):</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2117"/>
-        <location filename="../../src/SettingsWindow.ui" line="2422"/>
+        <location filename="../../src/SettingsWindow.ui" line="633"/>
+        <source>&lt;h4&gt;Color temperature&lt;/h4&gt;
+
+Internally emulates the effects of f.lux, redshift, Night Light, Night Shift...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindow.ui" line="638"/>
+        <source>Apply color temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindow.ui" line="2069"/>
+        <location filename="../../src/SettingsWindow.ui" line="2374"/>
         <source>%</source>
         <translation>%</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="2140"/>
+        <location filename="../../src/SettingsWindow.ui" line="2092"/>
         <source>Keep lights ON after lock computer</source>
         <translation>Оставлять подсветку включённой после блокировки компьютера</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3053"/>
+        <location filename="../../src/SettingsWindow.ui" line="3005"/>
         <source>All plugins:</source>
         <translation>Доступные плагины:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3130"/>
+        <location filename="../../src/SettingsWindow.ui" line="3082"/>
         <source>Increase priority</source>
         <translation>Повысить приоритет</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3144"/>
+        <location filename="../../src/SettingsWindow.ui" line="3096"/>
         <source>Decrease priority</source>
         <translation>Снизить приоритет</translation>
     </message>
     <message>
-        <source>Open python console</source>
-        <translation type="vanished">Открыть консоль Python</translation>
-    </message>
-    <message>
-        <location filename="../../src/SettingsWindow.ui" line="3158"/>
+        <location filename="../../src/SettingsWindow.ui" line="3110"/>
         <source>Reload plugins</source>
         <translation>Перезагрузить плагины</translation>
     </message>
     <message>
-        <source>This tab is used for experimental and not stable features. Any tuning with all these controls provide inevetible plane crash, miscarrige or nuclear disaster. Use it on your own risk.</source>
-        <translation type="vanished">В этом разделе собраны эксперементальные настройки которые могут повлиять на стабильность работы программы. Лучше оставить в покое те из них, назначение которых вам неизвестно. Если всё-таки вы что-то сломали, то удалите соответствующий профиль, или исправьте его вручную.</translation>
-    </message>
-    <message>
-        <location filename="../../src/SettingsWindow.ui" line="3356"/>
+        <location filename="../../src/SettingsWindow.ui" line="3308"/>
         <source>Enable server (API via sockets)</source>
         <translation>Включить сервер (API через сокеты)</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3397"/>
+        <location filename="../../src/SettingsWindow.ui" line="3349"/>
         <source>Port:</source>
         <translation>Порт:</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3470"/>
+        <location filename="../../src/SettingsWindow.ui" line="3422"/>
         <source>Capture source</source>
         <translation>Источник захвата</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.ui" line="3647"/>
+        <location filename="../../src/SettingsWindow.ui" line="3599"/>
         <source>Ping Lightpack device every second</source>
         <translation>Проверять доступность Лайтпака каждую секунду</translation>
     </message>
     <message>
-        <source>Send data only if colors changes</source>
-        <translation type="vanished">Посылать данные только при изменении</translation>
-    </message>
-    <message>
-        <source>&amp;Turn on</source>
-        <translation type="obsolete">&amp;Включить</translation>
-    </message>
-    <message>
-        <source>&amp;Turn off</source>
-        <translation type="obsolete">&amp;Выключить</translation>
-    </message>
-    <message>
-        <source>&amp;Settings</source>
-        <translation type="obsolete">&amp;Настройки</translation>
-    </message>
-    <message>
-        <source>&amp;Quit</source>
-        <translation type="obsolete">&amp;Выход</translation>
-    </message>
-    <message>
-        <source>&amp;Profiles</source>
-        <translation type="obsolete">&amp;Профили</translation>
-    </message>
-    <message>
-        <source>Enabled profile: %1</source>
-        <translation type="obsolete">Включен профиль: %1</translation>
-    </message>
-    <message>
-        <source>Disabled</source>
-        <translation type="obsolete">Выключен</translation>
-    </message>
-    <message>
-        <source>Error with connection device, verbose in logs</source>
-        <translation type="obsolete">Проблемы с подключением, подробности в логах</translation>
-    </message>
-    <message>
-        <location filename="../../src/SettingsWindow.cpp" line="461"/>
-        <location filename="../../src/SettingsWindow.cpp" line="2056"/>
+        <location filename="../../src/SettingsWindow.cpp" line="472"/>
+        <location filename="../../src/SettingsWindow.cpp" line="2098"/>
         <source>System default</source>
         <translation>По умолчанию</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="505"/>
+        <location filename="../../src/SettingsWindow.cpp" line="516"/>
         <source>FPS: %1</source>
         <translation>Кадр/c: %1</translation>
     </message>
     <message>
-        <source>Prismatik Grabber Update</source>
-        <translation type="vanished">Обновить Prismatik</translation>
-    </message>
-    <message>
-        <source>The profile &apos;</source>
-        <translation type="vanished">Профиль &apos;</translation>
-    </message>
-    <message>
-        <source>&apos; is using the outdated WinAPI grabber.
-</source>
-        <translation type="vanished">&apos; использует устаревший видеозахват WinAPI.</translation>
-    </message>
-    <message>
-        <source>Do you want to switch to the new Desktop Duplication grabber?
-Note: You can disable this message by enabling expert mode.</source>
-        <translation type="vanished">Переключиться на новый граббер Desktop Duplication?
-Примечание: вы можете отключить это сообщение, включив режим эксперта.</translation>
-    </message>
-    <message>
-        <location filename="../../src/SettingsWindow.cpp" line="868"/>
-        <location filename="../../src/SettingsWindow.cpp" line="905"/>
+        <location filename="../../src/SettingsWindow.cpp" line="876"/>
+        <location filename="../../src/SettingsWindow.cpp" line="913"/>
         <source>Turn lights OFF</source>
         <translation>Выключить подсветку</translation>
     </message>
     <message>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt; &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt; p, li { white-space: pre-wrap; } &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt; &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;software &lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;%1&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; (revision &lt;/span&gt;&lt;a href=&quot;https://github.com/woodenshark/Lightpack/commit/%2&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;%2 &lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;), firmware &lt;b&gt;%3&lt;/b&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="vanished">&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Софт версии &lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;%1&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; (ревизия &lt;/span&gt;&lt;a href=&quot;https://github.com/woodenshark/Lightpack/commit/%2&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;%2 &lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;), прошивка &lt;b&gt;%3&lt;/b&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>Device locked via Plugin</source>
-        <translation type="obsolete">Устройство находится под управлением плагина</translation>
-    </message>
-    <message>
-        <location filename="../../src/SettingsWindow.cpp" line="897"/>
+        <location filename="../../src/SettingsWindow.cpp" line="905"/>
         <source>Turn lights ON</source>
         <translation>Включить подсветку</translation>
     </message>
     <message>
-        <source>Application already running</source>
-        <translation type="obsolete">Приложение уже запущено</translation>
-    </message>
-    <message>
-        <location filename="../../src/SettingsWindow.cpp" line="503"/>
-        <location filename="../../src/SettingsWindow.cpp" line="1931"/>
+        <location filename="../../src/SettingsWindow.cpp" line="514"/>
+        <location filename="../../src/SettingsWindow.cpp" line="1973"/>
         <source>Profile: %1</source>
         <translation>Профиль: %1</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="453"/>
-        <location filename="../../src/SettingsWindow.cpp" line="2019"/>
+        <location filename="../../src/SettingsWindow.cpp" line="464"/>
+        <location filename="../../src/SettingsWindow.cpp" line="2061"/>
         <source>Prismatik: %1</source>
         <translation type="unfinished">Призматик: %1</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="182"/>
+        <location filename="../../src/SettingsWindow.cpp" line="176"/>
         <source> The sound visualizer uses the &lt;a href=&quot;http://un4seen.com/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;BASS&lt;/span&gt;&lt;/a&gt; library.</source>
         <translation>Визуализатор звука использует библиотеку &lt;a href=&quot;http://un4seen.com/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;BASS&lt;/span&gt;&lt;/a&gt;.</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="216"/>
-        <location filename="../../src/SettingsWindow.cpp" line="219"/>
-        <location filename="../../src/SettingsWindow.cpp" line="236"/>
+        <location filename="../../src/SettingsWindow.cpp" line="210"/>
+        <location filename="../../src/SettingsWindow.cpp" line="213"/>
+        <location filename="../../src/SettingsWindow.cpp" line="230"/>
         <source>ON</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="216"/>
-        <location filename="../../src/SettingsWindow.cpp" line="219"/>
-        <location filename="../../src/SettingsWindow.cpp" line="236"/>
+        <location filename="../../src/SettingsWindow.cpp" line="210"/>
+        <location filename="../../src/SettingsWindow.cpp" line="213"/>
+        <location filename="../../src/SettingsWindow.cpp" line="230"/>
         <source>OFF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="226"/>
+        <location filename="../../src/SettingsWindow.cpp" line="220"/>
         <source>none</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="504"/>
+        <location filename="../../src/SettingsWindow.cpp" line="515"/>
         <source>Device: %1</source>
         <translation>Устройство: %1</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="615"/>
+        <location filename="../../src/SettingsWindow.cpp" line="624"/>
         <source>Prismatik was updated</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="615"/>
+        <location filename="../../src/SettingsWindow.cpp" line="624"/>
         <source>Successfully updated to version %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="619"/>
+        <location filename="../../src/SettingsWindow.cpp" line="628"/>
         <source>Prismatik automatic update failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="620"/>
+        <location filename="../../src/SettingsWindow.cpp" line="629"/>
         <source>There was a problem when trying to automatically update Prismatik to the latest version.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="621"/>
+        <location filename="../../src/SettingsWindow.cpp" line="630"/>
         <source>You are still on version %1.
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="622"/>
+        <location filename="../../src/SettingsWindow.cpp" line="631"/>
         <source>Installing updates automatically was disabled.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="710"/>
+        <location filename="../../src/SettingsWindow.cpp" line="718"/>
         <source> (restart the program first)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="712"/>
-        <location filename="../../src/SettingsWindow.cpp" line="2262"/>
+        <location filename="../../src/SettingsWindow.cpp" line="720"/>
+        <location filename="../../src/SettingsWindow.cpp" line="2308"/>
         <source> (enable logs first and restart the program)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="1287"/>
+        <location filename="../../src/SettingsWindow.cpp" line="1302"/>
         <source>&lt;html&gt;&lt;body&gt;&lt;p&gt;Your frame rate reached &lt;b&gt;%1 FPS&lt;/b&gt;, your baud rate of &lt;b&gt;%2&lt;/b&gt; might be too low for the amount of LEDs (%3).&lt;/p&gt;&lt;p&gt;You might experience lag or visual artifacts with your LEDs.&lt;/p&gt;&lt;p&gt;Lower your target framerate to &lt;b&gt;under %4 FPS&lt;/b&gt; or increase your baud rate to &lt;b&gt;above %5&lt;/b&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="2384"/>
+        <location filename="../../src/SettingsWindow.cpp" line="2430"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt; &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt; p, li { white-space: pre-wrap; } &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt; &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;software &lt;span style=&quot; font-size:8pt; font-weight:600;&quot;&gt;%1&lt;/span&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt; (rev &lt;/span&gt;&lt;a href=&quot;https://github.com/psieg/Lightpack/commit/%2&quot;&gt;&lt;span style=&quot; font-size:8pt; text-decoration: underline; color:#0000ff;&quot;&gt;%2&lt;/span&gt;&lt;/a&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;, Qt %4), firmware &lt;b&gt;%3&lt;/b&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Action name</source>
-        <translation type="obsolete">Действие</translation>
-    </message>
-    <message>
-        <source>Description</source>
-        <translation type="obsolete">Описание</translation>
-    </message>
-    <message>
-        <source>Hotkey</source>
-        <translation type="obsolete">Хоткей</translation>
-    </message>
-    <message>
-        <source>On/Off lights</source>
-        <translation type="obsolete">Вкл/выкл подсветку</translation>
-    </message>
-    <message>
-        <source>Switch between &quot;Capture mode&quot; and mood lamp mode</source>
-        <translation type="obsolete">Переключение между режимами &quot;захват&quot; и &quot;обычный&quot;</translation>
-    </message>
-    <message>
-        <source>Activate next profile</source>
-        <translation type="obsolete">Следующий профиль</translation>
-    </message>
-    <message>
-        <source>Activate previous profile</source>
-        <translation type="obsolete">Предыдущий профиль</translation>
-    </message>
-    <message>
-        <source>Undefined key</source>
-        <translation type="obsolete">Не задано</translation>
-    </message>
-    <message>
-        <source>Action not selected</source>
-        <translation type="obsolete">Действие не выбрано</translation>
-    </message>
-    <message>
-        <source>Reset hotkey of selected command</source>
-        <translation type="obsolete">Сбросить сочетание клавиш</translation>
-    </message>
-    <message>
-        <source>Device locked via API</source>
-        <translation type="obsolete">Устройство заблокировано через API</translation>
-    </message>
-    <message>
-        <location filename="../../src/SettingsWindow.ui" line="2469"/>
+        <location filename="../../src/SettingsWindow.ui" line="2421"/>
         <source>Lightpack</source>
         <translation>Лайтпак</translation>
     </message>
     <message>
-        <location filename="../../src/SettingsWindow.cpp" line="1229"/>
+        <location filename="../../src/SettingsWindow.cpp" line="1244"/>
         <source>update firmware</source>
         <translation>обновить прошивку</translation>
     </message>
     <message>
-        <source>Lightpack firmware update</source>
-        <translation type="obsolete">Обновление прошивки Лайтпака</translation>
-    </message>
-    <message>
-        <source>Click on this message to open lightpack downloads page</source>
-        <translation type="obsolete">Нажмите на это сообщение чтобы перейти на страницу скачивания прошивок</translation>
-    </message>
-    <message>
-        <location filename="../../src/SettingsWindow.cpp" line="1304"/>
+        <location filename="../../src/SettingsWindow.cpp" line="1319"/>
         <source>FPS: </source>
         <translation>Кадр/с: </translation>
     </message>
     <message>
-        <source>Device:</source>
-        <translation type="obsolete">Устройство:</translation>
-    </message>
-    <message>
-        <location filename="../../src/SettingsWindow.cpp" line="1952"/>
+        <location filename="../../src/SettingsWindow.cpp" line="1994"/>
         <source>New profile</source>
         <translation>Новый профиль</translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindowPhase5.cpp" line="293"/>
+        <source>Content</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindowPhase5.cpp" line="300"/>
+        <source>Perceptual adjustments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindowPhase5.cpp" line="303"/>
+        <source>White point / temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindowPhase5.cpp" line="325"/>
+        <source>Over-brightening</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindowPhase5.cpp" line="337"/>
+        <source>Host smoothing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindowPhase5.cpp" line="355"/>
+        <source>Output</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindowPhase5.cpp" line="407"/>
+        <source>Luminosity threshold</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindowPhase5.cpp" line="419"/>
+        <source>Live stage (post-pipeline)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindowPhase5.cpp" line="426"/>
+        <source>Zone overlay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindowPhase5.cpp" line="494"/>
+        <location filename="../../src/SettingsWindowPhase5.cpp" line="511"/>
+        <source>Scene</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindowPhase5.cpp" line="495"/>
+        <location filename="../../src/SettingsWindowPhase5.cpp" line="512"/>
+        <source>Geometry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindowPhase5.cpp" line="496"/>
+        <location filename="../../src/SettingsWindowPhase5.cpp" line="513"/>
+        <source>Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindowPhase5.cpp" line="497"/>
+        <location filename="../../src/SettingsWindowPhase5.cpp" line="514"/>
+        <source>Calibration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/SettingsWindowPhase5.cpp" line="499"/>
+        <location filename="../../src/SettingsWindowPhase5.cpp" line="516"/>
+        <source>Advanced</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1746,65 +1842,6 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>SysTrayIconPrivate</name>
-    <message>
-        <source>Prismatik</source>
-        <translation type="vanished">Призматик</translation>
-    </message>
-    <message>
-        <source>Application already running</source>
-        <translation type="vanished">Приложение уже запущено</translation>
-    </message>
-    <message>
-        <source>Lightpack firmware update</source>
-        <translation type="vanished">Обновление прошивки Лайтпака</translation>
-    </message>
-    <message>
-        <source>Click on this message to open lightpack downloads page</source>
-        <translation type="vanished">Нажмите на это сообщение чтобы перейти на страницу скачивания прошивок</translation>
-    </message>
-    <message>
-        <source>&amp;Turn on</source>
-        <translation type="vanished">&amp;Включить</translation>
-    </message>
-    <message>
-        <source>&amp;Turn off</source>
-        <translation type="vanished">&amp;Выключить</translation>
-    </message>
-    <message>
-        <source>&amp;Settings</source>
-        <translation type="vanished">&amp;Настройки</translation>
-    </message>
-    <message>
-        <source>&amp;Quit</source>
-        <translation type="vanished">&amp;Выход</translation>
-    </message>
-    <message>
-        <source>&amp;Profiles</source>
-        <translation type="vanished">&amp;Профили</translation>
-    </message>
-    <message>
-        <source>Enabled profile: %1</source>
-        <translation type="vanished">Включен профиль: %1</translation>
-    </message>
-    <message>
-        <source>Disabled</source>
-        <translation type="vanished">Выключен</translation>
-    </message>
-    <message>
-        <source>Error with connection device, verbose in logs</source>
-        <translation type="vanished">Проблемы с подключением, подробности в логах</translation>
-    </message>
-    <message>
-        <source>Device locked via API</source>
-        <translation type="vanished">Устройство заблокировано через API</translation>
-    </message>
-    <message>
-        <source>Device locked via Plugin</source>
-        <translation type="vanished">Устройство находится под управлением плагина</translation>
-    </message>
-</context>
-<context>
     <name>WindowsSoundManager</name>
     <message>
         <location filename="../../src/WindowsSoundManager.cpp" line="78"/>
@@ -1815,7 +1852,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>Wizard</name>
     <message>
-        <location filename="../../src/wizard/Wizard.ui" line="14"/>
+        <location filename="../../src/wizard/Wizard.ui" line="7"/>
         <source>Wizard</source>
         <translation>Мастер настройки</translation>
     </message>
@@ -1836,209 +1873,205 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>ZonePlacementPage</name>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="14"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="7"/>
         <source>WizardPage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="50"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="43"/>
         <source>Pegasus</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="43"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="36"/>
         <source>Cassiopeia</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="17"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="10"/>
         <source>Zone placement</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="23"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="16"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;table border=&quot;0&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;&quot; cellspacing=&quot;0&quot; cellpadding=&quot;0&quot;&gt;&lt;tr&gt;&lt;td&gt;&lt;p&gt;You can disable some zones by using the gear button of the zone.&lt;br/&gt;
 You&apos;ll be able to re-adjust each zone individually later:&lt;br/&gt;
 Mode tab &gt; Screen grabbing mode &gt; Grab widget adjustment&lt;/p&gt;&lt;/td&gt;&lt;td style=&quot; padding-left:2;&quot;&gt;&lt;p&gt;&lt;img src=&quot;:/buttons/settings_24px.png&quot; width=&quot;16&quot;/&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="36"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="29"/>
         <source>Andromeda</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="57"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="50"/>
         <source>Number of LEDs:</source>
         <translation>Количество зон:</translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="95"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="88"/>
         <source>Bottom margin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="105"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="98"/>
         <source>Side margin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="125"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="118"/>
         <source>Top margin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="171"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="164"/>
         <source>Apply</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="178"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="171"/>
         <source>skip corners</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="195"/>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="500"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="188"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="493"/>
         <source>Top</source>
         <translation>Верх</translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="325"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="318"/>
         <source>Clear Display</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="339"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="332"/>
         <source>Starting LED for this display</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="395"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="388"/>
         <source>Resize all boxes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="401"/>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="532"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="394"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="525"/>
         <source>Width</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="408"/>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="428"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="401"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="421"/>
         <source>—</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="421"/>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="552"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="414"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="545"/>
         <source>Height</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="441"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="434"/>
         <source>Apply to all boxes on this display</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="464"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="457"/>
         <source>LED groups</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="470"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="463"/>
         <location filename="../../src/wizard/ZonePlacementPage.cpp" line="578"/>
         <location filename="../../src/wizard/ZonePlacementPage.cpp" line="709"/>
         <source>Right-click boxes to mark them as members of the group being edited.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="482"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="475"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="492"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="485"/>
         <source>Edge</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="510"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="503"/>
         <source>Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="515"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="508"/>
         <source>Right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="520"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="513"/>
         <source>Custom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="572"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="565"/>
         <source>Color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="575"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="568"/>
         <source>Applies a fixed color to this group&apos;s members in Constant color mode only (ignored in Liquid mode).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="589"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="582"/>
         <source>Create / apply group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="603"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="596"/>
         <source>Remove selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="115"/>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="505"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="108"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="498"/>
         <source>Bottom</source>
         <translation>Низ</translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="85"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="78"/>
         <source>Sides</source>
         <translation>Стороны</translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="155"/>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="208"/>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="237"/>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="266"/>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="289"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="148"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="201"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="230"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="259"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="282"/>
         <source>%</source>
         <translation>%</translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="253"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="246"/>
         <source>Bottom gap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="305"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="298"/>
         <source>Thickness</source>
         <translation>Толщина</translation>
     </message>
     <message>
-        <source>Stand width</source>
-        <translation type="vanished">Ширина зоны</translation>
-    </message>
-    <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="315"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="308"/>
         <source>Start offset</source>
         <translation>Начало смещения</translation>
     </message>
     <message>
-        <location filename="../../src/wizard/ZonePlacementPage.ui" line="135"/>
+        <location filename="../../src/wizard/ZonePlacementPage.ui" line="128"/>
         <source>invert order</source>
         <translation>инвертировать порядок</translation>
     </message>

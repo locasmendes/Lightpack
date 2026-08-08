@@ -75,7 +75,8 @@ VOID FreeRestrictedSD(PVOID ptr);
 	public:
 		NightLight();
 		~NightLight();
-		void apply(QList<QRgb>& colors, const double gamma);
+		void apply(QList<QRgb>& colors) override;
+		quint16 colorTemperatureKelvin() const override;
 		static bool isSupported();
 	private:
 		NightLightLibrary::NightLightWrapper* _client;
@@ -86,7 +87,7 @@ VOID FreeRestrictedSD(PVOID ptr);
 	public:
 		GammaRamp() = default;
 		~GammaRamp() = default;
-		void apply(QList<QRgb>& colors, const double/*gamma*/);
+		void apply(QList<QRgb>& colors) override;
 		static bool isSupported();
 	private:
 		time_t _gammaAge = 0;

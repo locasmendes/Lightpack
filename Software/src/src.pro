@@ -307,6 +307,10 @@ SOURCES += \
     LedDeviceWarls.cpp \
     LedDeviceDdp.cpp \
     HostColorSmoothing.cpp \
+    ColorPipeline.cpp \
+    SmoothingDriver.cpp \
+    CalibrationPage.cpp \
+    SettingsWindowPhase5.cpp \
     ColorButton.cpp \
     ColorWheelWidget.cpp \
     ColorWheelDialog.cpp \
@@ -342,6 +346,7 @@ SOURCES += \
     wizard/BulkResize.cpp \
     ZoneLayoutRuntime.cpp \
     LedGroupRuntime.cpp \
+    ScreenTopology.cpp \
     systrayicon/SysTrayIcon.cpp \
     UpdatesProcessor.cpp \
     LightpackCommandLineParser.cpp
@@ -370,6 +375,9 @@ HEADERS += \
     LedDeviceWarls.hpp \
     LedDeviceDdp.hpp \
     HostColorSmoothing.hpp \
+    ColorPipeline.hpp \
+    SmoothingDriver.hpp \
+    CalibrationPage.hpp \
     LedDeviceVirtual.hpp \
     ColorButton.hpp \
     ColorWheelWidget.hpp \
@@ -411,6 +419,7 @@ HEADERS += \
     wizard/BulkResize.hpp \
     ZoneLayoutRuntime.hpp \
     LedGroupRuntime.hpp \
+    ScreenTopology.hpp \
     systrayicon/SysTrayIcon.hpp \
     UpdatesProcessor.hpp \
     LightpackCommandLineParser.hpp

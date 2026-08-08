@@ -26,10 +26,11 @@
 #pragma once
 
 #include <QtGui>
-#include <QElapsedTimer>
+#include <QHash>
 
 #include "GrabberBase.hpp"
-#include "HostColorSmoothing.hpp"
+#include "SmoothingDriver.hpp"
+#include "ColorF.h"
 #include "enums.hpp"
 
 class GrabberContext;
@@ -48,8 +49,9 @@ public:
 	virtual ~GrabManager();
 
 signals:
-	void updateLedsColors(const QList<QRgb> & colors);
+	void updateLedsColors(const QList<LinearRgbF> & colors);
 	void ambilightTimeOfUpdatingColors(double ms);
+	/*! Emitted on topology changes and when zone-screen availability flips (Phase 1). */
 	void changeScreen();
 	void onSessionChange(SystemSession::Status change);
 
@@ -60,6 +62,9 @@ public:
 	// Common options
 	void setNumberOfLeds(int numberOfLeds);
 	void reset();
+
+	/*! True after N consecutive ticks with no screen covering any zone (Phase 1.3). */
+	bool areZoneScreensMissing() const { return m_zonesScreenMissing; }
 
 public slots:
 	void onGrabberTypeChanged(const Grab::GrabberType grabberType);
@@ -77,7 +82,6 @@ public slots:
 	void onGrabApplyBlueLightReductionChanged(bool state);
 	void onGrabApplyColorTemperatureChanged(bool state);
 	void onGrabColorTemperatureChanged(int value);
-	void onGrabGammaChanged(double value);
 	void onSendDataOnlyIfColorsEnabledChanged(bool state);
 	void onGrabHostSmoothingDurationChanged(int ms);
 	void onConnectedDeviceChanged(const SupportedDevices::DeviceType device);
@@ -92,11 +96,12 @@ public slots:
 	void setVisibleLedWidgets(bool state);
 	void setColoredLedWidgets(bool state);
 	void setWhiteLedWidgets(bool state);
+	void setLiveColorsLedWidgets(bool state);
+	void updateLiveLedColors(const QList<QRgb> & colors);
 	void onGrabberStateChangeRequested(bool isStartRequested);
 
 private slots:
 	void handleGrabbedColors();
-	void advanceHostTransition();
 	void timeoutFakeGrab();
 	void timeoutUpdateFPS();
 	void pauseWhileResizeOrMoving();
@@ -104,9 +109,16 @@ private slots:
 	void onFrameGrabAttempted(GrabResult result);
 	void updateScreenGeometry();
 	void onScreenCountChanged(QScreen* screen);
+	void onPrimaryScreenChanged(QScreen* screen);
+	void onScreenGeometryChanged(const QScreen* screen, const QRect& geometry);
+	void restoreLedPositionsFromSettings();
 
 private:
-	void scaleLedWidgets(const int screenIndexResized, const QRect& geometry);
+	void syncScreenConnections();
+	void scheduleRestoreLedPositions();
+	void evaluateZoneScreenAvailability();
+	void persistZoneScreenIdentity();
+	QList<QPoint> zoneCenters() const;
 	GrabberBase *queryGrabber(Grab::GrabberType grabber);
 	void initGrabbers();
 	GrabberBase *initGrabber(GrabberBase *grabber);
@@ -117,12 +129,13 @@ private:
 	void clearColorsNew();
 	void clearColorsCurrent();
 	void initLedWidgets(int numberOfLeds);
-	bool isHostSmoothingApplicable() const;
+	void syncHostSmoothingEnabled();
 
 private:
 	QList<GrabberBase*> m_grabbers;
 	GrabberBase *m_grabber;
-	QList<QRect> m_lastScreenGeometry;
+	/*! Phase 1.1: keyed by QScreen* so geometryChanged lambdas never hold a stale index. */
+	QHash<const QScreen*, QRect> m_lastScreenGeometry;
 
 #ifdef D3D10_GRAB_SUPPORT
 	D3D10Grabber *m_d3d10Grabber;
@@ -132,20 +145,19 @@ private:
 
 	QTimer *m_timerUpdateFPS;
 	QTimer *m_timerFakeGrab;
-	QTimer *m_timerHostSmoothing;
-	QElapsedTimer m_hostSmoothingClock;
-	HostColorSmoothing m_hostSmoothing;
+	QTimer *m_timerRestoreLedPositions;
+	SmoothingDriver *m_smoothingDriver;
 	QWidget *m_parentWidget;
 	QList<GrabWidget *> m_ledWidgets;
 	QList<QRgb> m_grabResult;
 	const static QColor m_backgroundAndTextColors[10][2];
 
-	QList<QRgb> m_colorsCurrent;
+	QList<LinearRgbF> m_colorsCurrent;
 	QList<QRgb> m_colorsNew;
 	QList<QRgb> m_colorsProcessing;
 
-	QRect m_screenSavedRect;
-	int m_screenSavedIndex;
+	int m_consecutiveNoScreenMisses = 0;
+	bool m_zonesScreenMissing = false;
 
 	bool m_isPauseGrabWhileResizeOrMoving;
 	bool m_isSendDataOnlyIfColorsChanged;
@@ -163,12 +175,14 @@ private:
 	int m_vibranceProtection;
 	bool m_isApplyBlueLightReduction;
 	bool m_isApplyColorTemperature;
-	double m_gamma;
 	int m_colorTemperature;
+
+	QList<bool> m_changeLatch;
 
 	int m_grabCountThisInterval;
 	int m_grabCountLastInterval;
 
 	bool m_isGrabWidgetsVisible;
+	bool m_isLiveColorsEnabled;
 	GrabberContext * m_grabberContext;
 };

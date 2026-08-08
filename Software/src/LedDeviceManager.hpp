@@ -28,6 +28,7 @@
 
 #include "enums.hpp"
 #include "AbstractLedDevice.hpp"
+#include "ColorF.h"
 
 class QTimer;
 namespace SystemSession {
@@ -54,7 +55,7 @@ signals:
 
 	// This signals are directly connected to ILedDevice. Don't use outside.
 	void ledDeviceOpen();
-	void ledDeviceSetColors(const QList<QRgb> & colors);
+	void ledDeviceSetColors(const QList<LinearRgbF> & colors);
 	void ledDeviceOffLeds();
 	void ledDeviceSetUsbPowerLedDisabled(bool isDisabled);
 	void ledDeviceSetRefreshDelay(int value);
@@ -67,6 +68,7 @@ signals:
 	void ledDeviceSetMinimumLuminosityEnabled(bool, bool);
 	void ledDeviceSetDitheringEnabled(bool isEnabled, bool);
 	void ledDeviceSetColorSequence(QString value);
+	void ledDeviceSetColorFeedbackEnabled(bool enabled);
 	void ledDeviceRequestFirmwareVersion();
 	void ledDeviceUpdateWBAdjustments();
 	void ledDeviceUpdateDeviceSettings();
@@ -77,6 +79,7 @@ public slots:
 	void recreateLedDevice();
 
 	// This slots are protected from the overflow of queries
+	void setColors(const QList<LinearRgbF> & colors);
 	void setColors(const QList<QRgb> & colors);
 	void switchOffLeds();
 	void switchOnLeds();
@@ -91,6 +94,7 @@ public slots:
 	void setMinimumLuminosityEnabled(bool value);
 	void setDitheringEnabled(bool isEnabled);
 	void setColorSequence(const QString& value);
+	void setColorFeedbackEnabled(bool enabled);
 	void requestFirmwareVersion();
 	void updateWBAdjustments();
 	void updateDeviceSettings();
@@ -119,7 +123,7 @@ private:
 
 	QList<LedDeviceCommands::Cmd> m_cmdQueue;
 
-	QList<QRgb> m_savedColors;
+	QList<LinearRgbF> m_savedColors;
 	bool m_savedUsbPowerLedDisabled;
 	int m_savedRefreshDelay;
 	int m_savedColorDepth;
@@ -131,6 +135,7 @@ private:
 	bool m_savedIsMinimumLuminosityEnabled;
 	bool m_savedDitheringEnabled;
 	QString m_savedColorSequence;
+	bool m_savedColorFeedbackEnabled;
 
 	QList<AbstractLedDevice *> m_ledDevices;
 	AbstractLedDevice *m_ledDevice;

@@ -389,9 +389,15 @@ VOID FreeRestrictedSD(PVOID ptr) {
 		return NightLightLibrary::NightLightWrapper::isSupported(true);
 	}
 
-	void NightLight::apply(QList<QRgb>& colors, const double gamma)
+	void NightLight::apply(QList<QRgb>& colors)
 	{
-		PrismatikMath::applyColorTemperature(colors, _client->getSmoothenedColorTemperature(), gamma);
+		Q_UNUSED(colors);
+		// Kelvin is applied in ColorPipeline (linear white point); see colorTemperatureKelvin().
+	}
+
+	quint16 NightLight::colorTemperatureKelvin() const
+	{
+		return static_cast<quint16>(_client->getSmoothenedColorTemperature());
 	}
 #endif // NIGHTLIGHT_SUPPORT
 
@@ -425,7 +431,7 @@ VOID FreeRestrictedSD(PVOID ptr) {
 		return true;
 	}
 
-	void GammaRamp::apply(QList<QRgb>& colors, const double/*gamma*/)
+	void GammaRamp::apply(QList<QRgb>& colors)
 	{
 		HDC dc = NULL;
 

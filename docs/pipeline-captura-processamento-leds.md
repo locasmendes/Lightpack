@@ -24,8 +24,9 @@ flowchart LR
 | Camada | Onde vive | Responsabilidade |
 |--------|-----------|------------------|
 | Captura | `Software/grab/` | Ler pixels do SO |
-| Zonas + pós-processamento | `Software/src/GrabManager*` | 1 zona = 1 LED; ajustes de cor |
-| Dispositivo host | `Software/src/LedDevice*` | Gamma, brilho, dither, I/O |
+| Média por zona | `calculations.cpp` | Ainda `QRgb` 8-bit sRGB (SIMD) |
+| Conteúdo (B1–B4) | `ColorPipeline` + `GrabManager` | Decode → float linear → ajustes |
+| Dispositivo host | `ColorOps::applyDeviceStage` + `LedDevice*` | `OutputGamma` → wire → quantize + I/O |
 | Firmware | `Firmware/` | Smooth temporal + drivers LED |
 
 Modos **Mood Lamp** e **Sound Visualizer** reutilizam o mesmo caminho a partir do `LedDeviceManager`, mas **não** passam pelo grabber.
@@ -69,12 +70,14 @@ flowchart TB
 
 | Arquivo | Papel |
 |---------|--------|
-| `Software/src/LightpackApplication.cpp` | Liga `GrabManager` ↔ `LedDeviceManager` e inicia o backlight |
-| `Software/src/GrabManager.cpp` | Orquestra grabbers, zonas e pós-processamento |
+| `Software/src/LightpackApplication.cpp` | Liga `GrabManager` ↔ `LedDeviceManager`; registra `QList<LinearRgbF>` |
+| `Software/src/GrabManager.cpp` | Orquestra grabbers, zonas; chama `ColorPipeline` + smoothing |
+| `Software/src/ColorPipeline.*` | Estágio de conteúdo B1–B4 em `LinearRgbF` |
+| `Software/math/ColorOps.*` / `ColorF.h` | Decode/encode sRGB, `renderToWire`, device stage D1–D6 |
 | `Software/grab/GrabberBase.cpp` | Loop do timer + cálculo de média por zona |
-| `Software/grab/calculations.cpp` | `calculateAvgColor` (média RGB, com SIMD) |
+| `Software/grab/calculations.cpp` | `calculateAvgColor` (média sRGB 8-bit, com SIMD) |
 | `Software/src/LedDeviceManager.*` | Fila de comandos e thread do dispositivo |
-| `Software/src/AbstractLedDevice.cpp` | Gamma, luminosidade, WB, brilho, dither |
+| `Software/src/AbstractLedDevice.cpp` | Encaminha para `ColorOps::applyDeviceStage` |
 | `Software/src/LedDeviceLightpack.cpp` | Empacota cores e faz `hid_write` |
 | `Firmware/LightpackUSB.c` | Parse do comando HID `CMD_UPDATE_LEDS` |
 | `Firmware/LedManager.c` | Interpolação `start → end` |
@@ -154,16 +157,19 @@ Não há um `while` infinito dedicado. O “main loop” Ambilight é um **`QTim
 
 Intervalo padrão típico: **50 ms** (`Settings::getGrabSlowdown()`, faixa 1–1000 ms).
 
-### 3.3 Pós-processamento (`GrabManager::handleGrabbedColors`)
+### 3.3 Pós-processamento (`GrabManager` → `ColorPipeline`)
 
-Sobre a lista de cores por LED:
+A média por zona ainda chega como `QList<QRgb>` (sRGB 8-bit). A partir daí o host trabalha em **float linear** (`LinearRgbF`):
 
-1. Cópia de trabalho (`m_colorsNew` → `m_colorsProcessing`).
-2. **Temperatura de cor** *ou* **Blue Light Reduction** do SO.
-3. Opcional: **uma média global** aplicada a todos os LEDs habilitados.
-4. **Overbrighten**: escala se o canal máximo estiver abaixo de um teto.
-5. Diff com o frame anterior; se mudou (ou se “enviar sempre”) → `emit updateLedsColors`.
-6. Se “enviar sempre”, um timer fake (~900 ms) reenvia a última cor (útil como keep-alive em serial).
+1. **A — decode** (`ColorOps::srgbDecode`): `QRgb` → `LinearRgbF` (LUT 256), uma vez por LED.
+2. **B1** — média global opcional de todos os LEDs habilitados (acumulador em linear).
+3. **B2** — sanduíche perceptual (só se sat/contraste/vibrance/bloom ≠ default): encode → ops → decode.
+4. **B3** — white point / temperatura **ou** blue-light reduction do SO (ganho linear; **não** arrasta mais um segundo gamma).
+5. **B4** — overbrighten como ganho de exposição em linear.
+6. **C1/C2** — detecção de mudança com histerese + smooth no host em domínio *encoded* (`SmoothingDriver` / `HostColorSmoothing`).
+7. `emit updateLedsColors(QList<LinearRgbF>)` (QueuedConnection; metatype registrado no app).
+
+Keep-alive “enviar sempre” (~900 ms) continua existindo para serial.
 
 ### 3.4 Camada de dispositivo (host)
 
@@ -174,17 +180,16 @@ Sobre a lista de cores por LED:
 - timeout de comando ~500 ms;
 - em falha, tenta recriar o device (backoff) e pode pausar o grab.
 
-`AbstractLedDevice::applyColorModifications` (8-bit → 12-bit interno):
+`ColorOps::applyDeviceStage` (via `AbstractLedDevice::applyColorModifications` sobre `LinearRgbF`):
 
-1. Escala ×(4095/255)
-2. Correção **gamma**
-3. Limiar de luminosidade (espaço Lab): mínimo ou dead-zone
-4. **Brilho**
-5. **White balance** por LED
-6. Cap de brilho por LED
-7. Limite de corrente da fonte (`powerSupplyAmps`)
+1. **D1 — render transform** `w = L^(1/γ)` com `Device/OutputGamma` (único gamma de saída; 1.00 = linear físico, ~1.32 = look clássico migrado)
+2. **D2** — limiar de luminosidade (Lab) no domínio *wire*
+3. **D3** — white balance por LED
+4. **D4** — brilho do device
+5. **D5** — `PowerLimiter` (cap por LED + PSU numa passada)
+6. **D6** — quantização para códigos 12-bit (`StructRgb`); dither separado (`quantizeDithered`) — Lightpack 12-bit permanece sem dither nesta release
 
-Em seguida `applyDithering` reduz para a profundidade do hardware (ex.: 12 bits no Lightpack).
+Não há mais expansão 8→12 por `×(4095/255)` nem os dois gammas `Grab/Gamma` + `Device/Gamma` na cadeia ativa (ficam no disco só para migração/downgrade).
 
 ### 3.5 Empacote USB Lightpack (`LedDeviceLightpack::setColors`)
 
@@ -270,44 +275,55 @@ Intuição: se a zona esquerda mostra um céu azul, a média tende a azul → o 
 
 ## 6. Pipeline de transformação de cor
 
+Working space pós-grab: **`LinearRgbF`** (luz linear). Tipos auxiliares: `EncodedRgbF` (ops perceptuais), `WireRgbF` (pós-`OutputGamma`, ∝ duty PWM).
+
 ```mermaid
 flowchart TB
     subgraph Captura
-        P0[Pixels da zona] --> P1[Média 8-bit RGB]
+        P0[Pixels da zona] --> P1[Média sRGB 8-bit QRgb<br/>ainda em espaço gama]
     end
 
-    subgraph GrabManager
-        P1 --> P2[Temp. cor / Night Light]
-        P2 --> P3[Avg global opcional]
-        P3 --> P4[Overbrighten]
+    subgraph Conteúdo["ColorPipeline B1–B4"]
+        P1 --> A[srgbDecode → LinearRgbF]
+        A --> B1[Avg global opcional]
+        B1 --> B2[Sat / contraste / vibrance / bloom<br/>em encoded float]
+        B2 --> B3[Temp. / Night Light linear]
+        B3 --> B4[Overbrighten linear]
     end
 
-    subgraph Device host
-        P4 --> P5[Expandir p/ 12-bit]
-        P5 --> P6[Gamma]
-        P6 --> P7[Limiar Lab]
-        P7 --> P8[Brilho + WB + caps]
-        P8 --> P9[Dithering]
+    subgraph HostSmooth["Smooth / histerese"]
+        B4 --> C[Encoded lerp + change detect]
+    end
+
+    subgraph Device["ColorOps device stage"]
+        C --> D1["OutputGamma: w = L^(1/γ)"]
+        D1 --> D2[Limiar Lab wire]
+        D2 --> D3[WB + brilho]
+        D3 --> D4[PowerLimiter]
+        D4 --> D5[Quantize → 12-bit]
     end
 
     subgraph Firmware
-        P9 --> P10[Pacote HID]
+        D5 --> P10[Pacote HID / serial / UDP]
         P10 --> P11[Smooth start→end]
         P11 --> P12[SPI 12-bit / PWM]
         P12 --> P13[LED]
     end
 ```
 
-| Etapa | O quê | Onde |
-|-------|--------|------|
-| Média espacial | Cor representativa da zona | `calculations.cpp` |
-| Temp. / Night Light | Adequação à tela / SO | `GrabManager` |
-| Avg global | Todos os LEDs iguais | `GrabManager` |
-| Overbrighten | Amplifica cenas escuras | `GrabManager` |
-| Gamma / Lab / brilho / WB | Percepção e calibração | `AbstractLedDevice` |
-| Dither | Reduz banding na quantização | `AbstractLedDevice` |
-| Smooth temporal | Evita “piscar” entre frames | `LedManager` (firmware) |
-| SPI/PWM | Corrente/intensidade real | `LedDriver` |
+| Etapa | Domínio | O quê | Onde |
+|-------|---------|--------|------|
+| Média espacial | sRGB 8-bit | Cor representativa da zona (viés de Jensen vs média linear) | `calculations.cpp` |
+| Decode | → linear | LUT sRGB | `ColorOps` |
+| B1–B4 | linear (+ encoded em B2) | Avg, perceptual, temp, overbrighten | `ColorPipeline` |
+| Smooth host | encoded float | Interpolação temporal / histerese | `SmoothingDriver` |
+| D1 `OutputGamma` | linear → wire | Única transfer function de saída | `ColorOps::renderToWire` |
+| D2–D5 | wire | Lab, WB, brilho, PSU/cap | `ColorOps::applyDeviceStage` |
+| Quantize | wire → N-bit | Códigos para o device | `ColorOps::quantize` |
+| Smooth firmware | códigos | Evita “piscar” entre frames (Lightpack) | `LedManager` |
+| SPI/PWM | — | Corrente/intensidade real | `LedDriver` |
+
+**Nota (5.17):** temperatura de cor **não** muda mais o brilho geral (antes o toggle puxava `Grab/Gamma`). Quem usava o toggle como brilho deve ajustar **Output Gamma**.
 
 ---
 
@@ -398,32 +414,31 @@ O caminho **tela → média → pós-processamento** é o mesmo; só o empacote 
 ## 10. Diagrama mental resumido
 
 ```text
-┌──────────────────┐     média por zona      ┌─────────────────────┐
-│  Pixels da tela  │ ───────────────────────► │  RGB[LED0..LEDn]    │
-└──────────────────┘                          └──────────┬──────────┘
-                                                         │
-                              temp/avg/overbrighten      │
-                                                         ▼
-                                              ┌─────────────────────┐
-                                              │  Cores “percebidas” │
-                                              └──────────┬──────────┘
-                                    gamma/WB/brilho/dither│
-                                                         ▼
-                                              ┌─────────────────────┐
-                                              │  Pacote USB/Serial  │
-                                              └──────────┬──────────┘
-                                                         │
-                                                         ▼
-                                              ┌─────────────────────┐
-                                              │ Firmware: smooth    │
-                                              │ + SPI/PWM           │
-                                              └──────────┬──────────┘
-                                                         │
-                                                         ▼
-                                                   💡 LED aceso
+┌──────────────────┐   média sRGB 8-bit    ┌─────────────────────┐
+│  Pixels da tela  │ ─────────────────────► │  QRgb[LED0..LEDn]   │
+└──────────────────┘                        └──────────┬──────────┘
+                                                       │ srgbDecode
+                                                       ▼
+                                            ┌─────────────────────┐
+                                            │ LinearRgbF + B1–B4  │
+                                            │ (ColorPipeline)     │
+                                            └──────────┬──────────┘
+                                  OutputGamma → wire   │
+                                  WB/brilho/PSU/quant  │
+                                                       ▼
+                                            ┌─────────────────────┐
+                                            │  Pacote USB/Serial  │
+                                            └──────────┬──────────┘
+                                                       ▼
+                                            ┌─────────────────────┐
+                                            │ Firmware: smooth    │
+                                            │ + SPI/PWM           │
+                                            └──────────┬──────────┘
+                                                       ▼
+                                                 💡 LED aceso
 ```
 
-Em uma frase: **o grabber transforma retângulos da tela em cores médias; o host calibra essas cores; o firmware interpola e aciona os drivers até o LED emitir luz.**
+Em uma frase: **o grabber reduz zonas a médias 8-bit; o host lineariza, ajusta em float e aplica um único Output Gamma até o wire; o firmware interpola e aciona os drivers.**
 
 ---
 
@@ -431,10 +446,11 @@ Em uma frase: **o grabber transforma retângulos da tela em cores médias; o hos
 
 Ordem sugerida de leitura:
 
-1. `Software/src/LightpackApplication.cpp` — wiring e `startBacklight`
+1. `Software/src/LightpackApplication.cpp` — wiring, metatype `LinearRgbF`, `startBacklight`
 2. `Software/grab/GrabberBase.cpp` — `grab()` completo
-3. `Software/grab/calculations.cpp` — média de pixels
-4. `Software/src/GrabManager.cpp` — `handleGrabbedColors`
+3. `Software/grab/calculations.cpp` — média de pixels (ainda 8-bit)
+4. `Software/src/ColorPipeline.cpp` / `GrabManager.cpp` — conteúdo B1–B4 + emit float
+5. `Software/math/ColorOps.cpp` — decode, `renderToWire`, device stage
 5. `Software/src/AbstractLedDevice.cpp` — modificações de cor
 6. `Software/src/LedDeviceLightpack.cpp` — `setColors` + HID
 7. `Firmware/LightpackUSB.c` — `CMD_UPDATE_LEDS`

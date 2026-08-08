@@ -29,6 +29,9 @@
 #include <QColor>
 #include <QElapsedTimer>
 #include "SoundVisualizer.hpp"
+#include "SmoothingDriver.hpp"
+#include "ColorF.h"
+#include "enums.hpp"
 
 struct SoundManagerDeviceInfo {
 	SoundManagerDeviceInfo(){ this->name = QLatin1String(""); this->id = -1; }
@@ -48,7 +51,7 @@ public:
 	static SoundManagerBase* create(int hWnd = 0, QObject* parent = 0);
 
 signals:
-	void updateLedsColors(const QList<QRgb> & colors);
+	void updateLedsColors(const QList<LinearRgbF> & colors);
 	void deviceList(const QList<SoundManagerDeviceInfo> & devices, int recommended);
 	void visualizerList(const QList<SoundManagerVisualizerInfo>& visualizers, int recommended);
 	void visualizerFrametime(const double);
@@ -75,12 +78,15 @@ public slots:
 	void requestVisualizerList();
 	void updateColors();
 	void setSendDataOnlyIfColorsChanged(bool state);
+	void onHostSmoothingDurationChanged(int ms);
+	void onConnectedDeviceChanged(const SupportedDevices::DeviceType device);
 
 protected:
 	virtual bool init() = 0;
 	void initColors(int numberOfLeds);
 	virtual void populateDeviceList(QList<SoundManagerDeviceInfo>& devices, int& recommended) = 0;
 	virtual void updateFft() {};
+	void syncHostSmoothingEnabled();
 
 protected:
 	SoundVisualizerBase* m_visualizer{nullptr};
@@ -96,4 +102,6 @@ protected:
 
 	QElapsedTimer m_elapsedTimer;
 	size_t m_frames{ 1 };
+
+	SmoothingDriver *m_smoothingDriver{ nullptr };
 };

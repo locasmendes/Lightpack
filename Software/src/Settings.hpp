@@ -144,6 +144,9 @@ public:
 	static void setKeepLightsOnAfterSuspend(bool isEnabled);
 	static bool isKeepLightsOnAfterScreenOff();
 	static void setKeepLightsOnAfterScreenOff(bool isEnabled);
+	// Phase 1
+	static bool isKeepLightsOnAfterScreenDisconnect();
+	static void setKeepLightsOnAfterScreenDisconnect(bool isEnabled);
 	static bool isPingDeviceEverySecond();
 	static void setPingDeviceEverySecond(bool isEnabled);
 	static bool isUpdateFirmwareMessageShown();
@@ -212,6 +215,9 @@ public:
 	static bool hasLayoutRecipe();
 	static QJsonArray getLayoutRecipe();
 	static void setLayoutRecipe(const QJsonArray& recipe);
+	// Phase 1: persisted QScreen name|manufacturer|serial for the zones' screen.
+	static QString getZoneScreenIdentity();
+	static void setZoneScreenIdentity(const QString& identity);
 	static QList<LedGroup> getLedGroups();
 	static void setLedGroups(const QList<LedGroup>& groups);
 	static bool isBacklightEnabled();
@@ -265,6 +271,8 @@ public:
 	static void setDeviceColorDepth(int value);
 	static double getDeviceGamma();
 	static void setDeviceGamma(double gamma);
+	static double getDeviceOutputGamma();
+	static void setDeviceOutputGamma(double gamma);
 	static bool isDeviceDitheringEnabled();
 	static void setDeviceDitheringEnabled(bool isEnabled);
 
@@ -345,6 +353,7 @@ private:
 	static int getValidDeviceSmooth(int value);
 	static int getValidDeviceColorDepth(int value);
 	static double getValidDeviceGamma(double value);
+	static double getValidDeviceOutputGamma(double value);
 	static int getValidGrabSlowdown(int value);
 	static int getValidGrabHostSmoothingDuration(int value);
 	static int getValidMoodLampSpeed(int value);
@@ -368,6 +377,9 @@ private:
 
 
 public:
+	/*! Per-profile migrations (General/ProfileVersion). Called at end of initCurrentProfile. */
+	static void migrateCurrentProfile();
+
 	static void setNewOption(const QString & name, const QVariant & value,
 							bool isForceSetOption = false, QSettings * settings = m_currentProfile);
 	static void setNewOptionMain(const QString & name, const QVariant & value,
@@ -390,6 +402,8 @@ signals:
 	void keepLightsOnAfterLockChanged(bool isEnabled);
 	void keepLightsOnAfterSuspendChanged(bool isEnabled);
 	void keepLightsOnAfterScreenOffChanged(bool isEnabled);
+	// Phase 1
+	void keepLightsOnAfterScreenDisconnectChanged(bool isEnabled);
 	void pingDeviceEverySecondEnabledChanged(bool);
 
 	void languageChanged(const QString &);
@@ -467,6 +481,7 @@ signals:
 	void deviceSmoothChanged(int value);
 	void deviceColorDepthChanged(int value);
 	void deviceGammaChanged(double gamma);
+	void deviceOutputGammaChanged(double gamma);
 	void deviceDitheringEnabledChanged(bool isEnabled);
 	void deviceColorSequenceChanged(QString value);
 	void grabberTypeChanged(const Grab::GrabberType grabMode);

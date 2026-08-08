@@ -29,6 +29,7 @@
 #include <QMenu>
 #include <QScreen>
 #include <QGuiApplication>
+#include <QIcon>
 #include "LightpackApplication.hpp"
 
 #include "SettingsWindow.hpp"
@@ -125,15 +126,8 @@ SettingsWindow::SettingsWindow(QWidget *parent) :
 
 	ui->tabWidget->setCurrentIndex(0);
 
-	setWindowFlags(Qt::Window |
-					Qt::CustomizeWindowHint |
-					Qt::WindowCloseButtonHint );
+	applyPhase5Ui();
 	setFocus(Qt::OtherFocusReason);
-
-#ifdef Q_OS_LINUX
-	ui->listWidget->setSpacing(0);
-	ui->listWidget->setGridSize(QSize(115, 85));
-#endif
 
 	// Check windows reserved symbols in profile input name
 	#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
@@ -239,15 +233,31 @@ SettingsWindow::SettingsWindow(QWidget *parent) :
 
 	installWheelIgnoreFilter(ui->scrollAreaWidgetContents_LightpackModes);
 	installWheelIgnoreFilter(ui->scrollAreaWidgetContents_DeviceOptions);
+	if (m_scrollAreaColor && m_scrollAreaColor->widget())
+		installWheelIgnoreFilter(m_scrollAreaColor->widget());
+	if (m_scrollAreaGeometry && m_scrollAreaGeometry->widget())
+		installWheelIgnoreFilter(m_scrollAreaGeometry->widget());
 
 	resizeToFitScreen();
 
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << "initialized";
 }
 
+void SettingsWindow::onCalibrationSessionActive(bool active)
+{
+	emit calibrationSessionActive(active);
+}
+
 void SettingsWindow::changePage(int page)
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << page;
+
+	const bool enteringCalibration = (m_calibrationPage && page == m_calibrationNavIndex);
+	const bool leavingCalibration = (m_calibrationPage && m_calibrationPage->isSessionActive()
+		&& page != m_calibrationNavIndex);
+
+	if (leavingCalibration)
+		m_calibrationPage->leaveSession();
 
 	ui->tabWidget->setCurrentIndex(page);
 	if (ui->tabWidget->currentWidget() == ui->tabAbout) {
@@ -259,6 +269,8 @@ void SettingsWindow::changePage(int page)
 		m_smoothScrollTimer.stop();
 	}
 
+	if (enteringCalibration)
+		m_calibrationPage->enterSession();
 }
 
 SettingsWindow::~SettingsWindow()
@@ -296,12 +308,11 @@ void SettingsWindow::connectSignalsSlots()
 	connect(ui->checkBox_GrabApplyBlueLightReduction, &QCheckBox::toggled, this, &SettingsWindow::onGrabApplyBlueLightReduction_toggled);
 	connect(ui->checkBox_GrabApplyColorTemperature, &QCheckBox::toggled, this, &SettingsWindow::onGrabApplyColorTemperature_toggled);
 	connect(ui->horizontalSlider_GrabColorTemperature, &QSlider::valueChanged, this, &SettingsWindow::onGrabColorTemperature_valueChanged);
-	connect(ui->horizontalSlider_GrabGamma, &QSlider::valueChanged, this, &SettingsWindow::onSliderGrabGamma_valueChanged);
-	connect(ui->doubleSpinBox_GrabGamma, qOverload<double>(&QDoubleSpinBox::valueChanged), this, &SettingsWindow::onGrabGamma_valueChanged);
 
 	connect(ui->radioButton_GrabWidgetsDontShow, &QRadioButton::toggled, this, &SettingsWindow:: onDontShowLedWidgets_Toggled);
 	connect(ui->radioButton_Colored, &QRadioButton::toggled, this, &SettingsWindow::onSetColoredLedWidgets);
 	connect(ui->radioButton_White, &QRadioButton::toggled, this, &SettingsWindow::onSetWhiteLedWidgets);
+	connect(ui->radioButton_LiveColors, &QRadioButton::toggled, this, &SettingsWindow::onSetLiveColorsLedWidgets);
 
 	connect(ui->radioButton_ConstantColorMoodLampMode, &QRadioButton::toggled, this, &SettingsWindow::onMoodLampColorMode_toggled);
 	connect(ui->radioButton_BreathingColorMoodLampMode, &QRadioButton::toggled, this, &SettingsWindow::onMoodLampColorMode_toggled);
@@ -332,9 +343,9 @@ void SettingsWindow::connectSignalsSlots()
 	connect(ui->spinBox_DeviceBrightness, qOverload<int>(&QSpinBox::valueChanged), this, &SettingsWindow::onDeviceBrightness_valueChanged);
 	connect(ui->spinBox_DeviceBrightnessCap, qOverload<int>(&QSpinBox::valueChanged), this, &SettingsWindow::onDeviceBrightnessCap_valueChanged);
 	connect(ui->spinBox_DeviceColorDepth, qOverload<int>(&QSpinBox::valueChanged), this, &SettingsWindow::onDeviceColorDepth_valueChanged);
-	connect(ui->doubleSpinBox_DeviceGamma, qOverload<double>(&QDoubleSpinBox::valueChanged), this, &SettingsWindow::onDeviceGammaCorrection_valueChanged);
+	connect(ui->doubleSpinBox_DeviceGamma, qOverload<double>(&QDoubleSpinBox::valueChanged), this, &SettingsWindow::onDeviceOutputGamma_valueChanged);
 	connect(ui->checkBox_EnableDithering, &QCheckBox::toggled, this, &SettingsWindow::onDeviceDitheringEnabled_toggled);
-	connect(ui->horizontalSlider_GammaCorrection, &QSlider::valueChanged, this, &SettingsWindow::onSliderDeviceGammaCorrection_valueChanged);
+	connect(ui->horizontalSlider_GammaCorrection, &QSlider::valueChanged, this, &SettingsWindow::onSliderDeviceOutputGamma_valueChanged);
 	connect(ui->checkBox_SendDataOnlyIfColorsChanges, &QCheckBox::toggled, this, &SettingsWindow::onDeviceSendDataOnlyIfColorsChanged_toggled);
 
 	connect(ui->pbRunConfigurationWizard, &QPushButton::clicked, this, &SettingsWindow::onRunConfigurationWizard_clicked);
@@ -510,25 +521,21 @@ void SettingsWindow::updateDeviceTabWidgetsVisibility()
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
 
 	SupportedDevices::DeviceType connectedDevice = Settings::getConnectedDevice();
+	const int ledCount = Settings::getNumberOfLeds(connectedDevice);
+
+	// Phase 4/5: Stage preview lives on Geometry; Device only shows hardware pages.
+	initVirtualLeds(ledCount);
 
 	switch (connectedDevice)
 	{
-	case SupportedDevices::DeviceTypeVirtual:
-		ui->tabDevices->show();
-		ui->tabDevices->setCurrentWidget(ui->tabDeviceVirtual);
-		// Sync Virtual Leds count with NumberOfLeds field
-		initVirtualLeds(Settings::getNumberOfLeds(SupportedDevices::DeviceTypeVirtual));
-		break;
-
 	case SupportedDevices::DeviceTypeLightpack:
 		ui->tabDevices->show();
 		ui->tabDevices->setCurrentWidget(ui->tabDeviceLightpack);
-		// Sync Virtual Leds count with NumberOfLeds field
 		break;
 
 	default:
+		// Serial / UDP / Virtual: no Lightpack firmware page; Stage is on Geometry.
 		ui->tabDevices->hide();
-//		qCritical() << Q_FUNC_INFO << "Fail. Unknown connectedDevice ==" << connectedDevice;
 		break;
 	}
 	setDeviceTabWidgetsVisibility(DeviceTab::Lightpack);
@@ -570,7 +577,7 @@ void SettingsWindow::syncLedDeviceWithSettingsWindow()
 {
 	emit updateBrightness(Settings::getDeviceBrightness());
 	emit updateBrightnessCap(Settings::getDeviceBrightnessCap());
-	emit updateGamma(Settings::getDeviceGamma());
+	emit updateGamma(Settings::getDeviceOutputGamma());
 }
 
 int SettingsWindow::getLigtpackFirmwareVersionMajor()
@@ -607,6 +614,8 @@ void SettingsWindow::onPostInit() {
 	emit requestSoundVizDevices();
 	emit requestSoundVizVisualizers();
 #endif
+
+	updateColorFeedbackGate();
 
 	if (m_trayIcon) {
 		bool updateJustFailed = false;
@@ -1133,8 +1142,10 @@ void SettingsWindow::showHelp()
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
 
-	ui->tabWidget->setCurrentWidget(ui->tabHelp);
-	ui->listWidget->setCurrentRow(ui->tabWidget->indexOf(ui->tabHelp));
+	ui->tabWidget->setCurrentWidget(ui->tabAbout);
+	ui->listWidget->setCurrentRow(ui->tabWidget->indexOf(ui->tabAbout));
+	if (ui->textBrowserHelp)
+		ui->textBrowserHelp->setFocus(Qt::OtherFocusReason);
 	this->show();
 }
 
@@ -1153,15 +1164,20 @@ void SettingsWindow::showSettings()
 	this->show();
 	raise();
 	this->activateWindow();
+	updateColorFeedbackGate();
 }
 
 void SettingsWindow::hideSettings()
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
 
+	if (m_calibrationPage && m_calibrationPage->isSessionActive())
+		m_calibrationPage->leaveSession();
+
 	emit showLedWidgets(false);
 
 	this->hide();
+	updateColorFeedbackGate();
 }
 
 void SettingsWindow::toggleSettings()
@@ -1539,21 +1555,6 @@ void SettingsWindow::onGrabColorTemperature_valueChanged(int value)
 	Settings::setGrabColorTemperature(value);
 }
 
-void SettingsWindow::onGrabGamma_valueChanged(double value)
-{
-	DEBUG_LOW_LEVEL << Q_FUNC_INFO << value;
-
-	Settings::setGrabGamma(value);
-	ui->horizontalSlider_GrabGamma->setValue(floor((value * 100)));
-}
-
-void SettingsWindow::onSliderGrabGamma_valueChanged(int value)
-{
-	DEBUG_LOW_LEVEL << Q_FUNC_INFO << value;
-	Settings::setGrabGamma(value / 100.0);
-	ui->doubleSpinBox_GrabGamma->setValue(value / 100.0);
-}
-
 void SettingsWindow::onLuminosityThreshold_valueChanged(int value)
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << value;
@@ -1609,21 +1610,28 @@ void SettingsWindow::onDeviceColorDepth_valueChanged(int value)
 	Settings::setDeviceColorDepth(value);
 }
 
-void SettingsWindow::onDeviceGammaCorrection_valueChanged(double value)
+void SettingsWindow::onDeviceOutputGamma_valueChanged(double value)
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << value;
 
-	Settings::setDeviceGamma(value);
-	ui->horizontalSlider_GammaCorrection->setValue(floor((value * 100 + 0.5)));
-	emit updateGamma(Settings::getDeviceGamma());
+	using namespace SettingsScope::Profile::Device;
+	if (value < OutputGammaUiMin) value = OutputGammaUiMin;
+	if (value > OutputGammaUiMax) value = OutputGammaUiMax;
+	Settings::setDeviceOutputGamma(value);
+	ui->horizontalSlider_GammaCorrection->setValue(static_cast<int>(floor(value * 100 + 0.5)));
+	emit updateGamma(Settings::getDeviceOutputGamma());
 }
 
-void SettingsWindow::onSliderDeviceGammaCorrection_valueChanged(int value)
+void SettingsWindow::onSliderDeviceOutputGamma_valueChanged(int value)
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << value;
-	Settings::setDeviceGamma(static_cast<double>(value + 0.4) / 100);
-	ui->doubleSpinBox_DeviceGamma->setValue(Settings::getDeviceGamma());
-	emit updateGamma(Settings::getDeviceGamma());
+	using namespace SettingsScope::Profile::Device;
+	double gamma = static_cast<double>(value) / 100.0;
+	if (gamma < OutputGammaUiMin) gamma = OutputGammaUiMin;
+	if (gamma > OutputGammaUiMax) gamma = OutputGammaUiMax;
+	Settings::setDeviceOutputGamma(gamma);
+	ui->doubleSpinBox_DeviceGamma->setValue(Settings::getDeviceOutputGamma());
+	emit updateGamma(Settings::getDeviceOutputGamma());
 }
 
 void SettingsWindow::onDeviceDitheringEnabled_toggled(bool state) {
@@ -1821,21 +1829,56 @@ void SettingsWindow::onSoundVizLiquidSpeed_valueChanged(int value)
 void SettingsWindow::onDontShowLedWidgets_Toggled(bool checked)
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << checked;
+	if (checked)
+		emit setLiveColorsLedWidget(false);
 	emit showLedWidgets(!checked);
+	updateColorFeedbackGate();
 }
 
 void SettingsWindow::onSetColoredLedWidgets(bool checked)
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
-	if (checked)
+	if (checked) {
+		emit setLiveColorsLedWidget(false);
 		emit setColoredLedWidget(true);
+	}
+	updateColorFeedbackGate();
 }
 
 void SettingsWindow::onSetWhiteLedWidgets(bool checked)
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
-	if (checked)
+	if (checked) {
+		emit setLiveColorsLedWidget(false);
 		emit setColoredLedWidget(false);
+	}
+	updateColorFeedbackGate();
+}
+
+void SettingsWindow::onSetLiveColorsLedWidgets(bool checked)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << checked;
+	if (checked) {
+		emit showLedWidgets(true);
+		emit setLiveColorsLedWidget(true);
+	}
+	updateColorFeedbackGate();
+}
+
+void SettingsWindow::setColorFeedbackForced(bool forced)
+{
+	DEBUG_LOW_LEVEL << Q_FUNC_INFO << forced;
+	m_colorFeedbackForced = forced;
+	updateColorFeedbackGate();
+}
+
+void SettingsWindow::updateColorFeedbackGate()
+{
+	// Watchers: Live colors mode, Stage preview while settings are open, or calibration force.
+	const bool needFeedback = m_colorFeedbackForced
+		|| (ui->radioButton_LiveColors && ui->radioButton_LiveColors->isChecked())
+		|| (isVisible() && !m_labelsGrabbedColors.isEmpty());
+	emit setColorFeedbackEnabled(needFeedback);
 }
 
 void SettingsWindow::onDeviceSendDataOnlyIfColorsChanged_toggled(bool state)
@@ -2057,6 +2100,8 @@ void SettingsWindow::initLanguages()
 	ui->comboBox_Language->addItem(QStringLiteral("Russian"));
 	ui->comboBox_Language->addItem(QStringLiteral("Ukrainian"));
 	ui->comboBox_Language->addItem(QStringLiteral("Portuguese (Brazil)"));
+	ui->comboBox_Language->addItem(QStringLiteral("Polish"));
+	ui->comboBox_Language->addItem(QStringLiteral("Chinese (Simplified)"));
 
 	int langIndex = 0; // "System default"
 	QString langSaved = Settings::getLanguage();
@@ -2092,6 +2137,8 @@ void SettingsWindow::loadTranslation(const QString & language)
 		else if (locale.startsWith(QStringLiteral("ru_"))) locale = QStringLiteral("ru_RU"); // :/translations/ru_RU.qm
 		else if (locale.startsWith(QStringLiteral("uk_"))) locale = QStringLiteral("uk_UA"); // :/translations/uk_UA.qm
 		else if (locale.startsWith(QStringLiteral("pt_"))) locale = QStringLiteral("pt_BR"); // :/translations/pt_BR.qm
+		else if (locale.startsWith(QStringLiteral("pl_"))) locale = QStringLiteral("pl_PL"); // :/translations/pl_PL.qm
+		else if (locale.startsWith(QStringLiteral("zh_"))) locale = QStringLiteral("zh_CN"); // :/translations/zh_CN.qm
 
 		DEBUG_LOW_LEVEL << "System translation" << locale;
 	}
@@ -2099,6 +2146,8 @@ void SettingsWindow::loadTranslation(const QString & language)
 	else if (language == QStringLiteral("Russian")) locale = QStringLiteral("ru_RU"); // :/translations/ru_RU.qm
 	else if (language == QStringLiteral("Ukrainian")) locale = QStringLiteral("uk_UA"); // :/translations/uk_UA.qm
 	else if (language == QStringLiteral("Portuguese (Brazil)")) locale = QStringLiteral("pt_BR"); // :/translations/pt_BR.qm
+	else if (language == QStringLiteral("Polish")) locale = QStringLiteral("pl_PL"); // :/translations/pl_PL.qm
+	else if (language == QStringLiteral("Chinese (Simplified)")) locale = QStringLiteral("zh_CN"); // :/translations/zh_CN.qm
 	// append line for new language/locale here
 	else {
 		qWarning() << "Language" << language << "not found. Set to default" << SettingsScope::Main::LanguageDefault;
@@ -2192,8 +2241,6 @@ void SettingsWindow::updateUiFromSettings()
 	ui->checkBox_GrabApplyColorTemperature->setChecked              (Settings::isGrabApplyColorTemperatureEnabled());
 	ui->spinBox_GrabColorTemperature->setValue                      (Settings::getGrabColorTemperature());
 	ui->horizontalSlider_GrabColorTemperature->setValue             (Settings::getGrabColorTemperature());
-	ui->doubleSpinBox_GrabGamma->setValue                           (Settings::getGrabGamma());
-	ui->horizontalSlider_GrabGamma->setValue                        (Settings::getGrabGamma() * 100);
 	ui->spinBox_LuminosityThreshold->setValue						(Settings::getLuminosityThreshold());
 
 	// Check the selected moodlamp mode (setChecked(false) not working to select another)
@@ -2245,8 +2292,8 @@ void SettingsWindow::updateUiFromSettings()
 	ui->horizontalSlider_DeviceBrightnessCap->setValue				(Settings::getDeviceBrightnessCap());
 	ui->horizontalSlider_DeviceSmooth->setValue						(Settings::getDeviceSmooth());
 	ui->horizontalSlider_DeviceColorDepth->setValue					(Settings::getDeviceColorDepth());
-	ui->doubleSpinBox_DeviceGamma->setValue							(Settings::getDeviceGamma());
-	ui->horizontalSlider_GammaCorrection->setValue					(floor((Settings::getDeviceGamma() * 100 + 0.5)));
+	ui->doubleSpinBox_DeviceGamma->setValue							(Settings::getDeviceOutputGamma());
+	ui->horizontalSlider_GammaCorrection->setValue					(floor((Settings::getDeviceOutputGamma() * 100 + 0.5)));
 	ui->checkBox_EnableDithering->setChecked						(Settings::isDeviceDitheringEnabled());
 
 	ui->groupBox_Api->setChecked									(Settings::isApiEnabled());
@@ -2416,7 +2463,14 @@ void SettingsWindow::resizeToFitScreen()
 	const int chromeHeight = height() - ui->scrollArea_LightpackModes->height();
 	const int modeNaturalHeight = ui->scrollAreaWidgetContents_LightpackModes->sizeHint().height();
 	const int deviceNaturalHeight = ui->scrollAreaWidgetContents_DeviceOptions->sizeHint().height();
-	const int desiredHeight = chromeHeight + qMax(modeNaturalHeight, deviceNaturalHeight);
+	int colorNaturalHeight = 0;
+	int geoNaturalHeight = 0;
+	if (m_scrollAreaColor && m_scrollAreaColor->widget())
+		colorNaturalHeight = m_scrollAreaColor->widget()->sizeHint().height();
+	if (m_scrollAreaGeometry && m_scrollAreaGeometry->widget())
+		geoNaturalHeight = m_scrollAreaGeometry->widget()->sizeHint().height();
+	const int desiredHeight = chromeHeight + qMax(qMax(modeNaturalHeight, deviceNaturalHeight),
+		qMax(colorNaturalHeight, geoNaturalHeight));
 
 	QScreen* activeScreen = windowHandle() ? windowHandle()->screen() : nullptr;
 	if (!activeScreen)
@@ -2479,11 +2533,6 @@ void SettingsWindow::on_pushButton_lumosityThresholdHelp_clicked()
 void SettingsWindow::on_pushButton_grabApplyColorTemperatureHelp_clicked()
 {
 	showHelpOf(ui->checkBox_GrabApplyColorTemperature);
-}
-
-void SettingsWindow::on_pushButton_grabGammaHelp_clicked()
-{
-	showHelpOf(ui->horizontalSlider_GrabGamma);
 }
 
 void SettingsWindow::on_pushButton_grabOverBrightenHelp_clicked()

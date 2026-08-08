@@ -7,9 +7,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>485</width>
+    <width>520</width>
     <height>668</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>420</width>
+    <height>480</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string notr="true">Prismatik (unofficial)</string>
@@ -19,7 +31,7 @@
     <normaloff>:/icons/settings.png</normaloff>:/icons/settings.png</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true">QMainWindow[style=QWindowsVistaStyle]{}</string>
+   <string notr="true"/>
   </property>
   <property name="locale">
    <locale language="English" country="UnitedStates"/>
@@ -53,15 +65,21 @@ Reveals extra fine-grained controls across the color/effect sections: bloom thre
        <bool>true</bool>
       </property>
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
         <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
+        <verstretch>1</verstretch>
        </sizepolicy>
       </property>
       <property name="minimumSize">
        <size>
-        <width>115</width>
-        <height>580</height>
+        <width>96</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>160</width>
+        <height>16777215</height>
        </size>
       </property>
       <property name="layoutDirection">
@@ -609,91 +627,15 @@ Reveals extra fine-grained controls across the color/effect sections: bloom thre
                 </property>
                </widget>
               </item>
-              <item row="6" column="0">
-               <widget class="QSlider" name="horizontalSlider_GrabGamma">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="whatsThis">
-                 <string>&lt;h4&gt;Color encoding gamma&lt;/h4&gt;
-
-This is the gamma used for encoding the color with the desired &lt;b&gt;color temperature&lt;/b&gt;. Setting to &lt;b&gt;1.0&lt;/b&gt; cancels the effect.
-This is the reciprocal of the &lt;b&gt;device gamma&lt;/b&gt; which is the decoding gamma. They cancel each other if set to same value.</string>
-                </property>
-                <property name="minimum">
-                 <number>5</number>
-                </property>
-                <property name="maximum">
-                 <number>1000</number>
-                </property>
-                <property name="singleStep">
-                 <number>10</number>
-                </property>
-                <property name="pageStep">
-                 <number>100</number>
-                </property>
-                <property name="value">
-                 <number>220</number>
-                </property>
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-               </widget>
-              </item>
-              <item row="6" column="1">
-               <widget class="QDoubleSpinBox" name="doubleSpinBox_GrabGamma">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                </property>
-                <property name="minimum">
-                 <double>0.050000000000000</double>
-                </property>
-                <property name="maximum">
-                 <double>10.000000000000000</double>
-                </property>
-                <property name="singleStep">
-                 <double>0.100000000000000</double>
-                </property>
-                <property name="value">
-                 <double>1.200000000000000</double>
-                </property>
-               </widget>
-              </item>
               <item row="4" column="0" colspan="2">
                <widget class="QCheckBox" name="checkBox_GrabApplyColorTemperature">
                 <property name="whatsThis">
-                 <string>&lt;h4&gt;Color temperature &amp;amp; gamma&lt;/h4&gt;
+                 <string>&lt;h4&gt;Color temperature&lt;/h4&gt;
 
 Internally emulates the effects of f.lux, redshift, Night Light, Night Shift...</string>
                 </property>
                 <property name="text">
-                 <string>Apply color temperature and gamma</string>
-                </property>
-               </widget>
-              </item>
-              <item row="6" column="2">
-               <widget class="QPushButton" name="pushButton_grabGammaHelp">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">margin: 0px;</string>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="icon">
-                 <iconset resource="../res/LightpackResources.qrc">
-                  <normaloff>:/icons/help.png</normaloff>:/icons/help.png</iconset>
-                </property>
-                <property name="flat">
-                 <bool>true</bool>
+                 <string>Apply color temperature</string>
                 </property>
                </widget>
               </item>
@@ -854,6 +796,16 @@ Internally emulates the effects of f.lux, redshift, Night Light, Night Shift...<
                 <widget class="QRadioButton" name="radioButton_White">
                  <property name="text">
                   <string>All white</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="radioButton_LiveColors">
+                 <property name="toolTip">
+                  <string>Paint each grab zone with the color actually sent to the LED after the full device pipeline.</string>
+                 </property>
+                 <property name="text">
+                  <string>Live colors</string>
                  </property>
                 </widget>
                </item>
@@ -2005,13 +1957,13 @@ Boosts near-white, low-saturation pixels (lens flares, bright highlights) to mak
            </sizepolicy>
           </property>
           <property name="whatsThis">
-           <string>&lt;h4&gt;Gamma correction&lt;/h4&gt; It controls the level of saturation. The effect is clearly detectable in a video in screen grabbing mode&lt;br/&gt;Recommended value: 2.00</string>
+           <string>&lt;h4&gt;Output gamma&lt;/h4&gt; Single transfer function from linear scene light to LED PWM duty: w = L^(1/γ). &lt;b&gt;1.00&lt;/b&gt; = Linear (physically correct). &lt;b&gt;1.32&lt;/b&gt; = Classic (pre-5.17 look with temperature on). UI range 0.5–3.0.</string>
           </property>
           <property name="minimum">
-           <number>5</number>
+           <number>50</number>
           </property>
           <property name="maximum">
-           <number>1000</number>
+           <number>300</number>
           </property>
           <property name="singleStep">
            <number>5</number>
@@ -2073,16 +2025,16 @@ Boosts near-white, low-saturation pixels (lens flares, bright highlights) to mak
            </size>
           </property>
           <property name="minimum">
-           <double>0.050000000000000</double>
+           <double>0.500000000000000</double>
           </property>
           <property name="maximum">
-           <double>10.000000000000000</double>
+           <double>3.000000000000000</double>
           </property>
           <property name="singleStep">
            <double>0.050000000000000</double>
           </property>
           <property name="value">
-           <double>0.050000000000000</double>
+           <double>1.100000000000000</double>
           </property>
          </widget>
         </item>
@@ -2150,7 +2102,7 @@ Boosts near-white, low-saturation pixels (lens flares, bright highlights) to mak
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Gamma correction:</string>
+           <string>Output gamma:</string>
           </property>
          </widget>
         </item>
@@ -2759,7 +2711,7 @@ LED groups (created in the configuration wizard's zone placement step) let you r
             </sizepolicy>
            </property>
            <attribute name="title">
-            <string>Virtual</string>
+            <string>Stage</string>
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout_12">
             <item>
@@ -3764,7 +3716,7 @@ LED groups (created in the configuration wizard's zone placement step) let you r
 &lt;h3&gt;4. Image &amp;amp; Color Post-Processing&lt;/h3&gt;
 &lt;ul&gt;
   &lt;li&gt;&lt;b&gt;Color Temperature &amp;amp; Night Light:&lt;/b&gt; Adjust color temperature (Kelvin) or reduce blue light during evening hours.&lt;/li&gt;
-  &lt;li&gt;&lt;b&gt;Gamma Correction:&lt;/b&gt; Fine-tune non-linear color luminosity curve for vibrant LED representation.&lt;/li&gt;
+  &lt;li&gt;&lt;b&gt;Output gamma:&lt;/b&gt; Single transfer from linear light to LED duty. 1.00 = Linear; 1.32 = Classic.&lt;/li&gt;
   &lt;li&gt;&lt;b&gt;Overbrighten:&lt;/b&gt; Boosts lower color intensity levels to maintain vivid backlight illumination even in dark scenes.&lt;/li&gt;
   &lt;li&gt;&lt;b&gt;Bloom:&lt;/b&gt; Boosts near-white, low-saturation pixels - lens flares, bright highlights - so they stand out more instead of blending into the rest of the frame.&lt;/li&gt;
   &lt;li&gt;&lt;b&gt;Saturation / Contrast / Vibrance:&lt;/b&gt; Three sliders, all on a 0-100 scale where 50 = unchanged, applied to every captured pixel (in that order, before Bloom). Vibrance is like Saturation but eases off on colors that are already vivid, to avoid oversaturating skin tones.&lt;/li&gt;
@@ -4106,10 +4058,7 @@ LED groups (created in the configuration wizard's zone placement step) let you r
   <tabstop>pushButton_grabApplyColorTemperatureHelp</tabstop>
   <tabstop>horizontalSlider_GrabColorTemperature</tabstop>
   <tabstop>spinBox_GrabColorTemperature</tabstop>
-  <tabstop>horizontalSlider_GrabGamma</tabstop>
-  <tabstop>doubleSpinBox_GrabGamma</tabstop>
-  <tabstop>pushButton_grabGammaHelp</tabstop>
-  <tabstop>horizontalSlider_GrabOverBrighten</tabstop>
+<tabstop>horizontalSlider_GrabOverBrighten</tabstop>
   <tabstop>spinBox_GrabOverBrighten</tabstop>
   <tabstop>pushButton_grabOverBrightenHelp</tabstop>
   <tabstop>horizontalSlider_GrabHostSmoothing</tabstop>
@@ -4118,6 +4067,7 @@ LED groups (created in the configuration wizard's zone placement step) let you r
   <tabstop>radioButton_GrabWidgetsDontShow</tabstop>
   <tabstop>radioButton_Colored</tabstop>
   <tabstop>radioButton_White</tabstop>
+  <tabstop>radioButton_LiveColors</tabstop>
   <tabstop>checkBox_GrabBloomEnabled</tabstop>
   <tabstop>horizontalSlider_GrabBloomIntensity</tabstop>
   <tabstop>spinBox_GrabBloomIntensity</tabstop>
@@ -4498,22 +4448,6 @@ LED groups (created in the configuration wizard's zone placement step) let you r
   <connection>
    <sender>checkBox_GrabApplyColorTemperature</sender>
    <signal>toggled(bool)</signal>
-   <receiver>horizontalSlider_GrabGamma</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>422</x>
-     <y>166</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>368</x>
-     <y>206</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>checkBox_GrabApplyColorTemperature</sender>
-   <signal>toggled(bool)</signal>
    <receiver>spinBox_GrabColorTemperature</receiver>
    <slot>setEnabled(bool)</slot>
    <hints>
@@ -4588,22 +4522,6 @@ LED groups (created in the configuration wizard's zone placement step) let you r
     <hint type="destinationlabel">
      <x>422</x>
      <y>300</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>checkBox_GrabApplyColorTemperature</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>doubleSpinBox_GrabGamma</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>422</x>
-     <y>166</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>422</x>
-     <y>210</y>
     </hint>
    </hints>
   </connection>
