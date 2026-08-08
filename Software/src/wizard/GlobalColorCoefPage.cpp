@@ -25,6 +25,8 @@
  */
 
 #include <QRadioButton>
+#include <QMessageBox>
+#include <cmath>
 #include "GlobalColorCoefPage.hpp"
 #include "ui_GlobalColorCoefPage.h"
 #include "MonitorIdForm.hpp"
@@ -230,16 +232,29 @@ void GlobalColorCoefPage::onCoefValueChanged(int value)
 
 void GlobalColorCoefPage::onColorTemperatureValueChanged(int value)
 {
-	const StructRgb whitePoint = PrismatikMath::whitePoint(value);
-	_ui->sbRed->setValue(whitePoint.r / 2.55);
-	_ui->sbGreen->setValue(whitePoint.g / 2.55);
-	_ui->sbBlue->setValue(whitePoint.b / 2.55);
+	// Live temperature control — do NOT bake whitePoint into per-LED coefs (R3).
+	SettingsScope::Settings::setGrabColorTemperature(value);
+	SettingsScope::Settings::setGrabApplyColorTemperatureEnabled(true);
 
 	MonitorSettings& settings = _screens[_ui->cbMonitorSelect->currentIndex()];
-	settings.red = _ui->sbRed->value();
-	settings.green = _ui->sbGreen->value();
-	settings.blue = _ui->sbBlue->value();
 	settings.colorTemp = value;
+
+	if (!_coefTempWarningShown) {
+		bool deviant = false;
+		for (GrabWidget * const widget : _grabAreas) {
+			const WBAdjustment c = widget->getCoefs();
+			if (std::fabs(c.red - 1.0) > 0.05 || std::fabs(c.green - 1.0) > 0.05 || std::fabs(c.blue - 1.0) > 0.05) {
+				deviant = true;
+				break;
+			}
+		}
+		if (deviant) {
+			_coefTempWarningShown = true;
+			QMessageBox::information(this, tr("Color temperature"),
+				tr("Per-LED white-balance coefficients already deviate from neutral. "
+				   "Temperature is applied separately and will not overwrite those coefficients."));
+		}
+	}
 }
 
 void GlobalColorCoefPage::cleanupMonitors()

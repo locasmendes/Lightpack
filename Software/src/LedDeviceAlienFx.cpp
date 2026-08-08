@@ -37,6 +37,7 @@
 #endif
 
 #include "LedDeviceAlienFx.hpp"
+#include "ColorOps.hpp"
 #include "Settings.hpp"
 #include <QtDebug>
 #include "debug.h"
@@ -105,7 +106,7 @@ LedDeviceAlienFx::~LedDeviceAlienFx()
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO << "destroy LedDeviceAlienFx : ILedDevice complete";
 }
 
-void LedDeviceAlienFx::setColors(const QList<QRgb> & colors)
+void LedDeviceAlienFx::setColors(const QList<LinearRgbF> & colors)
 {
 	DEBUG_MID_LEVEL << Q_FUNC_INFO;
 	if (m_isInitialized)
@@ -121,9 +122,10 @@ void LedDeviceAlienFx::setColors(const QList<QRgb> & colors)
 
 			LFX_COLOR lfxColor;
 
-			lfxColor.red	= qRed	( colors[0] );
-			lfxColor.green = qGreen ( colors[0] );
-			lfxColor.blue	= qBlue	( colors[0] );
+			const EncodedRgbF e = ColorOps::srgbEncode(colors.isEmpty() ? LinearRgbF{} : colors[0]);
+			lfxColor.red	= static_cast<unsigned char>(qBound(0, qRound(e.r * 255.f), 255));
+			lfxColor.green = static_cast<unsigned char>(qBound(0, qRound(e.g * 255.f), 255));
+			lfxColor.blue	= static_cast<unsigned char>(qBound(0, qRound(e.b * 255.f), 255));
 			lfxColor.brightness = 255;
 
 			for(unsigned int lightIndex = 0; lightIndex < numLights; lightIndex++)
@@ -140,10 +142,7 @@ void LedDeviceAlienFx::setColors(const QList<QRgb> & colors)
 
 void LedDeviceAlienFx::switchOffLeds()
 {
-	// TODO: fill it with current leds count
-	QList<QRgb> blackColor;
-	blackColor << 0;
-	setColors(blackColor);
+	AbstractLedDevice::setColors(QList<QRgb>{ qRgb(0, 0, 0) });
 }
 
 void LedDeviceAlienFx::setRefreshDelay(int /*value*/)

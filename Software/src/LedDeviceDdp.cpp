@@ -106,15 +106,14 @@ QList<QByteArray> LedDeviceDdp::buildPackets(const QList<StructRgb>& colors, uin
 	return packets;
 }
 
-void LedDeviceDdp::setColors(const QList<QRgb> & colors, const bool rawColors)
+void LedDeviceDdp::setColors(const QList<LinearRgbF> & colors)
 {
 	m_colorsSaved = colors;
 
 	resizeColorsBuffer(colors.count());
 
-	applyColorModifications(colors, m_colorsBuffer, rawColors);
-	if (!rawColors)
-		applyDithering(m_colorsBuffer, 8);
+	applyColorModifications(colors, m_colorsBuffer);
+	applyDithering(m_colorsBuffer, 8);
 
 	const QList<QByteArray> packets = buildPackets(m_colorsBuffer, m_sequenceNumber);
 

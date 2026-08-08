@@ -28,6 +28,7 @@
 
 #include "enums.hpp"
 #include "AbstractLedDevice.hpp"
+#include "ColorF.h"
 
 class QTimer;
 namespace SystemSession {
@@ -54,7 +55,7 @@ signals:
 
 	// This signals are directly connected to ILedDevice. Don't use outside.
 	void ledDeviceOpen();
-	void ledDeviceSetColors(const QList<QRgb> & colors);
+	void ledDeviceSetColors(const QList<LinearRgbF> & colors);
 	void ledDeviceOffLeds();
 	void ledDeviceSetUsbPowerLedDisabled(bool isDisabled);
 	void ledDeviceSetRefreshDelay(int value);
@@ -77,6 +78,7 @@ public slots:
 	void recreateLedDevice();
 
 	// This slots are protected from the overflow of queries
+	void setColors(const QList<LinearRgbF> & colors);
 	void setColors(const QList<QRgb> & colors);
 	void switchOffLeds();
 	void switchOnLeds();
@@ -119,7 +121,7 @@ private:
 
 	QList<LedDeviceCommands::Cmd> m_cmdQueue;
 
-	QList<QRgb> m_savedColors;
+	QList<LinearRgbF> m_savedColors;
 	bool m_savedUsbPowerLedDisabled;
 	int m_savedRefreshDelay;
 	int m_savedColorDepth;

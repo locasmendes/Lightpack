@@ -17,7 +17,7 @@ LightpackPluginInterface::LightpackPluginInterface(QObject *parent) :
 {
 	m_isRequestBacklightStatusDone = true;
 	m_backlightStatusResult = Backlight::StatusUnknown;
-	m_gamma = SettingsScope::Profile::Device::GammaDefault;
+	m_gamma = SettingsScope::Profile::Device::OutputGammaDefault;
 	m_brightness = SettingsScope::Profile::Device::BrightnessDefault;
 	m_smooth = SettingsScope::Profile::Device::SmoothDefault;
 	m_persistOnUnlock = false;

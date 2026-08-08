@@ -106,11 +106,15 @@ void AbstractLedDeviceUdp::setColorDepth(int value)
 void AbstractLedDeviceUdp::switchOffLeds()
 {
 	const int count = m_colorsSaved.count();
-	QList<QRgb> blackFrame;
-	blackFrame.reserve(count);
-	for (int i = 0; i < count; i++)
-		blackFrame << 0;
-	setColors(blackFrame, true);
+	QList<LinearRgbF> blackFrame(count);
+	// Bypass luminosity floor so off is truly off (R9).
+	const int savedThresh = m_luminosityThreshold;
+	const bool savedMin = m_isMinimumLuminosityEnabled;
+	m_luminosityThreshold = 0;
+	m_isMinimumLuminosityEnabled = false;
+	setColors(blackFrame);
+	m_luminosityThreshold = savedThresh;
+	m_isMinimumLuminosityEnabled = savedMin;
 }
 
 void AbstractLedDeviceUdp::resizeColorsBuffer(int buffSize)

@@ -27,6 +27,7 @@
 #include <qglobal.h>
 
 #include "LedDeviceManager.hpp"
+#include "ColorOps.hpp"
 #include "LedDeviceLightpack.hpp"
 
 #ifdef Q_OS_WIN
@@ -134,7 +135,7 @@ void LedDeviceManager::switchOnLeds()
 		emit ledDeviceSetColors(m_savedColors);
 }
 
-void LedDeviceManager::setColors(const QList<QRgb> & colors)
+void LedDeviceManager::setColors(const QList<LinearRgbF> & colors)
 {
 	DEBUG_HIGH_LEVEL << Q_FUNC_INFO << "Is last command completed:" << m_isLastCommandCompleted
 					<< " m_backlightStatus = " << m_backlightStatus;
@@ -152,6 +153,15 @@ void LedDeviceManager::setColors(const QList<QRgb> & colors)
 			cmdQueueAppend(LedDeviceCommands::SetColors);
 		}
 	}
+}
+
+void LedDeviceManager::setColors(const QList<QRgb> & colors)
+{
+	QList<LinearRgbF> linear;
+	linear.reserve(colors.size());
+	for (QRgb c : colors)
+		linear.append(ColorOps::srgbDecode(c));
+	setColors(linear);
 }
 
 void LedDeviceManager::switchOffLeds()
@@ -568,7 +578,9 @@ void LedDeviceManager::connectSignalSlotsLedDevice()
 	connect(m_ledDevice, &AbstractLedDevice::colorsUpdated,		this, &LedDeviceManager::setColors_VirtualDeviceCallback,	Qt::QueuedConnection);
 
 	connect(this, &LedDeviceManager::ledDeviceOpen,								m_ledDevice, &AbstractLedDevice::open,										Qt::QueuedConnection);
-	connect(this, &LedDeviceManager::ledDeviceSetColors,				m_ledDevice, &AbstractLedDevice::setColors,						Qt::QueuedConnection);
+	connect(this, &LedDeviceManager::ledDeviceSetColors, m_ledDevice,
+		static_cast<void (AbstractLedDevice::*)(const QList<LinearRgbF> &)>(&AbstractLedDevice::setColors),
+		Qt::QueuedConnection);
 	connect(this, &LedDeviceManager::ledDeviceOffLeds,							m_ledDevice, &AbstractLedDevice::switchOffLeds,								Qt::QueuedConnection);
 	connect(this, &LedDeviceManager::ledDeviceSetUsbPowerLedDisabled,		m_ledDevice, &AbstractLedDevice::setUsbPowerLedDisabled,				Qt::QueuedConnection);
 	connect(this, &LedDeviceManager::ledDeviceSetRefreshDelay,				m_ledDevice, &AbstractLedDevice::setRefreshDelay,						Qt::QueuedConnection);

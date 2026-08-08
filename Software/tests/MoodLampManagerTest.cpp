@@ -9,6 +9,8 @@
 #include "MoodLampManager.hpp"
 #include "MoodLamp.hpp"
 #include "Settings.hpp"
+#include "ColorOps.hpp"
+#include "ColorF.h"
 #include <QtTest>
 #include <QTemporaryDir>
 #include <QSignalSpy>
@@ -38,19 +40,30 @@ namespace {
 	int theaterChaseLampId() { return lampIdByName(QStringLiteral("Theater Chase")); }
 	int twinkleLampId() { return lampIdByName(QStringLiteral("Twinkle")); }
 
-	// Collects the QList<QRgb> argument of every updateLedsColors emission captured by spy.
+	// Collects updateLedsColors emissions and converts LinearRgbF ? QRgb for assertions.
 	QList<QList<QRgb>> capturedColorLists(const QSignalSpy& spy)
 	{
 		QList<QList<QRgb>> result;
-		for (const QList<QVariant>& args : spy)
-			result.append(args.at(0).value<QList<QRgb>>());
+		for (const QList<QVariant>& args : spy) {
+			const QList<LinearRgbF> linear = args.at(0).value<QList<LinearRgbF>>();
+			QList<QRgb> encoded;
+			encoded.reserve(linear.size());
+			for (const LinearRgbF &L : linear) {
+				const EncodedRgbF e = ColorOps::srgbEncode(L);
+				encoded.append(qRgb(
+					qBound(0, qRound(e.r * 255.f), 255),
+					qBound(0, qRound(e.g * 255.f), 255),
+					qBound(0, qRound(e.b * 255.f), 255)));
+			}
+			result.append(encoded);
+		}
 		return result;
 	}
 }
 
 void MoodLampManagerTest::initTestCase()
 {
-	qRegisterMetaType<QList<QRgb>>("QList<QRgb>");
+	qRegisterMetaType<QList<LinearRgbF>>("QList<LinearRgbF>");
 
 	static QTemporaryDir tempDir;
 	if (tempDir.isValid())

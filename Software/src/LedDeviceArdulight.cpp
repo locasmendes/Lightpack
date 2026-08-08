@@ -40,8 +40,6 @@ LedDeviceArdulight::LedDeviceArdulight(const QString &portName, const int baudRa
 	m_portName = portName;
 	m_baudRate = baudRate;
 
-//	m_gamma = Settings::getDeviceGamma();
-//	m_brightness = Settings::getDeviceBrightness();
 
 	m_writeBufferHeader.append((char)255);
 
@@ -76,9 +74,9 @@ void LedDeviceArdulight::close()
 	m_ArdulightDevice = NULL;
 }
 
-void LedDeviceArdulight::setColors(const QList<QRgb> & colors)
+void LedDeviceArdulight::setColors(const QList<LinearRgbF> & colors)
 {
-	DEBUG_MID_LEVEL << Q_FUNC_INFO << colors;
+	DEBUG_MID_LEVEL << Q_FUNC_INFO << colors.size();
 
 	// Save colors for showing changes of the brightness
 	m_colorsSaved = colors;
@@ -148,7 +146,7 @@ void LedDeviceArdulight::switchOffLeds()
 	m_colorsSaved.clear();
 
 	for (int i = 0; i < count; i++)
-		m_colorsSaved << 0;
+		m_colorsSaved << LinearRgbF{};
 
 	m_writeBuffer.clear();
 	m_writeBuffer.append(m_writeBufferHeader);
@@ -206,8 +204,6 @@ void LedDeviceArdulight::open()
 {
 	DEBUG_LOW_LEVEL << Q_FUNC_INFO;
 
-//	m_gamma = Settings::getDeviceGamma();
-//	m_brightness = Settings::getDeviceBrightness();
 
 	if (m_ArdulightDevice != NULL)
 		m_ArdulightDevice->close();

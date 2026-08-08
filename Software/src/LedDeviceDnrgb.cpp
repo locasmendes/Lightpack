@@ -41,16 +41,15 @@ int LedDeviceDnrgb::maxLedsCount()
 	return MaximumNumberOfLeds::Dnrgb;
 }
 
-void LedDeviceDnrgb::setColors(const QList<QRgb> & colors, const bool rawColors)
+void LedDeviceDnrgb::setColors(const QList<LinearRgbF> & colors)
 {
 	bool ok = true;
 	bool sentPackets = false;
 
 	resizeColorsBuffer(colors.count());
 
-	applyColorModifications(colors, m_colorsBuffer, rawColors);
-	if (!rawColors)
-		applyDithering(m_colorsBuffer, 8);
+	applyColorModifications(colors, m_colorsBuffer);
+	applyDithering(m_colorsBuffer, 8);
 
 	// Send multiple buffers
 	const int totalColorsSaved = m_processedColorsSaved.count();

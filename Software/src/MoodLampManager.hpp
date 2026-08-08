@@ -33,6 +33,7 @@
 #include "LiquidColorGenerator.hpp"
 #include "MoodLamp.hpp"
 #include "HostColorSmoothing.hpp"
+#include "ColorF.h"
 #include "enums.hpp"
 
 namespace SettingsScope { struct LedGroup; }
@@ -45,7 +46,7 @@ public:
 	~MoodLampManager();
 
 signals:
-	void updateLedsColors(const QList<QRgb> & colors);
+	void updateLedsColors(const QList<LinearRgbF> & colors);
 	void lampList(const QList<MoodLampLampInfo> &, int);
 	void moodlampFrametime(const double frameMs);
 

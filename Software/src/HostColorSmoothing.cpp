@@ -3,35 +3,34 @@
  *
  *	Created on: 27.07.2026
  *		Project: Lightpack
- *
- *	Lightpack is very simple implementation of the backlight for a laptop
- *
- *	Copyright (c) 2011 Mike Shatohin, mikeshatohin [at] gmail.com
- *
- *	Lightpack is free software: you can redistribute it and/or modify
- *	it under the terms of the GNU General Public License as published by
- *	the Free Software Foundation, either version 2 of the License, or
- *	(at your option) any later version.
- *
- *	Lightpack is distributed in the hope that it will be useful,
- *	but WITHOUT ANY WARRANTY; without even the implied warranty of
- *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
- *	GNU General Public License for more details.
- *
- *	You should have received a copy of the GNU General Public License
- *	along with this program.	If not, see <http://www.gnu.org/licenses/>.
- *
  */
 
 #include "HostColorSmoothing.hpp"
-#include <QColor>
+#include "ColorOps.hpp"
+#include "ColorPipeline.hpp"
 #include <QtGlobal>
+#include <cmath>
+
+namespace {
+
+EncodedRgbF toEncoded(const LinearRgbF &L)
+{
+	return ColorOps::srgbEncode(L);
+}
+
+LinearRgbF toLinear(const EncodedRgbF &e)
+{
+	return ColorOps::srgbDecode(e);
+}
+
+} // namespace
 
 void HostColorSmoothing::reset(int numberOfLeds)
 {
-	m_transitionStart = QList<QRgb>(numberOfLeds, qRgb(0, 0, 0));
-	m_target = QList<QRgb>(numberOfLeds, qRgb(0, 0, 0));
-	m_displayed = QList<QRgb>(numberOfLeds, qRgb(0, 0, 0));
+	m_transitionStart = QList<EncodedRgbF>(numberOfLeds);
+	m_target = QList<EncodedRgbF>(numberOfLeds);
+	m_displayed = QList<EncodedRgbF>(numberOfLeds);
+	m_displayedLinear = QList<LinearRgbF>(numberOfLeds);
 	m_active = false;
 }
 
@@ -40,32 +39,62 @@ void HostColorSmoothing::setDurationMs(int durationMs)
 	m_durationMs = durationMs;
 }
 
-void HostColorSmoothing::retarget(const QList<QRgb>& target, qint64 nowMs)
+bool HostColorSmoothing::targetsNearlyEqual(const QList<EncodedRgbF>& a, const QList<EncodedRgbF>& b) const
 {
+	if (a.size() != b.size())
+		return false;
+	for (int i = 0; i < a.size(); ++i) {
+		const float d = std::max({
+			std::fabs(a[i].r - b[i].r),
+			std::fabs(a[i].g - b[i].g),
+			std::fabs(a[i].b - b[i].b)});
+		if (d >= ColorPipeline::kChangeExitEncoded)
+			return false;
+	}
+	return true;
+}
+
+void HostColorSmoothing::syncLinearFromEncoded()
+{
+	m_displayedLinear.resize(m_displayed.size());
+	for (int i = 0; i < m_displayed.size(); ++i)
+		m_displayedLinear[i] = toLinear(m_displayed[i]);
+}
+
+void HostColorSmoothing::retarget(const QList<LinearRgbF>& target, qint64 nowMs)
+{
+	QList<EncodedRgbF> targetEnc;
+	targetEnc.reserve(target.size());
+	for (const LinearRgbF &L : target)
+		targetEnc.append(toEncoded(L));
+
 	if (m_durationMs <= 0) {
 		setDisplayedImmediately(target);
 		return;
 	}
 
-	if (m_active && m_target == target)
-		return; // identical target: keep the clock and endpoints unchanged
+	if (m_active && targetsNearlyEqual(m_target, targetEnc))
+		return;
 
 	if (m_active) {
 		const double t = qBound(0.0, double(nowMs - m_transitionStartMs) / m_durationMs, 1.0);
-		applyInterpolation(t); // materialize the current position into m_displayed
+		applyInterpolation(t);
 	}
 
 	m_transitionStart = m_displayed;
-	m_target = target;
+	m_target = targetEnc;
 	m_transitionStartMs = nowMs;
 	m_active = true;
 }
 
-void HostColorSmoothing::setDisplayedImmediately(const QList<QRgb>& colors)
+void HostColorSmoothing::setDisplayedImmediately(const QList<LinearRgbF>& colors)
 {
-	m_displayed = colors;
-	m_target = colors;
-	m_transitionStart = colors;
+	m_displayed.resize(colors.size());
+	for (int i = 0; i < colors.size(); ++i)
+		m_displayed[i] = toEncoded(colors[i]);
+	m_target = m_displayed;
+	m_transitionStart = m_displayed;
+	m_displayedLinear = colors;
 	m_active = false;
 }
 
@@ -89,42 +118,47 @@ bool HostColorSmoothing::advance(qint64 nowMs)
 void HostColorSmoothing::changeDurationAndRetarget(int newDurationMs, qint64 nowMs)
 {
 	if (m_active)
-		advance(nowMs); // materialize at now, using the OLD duration, into m_displayed;
-		                // may itself already finish the transition (m_active -> false)
+		advance(nowMs);
 
 	m_durationMs = newDurationMs;
 
 	if (newDurationMs <= 0) {
-		setDisplayedImmediately(m_target);
+		m_displayed = m_target;
+		syncLinearFromEncoded();
+		m_transitionStart = m_displayed;
+		m_active = false;
 		return;
 	}
 
-	// Only restart the clock if a transition is still actually in flight - the
-	// materialization above may have just completed it, in which case there is
-	// nothing left to retarget and resurrecting it would wrongly extend it.
 	if (m_active) {
 		m_transitionStart = m_displayed;
 		m_transitionStartMs = nowMs;
 	}
 }
 
-QRgb HostColorSmoothing::interpolate(QRgb start, QRgb target, double t) const
+EncodedRgbF HostColorSmoothing::interpolateEncoded(const EncodedRgbF& start, const EncodedRgbF& target, double t) const
 {
-	const int r = qRound(qRed(start) + (qRed(target) - qRed(start)) * t);
-	const int g = qRound(qGreen(start) + (qGreen(target) - qGreen(start)) * t);
-	const int b = qRound(qBlue(start) + (qBlue(target) - qBlue(start)) * t);
-	return qRgb(r, g, b);
+	return EncodedRgbF{
+		static_cast<float>(start.r + (target.r - start.r) * t),
+		static_cast<float>(start.g + (target.g - start.g) * t),
+		static_cast<float>(start.b + (target.b - start.b) * t)};
 }
 
 bool HostColorSmoothing::applyInterpolation(double t)
 {
 	bool changed = false;
 	for (int i = 0; i < m_displayed.size(); i++) {
-		const QRgb interpolated = interpolate(m_transitionStart[i], m_target[i], t);
-		if (m_displayed[i] != interpolated) {
+		const EncodedRgbF interpolated = interpolateEncoded(m_transitionStart[i], m_target[i], t);
+		const float d = std::max({
+			std::fabs(m_displayed[i].r - interpolated.r),
+			std::fabs(m_displayed[i].g - interpolated.g),
+			std::fabs(m_displayed[i].b - interpolated.b)});
+		if (d > 1e-8f) {
 			m_displayed[i] = interpolated;
 			changed = true;
 		}
 	}
+	if (changed)
+		syncLinearFromEncoded();
 	return changed;
 }

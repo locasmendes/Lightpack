@@ -57,6 +57,8 @@ HEADERS += \
     ../src/AbstractLedDeviceUdp.hpp \
     ../src/LedDeviceDdp.hpp \
     ../src/HostColorSmoothing.hpp \
+    ../src/ColorPipeline.hpp \
+    ../src/SmoothingDriver.hpp \
     ../src/wizard/AreaDistributor.hpp \
     ../src/wizard/CustomDistributor.hpp \
     ../src/wizard/ContentAspectPreset.hpp \
@@ -70,6 +72,8 @@ HEADERS += \
     ../src/MoodLampManager.hpp \
     ../grab/include/calculations.hpp \
     ../math/include/PrismatikMath.hpp \
+    ../math/include/ColorF.h \
+    ../math/include/ColorOps.hpp \
     SettingsWindowMockup.hpp \
     GrabCalculationTest.hpp \
     LightpackApiTest.hpp \
@@ -84,7 +88,10 @@ HEADERS += \
     DeviceDiscoveryDefaultTest.hpp \
     MoodLampManagerTest.hpp \
     BulkResizeTest.hpp \
-    LedGroupRuntimeTest.hpp
+    LedGroupRuntimeTest.hpp \
+    ColorOpsTest.hpp \
+    ColorPipelineGoldenTest.hpp \
+    SettingsMigrationTest.hpp
 
 SOURCES += \
     ../src/ApiServerSetColorTask.cpp \
@@ -97,6 +104,8 @@ SOURCES += \
     ../src/AbstractLedDeviceUdp.cpp \
     ../src/LedDeviceDdp.cpp \
     ../src/HostColorSmoothing.cpp \
+    ../src/ColorPipeline.cpp \
+    ../src/SmoothingDriver.cpp \
     ../src/wizard/CustomDistributor.cpp \
     ../src/wizard/ContentAspectPreset.cpp \
     ../src/wizard/LayoutRecipeGenerator.cpp \
@@ -122,7 +131,10 @@ SOURCES += \
     DeviceDiscoveryDefaultTest.cpp \
     MoodLampManagerTest.cpp \
     BulkResizeTest.cpp \
-    LedGroupRuntimeTest.cpp
+    LedGroupRuntimeTest.cpp \
+    ColorOpsTest.cpp \
+    ColorPipelineGoldenTest.cpp \
+    SettingsMigrationTest.cpp
 
 win32{
     HEADERS += \

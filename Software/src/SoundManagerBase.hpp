@@ -29,6 +29,7 @@
 #include <QColor>
 #include <QElapsedTimer>
 #include "SoundVisualizer.hpp"
+#include "ColorF.h"
 
 struct SoundManagerDeviceInfo {
 	SoundManagerDeviceInfo(){ this->name = QLatin1String(""); this->id = -1; }
@@ -48,7 +49,7 @@ public:
 	static SoundManagerBase* create(int hWnd = 0, QObject* parent = 0);
 
 signals:
-	void updateLedsColors(const QList<QRgb> & colors);
+	void updateLedsColors(const QList<LinearRgbF> & colors);
 	void deviceList(const QList<SoundManagerDeviceInfo> & devices, int recommended);
 	void visualizerList(const QList<SoundManagerVisualizerInfo>& visualizers, int recommended);
 	void visualizerFrametime(const double);

@@ -26,7 +26,7 @@
 
 #include "AbstractLedDevice.hpp"
 #include "colorspace_types.h"
-#include "PrismatikMath.hpp"
+#include "ColorOps.hpp"
 #include "Settings.hpp"
 
 void AbstractLedDevice::setUsbPowerLedDisabled(bool isDisabled) {
@@ -34,7 +34,17 @@ void AbstractLedDevice::setUsbPowerLedDisabled(bool isDisabled) {
 	emit commandCompleted(true);
 }
 
+void AbstractLedDevice::setColors(const QList<QRgb> &colors)
+{
+	QList<LinearRgbF> linear;
+	linear.reserve(colors.size());
+	for (QRgb c : colors)
+		linear.append(ColorOps::srgbDecode(c));
+	setColors(linear);
+}
+
 void AbstractLedDevice::setGamma(double value, bool updateColors) {
+	// m_gamma holds Device/OutputGamma (unified render transform).
 	m_gamma = value;
 	if (updateColors)
 		setColors(m_colorsSaved);
@@ -96,7 +106,7 @@ void AbstractLedDevice::updateWBAdjustments(const QList<WBAdjustment> &coefs, bo
 void AbstractLedDevice::updateDeviceSettings()
 {
 	using namespace SettingsScope;
-	setGamma(Settings::getDeviceGamma(), false);
+	setGamma(Settings::getDeviceOutputGamma(), false);
 	setBrightness(Settings::getDeviceBrightness(), false);
 	setBrightnessCap(Settings::getDeviceBrightnessCap(), false);
 	setLuminosityThreshold(Settings::getLuminosityThreshold(), false);
@@ -107,138 +117,72 @@ void AbstractLedDevice::updateDeviceSettings()
 	setColors(m_colorsSaved);
 }
 
+ColorOps::DeviceStageParams AbstractLedDevice::deviceStageParams() const
+{
+	ColorOps::DeviceStageParams p;
+	p.outputGamma = static_cast<float>(m_gamma);
+	p.brightnessPercent = m_brightness;
+	p.brightnessCapPercent = static_cast<float>(m_brightnessCap);
+	p.luminosityThreshold = m_luminosityThreshold;
+	p.minimumLuminosityEnabled = m_isMinimumLuminosityEnabled;
+	p.ledMilliAmps = static_cast<float>(m_ledMilliAmps);
+	p.powerSupplyAmps = static_cast<float>(m_powerSupplyAmps);
+	if (!m_wbAdjustments.isEmpty()) {
+		p.wb.reserve(m_wbAdjustments.size());
+		for (const WBAdjustment &wb : m_wbAdjustments)
+			p.wb.append(ColorOps::WhiteBalanceCoef{
+				static_cast<float>(wb.red),
+				static_cast<float>(wb.green),
+				static_cast<float>(wb.blue)});
+	}
+	return p;
+}
+
 /*!
-	Modifies colors according to gamma, luminosity threshold, white balance and brightness settings
-	All modifications are made over extended 12bit RGB, so \code outColors \endcode will contain 12bit
-	RGB instead of 8bit.
+	Modifies colors according to OutputGamma, luminosity threshold, white balance and brightness.
+	Modifications run in WireRgbF; \a outColors receives 12-bit codes (legacy buffer scale).
 */
 void AbstractLedDevice::applyColorModifications(const QList<QRgb> &inColors, QList<StructRgb> &outColors, const bool rawColors) {
 
-	const bool isApplyWBAdjustments = m_wbAdjustments.count() == inColors.count();
+	outColors.resize(inColors.size());
 
-	for(int i = 0; i < inColors.count(); i++) {
-
-		//renormalize to 12bit
-		const constexpr double k = 4095/255.0;
-		outColors[i].r = qRed(inColors[i]) * k;
-		outColors[i].g = qGreen(inColors[i]) * k;
-		outColors[i].b = qBlue(inColors[i]) * k;
-
-		if (!rawColors)
-			PrismatikMath::gammaCorrection(m_gamma, outColors[i]);
-	}
-
-	// we can't completely bypass this function because of the Qrgb / StructRgb conversion above
-	if (rawColors)
+	if (rawColors) {
+		// R9 bridge: expand 8→12 without the device stage (UDP switchOff zeros path).
+		const constexpr double k = 4095 / 255.0;
+		for (int i = 0; i < inColors.count(); i++) {
+			outColors[i].r = qRed(inColors[i]) * k;
+			outColors[i].g = qGreen(inColors[i]) * k;
+			outColors[i].b = qBlue(inColors[i]) * k;
+		}
 		return;
-
-	const StructLab avgColor = PrismatikMath::toLab(PrismatikMath::avgColor(outColors));
-
-	const double ampCoef = m_ledMilliAmps / (4095.0 * 3.0) / 1000.0;
-	double estimatedTotalAmps = 0.0;
-
-	for (int i = 0; i < outColors.count(); ++i) {
-		StructLab lab = PrismatikMath::toLab(outColors[i]);
-		const int dl = m_luminosityThreshold - lab.l;
-		if (dl > 0) {
-			if (m_isMinimumLuminosityEnabled) { // apply minimum luminosity or dead-zone
-				// Cross-fade a and b channels to avarage value within kFadingRange, fadingFactor = (dL - fadingRange)^2 / (fadingRange^2)
-				constexpr int kFadingRange = 5;
-				const double fadingCoeff = dl < kFadingRange ? (dl - kFadingRange)*(dl - kFadingRange)/(kFadingRange*kFadingRange): 1;
-				const char da = avgColor.a - lab.a;
-				const char db = avgColor.b - lab.b;
-				lab.l = m_luminosityThreshold;
-				lab.a += PrismatikMath::round(da * fadingCoeff);
-				lab.b += PrismatikMath::round(db * fadingCoeff);
-				const StructRgb rgb = PrismatikMath::toRgb(lab);
-				outColors[i] = rgb;
-			} else {
-				outColors[i].r = 0;
-				outColors[i].g = 0;
-				outColors[i].b = 0;
-			}
-		}
-
-		PrismatikMath::brightnessCorrection(m_brightness, outColors[i]);
-
-		if (isApplyWBAdjustments) {
-			outColors[i].r *= m_wbAdjustments[i].red;
-			outColors[i].g *= m_wbAdjustments[i].green;
-			outColors[i].b *= m_wbAdjustments[i].blue;
-		}
-		if (m_brightnessCap < SettingsScope::Profile::Device::BrightnessCapMax) {
-			const double bcapFactor = (m_brightnessCap / 100.0 * 4095 * 3) / (outColors[i].r + outColors[i].g + outColors[i].b);
-			if (bcapFactor < 1.0) {
-				outColors[i].r *= bcapFactor;
-				outColors[i].g *= bcapFactor;
-				outColors[i].b *= bcapFactor;
-			}
-		}
-
-		estimatedTotalAmps += ((double)outColors[i].r + (double)outColors[i].g + (double)outColors[i].b) * ampCoef;
 	}
 
-	if (m_powerSupplyAmps > 0.0 && m_powerSupplyAmps < estimatedTotalAmps) {
-		const double powerRatio = m_powerSupplyAmps / estimatedTotalAmps;
-		for (StructRgb& color : outColors) {
-			color.r *= powerRatio;
-			color.g *= powerRatio;
-			color.b *= powerRatio;
-		}
-	}
+	ColorOps::applyDeviceStageFromEncoded(inColors, outColors, deviceStageParams());
+}
+
+void AbstractLedDevice::applyColorModifications(const QList<LinearRgbF> &inColors, QList<StructRgb> &outColors)
+{
+	outColors.resize(inColors.size());
+	ColorOps::applyDeviceStage(inColors, outColors, deviceStageParams());
 }
 
 void AbstractLedDevice::applyDithering(QList<StructRgb>& colors, int colorDepth)
 {
-	unsigned int maxColorValueIn = 4095;
-	unsigned int maxColorValueOut = (1 << colorDepth) - 1;
+	// Convert 12-bit buffer → wire → quantize / dither at target depth (R7).
+	QList<WireRgbF> wire;
+	wire.reserve(colors.size());
+	for (const StructRgb &c : colors) {
+		wire.append(WireRgbF{
+			ColorOps::clamp01(c.r / 4095.f),
+			ColorOps::clamp01(c.g / 4095.f),
+			ColorOps::clamp01(c.b / 4095.f)});
+	}
 
-	double k = (double)maxColorValueIn / (double)maxColorValueOut;
-
-	double carryR = 0;
-	double carryG = 0;
-	double carryB = 0;
-
-	double meanIndR = 0;
-	double meanIndG = 0;
-	double meanIndB = 0;
-
-	for (double i = 0; i < colors.count(); ++i) {
-		double tempR = colors[i].r;
-		double tempG = colors[i].g;
-		double tempB = colors[i].b;
-
-		colors[i].r = (double)colors[i].r / k;
-		colors[i].g = (double)colors[i].g / k;
-		colors[i].b = (double)colors[i].b / k;
-
-		if (m_isDitheringEnabled) {
-			carryR += tempR - (double)colors[i].r * k;
-			carryG += tempG - (double)colors[i].g * k;
-			carryB += tempB - (double)colors[i].b * k;
-
-			meanIndR += (tempR - (double)colors[i].r * k) * i;
-			meanIndG += (tempG - (double)colors[i].g * k) * i;
-			meanIndB += (tempB - (double)colors[i].b * k) * i;
-
-			if (carryR >= k) {
-				int ind = (meanIndR - (carryR - k) * i) / k;
-				colors[ind].r++;
-				carryR -= k;
-				meanIndR = carryR * i;
-			}
-			if (carryG >= k) {
-				int ind = (meanIndG - (carryG - k) * i) / k;
-				colors[ind].g++;
-				carryG -= k;
-				meanIndG = carryG * i;
-			}
-			if (carryB >= k) {
-				int ind = (meanIndB - (carryB - k) * i) / k;
-				colors[ind].b++;
-				carryB -= k;
-				meanIndB = carryB * i;
-			}
-		}
+	if (m_isDitheringEnabled) {
+		ColorOps::quantizeDithered(wire, colorDepth, colors);
+	} else {
+		colors.resize(wire.size());
+		for (int i = 0; i < wire.size(); ++i)
+			ColorOps::quantize(wire[i], colorDepth, colors[i]);
 	}
 }
